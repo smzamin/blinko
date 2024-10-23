@@ -3,11 +3,17 @@
 
 # Blinko - Open Source, Self-hosted
 
+<a href="[https://demo.usememos.com/](https://blinko-five.vercel.app/)">Live Demo</a>
+> username:blinko
+> password:blinko
+
 Blinko is an innovative open-source project designed for individuals who want to quickly capture and organize their fleeting thoughts. Inspired by the idea of "lightning notes," Blinko allows users to seamlessly jot down ideas the moment they strike, ensuring that no spark of creativity is lost.
 
 What sets Blinko apart is its AI-powered capabilities, offering intelligent suggestions and context-aware enhancements to make your notes more insightful and actionable. Built with a focus on privacy and control, Blinko is fully self-hosted, meaning you can run it on your own server or infrastructure, ensuring your data stays secure and under your ownership.
 
 <img style="border-radius:20px" src="./home.png" alt="Blinko" />
+
+
 
 
 
