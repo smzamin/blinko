@@ -38,5 +38,4 @@ Contributions are the heart of what makes the open-source community so dynamic, 
 ## Sponsorship
 If you find Blinko valuable, consider supporting us! Your contribution will enable us to continue enhancing and maintaining the project for everyone. Thank you for helping us grow!
 
-## Star history
 
