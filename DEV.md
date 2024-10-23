@@ -1,5 +1,3 @@
-
-
 ## run docker image on server
 ### export env variables for docker
 ```
