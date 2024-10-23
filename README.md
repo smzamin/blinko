@@ -11,7 +11,7 @@ Blinko is an innovative open-source project designed for individuals who want to
 
 What sets Blinko apart is its AI-powered capabilities, offering intelligent suggestions and context-aware enhancements to make your notes more insightful and actionable. Built with a focus on privacy and control, Blinko is fully self-hosted, meaning you can run it on your own server or infrastructure, ensuring your data stays secure and under your ownership.
 
-<img style="border-radius:20px" src="./home.png" alt="Blinko" />
+<img style="border-radius:20px" src="./public/home.png" alt="Blinko" />
 
 ## Main Features
 - **AI-Enhanced Note Retrieval** 🤖：With Blinko's advanced AI-powered RAG (Retrieval-Augmented Generation), you can quickly search and access your notes using natural language queries, making it effortless to find exactly what you need.
