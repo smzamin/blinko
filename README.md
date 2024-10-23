@@ -3,7 +3,7 @@
 
 # Blinko - Open Source, Self-hosted
 
-<a href="[https://demo.usememos.com/](https://blinko-five.vercel.app/)">Live Demo</a>
+<a href="https://blinko-five.vercel.app/">Live Demo</a>
 > username:blinko
 > password:blinko
 
