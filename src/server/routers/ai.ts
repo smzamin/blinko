@@ -1,12 +1,6 @@
-import { router, publicProcedure, authProcedure } from '../trpc';
-import { TRPCError } from '@trpc/server';
+import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
-import jwt from 'jsonwebtoken';
-import dayjs from 'dayjs';
 import { AiService } from '../ai';
-import { withRemult } from 'remult';
-import { notesRepo } from '../share';
-import { observable } from '@trpc/server/observable';
 
 export const aiRouter = router({
   embeddingUpsert: authProcedure
