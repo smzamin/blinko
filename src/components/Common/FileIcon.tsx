@@ -1,6 +1,5 @@
 import { helper } from '@/lib/helper';
 import { Icon } from '@iconify/react';
-import { CircularProgress } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 

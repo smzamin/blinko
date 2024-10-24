@@ -1,21 +1,18 @@
-import { Allow, BackendMethod, EntityFilter, MembersOnly, withRemult } from 'remult';
-import { helper, TagTreeNode } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
 import { ChatOpenAI, ClientOptions, OpenAI, OpenAIEmbeddings, } from "@langchain/openai";
 import { MarkdownTextSplitter } from '@langchain/textsplitters';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import path from 'path';
 import type { Document } from "@langchain/core/documents";
-import { configRepo, notesRepo } from '../share';
-import { Note } from '../share/entities/notes';
 import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { createRetrievalChain } from "langchain/chains/retrieval";
-import { ConfigKey } from '../share/entities/config';
 import { OpenAIWhisperAudio } from "@langchain/community/document_loaders/fs/openai_whisper_audio";
+import { caller } from '../routers/_app';
+import { prisma } from '../prisma';
 
 //https://js.langchain.com/docs/introduction/
 //https://smith.langchain.com/onboarding
@@ -24,17 +21,9 @@ const FaissStorePath = path.join(process.cwd(), "faiss");
 
 export class AiService {
   static async getUserGlobalConfig() {
-    return withRemult(async () => {
-      const config = await configRepo.find()
-      const globalConfig: { [key in ConfigKey]?: any } = config.reduce((acc, item) => {
-        acc[item.key] = item.config.value
-        return acc
-      }, {})
-      return globalConfig
-    })
+    return await caller.config.list()
   }
   static async getModelProivder() {
-    return withRemult(async () => {
     const globalConfig = await AiService.getUserGlobalConfig()
     if (!globalConfig.isUseAI || !globalConfig.aiModelProvider || !globalConfig.aiApiKey) {
       throw new Error('apikey or provider is not set')
@@ -91,7 +80,6 @@ export class AiService {
       Splitter,
       VectorStore
     }
-  })
   }
 
   static async embeddingUpsert({ id, content, type }: { id: number, content: string, type: 'update' | 'insert' }) {
@@ -172,50 +160,47 @@ export class AiService {
   }
 
   static async completions({ question, conversations }: { question: string, conversations: { role: string, content: string }[] }) {
-    return withRemult(async () => {
-      try {
-        const { LLM, VectorStore } = await AiService.getModelProivder()
-        let searchRes = await AiService.similaritySearch({ question })
-        console.log(searchRes)
-        let notes: (Note & { index?: number })[] = await notesRepo.find({
-          where: {
-            id: {
-              $in: _.uniqWith(searchRes.map(i => i.metadata?.noteId))
-            }
+    try {
+      const { LLM, VectorStore } = await AiService.getModelProivder()
+      let searchRes = await AiService.similaritySearch({ question })
+      console.log(searchRes)
+      let notes = await prisma.notes.findMany({
+        where: {
+          id: {
+            in: _.uniqWith(searchRes.map(i => i.metadata?.noteId))
           }
-        })
-        notes = notes.map(i => { return { ...i, index: searchRes.findIndex(t => t.metadata.noteId == i.id) } })
-        notes.sort((a, b) => a.index! - b.index!)
-        const chat_history = AiService.getChatHistory({ conversations })
-        const qaPrompt = AiService.getQAPrompt()
-        const qaChain = qaPrompt.pipe(LLM).pipe(new StringOutputParser())
-        const result = await qaChain.stream({
-          chat_history,
-          input: question,
-          context: notes.map(i => i.content)
-        })
-        return { result, notes }
-      } catch (error) {
-        console.log(error)
-        throw new Error(error)
-      }
-    })
+        }
+      })
+      notes = notes.map(i => { return { ...i, index: searchRes.findIndex(t => t.metadata.noteId == i.id) } })
+      //@ts-ignore
+      notes.sort((a, b) => a.index! - b.index!)
+      const chat_history = AiService.getChatHistory({ conversations })
+      const qaPrompt = AiService.getQAPrompt()
+      const qaChain = qaPrompt.pipe(LLM).pipe(new StringOutputParser())
+      const result = await qaChain.stream({
+        chat_history,
+        input: question,
+        context: notes.map(i => i.content)
+      })
+      return { result, notes }
+    } catch (error) {
+      console.log(error)
+      throw new Error(error)
+    }
   }
 
   static async speechToText(audioPath: string) {
-    return withRemult(async () => {
-      const globalConfig = await AiService.getUserGlobalConfig()
-      if (!globalConfig.aiApiKey) {
-        throw new Error('apikey is not set')
-      }
-      const clientOptions: ClientOptions = { apiKey: globalConfig.aiApiKey }
-      if (globalConfig.aiApiEndpoint) {
-        clientOptions.baseURL = globalConfig.aiApiEndpoint
-      }
-      const loader = new OpenAIWhisperAudio(audioPath, { clientOptions });
-      const docs = await loader.load();
-      console.log(docs)
-      return docs
-    })
+    const globalConfig = await AiService.getUserGlobalConfig()
+    if (!globalConfig.aiApiKey) {
+      throw new Error('apikey is not set')
+    }
+    const clientOptions: ClientOptions = { apiKey: globalConfig.aiApiKey }
+    if (globalConfig.aiApiEndpoint) {
+      clientOptions.baseURL = globalConfig.aiApiEndpoint
+    }
+    const loader = new OpenAIWhisperAudio(audioPath, { clientOptions });
+    const docs = await loader.load();
+    console.log(docs)
+    return docs
   }
 }

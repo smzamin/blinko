@@ -1,18 +1,14 @@
-import { useRouter } from 'next/router';
-import { usePathname } from 'next/navigation';
 import { Check, Globe } from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
-  DropdownSection,
   DropdownItem
 } from "@nextui-org/dropdown";
 import { Button } from '@nextui-org/react';
 import { RootStore } from '@/store';
 import { BaseStore } from '@/store/baseStore';
 import { useTranslation } from 'react-i18next';
-import dayjs from '@/lib/dayjs';
 
 const LanguageSwitcher = () => {
   const baseStore = RootStore.Get(BaseStore)

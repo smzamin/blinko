@@ -1,5 +1,5 @@
 
-import _ from 'lodash';
+import { _ } from '@/lib/lodash';
 import { makeAutoObservable } from 'mobx';
 import { useEffect } from 'react';
 import { PromisePageState, PromiseState } from './standard/PromiseState';

@@ -1,21 +1,20 @@
 
-import _ from 'lodash';
+import { _ } from '@/lib/lodash';
 import { makeAutoObservable } from 'mobx';
 import { useEffect } from 'react';
 import { PromisePageState, PromiseState } from './standard/PromiseState';
 import { Store } from './standard/base';
 import { type AttachmentsType, BlinkoController } from '@/server/share/controllers/blinkoController';
-import { Note, NoteType } from '@/server/share/entities/notes';
+import { NoteType } from '@/server/share/entities/notes';
 import { configRepo, tagRepo } from '@/server/share/index';
 import { helper } from '@/lib/helper';
 import { ToastPlugin } from './module/Toast/Toast';
 import { RootStore } from './root';
-import { StorageState } from './standard/StorageState';
 import { eventBus } from '@/lib/event';
 import i18n from '@/lib/i18n';
-import { useRouter } from 'next/router';
 import { api } from '@/lib/trpc';
-import { ConfigKey } from '@/server/share/entities/config';
+import { type RouterOutput } from '@/server/routers/_app';
+import { type Note } from '@/server/types';
 
 type filterType = {
   label: string;
@@ -29,7 +28,7 @@ export class BlinkoStore implements Store {
   }
   sid = 'BlinkoStore';
   noteContent = '';
-  curSelectedNote: Note;
+  curSelectedNote: RouterOutput['notes']['list'][0];
   curMultiSelectIds: number[] = [];
   isMultiSelectMode: boolean = false;
 
@@ -101,12 +100,13 @@ export class BlinkoStore implements Store {
   updateTicker = 0
 
   upsertNote = new PromiseState({
-    function: async ({ content = '', isArchived = null, type, id, attachments = [] }:
-      { content?: string, isArchived?: boolean | null, type?: NoteType, id?: number, attachments?: AttachmentsType[] }) => {
+    function: async ({ content = '', isArchived, type, id, attachments = [] }:
+      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: AttachmentsType[] }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
-      const res = await BlinkoController.upsertBlinko({ content, type, isArchived, id, attachments })
+      // const res = await BlinkoController.upsertBlinko({ content, type, isArchived, id, attachments })
+      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments })
       console.log(res)
       if (res?.id) {
         api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' })
@@ -122,7 +122,7 @@ export class BlinkoStore implements Store {
 
   noteList = new PromisePageState({
     function: async ({ page, size }) => {
-      const notes = await BlinkoController.notes({ ...this.noteListFilterConfig, page, size })
+      const notes = await api.notes.list.query({ ...this.noteListFilterConfig, page, size })
       return notes.map(i => { return { ...i, isExpand: false } })
     }
   })
@@ -130,13 +130,13 @@ export class BlinkoStore implements Store {
   resourceList = new PromisePageState({
     size: 30,
     function: async ({ page, size }) => {
-      return await BlinkoController.resources({ page, size })
+      return await api.attachments.list.query({ page, size })
     }
   })
 
   tagList = new PromiseState({
     function: async () => {
-      const falttenTags = await tagRepo.find()
+      const falttenTags = await api.tags.list.query();
       const listTags = helper.buildHashTagTreeFromDb(falttenTags)
       let pathTags: string[] = [];
       listTags.forEach(node => {
@@ -152,13 +152,7 @@ export class BlinkoStore implements Store {
 
   config = new PromiseState({
     function: async () => {
-      const config = await configRepo.find()
-      const globalConfig = config.reduce((acc, item) => {
-        acc[item.key] = item.config.value
-        return acc
-      }, {})
-      console.log(globalConfig)
-      return globalConfig as { [key in ConfigKey]: any }
+      return await api.config.list.query()
     }
   })
 

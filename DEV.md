@@ -32,8 +32,3 @@ export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=mysecretpassword
 docker-compose -f docker-compose.yml up -d --build
 ```
-
-```
-openssl genrsa -out private.pem 2048
-openssl req -new -x509 -key private.pem -out cert.pem -days 365
-```

@@ -5,19 +5,21 @@ import { signIn } from "next-auth/react";
 import { RootStore } from "@/store";
 import { useRouter } from "next/router";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
-import { UserController } from "@/server/share/controllers/userController";
 import { useTranslation } from "react-i18next";
+import { api } from "@/lib/trpc";
 
 export default function Component() {
   const router = useRouter()
   const [isVisible, setIsVisible] = React.useState(false);
   const [user, setUser] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [userCount, setUserCount] = useState(0)
+  const [canRegister, setCanRegister] = useState(false)
   const { t } = useTranslation()
   useEffect(() => {
     try {
-      UserController.findUserCount().then(v => setUserCount(v ?? 0))
+      api.users.canRegister.mutate().then(v => {
+        setCanRegister(v)
+      })
     } catch (error) {
     }
   }, [])
@@ -90,7 +92,7 @@ export default function Component() {
           </Button>
         </form>
         {
-          userCount == 0 && <p className="text-center text-small">
+          canRegister && <p className="text-center text-small">
             {t('need-to-create-an-account')}&nbsp;
             <Link href="/signup" size="sm" >
               {t('sign-up')}

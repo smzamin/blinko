@@ -1,18 +1,17 @@
 import { observer } from "mobx-react-lite";
 import { BlinkoStore } from '@/store/blinkoStore';
 import { Divider } from '@nextui-org/react';
-import _ from 'lodash';
+import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
-import { Note, NoteType } from '@/server/share/entities/notes';
-import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from '@/components/Common/ContextMenu';
+import { ContextMenu, ContextMenuItem } from '@/components/Common/ContextMenu';
 import { Icon } from '@iconify/react';
-import { DeleteController } from '@/server/share/controllers/deleteController';
 import { PromiseCall } from '@/store/standard/PromiseState';
 import { api } from '@/lib/trpc';
 import { RootStore } from "@/store";
 import { DialogStore } from "@/store/module/Dialog";
 import { BlinkoEditor } from "../BlinkoEditor";
 import { useEffect, useState } from "react";
+import { NoteType } from "@/server/types";
 
 export const BlinkoRightClickMenu = observer(() => {
   const { t } = useTranslation();
@@ -78,7 +77,7 @@ export const BlinkoRightClickMenu = observer(() => {
     </ContextMenuItem>
 
     <ContextMenuItem onClick={async e => {
-      PromiseCall(DeleteController.deleteNotes({ ids: [blinko.curSelectedNote?.id] }))
+      PromiseCall(api.notes.deleteMany.mutate({ ids: [blinko.curSelectedNote?.id] }))
       api.ai.embeddingDelete.mutate({ id: blinko.curSelectedNote?.id })
     }}>
       <div className="flex items-start gap-2 text-red-500">

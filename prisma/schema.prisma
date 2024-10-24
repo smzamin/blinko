@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id        Int       @id @default(autoincrement())
+  name      String    @default("") @db.VarChar
+  nickname  String    @default("") @db.VarChar
+  password  String    @default("") @db.VarChar
+  image     String    @default("") @db.VarChar
+  apiToken  String    @default("") @db.VarChar
+  note      Int       @default(0)
+  role      String    @default("") @db.VarChar
+  createdAt DateTime? @db.Timestamptz(6)
+  updatedAt DateTime? @db.Timestamptz(6)
+}
+
+model attachments {
+  id            Int       @id @default(autoincrement())
+  isShare       Boolean   @default(false)
+  sharePassword String    @default("") @db.VarChar
+  name          String    @default("") @db.VarChar
+  path          String    @default("") @db.VarChar
+  size          Decimal   @default(0) @db.Decimal
+  noteId        Int       @default(0)
+  createdAt     DateTime? @db.Timestamptz(6)
+  updatedAt     DateTime? @db.Timestamptz(6)
+
+  note notes @relation(fields: [noteId], references: [id])
+}
+
+model config {
+  id     Int    @id @default(autoincrement())
+  key    String @default("") @db.VarChar
+  config Json?  @db.Json
+}
+
+model notes {
+  id            Int           @id @default(autoincrement())
+  type          Int           @default(0)
+  content       String        @default("") @db.VarChar
+  isArchived    Boolean       @default(false)
+  isRecycle     Boolean       @default(false)
+  isShare       Boolean       @default(false)
+  isTop         Boolean       @default(false)
+  sharePassword String        @default("") @db.VarChar
+  metadata      Json?         @db.Json
+  users         Int           @default(0)
+  createdAt     DateTime?     @db.Timestamptz(6)
+  updatedAt     DateTime?     @db.Timestamptz(6)
+  attachments   attachments[]
+  tags          tagsToNote[]
+}
+
+model tag {
+  id         Int          @id @default(autoincrement())
+  name       String       @default("") @db.VarChar
+  icon       String       @default("") @db.VarChar
+  parent     Int          @default(0)
+  createdAt  DateTime?    @db.Timestamptz(6)
+  updatedAt  DateTime?    @db.Timestamptz(6)
+  tagsToNote tagsToNote[]
+}
+
+model tagsToNote {
+  id     Int @default(autoincrement())
+  noteId Int @default(0)
+  tagId  Int @default(0)
+
+  note notes @relation(fields: [noteId], references: [id])
+  tag  tag   @relation(fields: [tagId], references: [id])
+
+  @@id([noteId, tagId])
+}

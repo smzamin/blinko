@@ -1,7 +1,5 @@
-import { UserController } from "@/server/share/controllers/userController";
+import { api } from "@/lib/trpc";
 import { RootStore } from "@/store";
-import { AiStore } from "@/store/aiStore";
-import { BlinkoStore } from "@/store/blinkoStore";
 import { DialogStore } from "@/store/module/Dialog";
 import { PromiseCall } from "@/store/standard/PromiseState";
 import { UserStore } from "@/store/user";
@@ -43,7 +41,7 @@ export const UpdateUserInfo = observer(() => {
     />
     <div className="flex w-full mt-2">
       <Button className="ml-auto" color='primary' onClick={async e => {
-        await PromiseCall(UserController.upsertUser({ id: Number(user.id), name: store.username, nickname: store.nickname }))
+        await PromiseCall(api.users.upsertUser.mutate({ id: Number(user.id), name: store.username, nickname: store.nickname }))
         RootStore.Get(DialogStore).close()
         await signOut()
         router.push('/signin')
@@ -120,7 +118,7 @@ export const UpdateUserPassword = observer(() => {
     />
     <div className="flex w-full mt-2">
       <Button className="ml-auto" color='primary' onClick={async e => {
-        await PromiseCall(UserController.upsertUser({ id: Number(user.id), password }))
+        await PromiseCall(api.users.upsertUser.mutate({ id: Number(user.id), password }))
         RootStore.Get(DialogStore).close()
         await signOut()
         router.push('/signin')

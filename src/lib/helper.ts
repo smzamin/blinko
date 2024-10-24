@@ -1,6 +1,5 @@
+import { type Tag } from '@/server/types';
 import { _ } from './lodash';
-import jwt from 'jsonwebtoken';
-import { Tag } from '@/server/share/entities/tag';
 
 const valMap = {
   undefined: '',
@@ -188,16 +187,6 @@ export const helper = {
   isObject(value) {
     return value != null && typeof value === 'object';
   },
-  deepMerge(obj, newObj) {
-    const newVal = _.mergeWith(obj, newObj, (...args) => {
-      const [objValue, srcValue] = args;
-      if (typeof srcValue === 'object') {
-        return helper.deepMerge(objValue, srcValue);
-      }
-      return srcValue || valMap[srcValue];
-    });
-    return newVal;
-  },
   download: {
     downloadByBlob(name: string, blob: Blob) {
       const a = document.createElement('a');
@@ -211,14 +200,6 @@ export const helper = {
       a.href = href;
       a.click();
     },
-  },
-  encode: async (jwtClaims: { sub: string; name: string; iat: number; exp: number }) => {
-    console.log('encode token->>', jwt.sign(jwtClaims, process.env.JWT_SECRET, { algorithm: 'HS256' }))
-    return jwt.sign(jwtClaims, process.env.JWT_SECRET, { algorithm: 'HS256' });
-  },
-  decode: async (token: string): Promise<{ sub: string; name: string; iat: number; exp: number }> => {
-    //@ts-ignore
-    return jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
   },
   env: {
     //@ts-ignore

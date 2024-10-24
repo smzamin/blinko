@@ -1,16 +1,13 @@
 
-import _ from 'lodash';
+import { _ } from '@/lib/lodash';
 import { observer } from 'mobx-react-lite';
 import { RootStore } from '@/store';
 import { motion } from "framer-motion"
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BlinkoController } from '@/server/share/controllers/blinkoController';
 import { ToastPlugin } from '@/store/module/Toast/Toast';
 import { ShowUpdateTagDialog } from '../Common/UpdateTagPop';
 import { showTipsDialog } from '../Common/TipsDialog';
-import { DeleteController } from '@/server/share/controllers/deleteController';
 import { DialogStore } from '@/store/module/Dialog';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { api } from '@/lib/trpc';
@@ -56,7 +53,7 @@ export const BlinkoMultiSelectPop = observer(() => {
     <div className={SelectItems}
       onClick={async () => {
         await RootStore.Get(ToastPlugin).promise(
-          BlinkoController.updateManyBlinko({ ids: blinko.curMultiSelectIds, isArchived: true }),
+          api.notes.updateMany.mutate({ ids: blinko.curMultiSelectIds, isArchived: true }),
           {
             loading: t('in-progress'),
             success: <b>{t('your-changes-have-been-saved')}</b>,
@@ -74,7 +71,7 @@ export const BlinkoMultiSelectPop = observer(() => {
           type: 'select',
           onSave: async (tagName) => {
             await RootStore.Get(ToastPlugin).promise(
-              BlinkoController.batchUpdateTagByNoteIds({ tag: tagName, ids: blinko.curMultiSelectIds }),
+              api.tags.updateTagMany.mutate({ tag: tagName, ids: blinko.curMultiSelectIds }),
               {
                 loading: t('in-progress'),
                 success: <b>{t('your-changes-have-been-saved')}</b>,
@@ -95,7 +92,7 @@ export const BlinkoMultiSelectPop = observer(() => {
           content: t('this-operation-removes-the-associated-label-and-cannot-be-restored-please-confirm'),
           onConfirm: async () => {
             await RootStore.Get(ToastPlugin).promise(
-              DeleteController.deleteNotes({ ids: blinko.curMultiSelectIds }),
+              api.notes.deleteMany.mutate({ ids: blinko.curMultiSelectIds }),
               {
                 loading: t('in-progress'),
                 success: <b>{t('your-changes-have-been-saved')}</b>,

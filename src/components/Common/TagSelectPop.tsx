@@ -1,17 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Card, Input } from '@nextui-org/react';
+import { Card } from '@nextui-org/react';
 import { eventBus } from '@/lib/event';
 import { RootStore } from '@/store';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { motion } from "framer-motion"
-import { Icon } from '@iconify/react';
-import { Tag } from '@/server/share/entities/tag';
 import { DialogStore } from '@/store/module/Dialog';
-import { helper } from '@/lib/helper';
-import { useMediaQuery, useIsClient } from 'usehooks-ts'
+import { useMediaQuery } from 'usehooks-ts'
 
 export const showTagSelectPop = (text: string = '') => {
   setTimeout(() => {

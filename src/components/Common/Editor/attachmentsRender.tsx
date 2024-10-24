@@ -4,20 +4,17 @@ import { FileIcons } from '../FileIcon';
 import { observer } from 'mobx-react-lite';
 import { FileType } from './type';
 import { RootStore } from '@/store';
-import { showTipsDialog, TipsPopover } from '@/components/Common/TipsDialog';
+import { TipsPopover } from '@/components/Common/TipsDialog';
 import { ToastPlugin } from '@/store/module/Toast/Toast';
 import { DialogStore } from '@/store/module/Dialog';
-import { Attachment } from '@/server/share/entities/attachments';
 import { HandleFileType } from '.';
-import { eventBus } from '@/lib/event';
 import { Image } from '@nextui-org/react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { useTranslation } from 'react-i18next';
-import { BlinkoController } from '@/server/share/controllers/blinkoController';
-import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
 import { PromiseState } from '@/store/standard/PromiseState';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { helper } from '@/lib/helper';
+import { type Attachment } from '@/server/types';
 
 type IProps = {
   files: FileType[]

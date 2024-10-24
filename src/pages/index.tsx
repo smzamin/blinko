@@ -1,20 +1,17 @@
 import { BlinkoStore } from '@/store/blinkoStore';
-import { Button, Card, Divider } from '@nextui-org/react';
-import _ from 'lodash';
+import { Card } from '@nextui-org/react';
+import { _ } from '@/lib/lodash';
 import { observer } from 'mobx-react-lite';
 import Masonry from 'react-masonry-css'
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { RootStore } from '@/store';
 import { motion } from "framer-motion"
-import { DialogStore } from '@/store/module/Dialog';
-import { Note, NoteType } from '@/server/share/entities/notes';
 import { FilesAttachmentRender } from '@/components/Common/Editor/attachmentsRender';
-import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from '@/components/Common/ContextMenu';
+import { ContextMenuTrigger } from '@/components/Common/ContextMenu';
 import { MarkdownRender } from '@/components/Common/MarkdownRender';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
-import { DeleteController } from '@/server/share/controllers/deleteController';
 import { BlinkoEditor } from '@/components/BlinkoEditor';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
@@ -22,14 +19,14 @@ import dayjs from '@/lib/dayjs';
 import { PromiseCall } from '@/store/standard/PromiseState';
 import { api } from '@/lib/trpc';
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
-import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { NoteType } from '@/server/types';
 
 const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?: boolean | null }) => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
   const router = useRouter();
   const { tagId } = router.query;
-  
+
   useEffect(() => {
     if (!router.isReady) return
     blinko.noteListFilterConfig.type = type ? Number(type) : 0
@@ -63,7 +60,6 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
 
   return (
     <div className="md:p-0 relative h-full flex flex-col-reverse md:flex-col">
-    
       {store.showEditor && <div className='px-2 md:px-6 ' >
         <BlinkoEditor mode='create' key='create-key' onHeightChange={height => store.editorHeight = height} />
       </div>}

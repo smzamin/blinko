@@ -1,7 +1,5 @@
 import type * as trpcNext from '@trpc/server/adapters/next';
-import { handleAuthorize } from './remult';
 import { getToken } from 'next-auth/jwt';
-
 
 export async function createContext(
   opts: trpcNext.CreateNextContextOptions,
@@ -12,6 +10,5 @@ export async function createContext(
   }
   return { ok: true }
 }
-
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

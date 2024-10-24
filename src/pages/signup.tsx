@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { Button, Input, Checkbox, Link } from "@nextui-org/react";
+import React from "react";
+import { Button, Input, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import { UserController } from "@/server/share/controllers/userController";
 import { RootStore } from "@/store/root";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { useTranslation } from "react-i18next";
+import { api } from "@/lib/trpc";
 
 export default function Component() {
   const router = useRouter()
@@ -100,16 +100,11 @@ export default function Component() {
               return RootStore.Get(ToastPlugin).error(t('the-two-passwords-are-inconsistent'))
             }
             try {
-              const res = await UserController.createAdmin({ name: user, password })
-              console.log(res)
-              if (res.ok) {
-                RootStore.Get(ToastPlugin).success(t('create-successfully-is-about-to-jump-to-the-login'))
-                setTimeout(() => {
-                  router.push('/signin')
-                }, 1000)
-              } else {
-                return RootStore.Get(ToastPlugin).error(res.errorMsg!)
-              }
+              await api.users.createAdmin.mutate({ name: user, password })
+              RootStore.Get(ToastPlugin).success(t('create-successfully-is-about-to-jump-to-the-login'))
+              setTimeout(() => {
+                router.push('/signin')
+              }, 1000)
             } catch (error) {
               return RootStore.Get(ToastPlugin).error(error.message)
             }

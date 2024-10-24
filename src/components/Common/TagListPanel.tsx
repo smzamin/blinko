@@ -5,15 +5,14 @@ import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { Icon } from "@iconify/react";
 import { SideBarItem } from "../Layout";
-import { Popover, PopoverTrigger, PopoverContent, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import EmojiPicker, { Theme } from 'emoji-picker-react';
-import { tagRepo } from "@/server/share/index";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
-import { DeleteController } from "@/server/share/controllers/deleteController";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { ShowUpdateTagDialog } from "./UpdateTagPop";
-import { BlinkoController } from "@/server/share/controllers/blinkoController";
+import { api } from "@/lib/trpc";
+import { PromiseCall } from "@/store/standard/PromiseState";
 
 const EmojiPick = ({ children, element }) => {
   const { theme } = useTheme();
@@ -26,9 +25,7 @@ const EmojiPick = ({ children, element }) => {
     </PopoverTrigger>
     <PopoverContent>
       <EmojiPicker theme={theme == 'dark' ? Theme.DARK : Theme.LIGHT} onEmojiClick={async e => {
-        console.log(e, element)
-        await BlinkoController.updateTagIcon({ id: element.id, icon: e.emoji })
-        blinko.tagList.call()
+        PromiseCall(api.tags.updateTagIcon.mutate({ id: element.id, icon: e.emoji }))
       }} />
     </PopoverContent>
   </Popover>
@@ -107,7 +104,7 @@ export const TagListPanel = observer(() => {
                   } </div>
                 </EmojiPick>
               )}
-              
+
               <div className="truncate overflow-hidden whitespace-nowrap" title={element.name}>
                 {element.name}
               </div>
@@ -121,29 +118,25 @@ export const TagListPanel = observer(() => {
                     ShowUpdateTagDialog({
                       defaultValue: (element.metadata?.path! as string),
                       onSave: async (tagName) => {
-                        await DeleteController.updateTag({
+                        await PromiseCall(api.tags.updateTagName.mutate({
                           id: element.id as number,
-                          originName: element.metadata?.path as string,
+                          oldName: element.metadata?.path as string,
                           newName: tagName
-                        })
-                        blinko.updateTicker++
+                        }))
                         router.push('/all')
                         setPopId(0)
-                        RootStore.Get(ToastPlugin).success("update-success")
                       }
                     })
                   }}>
                     Update name
                   </DropdownItem>
                   <DropdownItem key="delete" className="text-danger" color="danger" onClick={async () => {
-                    await DeleteController.deleteOnlyTag({ id: element.id as number })
-                    blinko.updateTicker++
+                    PromiseCall(api.tags.deleteOnlyTag.mutate(({ id: element.id as number })))
                   }}>
                     Delete only tag
                   </DropdownItem>
                   <DropdownItem key="delete" className="text-danger" color="danger" onClick={async () => {
-                    await DeleteController.deleteTagWithAllNote({ id: element.id as number })
-                    blinko.updateTicker++
+                    PromiseCall(api.tags.deleteTagWithAllNote.mutate(({ id: element.id as number })))
                   }}>
                     Delete tag with note
                   </DropdownItem>

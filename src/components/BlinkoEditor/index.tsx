@@ -2,10 +2,8 @@ import { observer } from "mobx-react-lite"
 import Editor from "../Common/Editor"
 import { RootStore } from "@/store"
 import { BlinkoStore } from "@/store/blinkoStore"
-import { DialogStore } from "@/store/module/Dialog"
 import dayjs from "@/lib/dayjs"
-import { useEffect, useRef } from "react"
-import usePasteFile from "@/lib/hooks"
+import { useRef } from "react"
 
 type IProps = {
   mode: 'create' | 'edit',
@@ -16,11 +14,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const isCreateMode = mode == 'create'
   const blinko = RootStore.Get(BlinkoStore)
   const editorRef = useRef<any>(null)
-  // const pastedFiles = usePasteFile(editorRef);
-  // useEffect(() => {
-  //   console.log(pastedFiles)
-  // }, [blinko.noteContent, pastedFiles])
-
+  
   return <div ref={editorRef} id='global-editor'>
     <Editor
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}

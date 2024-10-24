@@ -1,44 +1,42 @@
-'use client';
+import '@mdxeditor/editor/style.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { Icon } from '@iconify/react';
 import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
-import '@mdxeditor/editor/style.css';
 import { Button, Card, Divider, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { observer } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
-import { FileType, OnSendContentType, simpleSandpackConfig } from './type';
+import { FileType, OnSendContentType } from './type';
 import { AttachmentsRender } from './attachmentsRender';
 import { MyPlugins } from './editorPlugins';
-import { AttachmentsType } from '@/server/share/controllers/blinkoController';
-import { Attachment } from '@/server/share/entities/attachments';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
-import { NoteType } from '@/server/share/entities/notes';
-import { FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, RecordIcon, SendIcon } from '../Icons';
+import { FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
 import usePasteFile from '@/lib/hooks';
 import useAudioRecorder from '../AudioRecorder/hook';
 import AudioRecorder from '../AudioRecorder';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
-const { MDXEditor, Button: MyButton, codeBlockPlugin, tablePlugin, headingsPlugin, listsPlugin, linkPlugin, quotePlugin, markdownShortcutPlugin, useCodeBlockEditorContext } = await import('@mdxeditor/editor')
+import { NoteType, type Attachment } from '@/server/types';
+const { MDXEditor } = await import('@mdxeditor/editor')
+
 // https://mdxeditor.dev/editor/docs/theming
 // https://react-dropzone.js.org/
+
 type IProps = {
   content: string,
   onChange?: (content: string) => void,
   onSend?: (args: OnSendContentType) => Promise<void>,
   isSendLoading?: boolean,
   bottomSlot?: ReactElement<any, any>,
-  originFiles?: AttachmentsType[]
+  originFiles?: Attachment[]
 }
 
-export const HandleFileType = (originFiles: AttachmentsType[] | Attachment[]): FileType[] => {
+export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
   if (originFiles.length == 0) return []
   const res = originFiles?.map(file => {
     const extension = helper.getFileExtension(file.name)
@@ -311,7 +309,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         ]}
       />
     </div>
-    {/* <>{bottomSlot}</> */}
   </Card >
 })
 

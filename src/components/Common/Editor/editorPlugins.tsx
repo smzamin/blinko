@@ -1,7 +1,6 @@
-import { ChangeCodeMirrorLanguage, codeMirrorPlugin, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertTable, linkPlugin, ListsToggle, SandpackConfig, sandpackPlugin, ShowSandpackInfo, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
+import { codeMirrorPlugin, linkPlugin, sandpackPlugin } from '@mdxeditor/editor';
 import { simpleSandpackConfig } from './type';
-import { Icon } from '@iconify/react';
-const { codeBlockPlugin, tablePlugin, headingsPlugin, listsPlugin, quotePlugin, markdownShortcutPlugin } = await import('@mdxeditor/editor')
+const { codeBlockPlugin, tablePlugin, listsPlugin, quotePlugin, markdownShortcutPlugin } = await import('@mdxeditor/editor')
 import { hashTagPlugin } from '../MdxPlugin/hashTagPlugin';
 
 export const MyPlugins = [

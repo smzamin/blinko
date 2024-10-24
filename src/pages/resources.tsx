@@ -32,7 +32,7 @@ const Page = observer(() => {
                   </div>
               }
               <div className="w-full break-words whitespace-normal text-xs font-bold">{decodeURIComponent(i.name)}</div>
-              <div className="w-full break-words whitespace-normal text-xs text-desc ">{dayjs(i.createdAt).fromNow()}-{filesize(i.size, { standard: "jedec" })}</div>
+              <div className="w-full break-words whitespace-normal text-xs text-desc ">{dayjs(i.createdAt).fromNow()}-{filesize(i.size as any, { standard: "jedec" })}</div>
             </Card>
           })
         }

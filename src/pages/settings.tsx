@@ -1,7 +1,7 @@
 import LanguageSwitcher from "@/components/Common/LanguageSwitcher";
 import ThemeSwitcher from "@/components/Common/ThemeSwitcher";
 import { UpdateUserInfo, UpdateUserPassword } from "@/components/Common/UpdateUserInfo";
-import { ConfigController } from "@/server/share/controllers/configController";
+import { api } from "@/lib/trpc";
 import { RootStore } from "@/store";
 import { AiStore } from "@/store/aiStore";
 import { BlinkoStore } from "@/store/blinkoStore";
@@ -86,7 +86,7 @@ const Page = observer(() => {
           rightContent={<Switch
             isSelected={blinko.config.value?.isUseAI}
             onChange={e => {
-              PromiseCall(ConfigController.updateConfig({
+              PromiseCall(api.config.update.mutate({
                 key: 'isUseAI',
                 value: e.target.checked
               }))
@@ -100,7 +100,7 @@ const Page = observer(() => {
               selectedKeys={[blinko.config.value?.aiModelProvider!]}
               onChange={e => {
                 blinko.config.value!.aiModelProvider = e.target.value
-                PromiseCall(ConfigController.updateConfig({
+                PromiseCall(api.config.update.mutate({
                   key: 'aiModelProvider',
                   value: e.target.value
                 }))
@@ -123,7 +123,7 @@ const Page = observer(() => {
               selectedKeys={[blinko.config.value?.aiModel!]}
               onChange={e => {
                 blinko.config.value!.aiModel = e.target.value
-                PromiseCall(ConfigController.updateConfig({
+                PromiseCall(api.config.update.mutate({
                   key: 'aiModel',
                   value: e.target.value
                 }))
@@ -154,7 +154,7 @@ const Page = observer(() => {
               value={store.apiKey}
               onChange={e => { store.apiKey = e.target.value }}
               onBlur={e => {
-                PromiseCall(ConfigController.updateConfig({
+                PromiseCall(api.config.update.mutate({
                   key: 'aiApiKey',
                   value: store.apiKey
                 }))
@@ -185,7 +185,7 @@ const Page = observer(() => {
             value={store.apiEndPoint}
             onChange={e => { store.apiEndPoint = e.target.value }}
             onBlur={e => {
-              PromiseCall(ConfigController.updateConfig({
+              PromiseCall(api.config.update.mutate({
                 key: 'aiApiEndpoint',
                 value: store.apiEndPoint
               }))

@@ -7,7 +7,6 @@ export default function _Document(props: DocumentProps) {
       <Head>
         <link rel="icon" href={`/favicon.ico`} type="image/x-icon" />
         <title>Blinko</title>
-        {/* <link rel="sitemap" type="application/xml" href={`${process.env.NEXT_PUBLIC_BASE_URL}/sitemap.xml`} /> */}
       </Head>
       <body>
         <Main />

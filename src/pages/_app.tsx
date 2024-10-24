@@ -6,15 +6,15 @@ import "swagger-ui-react/swagger-ui.css";
 import 'react-photo-view/dist/react-photo-view.css';
 import "@/server/share/index"
 import '@/lib/i18n'
-import React, { useState } from 'react';
+import NProgress from 'nprogress';
+import React from 'react';
+import TagSelectPop from '@/components/Common/TagSelectPop';
 import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import { NextUIProvider } from '@nextui-org/react';
 import { useEffect } from 'react';
 import { Router } from 'next/router';
-import NProgress from 'nprogress';
 import { initStore } from '@/store/init';
-import TagSelectPop from '@/components/Common/TagSelectPop';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
@@ -25,7 +25,7 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <>
       <Inspector
-        keys={['control', 'shift', 'command', 'c']}
+        keys={['control', 'shift', 'c']}
         disableLaunchEditor={true}
         onClickElement={({ codeInfo }: InspectParams) => {
           if (!codeInfo?.absolutePath) return

@@ -1,13 +1,6 @@
-import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { helper } from '@/lib/helper';
 import NextAuth from 'next-auth';
-import { remultServer } from '@/server/remult';
-import { remult } from 'remult';
-import { Accounts } from '@/server/share/entities/accounts';
-import { UserController } from '@/server/share/controllers/userController';
-import { encode } from 'next-auth/jwt';
-import { userRepo } from '@/server/share';
+import { prisma } from '@/server/prisma';
 
 export default NextAuth({
   providers: [
@@ -18,19 +11,17 @@ export default NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        return remultServer.withRemult(async () => {
-          try {
-            console.log({ credentials })
-            const user = await userRepo.find({ where: { name: credentials!.username, password: credentials!.password } });
-            if (user && user.length != 0) {
-              return { id: user[0]!.id.toString(), name: user[0]!.name || '', nickname: user[0]!.nickname };
-            }
-            throw new Error(JSON.stringify({ errors: 'user not found', status: false }))
-          } catch (error) {
-            console.log(error)
-            throw new Error(JSON.stringify({ errors: error.message, status: false }))
+        try {
+          console.log({ credentials })
+          const user = await prisma.accounts.findFirst({ where: { name: credentials!.username, password: credentials!.password } })
+          if (user) {
+            return { id: user[0]!.id.toString(), name: user[0]!.name || '', nickname: user[0]!.nickname };
           }
-        });
+          throw new Error(JSON.stringify({ errors: 'user not found', status: false }))
+        } catch (error) {
+          console.log(error)
+          throw new Error(JSON.stringify({ errors: error.message, status: false }))
+        }
       }
     })
   ],
