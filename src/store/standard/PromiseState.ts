@@ -39,47 +39,12 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   function: T;
   autoAlert = true;
   autoUpdate = false;
+  context: any = undefined;
   autoInit = false;
   autoClean = false;
-  context: any = undefined;
-
   successMsg: string = "";
   errMsg: string = "";
-
   loadingLock = true;
-
-  // event plugin
-  event = new EventEmitter();
-
-  on<E extends keyof Events>(event: E, listener: Events[E]) {
-    this.event.on(event, listener);
-    return this;
-  }
-
-  once<E extends keyof Events>(event: E, listener: Events[E]) {
-    this.event.once(event, listener);
-    return this;
-  }
-
-  use<E extends keyof Events>(event: E, listener: Events[E]) {
-    useEffect(() => {
-      this.event.on(event, listener);
-      return () => {
-        this.event.off(event, listener);
-      };
-    }, []);
-
-    return () => this.event.off(event, listener);
-  }
-
-  emit<E extends keyof Events>(event: E, ...args: Parameters<Events[E]>) {
-    this.event.emit(event, ...args);
-  }
-
-  // init plugin
-  init: () => Promise<void>;
-
-  // list selector plugin
   currentIndex: BaseState = new NumberState({ value: 0 });
   get current() {
     if (Array.isArray(this.value) && this.value.length > 0 && !this.value[this.currentIndex.value]) {
@@ -89,29 +54,6 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
     return this.value[this.currentIndex.value];
   }
 
-  _onSelect(index: number) {
-    this.currentIndex.setValue(index);
-    this.event.emit("select", index);
-    this.event.emit("update");
-  }
-
-  onSelect(index: number) {
-    this._onSelect(index);
-  }
-
-  toJSON() {
-    return {
-      value: this.value,
-    };
-  }
-
-  //@ts-ignore
-  async waitItem(): Promise<Awaited<U>[0]> {
-    await this.wait();
-    return this.current;
-  }
-
-  // wait hook plugin
   async wait({ call = false } = {}): Promise<Awaited<U>> {
     return new Promise<Awaited<U>>((res, rej) => {
       if (this.value) {
@@ -126,9 +68,6 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
 
       //@ts-ignore
       if (call && !this.loading.value) this.call();
-      this.event.emit("wait");
-      this.event.once("data", res);
-      this.event.on("error", rej);
     });
   }
 
@@ -147,8 +86,6 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   async setValue(val) {
     let _val = val;
     this.value = _val;
-    this.event.emit("data", val);
-    this.event.emit("update");
   }
 
   async getOrCall(...args: Parameters<T>): Promise<Awaited<U> | undefined> {
@@ -181,29 +118,20 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
     } catch (error) {
       if (this.autoAlert) {
         const message = error.message;
-        if (message.includes("Forbidden")) {
+        if (message.includes("Unauthorized")) {
           toast.dismiss();
-          // toast.error(message, {
-          //   id: "UNAUTHORIZED",
-          // });
           eventBus.emit('user:signout')
-          this.signOut?.();
         } else {
           this.errMsg = message;
           toast.error(message);
         }
       } else {
-        this.event.emit("error", error);
         throw error;
       }
     } finally {
-      this.event.emit("finally");
       this.loading.setValue(false);
     }
   }
-
-  // 401 403
-  signOut: () => void;
 }
 
 export class PromisePageState<T extends (...args: any) => Promise<any>, U = ReturnType<T>> {
@@ -214,8 +142,8 @@ export class PromisePageState<T extends (...args: any) => Promise<any>, U = Retu
   loading = new BooleanState();
   isLoadAll: boolean = false;
   get isEmpty() {
-    if (this.value == null) return true
     if (this.loading.value) return false
+    if (this.value == null) return true
     //@ts-ignore
     return this.value?.length == 0
   }
@@ -307,7 +235,7 @@ export class PromisePageState<T extends (...args: any) => Promise<any>, U = Retu
     } catch (error) {
       if (this.autoAlert) {
         const message = error.message;
-        if (message.includes("Forbidden")) {
+        if (message.includes("Unauthorized")) {
           toast.dismiss();
           eventBus.emit('user:signout')
         } else {

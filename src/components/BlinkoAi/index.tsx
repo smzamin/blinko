@@ -7,7 +7,6 @@ import { BlinkoStore } from "@/store/blinkoStore";
 import { api, streamApi } from "@/lib/trpc";
 import { motion } from "framer-motion"
 import { AiStore } from "@/store/aiStore";
-import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
 import { useEffect, useRef } from "react";
 import { MarkdownRender, StreamingCodeBlock } from "../Common/MarkdownRender";
 import dayjs from "@/lib/dayjs";
@@ -15,6 +14,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { DialogStore } from "@/store/module/Dialog";
 import { UserStore } from "@/store/user";
 import { useTranslation } from "react-i18next";
+import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
 
 export const BlinkoAiChat = observer(() => {
   const ai = RootStore.Get(AiStore)
@@ -27,19 +27,16 @@ export const BlinkoAiChat = observer(() => {
 
   return <div className="flex flex-col p-0 md:p-2 relative h-full">
     <ScrollArea
+      onBottom={() => {}}
       ref={scrollAreaRef}
       key='BlinkoAiChat'
-      onBottom={() => { }}
-      // style={{ height: `310px` }}
-      className={`px-2 mt-1 w-full overflow-y-scroll overflow-x-hidden h-[500px] md:h-[310px]`}>
+      className={`mx-1 w-full !h-[500px] md:!h-[360px]`}>
       {
         ai.chatHistory.list.length == 0 && <div className="font-bold mt-5 select-none text-desc">
           <Image src="/single-logo.svg" className="ml-[-8px]" width={40} />
           {t('hi-user-name-i-can-search-for-the-notes-for-you-how-can-i-help-you-today', { name: user.name })}
         </div>
       }
-
-
       {ai.chatHistory.list?.map((i, index) => {
         return <div className="flex flex-col w-full gap-2">
           {i.role == 'user' && <div className="text-center text-desc">{dayjs(i.createAt).fromNow()}</div>}
@@ -76,8 +73,8 @@ export const BlinkoAiChat = observer(() => {
         </div>
       })}
     </ScrollArea>
-    <div className="flex gap-2 mt-auto absolute w-full bottom-2">
-      <div className="relative w-full md:mr-4">
+    <div className="flex gap-2 mt-auto w-full ">
+      <div className="relative w-full ">
         <Textarea
           className="w-[85%]"
           variant="bordered"

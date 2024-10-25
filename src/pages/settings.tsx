@@ -205,6 +205,13 @@ const Page = observer(() => {
           rightContent={<LanguageSwitcher />} />
       </Card>
 
+      <Button onClick={e => {
+        api.task.createDBackupTask.query()
+      }}>Test Cron</Button>
+
+      <Button onClick={e => {
+        api.task.importDB.query()
+      }}>Import db</Button>
     </div>
   </>
 });

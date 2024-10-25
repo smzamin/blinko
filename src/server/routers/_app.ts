@@ -10,6 +10,8 @@ import { noteRouter } from './note';
 import { tagRouter } from './tag';
 import { userRouter } from './user';
 import { configRouter } from './config';
+import { publicRouter } from './public';
+import { taskRouter } from './task';
 
 export const appRouter = router({
   ai: aiRouter,
@@ -17,7 +19,9 @@ export const appRouter = router({
   tags: tagRouter,
   users: userRouter,
   attachments: attachmentsRouter,
-  config: configRouter
+  config: configRouter,
+  public: publicRouter,
+  task: taskRouter
 });
 
 export const createCaller = createCallerFactory(appRouter);

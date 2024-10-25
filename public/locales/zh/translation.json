@@ -74,5 +74,7 @@
   "required-items-cannot-be-empty": "所需项目不能为空",
   "the-two-passwords-are-inconsistent": "两个密码不一致",
   "create-successfully-is-about-to-jump-to-the-login": "创建成功，即将跳转到登录页面",
-  "already-have-an-account-direct-login": "已有账户？直接登录"
+  "already-have-an-account-direct-login": "已有账户？直接登录",
+  "no-tag-found": "未找到标签",
+  "new-version-detected-click-to-get-the-latest-version": "🎉检测到新版本，点击获取最新版本"
 }

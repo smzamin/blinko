@@ -75,5 +75,7 @@
   "required-items-cannot-be-empty": "Required items cannot be empty",
   "the-two-passwords-are-inconsistent": "The two passwords are inconsistent",
   "create-successfully-is-about-to-jump-to-the-login": "Create successfully, is about to jump to the login",
-  "already-have-an-account-direct-login": "Already have an account? Direct login"
+  "already-have-an-account-direct-login": "Already have an account? Direct login",
+  "no-tag-found": "No tag found",
+  "new-version-detected-click-to-get-the-latest-version": "🎉New version detected, click to get the latest version"
 }

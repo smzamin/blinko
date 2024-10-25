@@ -19,8 +19,10 @@ export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ styl
   const [isAtTop, setIsAtTop] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const controls = useAnimation();
-
-  const debounceBottom = _.debounce(onBottom!, 500, { leading: true, trailing: false });
+  let debounceBottom
+  if (onBottom) {
+    debounceBottom = _.debounce(onBottom!, 500, { leading: true, trailing: false });
+  }
 
   useImperativeHandle(ref, () => ({
     scrollToBottom: () => {
@@ -34,7 +36,7 @@ export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ styl
     const top = target.scrollTop <= 100;
 
     if (bottom) {
-      debounceBottom();
+      debounceBottom?.();
       if (!isAtBottom) {
         setIsAtBottom(true);
         controls.start({ y: [-10, 0], transition: { type: "spring", stiffness: 300 } });

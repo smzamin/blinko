@@ -4,9 +4,6 @@ import { makeAutoObservable } from 'mobx';
 import { useEffect } from 'react';
 import { PromisePageState, PromiseState } from './standard/PromiseState';
 import { Store } from './standard/base';
-import { type AttachmentsType, BlinkoController } from '@/server/share/controllers/blinkoController';
-import { NoteType } from '@/server/share/entities/notes';
-import { configRepo, tagRepo } from '@/server/share/index';
 import { helper } from '@/lib/helper';
 import { ToastPlugin } from './module/Toast/Toast';
 import { RootStore } from './root';
@@ -14,7 +11,7 @@ import { eventBus } from '@/lib/event';
 import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
 import { type RouterOutput } from '@/server/routers/_app';
-import { type Note } from '@/server/types';
+import { Attachment, NoteType, type Note } from '@/server/types';
 
 type filterType = {
   label: string;
@@ -101,7 +98,7 @@ export class BlinkoStore implements Store {
 
   upsertNote = new PromiseState({
     function: async ({ content = '', isArchived, type, id, attachments = [] }:
-      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: AttachmentsType[] }) => {
+      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[] }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
@@ -122,6 +119,7 @@ export class BlinkoStore implements Store {
 
   noteList = new PromisePageState({
     function: async ({ page, size }) => {
+      // await new Promise(resolve => setTimeout(resolve, 2000))
       const notes = await api.notes.list.query({ ...this.noteListFilterConfig, page, size })
       return notes.map(i => { return { ...i, isExpand: false } })
     }
@@ -143,6 +141,13 @@ export class BlinkoStore implements Store {
         pathTags = pathTags.concat(helper.generateTagPaths(node));
       });
       return { falttenTags, listTags, pathTags }
+    }
+  })
+
+  public = new PromiseState({
+    function: async () => {
+      const version = await api.public.version.query()
+      return { version }
     }
   })
 
@@ -170,6 +175,7 @@ export class BlinkoStore implements Store {
   use() {
     useEffect(() => {
       this.loadAllData()
+      this.public.call()
     }, [])
 
     useEffect(() => {

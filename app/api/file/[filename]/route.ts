@@ -7,7 +7,7 @@ import mime from "mime-types";
 export const GET = async (req: Request, { params }: any) => {
   const { filename } = params;
   const encodeFileName = encodeURIComponent(filename)
-  const filePath = path.join(process.cwd(), "upload", encodeFileName);
+  const filePath = path.join(process.cwd(), ".blinko/files", encodeFileName);
   try {
     await stat(filePath);
     const fileContent = await readFile(filePath);

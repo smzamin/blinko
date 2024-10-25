@@ -75,7 +75,7 @@ export const tagRouter = router({
       const { id } = input
       const tag = await prisma.tag.findFirst({ where: { id }, include: { tagsToNote: true } })
       const allNotesId = tag?.tagsToNote.map(i => i.noteId) ?? []
-      await prisma.notes.deleteMany({ where: { id: { in: allNotesId } } })
+      await caller.notes.deleteMany({ ids: allNotesId })
       return true
     }),
 })

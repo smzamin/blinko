@@ -17,7 +17,7 @@ import { prisma } from '../prisma';
 //https://js.langchain.com/docs/introduction/
 //https://smith.langchain.com/onboarding
 //https://js.langchain.com/docs/tutorials/qa_chat_history
-const FaissStorePath = path.join(process.cwd(), "faiss");
+const FaissStorePath = path.join(process.cwd(), ".blinko/faiss");
 
 export class AiService {
   static async getUserGlobalConfig() {

@@ -6,7 +6,7 @@ import { BlinkoStore } from "@/store/blinkoStore";
 import { Icon } from "@iconify/react";
 import { SideBarItem } from "../Layout";
 import { Popover, PopoverTrigger, PopoverContent, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import EmojiPicker, { Theme } from 'emoji-picker-react';
+import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react';
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
@@ -16,7 +16,6 @@ import { PromiseCall } from "@/store/standard/PromiseState";
 
 const EmojiPick = ({ children, element }) => {
   const { theme } = useTheme();
-  const blinko = RootStore.Get(BlinkoStore);
   return <Popover placement="bottom" showArrow={true}>
     <PopoverTrigger>
       <div className="hover:bg-background transition-all rounded-md px-1">
@@ -24,7 +23,7 @@ const EmojiPick = ({ children, element }) => {
       </div>
     </PopoverTrigger>
     <PopoverContent>
-      <EmojiPicker theme={theme == 'dark' ? Theme.DARK : Theme.LIGHT} onEmojiClick={async e => {
+      <EmojiPicker emojiStyle={EmojiStyle.NATIVE} theme={theme == 'dark' ? Theme.DARK : Theme.LIGHT} onEmojiClick={async e => {
         PromiseCall(api.tags.updateTagIcon.mutate({ id: element.id, icon: e.emoji }))
       }} />
     </PopoverContent>
@@ -35,18 +34,10 @@ const EmojiPick = ({ children, element }) => {
 export const TagListPanel = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
   const router = useRouter()
-  const [showPopId, setPopId] = useState(0) //id
-  // const [tagName, setTagName] = useState('')
-  // const store = RootStore.Local(() => ({
-  //   tagName: ''
-  // }))
+  const isSelected = (id) => {
+    return blinko.noteListFilterConfig.tagId == id && router.pathname == '/all'
+  }
   useEffect(() => { }, [blinko.noteListFilterConfig.tagId])
-  useEffect(() => {
-    document.addEventListener('click', () => setPopId(0));
-    return () => {
-      document.removeEventListener('click', () => setPopId(0));
-    }
-  }, [])
   return (
     <>
       <TreeView
@@ -74,7 +65,7 @@ export const TagListPanel = observer(() => {
           handleSelect,
         }) => (
           <div {...getNodeProps()} style={{ paddingLeft: 20 * (level - 1) + 6 }} >
-            <div className={`${SideBarItem} mb-1 relative group ${(blinko.noteListFilterConfig.tagId == element.id && router.pathname == '/all') ? '!bg-primary !text-primary-foreground' : ''}`}
+            <div className={`${SideBarItem} mb-1 relative group ${(isSelected(element.id)) ? '!bg-primary !text-primary-foreground' : ''}`}
               onClick={e => {
                 blinko.currentRouter = blinko.allTagRouter
                 router.push('/all?tagId=' + element.id, undefined, { shallow: true })
@@ -82,14 +73,14 @@ export const TagListPanel = observer(() => {
             >
               {isBranch ? (
                 <EmojiPick element={element}>
-                  <div className="flex items-center justify-center">
-                    <div className="group-hover:block hidden">
+                  <div className="flex items-center justify-center h-[24px]">
+                    <div className="flex items-center justify-center group-hover:opacity-100 opacity-0 w-0 h-0 group-hover:w-[24px] group-hover:h-[24px] transition-all" >
                       {isExpanded ?
-                        <Icon icon="gravity-ui:caret-down" width="20" height="20" />
-                        : <Icon icon="gravity-ui:caret-right" width="20" height="20" />
+                        <Icon icon="gravity-ui:caret-down" className="hover:text-primary transition-all" width="20" height="20" />
+                        : <Icon icon="gravity-ui:caret-right" className="hover:text-primary transition-all" width="20" height="20" />
                       }
                     </div>
-                    <div className="group-hover:hidden block">
+                    <div className="group-hover:opacity-0 opacity-100 w-[24px] group-hover:w-0 transition-all">
                       {
                         element.metadata?.icon ? <div>{element.metadata?.icon}</div>
                           : <Icon icon="mdi:hashtag" width="20" height="20" />
@@ -107,14 +98,14 @@ export const TagListPanel = observer(() => {
 
               <div className="truncate overflow-hidden whitespace-nowrap" title={element.name}>
                 {element.name}
+
               </div>
               <Dropdown>
                 <DropdownTrigger>
-                  <Icon className="ml-auto group-hover:opacity-100 opacity-0 transition-all" icon="ri:more-fill" width="20" height="20" />
+                  <Icon className="ml-auto group-hover:opacity-100 opacity-0 transition-all group-hover:translate-x-0 translate-x-2" icon="ri:more-fill" width="20" height="20" />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
                   <DropdownItem key="delete" onClick={async () => {
-                    setPopId(element.id as number)
                     ShowUpdateTagDialog({
                       defaultValue: (element.metadata?.path! as string),
                       onSave: async (tagName) => {
@@ -124,7 +115,6 @@ export const TagListPanel = observer(() => {
                           newName: tagName
                         }))
                         router.push('/all')
-                        setPopId(0)
                       }
                     })
                   }}>

@@ -13,8 +13,11 @@ export default NextAuth({
       async authorize(credentials) {
         try {
           console.log({ credentials })
-          const user = await prisma.accounts.findFirst({ where: { name: credentials!.username, password: credentials!.password } })
-          if (user) {
+          const user = await prisma.accounts.findMany({
+            where: { name: credentials!.username, password: credentials!.password },
+            select: { name: true, nickname: true, id: true }
+          })
+          if (user?.[0]) {
             return { id: user[0]!.id.toString(), name: user[0]!.name || '', nickname: user[0]!.nickname };
           }
           throw new Error(JSON.stringify({ errors: 'user not found', status: false }))

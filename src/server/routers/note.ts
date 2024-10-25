@@ -78,15 +78,14 @@ export const noteRouter = router({
 
       if (id) {
         const note = await prisma.notes.update({ where: { id }, data: update })
-        // const oldTagsInThisNote = await notesRepo.relations(note!).tags.find()
-        const oldTagsInThisNote = await prisma.tagsToNote.findMany({ where: { id: note.id }, include: { tag: true } })
+        const oldTagsInThisNote = await prisma.tagsToNote.findMany({ where: { noteId: note.id }, include: { tag: true } })
         await handleAddTags(tagTree, undefined)
         const oldTags = oldTagsInThisNote.map(i => i.tag).filter(i => !!i)
         const oldTagsString = oldTags.map(i => `${i?.name}<key>${i?.parent}`)
         const newTagsString = newTags.map(i => `${i?.name}<key>${i?.parent}`)
         const needTobeAddedRelationTags = _.difference(newTagsString, oldTagsString);
         const needToBeDeletedRelationTags = _.difference(oldTagsString, newTagsString);
-        console.log({ needToBeDeletedRelationTags })
+        console.log({ oldTags, newTags, needToBeDeletedRelationTags, needTobeAddedRelationTags })
         if (needToBeDeletedRelationTags.length != 0) {
           await prisma.tagsToNote.deleteMany({
             where: {
@@ -106,7 +105,6 @@ export const noteRouter = router({
         }
 
         if (needTobeAddedRelationTags.length != 0) {
-
           await prisma.tagsToNote.createMany({
             data: needTobeAddedRelationTags.map(i => {
               const [name, parent] = i.split('<key>')

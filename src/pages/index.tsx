@@ -13,13 +13,13 @@ import { MarkdownRender } from '@/components/Common/MarkdownRender';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
 import { BlinkoEditor } from '@/components/BlinkoEditor';
-import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 import dayjs from '@/lib/dayjs';
 import { PromiseCall } from '@/store/standard/PromiseState';
 import { api } from '@/lib/trpc';
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
 import { NoteType } from '@/server/types';
+import { ScrollArea } from '@/components/Common/ScrollArea';
 
 const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?: boolean | null }) => {
   const { t } = useTranslation();
@@ -63,10 +63,8 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
       {store.showEditor && <div className='px-2 md:px-6 ' >
         <BlinkoEditor mode='create' key='create-key' onHeightChange={height => store.editorHeight = height} />
       </div>}
-      <div className='text-ignore flex items-center justify-center gap-2 w-full '>
-        {
-          blinko.noteList.isLoading && <Icon className='text-ignore mt-2' icon="eos-icons:three-dots-loading" width="30" height="30" />
-        }
+      <div className='text-ignore flex items-center justify-center gap-1 w-full '>
+        <Icon className={`text-ignore mt-2 mb-[-5px] transition-all ${blinko.noteList.isLoading ? 'h-[30px]' : 'h-0'}`} icon="eos-icons:three-dots-loading" width="40" height="40" />
         {
           blinko.noteList.isEmpty &&
           <div className='absolute top-[40%] select-none text-ignore flex items-center justify-center gap-2 w-full mt-2 md:mt-10'>
@@ -79,7 +77,7 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
         !blinko.noteList.isEmpty && <ScrollArea
           onBottom={() => blinko.onBottom()}
           style={{ height: store.showEditor ? `calc(100vh - ${100 + store.editorHeight}px)` : '100vh' }}
-          className={`px-2 mt-0 md:mt-6 md:px-6 w-full h-full overflow-y-scroll overflow-x-hidden`}>
+          className={`px-2 mt-0 md:mt-6 md:px-6 w-full h-full transition-all`}>
           <Masonry
             breakpointCols={{
               default: 2,
@@ -89,7 +87,9 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
             columnClassName="my-masonry-grid_column">
             {
               blinko.noteList?.value?.map(i => {
-                return <motion.div className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }} whileTap={{ scale: 1 }} key={i.id}>
+                return <motion.div className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }}
+                  // whileHover={{ y: 2 }}
+                  key={i.id}>
                   <ContextMenuTrigger id="blink-item-context-menu" >
                     <div
                       onContextMenu={e => {

@@ -19,7 +19,7 @@ services:
         condition: service_healthy
     volumes:
       - ./docker-runtime-dir:/app #linux系统中的指定目录
-      - ./upload:/app/upload # blinko upload file 
+      - ./upload:/app/.blinko/files # blinko upload file 
     restart: always
     ports:
       - 1111:1111

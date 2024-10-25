@@ -7,8 +7,8 @@ import { useEffect } from "react";
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import { filesize } from "filesize";
 import dayjs from "@/lib/dayjs";
-import { ScrollArea } from "@/components/Common/ScrollArea";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import { ScrollArea } from "@/components/Common/ScrollArea";
 
 const Page = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)

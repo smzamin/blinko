@@ -14,7 +14,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const isCreateMode = mode == 'create'
   const blinko = RootStore.Get(BlinkoStore)
   const editorRef = useRef<any>(null)
-  
+
   return <div ref={editorRef} id='global-editor'>
     <Editor
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
@@ -30,10 +30,12 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       }
       onSend={async ({ files }) => {
         if (isCreateMode) {
+          //@ts-ignore
           await blinko.upsertNote.call({ content: blinko.noteContent, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } }) })
         } else {
           await blinko.upsertNote.call({
             id: blinko.curSelectedNote.id,
+            //@ts-ignore
             content: blinko.curSelectedNote.content, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } })
           })
         }

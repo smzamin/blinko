@@ -11,7 +11,7 @@ export const POST = async (req: Request, res: NextResponse) => {
     if (attachment) {
       await prisma.attachments.delete({ where: { id: attachment.id } })
     }
-    const filepath = path.join(process.cwd(), "upload/" + attachment_path.replace('/api/file/', ""))
+    const filepath = path.join(process.cwd(), ".blinko/files/" + attachment_path.replace('/api/file/', ""))
     await unlink(filepath)
     return NextResponse.json({ Message: "Success", status: 200 });
   } catch (error) {

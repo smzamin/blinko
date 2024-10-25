@@ -82,7 +82,7 @@ export default function Component() {
               if (res?.ok) {
                 router.push('/')
               } else {
-                RootStore.Get(ToastPlugin).error(t('user-or-password-error'))
+                RootStore.Get(ToastPlugin).error(res?.error ?? t('user-or-password-error'))
               }
             } catch (error) {
               console.log(error)

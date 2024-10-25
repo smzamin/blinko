@@ -7,6 +7,7 @@ import { BlinkoStore } from '@/store/blinkoStore';
 import { motion } from "framer-motion"
 import { DialogStore } from '@/store/module/Dialog';
 import { useMediaQuery } from 'usehooks-ts'
+import { useTranslation } from 'react-i18next';
 
 export const showTagSelectPop = (text: string = '') => {
   setTimeout(() => {
@@ -22,6 +23,7 @@ export const showTagSelectPop = (text: string = '') => {
 const TagSelectPop = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const isPc = useMediaQuery('(min-width: 768px)')
+  const { t } = useTranslation()
   const popRef: any = useRef(null)
   const store = RootStore.Local(() => ({
     rect: { top: 0, left: 0 },
@@ -126,7 +128,7 @@ const TagSelectPop = observer(() => {
             eventBus.emit('editor:replace', i)
           }}>#{i}</div>
         })}
-        {store.tagList?.length == 0 && <div className='text-ignore font-bold text-sm'>No tag found</div>}
+        {store.tagList?.length == 0 && <div className='text-ignore font-bold text-sm'>{t('no-tag-found')}</div>}
       </Card>
     </motion.div >
   );

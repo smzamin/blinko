@@ -8,8 +8,8 @@ CREATE TABLE "accounts" (
     "apiToken" VARCHAR NOT NULL DEFAULT '',
     "note" INTEGER NOT NULL DEFAULT 0,
     "role" VARCHAR NOT NULL DEFAULT '',
-    "createdAt" TIMESTAMPTZ(6),
-    "updatedAt" TIMESTAMPTZ(6),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
 );
@@ -23,8 +23,8 @@ CREATE TABLE "attachments" (
     "path" VARCHAR NOT NULL DEFAULT '',
     "size" DECIMAL NOT NULL DEFAULT 0,
     "noteId" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" TIMESTAMPTZ(6),
-    "updatedAt" TIMESTAMPTZ(6),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "attachments_pkey" PRIMARY KEY ("id")
 );
@@ -50,8 +50,8 @@ CREATE TABLE "notes" (
     "sharePassword" VARCHAR NOT NULL DEFAULT '',
     "metadata" JSON,
     "users" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" TIMESTAMPTZ(6),
-    "updatedAt" TIMESTAMPTZ(6),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "notes_pkey" PRIMARY KEY ("id")
 );
@@ -62,8 +62,8 @@ CREATE TABLE "tag" (
     "name" VARCHAR NOT NULL DEFAULT '',
     "icon" VARCHAR NOT NULL DEFAULT '',
     "parent" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" TIMESTAMPTZ(6),
-    "updatedAt" TIMESTAMPTZ(6),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "tag_pkey" PRIMARY KEY ("id")
 );
@@ -75,6 +75,18 @@ CREATE TABLE "tagsToNote" (
     "tagId" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "tagsToNote_pkey" PRIMARY KEY ("noteId","tagId")
+);
+
+-- CreateTable
+CREATE TABLE "scheduledTask" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "schedule" TEXT NOT NULL,
+    "lastRun" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isSuccess" BOOLEAN NOT NULL DEFAULT true,
+    "output" TEXT,
+
+    CONSTRAINT "scheduledTask_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

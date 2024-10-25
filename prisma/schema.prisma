@@ -8,28 +8,28 @@ datasource db {
 }
 
 model accounts {
-  id        Int       @id @default(autoincrement())
-  name      String    @default("") @db.VarChar
-  nickname  String    @default("") @db.VarChar
-  password  String    @default("") @db.VarChar
-  image     String    @default("") @db.VarChar
-  apiToken  String    @default("") @db.VarChar
-  note      Int       @default(0)
-  role      String    @default("") @db.VarChar
-  createdAt DateTime? @db.Timestamptz(6)
-  updatedAt DateTime? @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  name      String   @default("") @db.VarChar
+  nickname  String   @default("") @db.VarChar
+  password  String   @default("") @db.VarChar
+  image     String   @default("") @db.VarChar
+  apiToken  String   @default("") @db.VarChar
+  note      Int      @default(0)
+  role      String   @default("") @db.VarChar
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
 }
 
 model attachments {
-  id            Int       @id @default(autoincrement())
-  isShare       Boolean   @default(false)
-  sharePassword String    @default("") @db.VarChar
-  name          String    @default("") @db.VarChar
-  path          String    @default("") @db.VarChar
-  size          Decimal   @default(0) @db.Decimal
-  noteId        Int       @default(0)
-  createdAt     DateTime? @db.Timestamptz(6)
-  updatedAt     DateTime? @db.Timestamptz(6)
+  id            Int      @id @default(autoincrement())
+  isShare       Boolean  @default(false)
+  sharePassword String   @default("") @db.VarChar
+  name          String   @default("") @db.VarChar
+  path          String   @default("") @db.VarChar
+  size          Decimal  @default(0) @db.Decimal
+  noteId        Int      @default(0)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
 
   note notes @relation(fields: [noteId], references: [id])
 }
@@ -51,8 +51,8 @@ model notes {
   sharePassword String        @default("") @db.VarChar
   metadata      Json?         @db.Json
   users         Int           @default(0)
-  createdAt     DateTime?     @db.Timestamptz(6)
-  updatedAt     DateTime?     @db.Timestamptz(6)
+  createdAt     DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime      @updatedAt @db.Timestamptz(6)
   attachments   attachments[]
   tags          tagsToNote[]
 }
@@ -62,8 +62,8 @@ model tag {
   name       String       @default("") @db.VarChar
   icon       String       @default("") @db.VarChar
   parent     Int          @default(0)
-  createdAt  DateTime?    @db.Timestamptz(6)
-  updatedAt  DateTime?    @db.Timestamptz(6)
+  createdAt  DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime     @updatedAt @db.Timestamptz(6)
   tagsToNote tagsToNote[]
 }
 
@@ -76,4 +76,14 @@ model tagsToNote {
   tag  tag   @relation(fields: [tagId], references: [id])
 
   @@id([noteId, tagId])
+}
+
+
+model scheduledTask {
+  id        Int      @id @default(autoincrement())
+  name      String
+  schedule  String
+  lastRun   DateTime @default(now())
+  isSuccess Boolean  @default(true)
+  output    String?
 }

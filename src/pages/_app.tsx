@@ -4,7 +4,6 @@ import '../styles/editor.css';
 import '../styles/github-markdown.css';
 import "swagger-ui-react/swagger-ui.css";
 import 'react-photo-view/dist/react-photo-view.css';
-import "@/server/share/index"
 import '@/lib/i18n'
 import NProgress from 'nprogress';
 import React from 'react';
@@ -18,7 +17,6 @@ import { initStore } from '@/store/init';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
-
 const MyApp = ({ Component, pageProps }) => {
   initStore();
   useProgressBar();

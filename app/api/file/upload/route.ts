@@ -5,14 +5,14 @@ import { stat, writeFile } from "fs/promises";
 const writeFileSafe = async (baseName: string, extension: string, buffer: Buffer) => {
   let filename = encodeURIComponent(`${baseName}${extension}`)
   try {
-    const exists = await stat(path.join(process.cwd(), "upload/" + filename));
+    const exists = await stat(path.join(process.cwd(), ".blinko/files/" + filename));
     if (exists) {
       baseName = baseName + '_copy';
       return await writeFileSafe(baseName, extension, buffer)
     }
   } catch (error) {
     await writeFile(
-      path.join(process.cwd(), "upload/" + filename),
+      path.join(process.cwd(), ".blinko/files/" + filename),
       //@ts-ignore
       buffer
     );
