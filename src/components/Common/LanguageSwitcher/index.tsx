@@ -1,4 +1,3 @@
-import { Check, Globe } from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,
@@ -9,6 +8,7 @@ import { Button } from '@nextui-org/react';
 import { RootStore } from '@/store';
 import { BaseStore } from '@/store/baseStore';
 import { useTranslation } from 'react-i18next';
+import { Icon } from "@iconify/react";
 
 const LanguageSwitcher = () => {
   const baseStore = RootStore.Get(BaseStore)
@@ -19,7 +19,7 @@ const LanguageSwitcher = () => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="flat" startContent={<Globe size={22} />}>{baseStore.locales.filter(i => i.value == baseStore.locale.value)?.[0]?.label}</Button>
+        <Button variant="flat" startContent={<Icon icon="hugeicons:global" width="24" height="24" />}>{baseStore.locales.filter(i => i.value == baseStore.locale.value)?.[0]?.label}</Button>
       </DropdownTrigger>
 
       <DropdownMenu className="p-2 space-y-1">
@@ -32,7 +32,7 @@ const LanguageSwitcher = () => {
             }}
           >
             <div className='flex'> {locale.label}
-              {baseStore.locale.value === locale.value && <Check className='ml-auto' size={18} />}</div>
+              {baseStore.locale.value === locale.value && <Icon icon="mingcute:check-fill" width="18" height="18" />}</div>
           </DropdownItem>
         ))}
       </DropdownMenu>

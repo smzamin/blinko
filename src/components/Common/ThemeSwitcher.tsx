@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { Button } from '@nextui-org/react';
+import { Icon } from '@iconify/react';
 
 const ThemeSwitcher = observer(() => {
   const [isMounted, setIsMounted] = useState(false);
@@ -24,7 +24,7 @@ const ThemeSwitcher = observer(() => {
         setTheme(theme === 'light' ? 'dark' : 'light');
       }}
     >
-      {isMounted && theme === 'dark' ? <Sun /> : <Moon />}
+      {isMounted && theme === 'dark' ? <Icon icon="line-md:sun-rising-loop" width="24" height="24" /> :<Icon icon="line-md:moon-alt-loop" width="24" height="24" />}
     </Button>
   );
 });
