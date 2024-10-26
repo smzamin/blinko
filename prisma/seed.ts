@@ -196,19 +196,22 @@ const prisma = new PrismaClient();
 async function main() {
   const hasNotes = await prisma.notes.findMany();
   if (hasNotes.length == 0) {
-    await prisma.notes.createMany({ data: notes })
+    const noteRes = await prisma.notes.createManyAndReturn({ data: notes })
     await prisma.tag.createMany({ data: tag })
     await prisma.tagsToNote.createMany({ data: tagsToNote })
     await prisma.attachments.createMany({ data: attachments })
+    return noteRes
   }
 }
 
 main()
+  .then(e => {
+    console.log(e)
+    console.log("✨ Seed done! ✨")
+  })
   .catch((e) => {
     console.error(e);
-    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
-    process.exit(1);
   });
