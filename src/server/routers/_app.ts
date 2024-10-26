@@ -1,8 +1,7 @@
 /**
  * This file contains the root router of your tRPC-backend
  */
-import { AnyProcedure, inferRouterInputs, inferRouterOutputs } from '@trpc/server';
-import { notes } from '../share/initdata';
+import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import { createCallerFactory, router } from '../trpc';
 import { aiRouter } from './ai';
 import { attachmentsRouter } from './attachment';
