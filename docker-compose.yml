@@ -17,9 +17,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ./docker-runtime-dir:/app #linux系统中的指定目录
-      - ./upload:/app/.blinko/files # blinko upload file 
     restart: always
     ports:
       - 1111:1111
@@ -40,8 +37,6 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
-    volumes:
-      - ./docker-runtime-dir/pgdata:/var/lib/postgresql/data #linux system dir
     healthcheck:
       test:
         ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]

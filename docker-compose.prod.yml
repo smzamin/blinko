@@ -8,16 +8,14 @@ services:
       NODE_ENV: production
       NEXTAUTH_URL: http://localhost:1111
       NEXT_PUBLIC_BASE_URL: http://localhost:1111
-      NEXT_PUBLIC_PROJECT_ID: blinko
       NEXTAUTH_SECRET: my_ultra_secure_nextauth_secret
       JWT_SECRET: MBqmAZqgbe0I66Jx3sFd/nMoU3paITpHznScerTHJNo2
       DATABASE_URL: postgresql://postgres:mysecretpassword@postgres:5432/postgres
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      # - ./docker-runtime-dir:/app 
-      - ./public/assets:/app/public/assets 
+    # volumes:
+    #   - <your volumn>:/app/.blinko
     restart: always
     logging:
       options:
@@ -44,32 +42,10 @@ services:
       POSTGRES_PASSWORD: mysecretpassword
       TZ: Asia/Shanghai
     # volumes:
-    #   - ./docker-runtime-dir/pgdata:/var/lib/postgresql/data #linux系统中的指定目录
+    #   - <your volumn>:/var/lib/postgresql/data
     healthcheck:
       test:
         ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
       interval: 5s
       timeout: 10s
       retries: 5
-
-  # watchtower:
-  #   image: containrrr/watchtower:latest
-  #   container_name: blinko-watchtower
-  #   restart: always
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   command: --interval 10 --cleanup blinko-website
-
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: blinko-nginx
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx-site.conf:/etc/nginx/conf.d/default.conf 
-  #     - ./certs:/etc/nginx/certs  
-  #   # depends_on:
-  #   #   blinko-website:
-  #   #     condition: service_healthy
