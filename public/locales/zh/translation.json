@@ -76,5 +76,15 @@
   "create-successfully-is-about-to-jump-to-the-login": "创建成功，即将跳转到登录页面",
   "already-have-an-account-direct-login": "已有账户？直接登录",
   "no-tag-found": "未找到标签",
-  "new-version-detected-click-to-get-the-latest-version": "🎉检测到新版本，点击获取最新版本"
+  "new-version-detected-click-to-get-the-latest-version": "🎉检测到新版本，点击获取最新版本",
+  "schedule-task": "定时任务",
+  "schedule-back-up": "定时备份",
+  "every-half-year": "每半年",
+  "every-three-month": "每三个月",
+  "every-month": "每月",
+  "every-week": "每周",
+  "every-day": "每天",
+  "import": "导入",
+  "impoort-from-bko": "从.bko文件导入",
+  "not-a-bko-file": "不是 bko 文件"
 }

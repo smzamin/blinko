@@ -19,14 +19,13 @@ export const publicRouter = router({
           })
           const latestVersion = res.data.tag_name.replace('v', '');
           const currentVersion = packageJson.version;
-          console.log({ latestVersion, currentVersion })
           if (latestVersion !== currentVersion) {
             return latestVersion
           } else {
             return ''
           }
         } catch (error) {
-          console.error(error)
+          // console.error(error)
           return ''
         }
       }, { ttl: 60 * 60 * 1000 })

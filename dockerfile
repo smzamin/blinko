@@ -1,5 +1,7 @@
 FROM node:18-alpine AS build
 
+RUN apk add --no-cache postgresql14-client
+
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
@@ -11,16 +13,4 @@ RUN pnpm install
 COPY . .
 
 RUN pnpm build
-CMD ["pnpm", "start"]
-
-# FROM oven/bun:latest
-# WORKDIR /app/next-app
-
-# COPY package.json ./
-# COPY bun.lockb ./
-
-# RUN bun install
-
-# COPY . .
-# RUN bun run build
-# CMD bun start
+CMD ["sh", "-c", "pnpm migrate && pnpm db-seed && pnpm start"]

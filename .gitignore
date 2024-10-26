@@ -18,5 +18,5 @@ public/robots.txt
 public/sitemap*
 public/assets
 pgdata
-upload/*
-faiss/*
+.blinko/faiss/*
+dump.sql

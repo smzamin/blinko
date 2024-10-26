@@ -62,7 +62,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
   const cardRef = React.useRef(null)
   const blinko = RootStore.Get(BlinkoStore)
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   const pastedFiles = usePasteFile(cardRef);
   useEffect(() => {
@@ -71,6 +71,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       store.uploadFiles(pastedFiles)
     }
   }, [pastedFiles])
+
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
@@ -78,6 +79,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     },
     (err) => console.table(err)
   );
+  
   const store = RootStore.Local(() => ({
     files: [] as FileType[],
     get canSend() {

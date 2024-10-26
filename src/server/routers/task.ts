@@ -1,74 +1,61 @@
-import { router, publicProcedure, authProcedure } from '../trpc';
-import { TRPCError } from '@trpc/server';
+import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { encode } from 'next-auth/jwt';
-import { Prisma } from '@prisma/client';
-import { CronJob } from 'cron'
-import { exec } from 'child_process';
-import { pgDump, pgRestore } from "pg-dump-restore";
-import { parse } from 'pg-connection-string'
-
-//when you are in dev mode,you need to download and install command line tools and aad to env https://www.postgresql.org/download
-const job = new CronJob('* * * * *', async () => {
-  console.log("dump")
-  var config = parse(process.env.DATABASE_URL!)
-  const { stdout, stderr } = await pgDump(
-    {
-      port: Number(config.port!),
-      host: config.host!,
-      database: config.database!,
-      username: config.user!,
-      password: config.password!,
-    },
-    {
-      filePath: './dump.sql'
-    },
-  );
-  console.log({ stdout, stderr })
-}, null, true);
+import { Backupdb, DBBackupJob, Resotredb } from '../plugins/jobs';
+import { DBBAK_TASK_NAME } from '@/lib/constant';
+import { CronTime } from 'cron';
 
 export const taskRouter = router({
-  createDBackupTask: authProcedure
+  list: authProcedure
     .input(z.void())
     .query(async () => {
-      var config = parse(process.env.DATABASE_URL!)
-      const { stdout, stderr } = await pgDump(
-        {
-          port: Number(config.port!),
-          host: config.host!,
-          database: config.database!,
-          username: config.user!,
-          password: config.password!,
-        },
-        {
-          filePath: '.blinko/dump.sql'
-        },
-      );
-      return
-      const hasTask = await prisma.scheduledTask.findFirst({ where: { name: 'Backup Database' } })
-      console.log({ hasTask })
-      if (!hasTask) {
-        console.log("0")
-        job.start()
-        console.log(job.running)
-      }
+      return await prisma.scheduledTask.findMany()
     }),
-  importDB: authProcedure
+  startDBackupTask: authProcedure
+    .input(z.object({
+      time: z.string(),
+      immediate: z.boolean().default(false)
+    }))
+    .query(async ({ input }) => {
+      const { time, immediate } = input
+      let success = false, output
+      const hasTask = await prisma.scheduledTask.findFirst({ where: { name: DBBAK_TASK_NAME } })
+      DBBackupJob.setTime(new CronTime(time))
+      DBBackupJob.start()
+      if (immediate) {
+        try {
+          output = await Backupdb()
+          success = true
+        } catch (error) { output = error ?? (error.message ?? "internal error") }
+      }
+      if (!hasTask) {
+        await prisma.scheduledTask.create({ data: { lastRun: new Date(), output, isSuccess: success, schedule: time, name: DBBAK_TASK_NAME, isRunning: DBBackupJob.running } })
+      } else {
+        await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { lastRun: new Date(), output, isSuccess: success, schedule: time, isRunning: DBBackupJob.running } })
+      }
+      return null
+    }),
+  stopDBackupTask: authProcedure
     .input(z.void())
     .query(async () => {
-      var config = parse(process.env.DATABASE_URL!)
-      const { stdout, stderr } = await pgRestore(
-        {
-          port: Number(config.port!),
-          host: config.host!,
-          database: config.database!,
-          username: config.user!,
-          password: config.password!,
-        },
-        {
-          filePath: ".blinko/dump.sql",
-        }
-      ); 
+      DBBackupJob.stop()
+      await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { isRunning: DBBackupJob.running } })
+    }),
+  updataDBackupTime: authProcedure
+    .input(z.object({
+      time: z.string(),
+    }))
+    .mutation(async ({ input }) => {
+      const { time } = input
+      DBBackupJob.setTime(new CronTime(time))
+      await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { schedule: time } })
+    }),
+  restoreDB: authProcedure
+    .input(z.object({
+      fileName: z.string()
+    }))
+    .query(async ({ input }) => {
+      const { fileName } = input
+      return Resotredb(fileName)
     }),
 })

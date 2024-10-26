@@ -1,20 +1,15 @@
-import { makeAutoObservable, makeObservable } from "mobx"; 
+import { makeAutoObservable, makeObservable } from "mobx";
 import { type Store, type StoreClass } from "./standard/base";
 import { useLocalObservable } from "mobx-react-lite";
 
-export type EventMap = {
-  "*": (args: any) => void;
-  add: (store: Store) => void;
-};
 
-
-export class RootStore<T extends EventMap = any> {
+export class RootStore {
   instanceMap = new Map<Function, Map<string, Store>>();
   instance: Record<string, Store> = {};
   providers: Store[] = [];
   isInited = false;
 
-  static init<T extends EventMap>(args: Partial<RootStore<T>> = {}): RootStore<T> {
+  static init(args: Partial<RootStore> = {}): RootStore {
     if (!globalThis.store) {
       globalThis.store = new RootStore(args);
     }
@@ -34,7 +29,6 @@ export class RootStore<T extends EventMap = any> {
     }
 
     if (this.instanceMap.get(store.constructor)?.get(instanceMapId)) {
-      // console.error(`Store ${store.sid} already exists`);
       return;
     }
     if (store.autoObservable) {
@@ -73,7 +67,7 @@ export class RootStore<T extends EventMap = any> {
     return this.instanceMap.has(store);
   }
 
-  constructor(args: Partial<RootStore<T>> = {}) {
+  constructor(args: Partial<RootStore> = {}) {
     Object.assign(this, args);
     makeObservable(this, {
       providers: true,

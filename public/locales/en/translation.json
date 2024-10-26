@@ -77,5 +77,15 @@
   "create-successfully-is-about-to-jump-to-the-login": "Create successfully, is about to jump to the login",
   "already-have-an-account-direct-login": "Already have an account? Direct login",
   "no-tag-found": "No tag found",
-  "new-version-detected-click-to-get-the-latest-version": "🎉New version detected, click to get the latest version"
+  "new-version-detected-click-to-get-the-latest-version": "🎉New version detected, click to get the latest version",
+  "schedule-task": "Schedule Task",
+  "schedule-back-up": "Schedule Back Up",
+  "every-day": "Every day",
+  "every-week": "Every week",
+  "every-month": "Every month",
+  "every-three-month": "Every three month",
+  "every-half-year": "Every half year",
+  "import": "Import",
+  "impoort-from-bko": "Import from .bko",
+  "not-a-bko-file": "not a bko file"
 }

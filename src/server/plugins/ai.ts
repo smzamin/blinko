@@ -1,23 +1,21 @@
 import { _ } from '@/lib/lodash';
-import { ChatOpenAI, ClientOptions, OpenAI, OpenAIEmbeddings, } from "@langchain/openai";
+import { ChatOpenAI, ClientOptions, OpenAIEmbeddings, } from "@langchain/openai";
 import { MarkdownTextSplitter } from '@langchain/textsplitters';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import path from 'path';
 import type { Document } from "@langchain/core/documents";
 import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { createRetrievalChain } from "langchain/chains/retrieval";
 import { OpenAIWhisperAudio } from "@langchain/community/document_loaders/fs/openai_whisper_audio";
 import { caller } from '../routers/_app';
 import { prisma } from '../prisma';
+import { FAISS_PATH } from '@/lib/constant';
 
 //https://js.langchain.com/docs/introduction/
 //https://smith.langchain.com/onboarding
 //https://js.langchain.com/docs/tutorials/qa_chat_history
-const FaissStorePath = path.join(process.cwd(), ".blinko/faiss");
+const FaissStorePath = path.join(process.cwd(), FAISS_PATH);
 
 export class AiService {
   static async getUserGlobalConfig() {

@@ -1,6 +1,6 @@
 import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
-import { AiService } from '../ai';
+import { AiService } from '../plugins/ai';
 
 export const aiRouter = router({
   embeddingUpsert: authProcedure

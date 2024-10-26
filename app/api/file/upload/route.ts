@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { stat, writeFile } from "fs/promises";
+import { UPLOAD_FILE_PATH } from "@/lib/constant";
 
 const writeFileSafe = async (baseName: string, extension: string, buffer: Buffer) => {
   let filename = encodeURIComponent(`${baseName}${extension}`)
   try {
-    const exists = await stat(path.join(process.cwd(), ".blinko/files/" + filename));
+    const exists = await stat(path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + filename));
     if (exists) {
       baseName = baseName + '_copy';
       return await writeFileSafe(baseName, extension, buffer)
     }
   } catch (error) {
     await writeFile(
-      path.join(process.cwd(), ".blinko/files/" + filename),
+      path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + filename),
       //@ts-ignore
       buffer
     );

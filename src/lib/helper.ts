@@ -1,5 +1,6 @@
 import { type Tag } from '@/server/types';
 import { _ } from './lodash';
+import i18n from './i18n';
 
 const valMap = {
   undefined: '',
@@ -205,4 +206,42 @@ export const helper = {
     //@ts-ignore
     isBrowser: typeof window === 'undefined' ? false : true,
   },
+  cron: {
+    human(cronTime: string) {
+      switch (cronTime) {
+        case '0 0 * * *':
+          return i18n.t('every-day')
+        case '0 0 * * 0':
+          return i18n.t('every-week')
+        case '0 0 1 * *':
+          return i18n.t('every-month')
+        case '0 0 1 */3 *':
+          return i18n.t('every-three-month')
+        case '0 0 1 */6 *':
+          return i18n.t('every-half-year')
+      }
+    },
+    cornTimeList: [
+      {
+        label: i18n.t('every-day'),
+        value: '0 0 * * *'
+      },
+      {
+        label: i18n.t('every-week'),
+        value: '0 0 * * 0'
+      },
+      {
+        label: i18n.t('every-month'),
+        value: '0 0 1 * *'
+      },
+      {
+        label: i18n.t('every-three-month'),
+        value: '0 0 1 */3 *'
+      },
+      {
+        label: i18n.t('every-half-year'),
+        value: '0 0 1 */6 *'
+      }
+    ]
+  }
 };

@@ -12,6 +12,7 @@ import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
 import { type RouterOutput } from '@/server/routers/_app';
 import { Attachment, NoteType, type Note } from '@/server/types';
+import { DBBAK_TASK_NAME } from '@/lib/constant';
 
 type filterType = {
   label: string;
@@ -161,6 +162,27 @@ export class BlinkoStore implements Store {
     }
   })
 
+  task = new PromiseState({
+    function: async () => {
+      return await api.task.list.query()
+    }
+  })
+
+  updateTask = new PromiseState({
+    function: async (isStart) => {
+      if (isStart) {
+        await api.task.startDBackupTask.query({ time: '0 0 * * 0', immediate: true })
+      } else {
+        await api.task.stopDBackupTask.query()
+      }
+      await this.task.call()
+    }
+  })
+
+  get DBTask() {
+    return this.task.value?.find(i => i.name == DBBAK_TASK_NAME)
+  }
+
 
   async onBottom() {
     await this.noteList.callNextPage({})
@@ -176,11 +198,11 @@ export class BlinkoStore implements Store {
     useEffect(() => {
       this.loadAllData()
       this.public.call()
+      this.task.call()
     }, [])
 
     useEffect(() => {
       this.loadAllData()
     }, [this.updateTicker])
   }
-
 }

@@ -79,14 +79,14 @@ CREATE TABLE "tagsToNote" (
 
 -- CreateTable
 CREATE TABLE "scheduledTask" (
-    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "schedule" TEXT NOT NULL,
     "lastRun" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "isSuccess" BOOLEAN NOT NULL DEFAULT true,
-    "output" TEXT,
+    "isRunning" BOOLEAN NOT NULL DEFAULT false,
+    "output" JSON,
 
-    CONSTRAINT "scheduledTask_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "scheduledTask_pkey" PRIMARY KEY ("name")
 );
 
 -- AddForeignKey

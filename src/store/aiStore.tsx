@@ -1,21 +1,12 @@
 
 import { _ } from '@/lib/lodash';
 import { makeAutoObservable } from 'mobx';
-import { useEffect } from 'react';
-import { PromisePageState, PromiseState } from './standard/PromiseState';
 import { Store } from './standard/base';
-import { type AttachmentsType, BlinkoController } from '@/server/share/controllers/blinkoController';
-import { Note, NoteType } from '@/server/share/entities/notes';
-import { tagRepo } from '@/server/share/index';
-import { helper } from '@/lib/helper';
 import { ToastPlugin } from './module/Toast/Toast';
 import { RootStore } from './root';
-import { StorageState } from './standard/StorageState';
-import { eventBus } from '@/lib/event';
-import i18n from '@/lib/i18n';
-import { useRouter } from 'next/router';
-import { api, streamApi } from '@/lib/trpc';
+import { streamApi } from '@/lib/trpc';
 import { StorageListState } from './standard/StorageListState';
+import { Note } from '@/server/types';
 
 type Chat = {
   content: string
@@ -105,11 +96,4 @@ export class AiStore implements Store {
   abortCompletions() {
     this.abortController.abort()
   }
-
-  use() {
-    const router = useRouter()
-
-  }
-
-
 }
