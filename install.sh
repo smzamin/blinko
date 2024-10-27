@@ -1,7 +1,12 @@
 #!/bin/bash
 
-echo "Remove the local blinko-website image..."
-docker rmi -f blinkospace/blinko || echo "No existing blinko-website image to remove."
+read -p "Do you want to remove the local blinko-website image? (y/n): " USER_INPUT
+if [[ "$USER_INPUT" == "y" || "$USER_INPUT" == "Y" ]]; then
+    echo "Removing the local blinko-website image..."
+    docker rmi -f blinkospace/blinko || echo "No existing blinko-website image to remove."
+else
+    echo "Skipping the removal of the local blinko-website image."
+fi
 
 echo "Pull up the latest blinko mirror image..."
 
