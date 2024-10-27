@@ -11,7 +11,5 @@ docker run --name blinko-website -d -p 1111:1111 blinko
 
 ## build docker image & run with docker-compose locally
 ```
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=mysecretpassword
 docker-compose -f docker-compose.yml up -d --build
 ```

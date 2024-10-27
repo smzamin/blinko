@@ -196,17 +196,19 @@ const prisma = new PrismaClient();
 async function main() {
   const hasNotes = await prisma.notes.findMany();
   if (hasNotes.length == 0) {
-    const noteRes = await prisma.notes.createManyAndReturn({ data: notes })
+    await prisma.notes.createMany({ data: notes })
     await prisma.tag.createMany({ data: tag })
     await prisma.tagsToNote.createMany({ data: tagsToNote })
     await prisma.attachments.createMany({ data: attachments })
-    return noteRes
+    await prisma.$executeRaw`SELECT setval('notes_id_seq', (SELECT MAX(id) FROM "notes") + 1);`
+    await prisma.$executeRaw`SELECT setval('tag_id_seq', (SELECT MAX(id) FROM "tag") + 1);`
+    await prisma.$executeRaw`SELECT setval('"tagsToNote_id_seq"', (SELECT MAX(id) FROM "tagsToNote") + 1);`
+    await prisma.$executeRaw`SELECT setval('attachments_id_seq', (SELECT MAX(id) FROM "attachments") + 1);`
   }
 }
 
 main()
   .then(e => {
-    console.log(e)
     console.log("✨ Seed done! ✨")
   })
   .catch((e) => {

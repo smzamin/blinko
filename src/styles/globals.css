@@ -41,8 +41,12 @@
 html,
 body {
   scroll-behavior: smooth;
-  height: 100%;
   overflow-y: hidden;
+  height: var(--doc-height);
+}
+
+.h-mobile-full {
+  height: var(--doc-height);
 }
 
 

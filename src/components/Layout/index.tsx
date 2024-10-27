@@ -17,6 +17,11 @@ import { BlinkoAi } from "../BlinkoAi";
 import { ScrollArea } from "../Common/ScrollArea";
 import { BlinkoNewVersion } from "../BlinkoNewVersion";
 
+const documentHeight = () => {
+  const doc = document.documentElement
+  doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
+}
+
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover hover:bg-hover-foreground rounded-xl transition-all"
 export const CommonLayout = observer(({
   children,
@@ -40,6 +45,8 @@ export const CommonLayout = observer(({
   useEffect(() => {
     base.changeLanugage(i18n, base.locale.value)
     setIsClient(true)
+    documentHeight()
+    window.addEventListener('resize', documentHeight)
     debounceSearch = _.debounce(() => {
       blinkoStore.noteList.resetAndCall({})
     })
@@ -89,7 +96,7 @@ export const CommonLayout = observer(({
   );
 
   return (
-    <div className="flex h-dvh w-full">
+    <div className="flex w-full h-mobile-full">
       {
         blinkoStore.showAi && <BlinkoAi />
       }
@@ -123,7 +130,7 @@ export const CommonLayout = observer(({
                 fullWidth
                 variant="flat"
                 aria-label="search"
-                className="ml-auto"
+                className={`ml-auto w-[150px] md:w-[300px]`}
                 classNames={{
                   base: "px-1 mr-1 w-[full] md:w-[300px]",
                   inputWrapper:
@@ -165,7 +172,7 @@ export const CommonLayout = observer(({
 
 
         {/* main container  */}
-        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_100px)] overflow-y-scroll scroll-container">
+        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
           <div className="flex h-full w-full flex-col rounded-medium" >
             {children}
           </div>

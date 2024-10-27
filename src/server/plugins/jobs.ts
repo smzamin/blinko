@@ -11,7 +11,7 @@ import { unlink } from "fs/promises";
 export const Backupdb = async () => {
   try {
     // console.log(`pg_dump --dbname=${process.env.DATABASE_URL!} --format=custom --file=${DBBAKUP_PATH}/bak-v${Package.version}.sql --data-only --exclude-table=_prisma_migrations`)
-    const { stdout, stderr } = await $`pg_dump --dbname=${process.env.DATABASE_URL!} --format=custom --file=${DBBAKUP_PATH}/bak-v${Package.version}.sql --data-only 
+    const { stdout, stderr } = await $`pg_dump --dbname=${process.env.DATABASE_URL!} --format=custom --file=${DBBAKUP_PATH}/bak.sql --data-only 
     --exclude-table=accounts --exclude-table=scheduledTask --exclude-table=_prisma_migrations`;
     // console.log({ stdout, stderr })
     if (stderr) {
@@ -34,33 +34,17 @@ export const Backupdb = async () => {
 }
 
 export const Resotredb = async (filePath) => {
-  console.log(UPLOAD_FILE_PATH + '/' + filePath)
   const zip = new AdmZip(UPLOAD_FILE_PATH + '/' + filePath);
   zip.extractAllTo(ROOT_PATH, true);
-  const sqlFile = findFirstSQLFile(ROOT_PATH)
-  if (!sqlFile) {
+  const exists = fs.existsSync('.blinko/pgdump/bak.sql')
+  if (!exists) {
     throw new Error("Your db file can not find restore file")
   }
-  const { stdout, stderr } = await $`pg_restore --dbname=${process.env.DATABASE_URL!} ${sqlFile.replace(/\\/g, '/')}`;
+  const { stdout, stderr } = await $`pg_restore --dbname=${process.env.DATABASE_URL!} .blinko/pgdump/bak.sql}`;
   if (stderr) {
     throw new Error(stderr)
   }
   return true
-}
-
-const findFirstSQLFile = (dir) => {
-  const files = fs.readdirSync(dir);
-  for (const file of files) {
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-    if (stat.isDirectory()) {
-      const found = findFirstSQLFile(filePath);
-      if (found) return found;
-    } else if (path.extname(file) === '.sql') {
-      return path.normalize(filePath);
-    }
-  }
-  return null;
 }
 
 export const DBBackupJob = new CronJob('* * * * *', async () => {

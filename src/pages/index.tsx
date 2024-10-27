@@ -49,7 +49,7 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
   }, [type, tagId])
 
   const store = RootStore.Local(() => ({
-    editorHeight: 90,
+    editorHeight: 75,
     get showEditor() {
       return !isArchived
     },
@@ -60,7 +60,7 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
 
   return (
     <div className="md:p-0 relative h-full flex flex-col-reverse md:flex-col">
-      {store.showEditor && <div className='px-2 md:px-6 ' >
+      {store.showEditor && <div className='px-2 md:px-6' >
         <BlinkoEditor mode='create' key='create-key' onHeightChange={height => store.editorHeight = height} />
       </div>}
       <div className='text-ignore flex items-center justify-center gap-1 w-full '>
@@ -77,7 +77,7 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
         !blinko.noteList.isEmpty && <ScrollArea
           onBottom={() => blinko.onBottom()}
           style={{ height: store.showEditor ? `calc(100vh - ${100 + store.editorHeight}px)` : '100vh' }}
-          className={`px-2 mt-0 md:mt-6 md:px-6 w-full h-full transition-all`}>
+          className={`px-2 mt-0 md:mt-6 md:px-6 w-full h-full transition-all scroll-area`}>
           <Masonry
             breakpointCols={{
               default: 2,
@@ -125,10 +125,9 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
               })
             }
           </Masonry>
-          {store.showLoadAll && <div className='w-full text-center text-sm font-bold text-ignore mt-4'>{t('all-notes-have-been-loaded', { items: blinko.noteList.value?.length })}</div>}
+          {store.showLoadAll && <div className='w-full text-center text-sm font-bold text-ignore my-4'>{t('all-notes-have-been-loaded', { items: blinko.noteList.value?.length })}</div>}
         </ScrollArea>
       }
-
       <BlinkoRightClickMenu />
       <BlinkoMultiSelectPop />
     </div>
