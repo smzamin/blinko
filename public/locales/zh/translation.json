@@ -90,5 +90,12 @@
   "convert-to-note": "转换为笔记",
   "convert-to-blinko": "转换为闪念",
   "reviewed": "已回顾",
-  "congratulations-youve-reviewed-everything-today": "恭喜你，今天你已经回顾了所有内容"
+  "congratulations-youve-reviewed-everything-today": "恭喜你，今天你已经回顾了所有内容",
+  "name-db": "名称",
+  "schedule": "计划",
+  "last-run": "最后一次运行",
+  "backup-file": "备份文件",
+  "status": "状态",
+  "running": "运行中",
+  "stopped": "已停止"
 }

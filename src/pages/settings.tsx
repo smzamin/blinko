@@ -4,17 +4,18 @@ import { AiSetting } from "@/components/BlinkoSettings/AiSetting";
 import { PerferSetting } from "@/components/BlinkoSettings/PerferSetting";
 import { TaskSetting } from "@/components/BlinkoSettings/TaskSetting";
 import { ImportSetting } from "@/components/BlinkoSettings/ImportSetting";
+import { ScrollArea } from "@/components/Common/ScrollArea";
 
 const Page = observer(() => {
-  return <>
-    <div className="px-2 md:px-6 pt-2 flex flex-col gap-8">
+  return <div className="h-mobile-full ">
+    <ScrollArea onBottom={() => { }} className="px-2 md:px-6 pt-2 pb-6 flex flex-col gap-8 ">
       <BasicSetting />
       <AiSetting />
       <PerferSetting />
       <TaskSetting />
       <ImportSetting />
-    </div >
-  </>
+    </ScrollArea >
+  </div>
 });
 
 export default Page

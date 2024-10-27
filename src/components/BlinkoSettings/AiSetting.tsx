@@ -25,7 +25,7 @@ export const AiSetting = observer(() => {
     store.apiEndPoint = blinko.config.value?.aiApiEndpoint
     store.apiKey = blinko.config.value?.aiApiKey
   }, [blinko.config.value])
-  return <Card shadow="none" className="flex flex-col p-4 bg-background">
+  return <Card shadow="none" className="flex flex-col p-4 bg-background pb-6">
     <div className='text-desc text-sm'>AI</div>
     <Item
       leftContent={<>{t('use-ai')}</>}
@@ -118,7 +118,7 @@ export const AiSetting = observer(() => {
         />
       } />
     <Item
-      leftContent={<div className="flex flex-col ga-1">
+      leftContent={<div className="flex flex-col gap-1">
         <>{t('api-endpoint')}</>
         <div className="text-desc text-xs">{t('must-start-with-http-s-or-use-api-openai-as-default')}</div>
       </div>}

@@ -91,5 +91,12 @@
   "convert-to-note": "Convert to Note",
   "convert-to-blinko": "Convert to Blinko",
   "reviewed": "Reviewed",
-  "congratulations-youve-reviewed-everything-today": "you've reviewed everything today."
+  "congratulations-youve-reviewed-everything-today": "you've reviewed everything today.",
+  "name-db": "NAME",
+  "schedule": "SCHEDULE",
+  "last-run": "LAST RUN",
+  "backup-file": "BACKUP FILE",
+  "status": "STATUS",
+  "running": "Running",
+  "stopped": "Stopped"
 }

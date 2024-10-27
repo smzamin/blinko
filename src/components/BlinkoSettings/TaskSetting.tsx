@@ -32,14 +32,15 @@ export const TaskSetting = observer(() => {
 })
 
 const DBBackPanel = observer(() => {
+  const { t } = useTranslation()
   const blinko = RootStore.Get(BlinkoStore)
   return <> {blinko.DBTask && <Table shadow="none">
     <TableHeader>
-      <TableColumn>NAME</TableColumn>
-      <TableColumn>SCHEDULE</TableColumn>
-      <TableColumn>LAST RUN</TableColumn>
-      <TableColumn>BACKUP FILE</TableColumn>
-      <TableColumn>STATUS</TableColumn>
+      <TableColumn>{t('name-db')}</TableColumn>
+      <TableColumn>{t('schedule')}</TableColumn>
+      <TableColumn>{t('last-run')}</TableColumn>
+      <TableColumn>{t('backup-file')}</TableColumn>
+      <TableColumn>{t('status')}</TableColumn>
     </TableHeader>
     <TableBody>
       <TableRow>
@@ -58,7 +59,7 @@ const DBBackPanel = observer(() => {
           >
             {helper.cron.cornTimeList.map((item) => (
               <SelectItem key={item.value}>
-                {item.label}
+                {t(item.label)}
               </SelectItem>
             ))}
           </Select>
@@ -75,7 +76,7 @@ const DBBackPanel = observer(() => {
         <TableCell>
           <div className={`${blinko.DBTask?.isRunning ? 'text-green-500' : 'text-red-500'} flex items-center`}>
             <Icon icon="bi:dot" width="24" height="24" />
-            <div>{blinko.DBTask?.isRunning ? 'Running' : 'Stopped'}</div>
+            <div>{blinko.DBTask?.isRunning ? t('running') : t('stopped')}</div>
           </div>
         </TableCell>
       </TableRow>
