@@ -40,7 +40,7 @@ export const Resotredb = async (filePath) => {
   if (!exists) {
     throw new Error("Your db file can not find restore file")
   }
-  const { stdout, stderr } = await $`pg_restore --dbname=${process.env.DATABASE_URL!} .blinko/pgdump/bak.sql}`;
+  const { stdout, stderr } = await $`pg_restore --dbname=${process.env.DATABASE_URL!} .blinko/pgdump/bak.sql`;
   if (stderr) {
     throw new Error(stderr)
   }

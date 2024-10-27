@@ -13,9 +13,6 @@ const Page = observer(() => {
       <PerferSetting />
       <TaskSetting />
       <ImportSetting />
-      {/* <Button onClick={e => {
-        PromiseCall(api.task.restoreDB.query({ filePath: ".blinko/files/blinko_export.bko" }))
-      }}>Import db</Button> */}
     </div >
   </>
 });
