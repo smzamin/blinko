@@ -1,34 +1,34 @@
 # docker-compose.dev.yml
 
 services:
-  # blinko-website:
-  #   image: blinkospace/blinko:latest
-  #   container_name: blinko-website
-  #   environment:
-  #     NODE_ENV: production
-  #     NEXTAUTH_URL: http://localhost:1111
-  #     NEXT_PUBLIC_BASE_URL: http://localhost:1111
-  #     NEXTAUTH_SECRET: my_ultra_secure_nextauth_secret
-  #     JWT_SECRET: MBqmAZqgbe0I66Jx3sFd/nMoU3paITpHznScerTHJNo2
-  #     DATABASE_URL: postgresql://postgres:mysecretpassword@postgres:5432/postgres
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   # volumes:
-  #   #   - <your volumn>:/app/.blinko
-  #   restart: always
-  #   logging:
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   ports:
-  #     - 1111:1111
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:1111/"]
-  #     interval: 30s 
-  #     timeout: 10s   
-  #     retries: 5     
-  #     start_period: 30s 
+  blinko-website:
+    image: blinkospace/blinko:latest
+    container_name: blinko-website
+    environment:
+      NODE_ENV: production
+      NEXTAUTH_URL: http://localhost:1111
+      NEXT_PUBLIC_BASE_URL: http://localhost:1111
+      NEXTAUTH_SECRET: my_ultra_secure_nextauth_secret
+      JWT_SECRET: MBqmAZqgbe0I66Jx3sFd/nMoU3paITpHznScerTHJNo2
+      DATABASE_URL: postgresql://postgres:mysecretpassword@postgres:5432/postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # volumes:
+    #   - <your volumn>:/app/.blinko
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ports:
+      - 1111:1111
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1111/"]
+      interval: 30s 
+      timeout: 10s   
+      retries: 5     
+      start_period: 30s 
 
   postgres:
     image: postgres:14

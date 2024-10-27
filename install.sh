@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Remove the local blinko-website image..."
-docker rmi blinko-website || echo "No existing blinko-website image to remove."
+docker rmi -f blinkospace/blinko || echo "No existing blinko-website image to remove."
 
 echo "Pull up the latest blinko mirror image..."
 
