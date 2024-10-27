@@ -10,6 +10,7 @@ module.exports = {
     }
     return config;
   },
+  outputFileTracing: false,
   reactStrictMode: true,
   swcMinify:false,
   eslint: {
