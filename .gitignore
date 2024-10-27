@@ -19,5 +19,4 @@ public/sitemap*
 public/assets
 .blinko/faiss/*
 .blinko/pgdump/*
-.blinko/files/*
 dump.sql
