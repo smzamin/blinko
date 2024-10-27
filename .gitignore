@@ -17,7 +17,4 @@ yarn.lock
 public/robots.txt
 public/sitemap*
 public/assets
-pgdata
-.blinko/faiss/*
-.blinko/pgdump/*
 dump.sql
