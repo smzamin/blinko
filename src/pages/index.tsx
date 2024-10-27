@@ -4,7 +4,7 @@ import { _ } from '@/lib/lodash';
 import { observer } from 'mobx-react-lite';
 import Masonry from 'react-masonry-css'
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { RootStore } from '@/store';
 import { motion } from "framer-motion"
 import { FilesAttachmentRender } from '@/components/Common/Editor/attachmentsRender';
@@ -15,25 +15,26 @@ import { useRouter } from 'next/router';
 import { BlinkoEditor } from '@/components/BlinkoEditor';
 import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 import dayjs from '@/lib/dayjs';
-import { PromiseCall } from '@/store/standard/PromiseState';
-import { api } from '@/lib/trpc';
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
 import { NoteType } from '@/server/types';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 
-const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?: boolean | null }) => {
+const Home = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
   const router = useRouter();
   const { tagId } = router.query;
-
   useEffect(() => {
     if (!router.isReady) return
-    blinko.noteListFilterConfig.type = type ? Number(type) : 0
-    blinko.noteTypeDefault = type ? Number(type) : 0
+    blinko.noteListFilterConfig.type = NoteType.BLINKO
+    blinko.noteTypeDefault = NoteType.BLINKO
     blinko.noteListFilterConfig.tagId = null
     blinko.noteListFilterConfig.isArchived = false
 
+    if (router.pathname == '/notes') {
+      blinko.noteListFilterConfig.type = NoteType.NOTE
+      blinko.noteTypeDefault = NoteType.NOTE
+    }
     if (tagId) {
       console.log({ tagId })
       blinko.noteListFilterConfig.tagId = Number(tagId) as number
@@ -41,17 +42,17 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
     if (router.pathname == '/all') {
       blinko.noteListFilterConfig.type = -1
     }
-    if (isArchived) {
+    if (router.pathname == '/archived') {
       blinko.noteListFilterConfig.type = -1
       blinko.noteListFilterConfig.isArchived = true
     }
     blinko.noteList.resetAndCall({})
-  }, [type, tagId])
+  }, [router.isReady])
 
   const store = RootStore.Local(() => ({
     editorHeight: 75,
     get showEditor() {
-      return !isArchived
+      return !blinko.noteListFilterConfig.isArchived
     },
     get showLoadAll() {
       return blinko.noteList.isLoadAll
@@ -87,21 +88,17 @@ const Home = observer(({ type, isArchived }: { type?: number | null, isArchived?
             columnClassName="my-masonry-grid_column">
             {
               blinko.noteList?.value?.map(i => {
-                return <motion.div className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }}
-                  // whileHover={{ y: 2 }}
-                  key={i.id}>
+                return <motion.div key={i.id} className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }}>
                   <ContextMenuTrigger id="blink-item-context-menu" >
-                    <div
-                      onContextMenu={e => {
-                        blinko.curSelectedNote = _.cloneDeep(i)
-                      }}
+                    <div onContextMenu={e => {
+                      blinko.curSelectedNote = _.cloneDeep(i)
+                    }}
                       onClick={() => {
                         if (blinko.isMultiSelectMode) {
                           blinko.onMultiSelectNote(i.id)
                         }
                       }}>
-                      <Card shadow='none' className={`mb-4 flex flex-col p-4 bg-background transition-all
-                    ${blinko.curMultiSelectIds?.includes(i.id) ? 'border-2 border-primary' : ''}`}>
+                      <Card shadow='none' className={`mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(i.id) ? 'border-2 border-primary' : ''}`}>
                         <div className='mb-2 text-xs text-desc'>{dayjs(i.createdAt).fromNow()}</div>
                         <MarkdownRender content={i.content} />
                         <div className={i.attachments?.length != 0 ? 'my-2' : ''}>

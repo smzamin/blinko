@@ -1,3 +1,4 @@
+const isProduction = process.env.NODE_ENV === 'production';
 module.exports = {
   transpilePackages: ['@mdxeditor/editor', 'react-diff-view'],
   webpack: (config, { isServer }) => {
@@ -11,7 +12,7 @@ module.exports = {
     return config;
   },
   outputFileTracing: true,
-  reactStrictMode: true,
+  reactStrictMode: isProduction? true : false,
   swcMinify:false,
   eslint: {
     ignoreDuringBuilds: true,

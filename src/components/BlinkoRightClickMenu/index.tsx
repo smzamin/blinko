@@ -12,14 +12,15 @@ import { DialogStore } from "@/store/module/Dialog";
 import { BlinkoEditor } from "../BlinkoEditor";
 import { useEffect, useState } from "react";
 import { NoteType } from "@/server/types";
+import { reaction } from "mobx";
 
 export const BlinkoRightClickMenu = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
-  const [forceUpdate, setForceUpdate] = useState(0)
   const store = RootStore.Local(() => ({
     editorHeight: 90,
     editBlinko() {
+      console.log(123)
       RootStore.Get(DialogStore).setData({
         size: '2xl',
         isOpen: true,
@@ -28,13 +29,8 @@ export const BlinkoRightClickMenu = observer(() => {
       })
     },
   }))
-  useEffect(() => {
-    setForceUpdate(forceUpdate + 1)
-  }, [blinko.curSelectedNote])
   return <ContextMenu className='font-bold' id="blink-item-context-menu" hideOnLeave={false} animation="zoom">
-    <ContextMenuItem onClick={e => {
-      store.editBlinko()
-    }}>
+    <ContextMenuItem onClick={() => { store.editBlinko() }}>
       <div className="flex items-start gap-2">
         <Icon icon="tabler:edit" width="20" height="20" />
         <div>{t('edit')}</div>
@@ -42,7 +38,7 @@ export const BlinkoRightClickMenu = observer(() => {
     </ContextMenuItem>
     <ContextMenuItem onClick={e => {
       blinko.isMultiSelectMode = true
-      blinko.onMultiSelectNote(blinko.curSelectedNote.id)
+      blinko.onMultiSelectNote(blinko.curSelectedNote?.id!)
     }}>
       <div className="flex items-start gap-2">
         <Icon icon="mingcute:multiselect-line" width="20" height="20" />
@@ -53,32 +49,32 @@ export const BlinkoRightClickMenu = observer(() => {
     <ContextMenuItem
       onClick={e => {
         blinko.upsertNote.call({
-          id: blinko.curSelectedNote.id,
-          type: blinko.curSelectedNote.type == NoteType.NOTE ? NoteType.BLINKO : NoteType.NOTE
+          id: blinko.curSelectedNote?.id,
+          type: blinko.curSelectedNote?.type == NoteType.NOTE ? NoteType.BLINKO : NoteType.NOTE
         })
       }}>
-      {forceUpdate && <div className="flex items-start gap-2">
+      <div className="flex items-start gap-2">
         <Icon icon="ri:exchange-2-line" width="20" height="20" />
         <div>{t('convert-to')} {blinko.curSelectedNote?.type == NoteType.NOTE ?
           <span className='text-yellow-500'>{t('blinko')}</span> : <span className='text-blue-500'>{t('note')}</span>}</div>
-      </div>}
+      </div>
     </ContextMenuItem>
 
     <ContextMenuItem onClick={e => {
       blinko.upsertNote.call({ id: blinko.curSelectedNote?.id, isArchived: !blinko.curSelectedNote?.isArchived })
     }}>
-      {forceUpdate && <div className="flex items-start gap-2">
+      <div className="flex items-start gap-2">
         <Icon icon="eva:archive-outline" width="20" height="20" />
         {blinko.curSelectedNote?.isArchived ? t('recovery') : t('archive')}
-      </div>}
+      </div>
     </ContextMenuItem>
     <ContextMenuItem className='select-none divider hover:!bg-none'>
       <Divider orientation="horizontal" />
     </ContextMenuItem>
 
     <ContextMenuItem onClick={async e => {
-      PromiseCall(api.notes.deleteMany.mutate({ ids: [blinko.curSelectedNote?.id] }))
-      api.ai.embeddingDelete.mutate({ id: blinko.curSelectedNote?.id })
+      PromiseCall(api.notes.deleteMany.mutate({ ids: [blinko.curSelectedNote?.id!] }))
+      api.ai.embeddingDelete.mutate({ id: blinko.curSelectedNote?.id! })
     }}>
       <div className="flex items-start gap-2 text-red-500">
         <Icon icon="mingcute:delete-2-line" width="20" height="20" />

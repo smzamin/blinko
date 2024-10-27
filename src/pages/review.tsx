@@ -20,6 +20,7 @@ import { showTipsDialog } from '@/components/Common/TipsDialog';
 import { DialogStore } from '@/store/module/Dialog';
 import confetti from 'canvas-confetti'
 import { useMediaQuery } from 'usehooks-ts';
+import { FilesAttachmentRender } from '@/components/Common/Editor/attachmentsRender';
 const App = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const swiperRef = useRef(null);
@@ -50,6 +51,7 @@ const App = observer(() => {
 
   return (
     <div className="App h-full overflow-hidden">
+
       {
         blinko.dailyReviewNoteList.value?.length != 0 && <>
           <Swiper
@@ -63,20 +65,19 @@ const App = observer(() => {
             grabCursor={true}
             modules={[EffectCards]}
             className="mt-10 md:mt-4 w-[300px] h-[380px] md:w-[350px] md:h-[520px]"
-            allowSlideNext={true}  // Allow sliding to the next slide
-            allowSlidePrev={true}  // Allow sliding to the previous slide
-            touchRatio={1} // Make it responsive to touches
-            resistance={true} // Provide some resistance for a smooth user experience
-            resistanceRatio={0.5} // Ratio for swiping resistance
-            slidesPerView={1}  // Only one slide can be viewed at a time
-            centeredSlides={true} // Each slide is centered
+            allowSlideNext={true}
+            allowSlidePrev={true}
+            touchRatio={1}
+            resistance={true}
+            resistanceRatio={0.5}
+            slidesPerView={1}
+            centeredSlides={true}
           >
             {
               blinko.dailyReviewNoteList.value?.map((i, index) => (
                 <SwiperSlide key={i.id} data-id={i.id} className='bg-white shadow-lg p-4 w-full overflow-hidden h-full'>
                   <div className='bg-white p-0 w-full overflow-y-scroll h-full'>
                     <div className='flex items-center gap-2 mb-2'>
-                      <div>{i.id}</div>
                       <div className='text-xs text-desc'>{dayjs(i.createdAt).fromNow()}</div>
                       {
                         store.isBlinko ?
@@ -91,6 +92,9 @@ const App = observer(() => {
                       }
                     </div>
                     <MarkdownRender content={i.content} />
+                    <div className={i.attachments?.length != 0 ? 'my-2' : ''}>
+                      <FilesAttachmentRender columns={2} files={i.attachments ?? []} preview />
+                    </div>
                   </div>
                 </SwiperSlide>
               ))
@@ -142,12 +146,12 @@ const App = observer(() => {
         </>
       }
 
-
       {blinko.dailyReviewNoteList.value?.length == 0 && <div className='select-none text-ignore flex items-center justify-center gap-2 w-full mt-2 md:mt-10'>
         <Icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" />
         <div className='text-md text-ignore font-bold'>{t('congratulations-youve-reviewed-everything-today')}</div>
       </div>}
     </div >
+
   );
 })
 

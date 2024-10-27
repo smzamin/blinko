@@ -1,10 +1,14 @@
 import dayjs from 'dayjs';
 import { Store } from './standard/base';
 import { StorageState } from './standard/StorageState';
+import { makeAutoObservable } from 'mobx';
 
 export class BaseStore implements Store {
   sid = 'BaseStore';
-  autoObservable = true;
+  constructor() {
+    makeAutoObservable(this)
+  }
+
   locale = new StorageState({ key: 'language', default: 'en' });
   locales = [
     { value: 'en', label: 'English' },

@@ -5,11 +5,13 @@ import { useRouter } from 'next/router';
 import { RootStore } from './root';
 import { Store } from './standard/base';
 import { eventBus } from '@/lib/event';
+import { makeAutoObservable } from 'mobx';
 
 export class UserStore implements User, Store {
   sid = 'user';
-  autoObservable = true;
-
+  constructor() {
+    makeAutoObservable(this)
+  }
   id: string = '';
   name?: string = '';
   nickname?: string = '';

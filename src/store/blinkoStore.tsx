@@ -1,6 +1,5 @@
 
 import { _ } from '@/lib/lodash';
-import { makeAutoObservable } from 'mobx';
 import { useEffect } from 'react';
 import { PromisePageState, PromiseState } from './standard/PromiseState';
 import { Store } from './standard/base';
@@ -13,6 +12,7 @@ import { api } from '@/lib/trpc';
 import { type RouterOutput } from '@/server/routers/_app';
 import { Attachment, NoteType, type Note } from '@/server/types';
 import { DBBAK_TASK_NAME } from '@/lib/constant';
+import { makeAutoObservable } from 'mobx';
 
 type filterType = {
   label: string;
@@ -21,14 +21,14 @@ type filterType = {
 }
 
 export class BlinkoStore implements Store {
+  sid = 'BlinkoStore';
+  noteContent = '';
+  curSelectedNote: Note | null = null;
+  curMultiSelectIds: number[] = [];
+  isMultiSelectMode: boolean = false;
   constructor() {
     makeAutoObservable(this)
   }
-  sid = 'BlinkoStore';
-  noteContent = '';
-  curSelectedNote: RouterOutput['notes']['list'][0];
-  curMultiSelectIds: number[] = [];
-  isMultiSelectMode: boolean = false;
 
   onMultiSelectNote(id: number) {
     if (this.curMultiSelectIds.includes(id)) {
@@ -46,7 +46,6 @@ export class BlinkoStore implements Store {
     this.updateTicker++
   }
 
-  autoObservable = true;
   routerList = [
     {
       title: "blinko",
@@ -114,6 +113,7 @@ export class BlinkoStore implements Store {
   noteList = new PromisePageState({
     function: async ({ page, size }) => {
       const notes = await api.notes.list.query({ ...this.noteListFilterConfig, page, size })
+      console.log(notes)
       return notes.map(i => { return { ...i, isExpand: false } })
     }
   })
@@ -186,7 +186,15 @@ export class BlinkoStore implements Store {
     await this.noteList.callNextPage({})
   }
 
-  loadAllData() {
+  firstLoad() {
+    this.tagList.call()
+    this.config.call()
+    this.dailyReviewNoteList.call()
+    this.public.call()
+    this.task.call()
+  }
+
+  refreshData() {
     this.tagList.call()
     this.noteList.resetAndCall({})
     this.config.call()
@@ -195,13 +203,13 @@ export class BlinkoStore implements Store {
 
   use() {
     useEffect(() => {
-      this.loadAllData()
-      this.public.call()
-      this.task.call()
+      console.log('running')
+      this.firstLoad()
     }, [])
 
     useEffect(() => {
-      this.loadAllData()
+      if (this.updateTicker == 0) return
+      this.refreshData()
     }, [this.updateTicker])
   }
 }

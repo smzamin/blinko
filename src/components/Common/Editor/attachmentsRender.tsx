@@ -19,9 +19,10 @@ import { type Attachment } from '@/server/types';
 type IProps = {
   files: FileType[]
   preview?: boolean
+  columns?: number
 }
 
-const AttachmentsRender = observer(({ files, preview = false }: IProps) => {
+const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IProps) => {
   const { t } = useTranslation()
   const store = RootStore.Local(() => ({
     deleteFile: new PromiseState({
@@ -51,7 +52,7 @@ const AttachmentsRender = observer(({ files, preview = false }: IProps) => {
   })
 
   return <>
-    <div className='columns-3 md:columns-3'>
+    <div className={`columns-${columns} md:columns-${columns}`}>
       <PhotoProvider>
         {files?.filter(i => i.isImage).map((file, index) => (
           <div className='relative group'>
@@ -80,7 +81,7 @@ const AttachmentsRender = observer(({ files, preview = false }: IProps) => {
       </PhotoProvider>
 
     </div>
-    <div className="columns-3 mt-3">
+    <div className={`columns-${columns} mt-3`}>
       {files?.filter(i => !i.isImage).map((file, index) => (
         <div onClick={() => {
           if (preview) {
@@ -98,12 +99,12 @@ const AttachmentsRender = observer(({ files, preview = false }: IProps) => {
   </>
 })
 
-const FilesAttachmentRender = observer(({ files, preview }: { files: Attachment[], preview?: boolean }) => {
+const FilesAttachmentRender = observer(({ files, preview, columns }: { files: Attachment[], preview?: boolean, columns?: number }) => {
   const [handledFiles, setFiles] = useState<FileType[]>([])
   useEffect(() => {
     setFiles(HandleFileType(files))
   }, [files])
-  return <AttachmentsRender files={handledFiles} preview={preview} />
+  return <AttachmentsRender files={handledFiles} preview={preview} columns={columns} />
 })
 
 export { AttachmentsRender, FilesAttachmentRender }

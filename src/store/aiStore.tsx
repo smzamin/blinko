@@ -1,12 +1,12 @@
 
 import { _ } from '@/lib/lodash';
-import { makeAutoObservable } from 'mobx';
 import { Store } from './standard/base';
 import { ToastPlugin } from './module/Toast/Toast';
 import { RootStore } from './root';
 import { streamApi } from '@/lib/trpc';
 import { StorageListState } from './standard/StorageListState';
 import { Note } from '@/server/types';
+import { makeAutoObservable } from 'mobx';
 
 type Chat = {
   content: string
@@ -15,10 +15,10 @@ type Chat = {
 }
 
 export class AiStore implements Store {
+  sid = 'AiStore';
   constructor() {
     makeAutoObservable(this)
   }
-  sid = 'AiStore';
   noteContent = '';
   aiSearchText = '';
   aiSearchResult = {
@@ -53,14 +53,6 @@ export class AiStore implements Store {
   relationNotes: Note[] = []
   chatHistory = new StorageListState<Chat>({ key: 'chatHistory' })
   private abortController = new AbortController()
-  async onBottom() {
-    // await this.noteList.callNextPage({})
-  }
-
-  loadAllData() {
-    // this.noteList.resetAndCall({})
-    // this.tagList.call()
-  }
 
   async completionsStream() {
     try {

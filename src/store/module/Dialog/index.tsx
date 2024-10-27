@@ -1,9 +1,9 @@
 import React from "react";
-import { makeAutoObservable } from "mobx";
 import Provider from "./Provider";
 import { ModalSlots, SlotsToClasses } from "@nextui-org/react";
 import { Store } from "@/store/standard/base";
 import { RootStore } from "@/store/root";
+import { makeAutoObservable } from "mobx";
 
 export class DialogStore implements Store {
   sid = "DialogStore";
@@ -26,7 +26,7 @@ export class DialogStore implements Store {
       ...args?.classNames
     }
     Object.assign(this, args, { classNames });
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 
 
