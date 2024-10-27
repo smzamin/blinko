@@ -38,6 +38,19 @@ export const noteRouter = router({
         include: { tags: true, attachments: true }
       })
     }),
+  dailyReviewNoteList: authProcedure
+    .input(z.void())
+    .query(async function () {
+      return await prisma.notes.findMany({
+        where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false },
+        orderBy: { id: 'desc' },
+      })
+    }),
+  reviewNote: authProcedure
+    .input(z.number())
+    .mutation(async function ({ input }) {
+      return await prisma.notes.update({ where: { id: input }, data: { isReviewed: true } })
+    }),
   upsert: authProcedure
     .input(z.object({
       content: z.string().default(''),

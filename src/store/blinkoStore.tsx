@@ -86,13 +86,6 @@ export class BlinkoStore implements Store {
     searchText: ""
   }
   noteTypeDefault: NoteType = NoteType.BLINKO
-  commonFilterList: filterType[] = [
-    { label: '最热门', sortBy: 'views', direction: "desc" },
-    { label: '最新发布', sortBy: "createdAt", direction: "desc" },
-    { label: '最年轻', sortBy: "age", direction: "asc" },
-    { label: '价格最高', sortBy: "price", direction: "desc" },
-    { label: '价格最低', sortBy: "price", direction: "asc" },
-  ]
   currentCommonFilter: filterType | null = null
   currentRouter = this.routerList[0]
   updateTicker = 0
@@ -120,9 +113,14 @@ export class BlinkoStore implements Store {
 
   noteList = new PromisePageState({
     function: async ({ page, size }) => {
-      // await new Promise(resolve => setTimeout(resolve, 2000))
       const notes = await api.notes.list.query({ ...this.noteListFilterConfig, page, size })
       return notes.map(i => { return { ...i, isExpand: false } })
+    }
+  })
+
+  dailyReviewNoteList = new PromiseState({
+    function: async () => {
+      return await api.notes.dailyReviewNoteList.query()
     }
   })
 
@@ -192,6 +190,7 @@ export class BlinkoStore implements Store {
     this.tagList.call()
     this.noteList.resetAndCall({})
     this.config.call()
+    this.dailyReviewNoteList.call()
   }
 
   use() {

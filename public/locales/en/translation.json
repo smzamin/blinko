@@ -87,5 +87,9 @@
   "every-half-year": "Every half year",
   "import": "Import",
   "impoort-from-bko": "Import from .bko",
-  "not-a-bko-file": "not a bko file"
+  "not-a-bko-file": "not a bko file",
+  "convert-to-note": "Convert to Note",
+  "convert-to-blinko": "Convert to Blinko",
+  "reviewed": "Reviewed",
+  "congratulations-youve-reviewed-everything-today": "you've reviewed everything today."
 }

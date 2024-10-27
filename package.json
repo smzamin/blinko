@@ -1,6 +1,6 @@
 {
   "name": "blinko",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "browser": {
     "fs": false,
@@ -49,6 +49,7 @@
     "@types/mime-types": "^2.1.4",
     "adm-zip": "^0.5.16",
     "axios": "^1.7.7",
+    "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.1",
     "cron": "^3.1.7",
     "dataloader": "^2.2.2",
@@ -102,6 +103,7 @@
     "remark-gfm": "^4.0.0",
     "superjson": "^2.2.1",
     "swagger-ui-react": "^5.17.14",
+    "swiper": "^11.1.14",
     "tailwind-merge": "^1.13.0",
     "trpc-to-openapi": "^2.0.2",
     "typed-emitter": "^2.1.0",

@@ -86,5 +86,9 @@
   "every-day": "每天",
   "import": "导入",
   "impoort-from-bko": "从.bko文件导入",
-  "not-a-bko-file": "不是 bko 文件"
+  "not-a-bko-file": "不是 bko 文件",
+  "convert-to-note": "转换为笔记",
+  "convert-to-blinko": "转换为闪念",
+  "reviewed": "已回顾",
+  "congratulations-youve-reviewed-everything-today": "恭喜你，今天你已经回顾了所有内容"
 }

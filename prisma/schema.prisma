@@ -48,6 +48,7 @@ model notes {
   isRecycle     Boolean       @default(false)
   isShare       Boolean       @default(false)
   isTop         Boolean       @default(false)
+  isReviewed    Boolean       @default(false)
   sharePassword String        @default("") @db.VarChar
   metadata      Json?         @db.Json
   users         Int           @default(0)

@@ -1,5 +1,5 @@
 import React, { use, useEffect, useRef, useState, useTransition } from "react";
-import { Avatar, Button, ScrollShadow, Spacer, Image, useDisclosure, Input, Popover, PopoverTrigger, PopoverContent, Card } from "@nextui-org/react";
+import { Avatar, Button, ScrollShadow, Spacer, Image, useDisclosure, Input, Popover, PopoverTrigger, PopoverContent, Card, Badge } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { UserStore } from "@/store/user";
 import Link from "next/link";
@@ -103,7 +103,7 @@ export const CommonLayout = observer(({
       <SidebarDrawer className="flex-none" isOpen={isOpen} onOpenChange={e => setisOpen(false)}>
         {content}
       </SidebarDrawer>
-      <div className="flex w-full flex-col gap-y-1 sm:max-w-[calc(100%_-_258px)] bg-sencondbackground">
+      <div className="flex w-full flex-col gap-y-1 sm:max-w-[calc(100%_-_250px)] bg-sencondbackground">
         {/* nav bar  */}
         <header className="flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-4 pt-2 pb-2">
           <div className="flex max-w-full items-center gap-2 md:p-2 w-full">
@@ -130,7 +130,7 @@ export const CommonLayout = observer(({
                 fullWidth
                 variant="flat"
                 aria-label="search"
-                className={`ml-auto w-[150px] md:w-[300px]`}
+                className={`ml-auto w-[200px] md:w-[300px]`}
                 classNames={{
                   base: "px-1 mr-1 w-[full] md:w-[300px]",
                   inputWrapper:
@@ -165,6 +165,12 @@ export const CommonLayout = observer(({
                   </div>
                 </PopoverContent>
               </Popover>
+              {blinkoStore.dailyReviewNoteList.value?.length != 0 &&
+                <Badge size="sm" className="mr-2" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
+                  <Link href={'/review'}>
+                    <Icon className="mr-2 text-[#8600EF] cursor-pointer" icon="bxs:message-square-detail" width="24" height="24" />
+                  </Link>
+                </Badge>}
             </div>
           </div>
           {header}
