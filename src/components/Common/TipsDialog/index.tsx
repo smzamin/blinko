@@ -8,9 +8,8 @@ import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/rea
 const TipsDialog = observer(({ content, onConfirm }: any) => {
   const { t } = useTranslation()
   return <div className='flex flex-col'>
-    <div className='text-yellow-500 flex gap-4 items-center '>
-      <Icon icon="emojione-v1:warning" width="34" height="34" />
-      <div className="font-bold">{content}</div>
+    <div className='flex gap-4 items-center '>
+      <div className="ml-4">{content}</div>
     </div>
     <div className='flex my-4 gap-4'>
       <Button className="ml-auto" color='default' onClick={e => {

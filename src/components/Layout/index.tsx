@@ -16,11 +16,7 @@ import { BaseStore } from "@/store/baseStore";
 import { BlinkoAi } from "../BlinkoAi";
 import { ScrollArea } from "../Common/ScrollArea";
 import { BlinkoNewVersion } from "../BlinkoNewVersion";
-
-const documentHeight = () => {
-  const doc = document.documentElement
-  doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
-}
+import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover hover:bg-hover-foreground rounded-xl transition-all"
 export const CommonLayout = observer(({
@@ -31,9 +27,9 @@ export const CommonLayout = observer(({
   header?: React.ReactNode;
 }) => {
   const router = useRouter()
-  const [isClient, setIsClient] = useState(false)
   const [isOpen, setisOpen] = useState(false)
-  const { t, i18n } = useTranslation()
+  const [isClient, setClient] = useState(false)
+  const { t } = useTranslation()
   const { theme } = useTheme();
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
@@ -41,16 +37,14 @@ export const CommonLayout = observer(({
   let debounceSearch: any = null
   blinkoStore.use()
   user.use()
+  base.useInitApp(router)
 
   useEffect(() => {
-    base.changeLanugage(i18n, base.locale.value)
-    setIsClient(true)
-    documentHeight()
-    window.addEventListener('resize', documentHeight)
+    setClient(true)
     debounceSearch = _.debounce(() => {
       blinkoStore.noteList.resetAndCall({})
     })
-  }, [router.isReady])
+  }, [])
 
   if (!isClient) return <></>
 
@@ -70,9 +64,9 @@ export const CommonLayout = observer(({
         <div>
           <div className="flex flex-col gap-1 mt-4 font-semibold">
             {
-              blinkoStore.routerList.map(i => {
+              base.routerList.map(i => {
                 return <Link key={i.title} href={i.href} onClick={() => {
-                  blinkoStore.currentRouter = i
+                  base.currentRouter = i
                   setisOpen(false)
                 }}>
                   <div className={`group ${SideBarItem} ${i?.href == router.pathname ? '!bg-primary !text-primary-foreground' : ''}`}>
@@ -94,6 +88,8 @@ export const CommonLayout = observer(({
       </ScrollShadow>
     </div>
   );
+
+
 
   return (
     <div className="flex w-full h-mobile-full">
@@ -122,9 +118,9 @@ export const CommonLayout = observer(({
               />
             </Button>
             <div className="w-full truncate text-xl font-normal md:font-bold text-default-700 flex gap-2 items-center justify-center">
-              <div className="w-[3px] h-[16px] bg-primary"></div>
+              <div className="w-[3px] h-[16px] bg-primary" />
               {/* @ts-ignore */}
-              <div className="font-black select-none">{t(blinkoStore.currentRouter?.title)}</div>
+              <div className="font-black select-none">{t(base.currentTitle)}</div>
               <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={e => blinkoStore.updateTicker++} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
               <Input
                 fullWidth
@@ -137,6 +133,7 @@ export const CommonLayout = observer(({
                     "bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20",
                   input: "placeholder:text-default-600 group-data-[has-value=true]:text-foreground",
                 }}
+                disabled={router.pathname == '/resources'}
                 labelPlacement="outside"
                 placeholder={t('search')}
                 value={blinkoStore.noteListFilterConfig.searchText}
@@ -154,14 +151,19 @@ export const CommonLayout = observer(({
                 </PopoverTrigger>
                 <PopoverContent>
                   <div className="p-2 flex gap-2">
-                    <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
-                      <Icon icon="majesticons:tag-off-line" width="24" height="24" />
-                      <div className="text-sm ">No Tag</div>
-                    </Card>
-                    <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
-                      <Icon icon="ic:round-attachment" width="24" height="24" />
-                      <div className="text-sm ">Has File</div>
-                    </Card>
+                    <Link href='/all?withoutTag=true' onClick={() => blinkoStore.forceQuery++}>
+                      <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
+                        <Icon icon="majesticons:tag-off-line" width="24" height="24" />
+                        <div className="text-sm" >No Tag</div>
+                      </Card>
+                    </Link>
+
+                    <Link href='/all?withFile=true' onClick={() => blinkoStore.forceQuery++}>
+                      <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
+                        <Icon icon="ic:round-attachment" width="24" height="24" />
+                        <div className="text-sm">Has File</div>
+                      </Card>
+                    </Link>
                   </div>
                 </PopoverContent>
               </Popover>
@@ -177,12 +179,29 @@ export const CommonLayout = observer(({
         </header>
 
 
-        {/* main container  */}
         <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
           <div className="flex h-full w-full flex-col rounded-medium" >
             {children}
           </div>
         </ScrollArea>
+
+        {/* mobile footer bar  */}
+        <div className={`h-[60px] flex w-full px-4 py-2 gap-2 bg-background ${blinkoStore.config.value?.isHiddenMobileBar ? 'hidden' : 'block'} md:hidden`}>
+          {
+            base.routerList.map(i => {
+              return <Link className="flex-1 " key={i.title} href={i.href} onClick={() => {
+                base.currentRouter = i
+                setisOpen(false)
+              }}>
+                <div className={`flex flex-col group ${SideBarItem} ${i?.href == router.pathname ? '!bg-primary !text-primary-foreground' : ''}`}>
+                  <Icon className="text-center" icon={i.icon} width="20" height="20" />
+                </div>
+              </Link>
+            })
+          }
+        </div>
+
+        <BlinkoRightClickMenu />
       </div>
     </div>
   );

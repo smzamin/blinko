@@ -86,6 +86,11 @@
   list-style-type: disc;
   padding-inline-start: 15px !important;
   margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+
+.prose :where(.prose > :last-child):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 0 !important;
 }
 
 .prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -103,5 +108,5 @@
 
 .audio-recorder {
   box-shadow: none !important;
-  background-color: transparent!important;
+  background-color: transparent !important;
 }

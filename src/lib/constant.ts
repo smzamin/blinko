@@ -5,3 +5,4 @@ export const ROOT_PATH = '.blinko'
 export const EXPORT_BAKUP_PATH = 'backup'
 
 export const DBBAK_TASK_NAME = 'Backup Database'
+export const ARCHIVE_BLINKO_TASK_NAME = 'Auto Archive Blinko'

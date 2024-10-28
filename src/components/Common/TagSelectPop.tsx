@@ -32,7 +32,6 @@ const TagSelectPop = observer(() => {
     height: 200,
     maxWith: 250,
     get tagList() {
-      // console.log({ searchText: store.searchText })
       if (store.searchText == '' || !store.searchText) {
         return blinko.tagList?.value?.pathTags
       }
@@ -72,7 +71,6 @@ const TagSelectPop = observer(() => {
     }
   }, [store.tagList])
   const setRectFunction = ({ rect, text }) => {
-    // console.log({ rect, text })
     store.setData({
       rect,
       show: true,
@@ -95,7 +93,6 @@ const TagSelectPop = observer(() => {
       ref={popRef}
       animate={store.show ? 'enter' : 'exit'}
       onTransitionEnd={() => {
-        console.log('onTransitionEnd')
       }}
       variants={{
         enter: {

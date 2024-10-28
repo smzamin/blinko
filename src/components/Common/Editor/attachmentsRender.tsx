@@ -74,7 +74,7 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
             }
             {preview && <Icon onClick={() => {
               helper.download.downloadByLink(file.uploadPromise.value)
-            }} className='hidden group-hover:block transition-all absolute z-10 right-[5px] top-[5px] !text-background opacity-80 hover:opacity-100 bg-foreground cursor-pointer rounded-sm transition-all' icon="tabler:download" width="15" height="15" />
+            }} className='hidden er:block transition-all absolute z-10 right-[5px] top-[5px] !text-background opacity-80 hover:opacity-100 bg-foreground cursor-pointer rounded-sm transition-all' icon="tabler:download" width="15" height="15" />
             }
           </div>
         ))}

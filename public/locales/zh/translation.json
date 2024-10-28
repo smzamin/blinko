@@ -23,7 +23,7 @@
   "your-changes-have-been-saved": "您的更改已保存！",
   "add-tag": "添加标签",
   "cancel": "取消",
-  "confrim": "Confrim",
+  "confrim": "确认",
   "no-data-here-well-then-time-to-write-a-note": "没有数据？是时候开始写一篇Blinko啦~",
   "basic-information": "基本信息",
   "language": "语言",
@@ -97,5 +97,11 @@
   "backup-file": "备份文件",
   "status": "状态",
   "running": "运行中",
-  "stopped": "已停止"
+  "stopped": "已停止",
+  "show-navigation-bar-on-mobile": "移动端隐藏导航栏",
+  "schedule-archive-blinko": "定时归档闪念",
+  "there-are-no-resources-yet-go-upload-them-now": "还没有资源，现在就去上传吧",
+  "daily-review": "每日回顾",
+  "detail": "详情",
+  "total": "全部"
 }

@@ -50,13 +50,13 @@ export class AiStore implements Store {
     }
   ]
   scrollTicker = 0
-  relationNotes: Note[] = []
+  relationNotes = new StorageListState<Note>({ key: 'relationNotes' })
   chatHistory = new StorageListState<Chat>({ key: 'chatHistory' })
   private abortController = new AbortController()
 
   async completionsStream() {
     try {
-      this.relationNotes = []
+      this.relationNotes.clear()
       this.chatHistory.push({
         content: this.aiSearchText,
         role: 'user',
@@ -72,7 +72,8 @@ export class AiStore implements Store {
       const res = await streamApi.ai.completions.mutate({ question: this.aiSearchText, conversations }, { signal: this.abortController.signal })
       for await (const item of res) {
         if (item.notes) {
-          this.relationNotes = item.notes as Note[]
+          this.relationNotes.list = item.notes
+          this.relationNotes.save()
         } else {
           this.chatHistory.list[this.chatHistory.list.length - 1]!.content += item.context
           this.scrollTicker++

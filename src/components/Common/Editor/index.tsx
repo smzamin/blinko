@@ -30,7 +30,7 @@ const { MDXEditor } = await import('@mdxeditor/editor')
 type IProps = {
   content: string,
   onChange?: (content: string) => void,
-  onSend?: (args: OnSendContentType) => Promise<void>,
+  onSend?: (args: OnSendContentType) => Promise<any>,
   isSendLoading?: boolean,
   bottomSlot?: ReactElement<any, any>,
   originFiles?: Attachment[]
@@ -66,7 +66,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
 
   const pastedFiles = usePasteFile(cardRef);
   useEffect(() => {
-    console.log(pastedFiles)
     if (pastedFiles) {
       store.uploadFiles(pastedFiles)
     }
@@ -151,7 +150,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
               const data = await response.json();
               store.speechToText('upload/' + data.fileName)
               if (data.filePath) {
-                console.log(data.filePath)
                 return data.filePath
               }
             }
@@ -166,7 +164,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         type: "audio/webm",
         lastModified: Date.now(), // 可以指定最后修改时间为当前时间
       });
-      console.log(mp3File)
       store.uploadFiles([mp3File])
     }
   }))
@@ -199,7 +196,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     multiple: true,
     noClick: true,
     onDrop: acceptedFiles => {
-      console.log(acceptedFiles)
       store.uploadFiles(acceptedFiles)
     }
   });

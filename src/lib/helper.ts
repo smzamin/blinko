@@ -21,13 +21,11 @@ export const helper = {
     const { data, page, size } = args
     let result = args.result
     let isLoadAll = false
-    console.log(data)
     if (data.length == size) {
       if (page == 1) {
         result = data
       } else {
         result = result.concat(data)
-        console.log('contact result', result)
       }
     } else {
       if (page == 1) {
@@ -37,7 +35,6 @@ export const helper = {
         isLoadAll = true
       }
     }
-    console.log(result)
     return { result, isLoadAll, isEmpty: data.length == 0 }
   },
   extractHashtags(input: string): string[] {

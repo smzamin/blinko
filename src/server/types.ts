@@ -14,12 +14,13 @@ export enum NoteType {
 
 export const ZConfigKey = z.union([
   z.literal('isAutoArchived'),
+  z.literal('autoArchivedDays'),
   z.literal('isUseAI'),
   z.literal('aiModelProvider'),
   z.literal('aiApiKey'),
   z.literal('aiApiEndpoint'),
   z.literal('aiModel'),
-  z.literal('isInit'),
+  z.literal('isHiddenMobileBar'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;

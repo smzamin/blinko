@@ -20,7 +20,6 @@ import { AppProvider } from '@/store/module/AppProvider';
 import { RootStore } from '@/store';
 import { BlinkoStore } from '@/store/blinkoStore';
 const MyApp = ({ Component, pageProps }) => {
-  console.log('use MyApp')
   initStore();
   useProgressBar();
   return (

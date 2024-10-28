@@ -13,12 +13,13 @@ import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { ShowUpdateTagDialog } from "./UpdateTagPop";
 import { api } from "@/lib/trpc";
 import { PromiseCall } from "@/store/standard/PromiseState";
+import { BaseStore } from "@/store/baseStore";
 
 const EmojiPick = ({ children, element }) => {
   const { theme } = useTheme();
   return <Popover placement="bottom" showArrow={true}>
     <PopoverTrigger>
-      <div className="hover:bg-background transition-all rounded-md px-1">
+      <div className="hover:translate-x-1 transition-all rounded-md px-1">
         {children}
       </div>
     </PopoverTrigger>
@@ -33,6 +34,7 @@ const EmojiPick = ({ children, element }) => {
 
 export const TagListPanel = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
+  const base = RootStore.Get(BaseStore)
   const router = useRouter()
   const isSelected = (id) => {
     return blinko.noteListFilterConfig.tagId == id && router.pathname == '/all'
@@ -67,7 +69,7 @@ export const TagListPanel = observer(() => {
           <div {...getNodeProps()} style={{ paddingLeft: 20 * (level - 1) + 6 }} >
             <div className={`${SideBarItem} mb-1 relative group ${(isSelected(element.id)) ? '!bg-primary !text-primary-foreground' : ''}`}
               onClick={e => {
-                blinko.currentRouter = blinko.allTagRouter
+                base.currentRouter = blinko.allTagRouter
                 router.push('/all?tagId=' + element.id, undefined, { shallow: true })
               }}
             >
@@ -90,15 +92,16 @@ export const TagListPanel = observer(() => {
                 </EmojiPick>
               ) : (
                 <EmojiPick element={element}>
-                  <div> {
-                    element.metadata?.icon ? element.metadata?.icon : <Icon icon="mdi:hashtag" width="20" height="20" />
-                  } </div>
+                  <div>
+                    {
+                      element.metadata?.icon ? element.metadata?.icon : <Icon icon="mdi:hashtag" width="20" height="20" />
+                    }
+                  </div>
                 </EmojiPick>
               )}
 
               <div className="truncate overflow-hidden whitespace-nowrap" title={element.name}>
                 {element.name}
-
               </div>
               <Dropdown>
                 <DropdownTrigger>

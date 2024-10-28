@@ -14,7 +14,6 @@ export const UploadFileWrapper = ({ onUpload }: IProps) => {
     multiple: false,
     noClick: true,
     onDrop: async acceptedFiles => {
-      console.log(acceptedFiles)
       const file = acceptedFiles[0]!
       const formData = new FormData();
       formData.append('file', file)
@@ -23,7 +22,6 @@ export const UploadFileWrapper = ({ onUpload }: IProps) => {
         body: formData,
       });
       const data = await response.json();
-      console.log(data)
       onUpload?.(data)
     }
   });

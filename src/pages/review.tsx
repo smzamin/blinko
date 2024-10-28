@@ -30,7 +30,6 @@ const App = observer(() => {
     currentIndex: 0,
     currentNote: null as Note | null,
     handleSlideChange: async (_swiper) => {
-      console.log(_swiper)
       store.currentIndex = _swiper.activeIndex
     },
     get isBlinko() {

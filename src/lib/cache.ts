@@ -18,7 +18,6 @@ export class memoryCache {
   async wrap<T extends (...args: any[]) => Promise<any>, U = ReturnType<T>>(key: string, fn: T, args: { ttl: number, alowStale?: boolean }): Promise<Awaited<U>> {
     const data = this.get(key)
     if (data?.expiration && new Date(data.expiration) <= new Date()) {
-      console.log('cache expired', key)
       if (args?.alowStale) {
         fn().then((value) => {
           this.set(key, {

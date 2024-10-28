@@ -78,7 +78,6 @@ export default function Component() {
                 callbackUrl: '/',
                 redirect: false,
               })
-              console.log(res)
               if (res?.ok) {
                 router.push('/')
               } else {

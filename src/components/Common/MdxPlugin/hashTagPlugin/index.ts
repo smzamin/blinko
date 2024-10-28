@@ -20,17 +20,12 @@ export const hashTagPlugin = realmPlugin({
     }
     currentEditor.registerNodeTransform(TextNode, (textNode) => {
       const currentText = textNode.getTextContent();
-      // console.log(currentText)
       const endsWithAnyTextNoHashRegex = /\S(?<!#)$/g
       const hasHashTagRegex = /#[^\s#]+/g
       const endsWithBankRegex = /\s$/g
 
       const isEndsWithBank = endsWithBankRegex.test(currentText)
       const isEndsWithHashTag = helper.regex.isEndsWithHashTag.test(currentText)
-      // console.log({
-      //   isEndsWithHashTag,
-      //   isEndsWithBank
-      // })
       if (currentText == '' || !isEndsWithHashTag) {
         setTimeout(() => eventBus.emit('hashpop:hidden'))
         return
@@ -41,7 +36,6 @@ export const hashTagPlugin = realmPlugin({
         if (currentText.endsWith("#")) {
           searchText = ''
         }
-        console.log("searchText  ->", searchText.toLowerCase())
         showTagSelectPop(searchText.toLowerCase())
       }
 

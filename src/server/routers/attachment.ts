@@ -1,4 +1,4 @@
-import { router,  authProcedure } from '../trpc';
+import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 

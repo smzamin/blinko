@@ -11,7 +11,6 @@ const Dialog = observer(() => {
   return (
     <Modal
       onClose={() => {
-        console.log("onClose")
         // isOpen=true
       }}
       // portalContainer={document.querySelector("#layout")!}

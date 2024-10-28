@@ -1,53 +1,20 @@
 import { BlinkoStore } from '@/store/blinkoStore';
-import { Card } from '@nextui-org/react';
 import { _ } from '@/lib/lodash';
 import { observer } from 'mobx-react-lite';
 import Masonry from 'react-masonry-css'
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 import { RootStore } from '@/store';
-import { motion } from "framer-motion"
-import { FilesAttachmentRender } from '@/components/Common/Editor/attachmentsRender';
-import { ContextMenuTrigger } from '@/components/Common/ContextMenu';
-import { MarkdownRender } from '@/components/Common/MarkdownRender';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
 import { BlinkoEditor } from '@/components/BlinkoEditor';
 import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
-import dayjs from '@/lib/dayjs';
-import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
-import { NoteType } from '@/server/types';
 import { ScrollArea } from '@/components/Common/ScrollArea';
+import { BlinkoCard } from '@/components/BlinkoCard';
 
 const Home = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
-  const router = useRouter();
-  const { tagId } = router.query;
-  useEffect(() => {
-    if (!router.isReady) return
-    blinko.noteListFilterConfig.type = NoteType.BLINKO
-    blinko.noteTypeDefault = NoteType.BLINKO
-    blinko.noteListFilterConfig.tagId = null
-    blinko.noteListFilterConfig.isArchived = false
-
-    if (router.pathname == '/notes') {
-      blinko.noteListFilterConfig.type = NoteType.NOTE
-      blinko.noteTypeDefault = NoteType.NOTE
-    }
-    if (tagId) {
-      console.log({ tagId })
-      blinko.noteListFilterConfig.tagId = Number(tagId) as number
-    }
-    if (router.pathname == '/all') {
-      blinko.noteListFilterConfig.type = -1
-    }
-    if (router.pathname == '/archived') {
-      blinko.noteListFilterConfig.type = -1
-      blinko.noteListFilterConfig.isArchived = true
-    }
-    blinko.noteList.resetAndCall({})
-  }, [router.isReady])
+  blinko.useQuery(useRouter())
 
   const store = RootStore.Local(() => ({
     editorHeight: 75,
@@ -88,44 +55,14 @@ const Home = observer(() => {
             columnClassName="my-masonry-grid_column">
             {
               blinko.noteList?.value?.map(i => {
-                return <motion.div key={i.id} className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }}>
-                  <ContextMenuTrigger id="blink-item-context-menu" >
-                    <div onContextMenu={e => {
-                      blinko.curSelectedNote = _.cloneDeep(i)
-                    }}
-                      onClick={() => {
-                        if (blinko.isMultiSelectMode) {
-                          blinko.onMultiSelectNote(i.id)
-                        }
-                      }}>
-                      <Card shadow='none' className={`mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(i.id) ? 'border-2 border-primary' : ''}`}>
-                        <div className='mb-2 text-xs text-desc'>{dayjs(i.createdAt).fromNow()}</div>
-                        <MarkdownRender content={i.content} />
-                        <div className={i.attachments?.length != 0 ? 'my-2' : ''}>
-                          <FilesAttachmentRender files={i.attachments ?? []} preview />
-                        </div>
-                        {
-                          i.type == NoteType.BLINKO ?
-                            <div className='flex items-center justify-start mt-2'>
-                              <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
-                              <div className='text-desc text-xs font-bold ml-1'>{t('blinko')}</div>
-                            </div> :
-                            <div className='flex items-center justify-start mt-2'>
-                              <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
-                              <div className='text-desc text-xs font-bold ml-1'>{t('note')}</div>
-                            </div>
-                        }
-                      </Card>
-                    </div>
-                  </ContextMenuTrigger>
-                </motion.div>
+                return <BlinkoCard blinkoItem={i} />
               })
             }
           </Masonry>
           {store.showLoadAll && <div className='w-full text-center text-sm font-bold text-ignore my-4'>{t('all-notes-have-been-loaded', { items: blinko.noteList.value?.length })}</div>}
         </ScrollArea>
       }
-      <BlinkoRightClickMenu />
+    
       <BlinkoMultiSelectPop />
     </div>
   );

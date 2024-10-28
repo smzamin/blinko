@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client';
 import { helper, TagTreeNode } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
 import { NoteType } from '../types';
+import { fetchApi } from '@/lib/fetch';
 
 export const noteRouter = router({
   list: authProcedure
@@ -16,18 +17,25 @@ export const noteRouter = router({
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
       isArchived: z.boolean().default(false).optional(),
       isRecycle: z.boolean().default(false).optional(),
-      searchText: z.string().default('').optional()
+      searchText: z.string().default('').optional(),
+      withoutTag: z.boolean().default(false).optional(),
+      withFile: z.boolean().default(false).optional()
     }))
-    .query(async function ({ input }) {
-      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy } = input
+    .mutation(async function ({ input }) {
+      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag } = input
       let where: Prisma.notesWhereInput = { isArchived, isRecycle }
       if (tagId) {
         const tags = await prisma.tagsToNote.findMany({ where: { tagId } })
-        console.log("findTags!", tags)
         where.id = { in: tags?.map(i => i.noteId) }
       }
       if (searchText != '') {
         where.content = { contains: searchText }
+      }
+      if (withFile) {
+        where.attachments = { some: {} }
+      }
+      if (withoutTag) {
+        where.tags = { none: {} }
       }
       if (type != -1) { where.type = type }
       return await prisma.notes.findMany({
@@ -37,6 +45,14 @@ export const noteRouter = router({
         take: size,
         include: { tags: true, attachments: true }
       })
+    }),
+  detail: authProcedure
+    .input(z.object({
+      id: z.number(),
+    }))
+    .mutation(async function ({ input }) {
+      const { id } = input
+      return await prisma.notes.findFirst({ where: { id } })
     }),
   dailyReviewNoteList: authProcedure
     .input(z.void())
@@ -99,7 +115,6 @@ export const noteRouter = router({
         const newTagsString = newTags.map(i => `${i?.name}<key>${i?.parent}`)
         const needTobeAddedRelationTags = _.difference(newTagsString, oldTagsString);
         const needToBeDeletedRelationTags = _.difference(oldTagsString, newTagsString);
-        console.log({ oldTags, newTags, needToBeDeletedRelationTags, needTobeAddedRelationTags })
         if (needToBeDeletedRelationTags.length != 0) {
           await prisma.tagsToNote.deleteMany({
             where: {
@@ -130,9 +145,7 @@ export const noteRouter = router({
         //delete unused tags
         const allTagsIds = oldTags?.map(i => i?.id)
         const usingTags = (await prisma.tagsToNote.findMany({ where: { tagId: { in: allTagsIds } } })).map(i => i.tagId).filter(i => !!i)
-        console.log({ allTagsIds, usingTags })
         const needTobeDeledTags = _.difference(allTagsIds, usingTags);
-        console.log({ needTobeDeledTags })
         if (needTobeDeledTags) {
           await prisma.tag.deleteMany({ where: { id: { in: needTobeDeledTags } } })
         }
@@ -205,7 +218,7 @@ export const noteRouter = router({
           if (note.attachments) {
             for (const attachment of note.attachments) {
               try {
-                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/file/delete`, {
+                await fetchApi(`/api/file/delete`, {
                   method: 'POST',
                   body: JSON.stringify({ attachment_path: attachment.path }),
                 });

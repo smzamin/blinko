@@ -11,7 +11,7 @@ import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
 import { type RouterOutput } from '@/server/routers/_app';
 import { Attachment, NoteType, type Note } from '@/server/types';
-import { DBBAK_TASK_NAME } from '@/lib/constant';
+import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
 import { makeAutoObservable } from 'mobx';
 
 type filterType = {
@@ -26,53 +26,7 @@ export class BlinkoStore implements Store {
   curSelectedNote: Note | null = null;
   curMultiSelectIds: number[] = [];
   isMultiSelectMode: boolean = false;
-  constructor() {
-    makeAutoObservable(this)
-  }
-
-  onMultiSelectNote(id: number) {
-    if (this.curMultiSelectIds.includes(id)) {
-      this.curMultiSelectIds = this.curMultiSelectIds.filter(item => item !== id);
-    } else {
-      this.curMultiSelectIds.push(id);
-    }
-    if (this.curMultiSelectIds.length == 0) {
-      this.isMultiSelectMode = false
-    }
-  }
-  onMultiSelectRest() {
-    this.isMultiSelectMode = false
-    this.curMultiSelectIds = []
-    this.updateTicker++
-  }
-
-  routerList = [
-    {
-      title: "blinko",
-      href: '/',
-      icon: 'basil:lightning-outline'
-    },
-    {
-      title: "notes",
-      href: '/notes',
-      icon: 'hugeicons:note'
-    },
-    {
-      title: "resources",
-      href: '/resources',
-      icon: 'solar:database-linear'
-    },
-    {
-      title: "archived",
-      href: '/archived',
-      icon: 'solar:box-broken'
-    },
-    {
-      title: "settings",
-      href: '/settings',
-      icon: 'lsicon:setting-outline'
-    }
-  ];
+  forceQuery: number = 0;
   allTagRouter = {
     title: 'total',
     href: '/all',
@@ -82,39 +36,43 @@ export class BlinkoStore implements Store {
     isArchived: false,
     type: 0,
     tagId: null as number | null,
-    searchText: ""
+    searchText: "",
+    withoutTag: false,
+    withFile: false
   }
   noteTypeDefault: NoteType = NoteType.BLINKO
   currentCommonFilter: filterType | null = null
-  currentRouter = this.routerList[0]
   updateTicker = 0
-
+  fullNoteList: Note[] = []
   upsertNote = new PromiseState({
-    function: async ({ content = '', isArchived, type, id, attachments = [] }:
-      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[] }) => {
+    function: async ({ content = '', isArchived, type, id, attachments = [], refresh = true }:
+      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
       // const res = await BlinkoController.upsertBlinko({ content, type, isArchived, id, attachments })
       const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments })
-      console.log(res)
       if (res?.id) {
         api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' })
       }
       eventBus.emit('editor:clear')
       RootStore.Get(ToastPlugin).success(id ? i18n.t("update-successfully") : i18n.t("create-successfully"))
-      this.updateTicker++
+      refresh && this.updateTicker++
       return res
     }
   })
 
-  fullNoteList: Note[] = []
 
   noteList = new PromisePageState({
     function: async ({ page, size }) => {
-      const notes = await api.notes.list.query({ ...this.noteListFilterConfig, page, size })
-      console.log(notes)
+      const notes = await api.notes.list.mutate({ ...this.noteListFilterConfig, page, size })
       return notes.map(i => { return { ...i, isExpand: false } })
+    }
+  })
+
+  noteDetail = new PromiseState({
+    function: async ({ id }) => {
+      return await api.notes.detail.mutate({ id })
     }
   })
 
@@ -162,28 +120,60 @@ export class BlinkoStore implements Store {
 
   task = new PromiseState({
     function: async () => {
-      return await api.task.list.query()
+      return await api.task.list.query() ?? []
     }
   })
 
-  updateTask = new PromiseState({
+  updateDBTask = new PromiseState({
     function: async (isStart) => {
       if (isStart) {
-        await api.task.startDBackupTask.query({ time: '0 0 * * 0', immediate: true })
+        await api.task.upsertTask.mutate({ time: '0 0 * * 0', type: 'start', task: DBBAK_TASK_NAME })
       } else {
-        await api.task.stopDBackupTask.query()
+        await api.task.upsertTask.mutate({ type: 'stop', task: DBBAK_TASK_NAME })
+      }
+      await this.task.call()
+    }
+  })
+  updateArchiveTask = new PromiseState({
+    function: async (isStart) => {
+      if (isStart) {
+        await api.task.upsertTask.mutate({ time: '0 0 * * 0', type: 'start', task: ARCHIVE_BLINKO_TASK_NAME })
+      } else {
+        await api.task.upsertTask.mutate({ type: 'stop', task: ARCHIVE_BLINKO_TASK_NAME })
       }
       await this.task.call()
     }
   })
 
+
   get DBTask() {
     return this.task.value?.find(i => i.name == DBBAK_TASK_NAME)
+  }
+
+  get ArchiveTask() {
+    return this.task.value?.find(i => i.name == ARCHIVE_BLINKO_TASK_NAME)
   }
 
 
   async onBottom() {
     await this.noteList.callNextPage({})
+  }
+
+  onMultiSelectNote(id: number) {
+    if (this.curMultiSelectIds.includes(id)) {
+      this.curMultiSelectIds = this.curMultiSelectIds.filter(item => item !== id);
+    } else {
+      this.curMultiSelectIds.push(id);
+    }
+    if (this.curMultiSelectIds.length == 0) {
+      this.isMultiSelectMode = false
+    }
+  }
+
+  onMultiSelectRest() {
+    this.isMultiSelectMode = false
+    this.curMultiSelectIds = []
+    this.updateTicker++
   }
 
   firstLoad() {
@@ -203,7 +193,6 @@ export class BlinkoStore implements Store {
 
   use() {
     useEffect(() => {
-      console.log('running')
       this.firstLoad()
     }, [])
 
@@ -211,5 +200,44 @@ export class BlinkoStore implements Store {
       if (this.updateTicker == 0) return
       this.refreshData()
     }, [this.updateTicker])
+  }
+
+  useQuery(router) {
+    const { tagId, withoutTag, withFile } = router.query;
+    useEffect(() => {
+      if (!router.isReady) return
+      this.noteListFilterConfig.type = NoteType.BLINKO
+      this.noteTypeDefault = NoteType.BLINKO
+      this.noteListFilterConfig.tagId = null
+      this.noteListFilterConfig.isArchived = false
+      this.noteListFilterConfig.withoutTag = false
+      this.noteListFilterConfig.withFile = false
+
+      if (router.pathname == '/notes') {
+        this.noteListFilterConfig.type = NoteType.NOTE
+        this.noteTypeDefault = NoteType.NOTE
+      }
+      if (tagId) {
+        this.noteListFilterConfig.tagId = Number(tagId) as number
+      }
+      if (withoutTag) {
+        this.noteListFilterConfig.withoutTag = true
+      }
+      if (withFile) {
+        this.noteListFilterConfig.withFile = true
+      }
+      if (router.pathname == '/all') {
+        this.noteListFilterConfig.type = -1
+      }
+      if (router.pathname == '/archived') {
+        this.noteListFilterConfig.type = -1
+        this.noteListFilterConfig.isArchived = true
+      }
+      this.noteList.resetAndCall({})
+    }, [router.isReady, this.forceQuery])
+  }
+
+  constructor() {
+    makeAutoObservable(this)
   }
 }

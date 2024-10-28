@@ -1,9 +1,9 @@
 import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { Backupdb, DBBackupJob, Resotredb } from '../plugins/jobs';
-import { DBBAK_TASK_NAME } from '@/lib/constant';
-import { CronTime } from 'cron';
+import { DBJob } from '../plugins/dbjob';
+import { ArchiveJob } from '../plugins/archivejob';
+import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
 
 export const taskRouter = router({
   list: authProcedure
@@ -11,44 +11,23 @@ export const taskRouter = router({
     .query(async () => {
       return await prisma.scheduledTask.findMany()
     }),
-  startDBackupTask: authProcedure
+  upsertTask: authProcedure
     .input(z.object({
-      time: z.string(),
-      immediate: z.boolean().default(false)
-    }))
-    .query(async ({ input }) => {
-      const { time, immediate } = input
-      let success = false, output
-      const hasTask = await prisma.scheduledTask.findFirst({ where: { name: DBBAK_TASK_NAME } })
-      DBBackupJob.setTime(new CronTime(time))
-      DBBackupJob.start()
-      if (immediate) {
-        try {
-          output = await Backupdb()
-          success = true
-        } catch (error) { output = error ?? (error.message ?? "internal error") }
-      }
-      if (!hasTask) {
-        await prisma.scheduledTask.create({ data: { lastRun: new Date(), output, isSuccess: success, schedule: time, name: DBBAK_TASK_NAME, isRunning: DBBackupJob.running } })
-      } else {
-        await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { lastRun: new Date(), output, isSuccess: success, schedule: time, isRunning: DBBackupJob.running } })
-      }
-      return null
-    }),
-  stopDBackupTask: authProcedure
-    .input(z.void())
-    .query(async () => {
-      DBBackupJob.stop()
-      await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { isRunning: DBBackupJob.running } })
-    }),
-  updataDBackupTime: authProcedure
-    .input(z.object({
-      time: z.string(),
+      time: z.string().optional(),
+      type: z.enum(['start', 'stop', 'update']),
+      task: z.enum([ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME]),
     }))
     .mutation(async ({ input }) => {
-      const { time } = input
-      DBBackupJob.setTime(new CronTime(time))
-      await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { schedule: time } })
+      const { time, type, task } = input
+      if (type == 'start' && time) {
+        return task == DBBAK_TASK_NAME ? DBJob.Start(time, true) : ArchiveJob.Start(time, true)
+      }
+      if (type == 'stop') {
+        return task == DBBAK_TASK_NAME ? DBJob.Stop() : ArchiveJob.Stop()
+      }
+      if (type == 'update' && time) {
+        return task == DBBAK_TASK_NAME ? DBJob.SetCornTime(time) : ArchiveJob.SetCornTime(time)
+      }
     }),
   restoreDB: authProcedure
     .input(z.object({
@@ -56,6 +35,6 @@ export const taskRouter = router({
     }))
     .query(async ({ input }) => {
       const { fileName } = input
-      return Resotredb(fileName)
+      return DBJob.RestoreDB(fileName)
     }),
 })

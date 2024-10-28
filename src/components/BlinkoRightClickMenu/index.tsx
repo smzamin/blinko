@@ -20,7 +20,6 @@ export const BlinkoRightClickMenu = observer(() => {
   const store = RootStore.Local(() => ({
     editorHeight: 90,
     editBlinko() {
-      console.log(123)
       RootStore.Get(DialogStore).setData({
         size: '2xl',
         isOpen: true,

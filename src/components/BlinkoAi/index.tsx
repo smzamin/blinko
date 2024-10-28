@@ -15,6 +15,8 @@ import { DialogStore } from "@/store/module/Dialog";
 import { UserStore } from "@/store/user";
 import { useTranslation } from "react-i18next";
 import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export const BlinkoAiChat = observer(() => {
   const ai = RootStore.Get(AiStore)
@@ -27,7 +29,7 @@ export const BlinkoAiChat = observer(() => {
 
   return <div className="flex flex-col p-0 md:p-2 relative h-full">
     <ScrollArea
-      onBottom={() => {}}
+      onBottom={() => { }}
       ref={scrollAreaRef}
       key='BlinkoAiChat'
       className={`mx-1 w-full !h-[500px] md:!h-[360px]`}>
@@ -59,11 +61,11 @@ export const BlinkoAiChat = observer(() => {
               </div>
               {
                 (ai.chatHistory.list?.length == index + 1) && <div className="flex flex-col gap-1">
-                  {ai.relationNotes?.map(note => {
-                    return <div className="w-full flex gap-1 items-center blinko-tag cursor-pointer" style={{ fontSize: '11px' }}>
+                  {ai.relationNotes?.list?.map(note => {
+                    return <Link href={`/detail?id=${note.id}`} className="w-[90%] flex gap-1 items-center blinko-tag cursor-pointer" style={{ fontSize: '11px' }}>
                       <Icon className="min-w-[15px]" icon="uim:arrow-up-left" width="15" height="15" />
                       <div className="truncate">{note.content}</div>
-                    </div>
+                    </Link>
                   })}
                 </div>
               }

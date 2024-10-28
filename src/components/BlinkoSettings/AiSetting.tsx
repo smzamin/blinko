@@ -11,11 +11,13 @@ import { useTranslation } from "react-i18next";
 import { Item } from "./Item";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useMediaQuery } from "usehooks-ts";
 
 export const AiSetting = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const ai = RootStore.Get(AiStore)
   const { t } = useTranslation()
+  const isPc = useMediaQuery('(min-width: 768px)')
   const store = RootStore.Local(() => ({
     isVisible: false,
     apiKey: '',
@@ -37,7 +39,6 @@ export const AiSetting = observer(() => {
             value: e.target.checked
           }))
         }}
-      // defaultSelected={blinko.config.value?.isUseAI}
       />} />
     <Item
       leftContent={<>{t('model-provider')}</>}
@@ -86,6 +87,7 @@ export const AiSetting = observer(() => {
         </Select>} />
 
     <Item
+      type={isPc ? 'row' : 'col'}
       leftContent={<div className="flex flex-col ga-1">
         <div>API Key</div>
         <div className="text-desc text-xs">{t('user-custom-openai-api-key')}</div>
@@ -95,7 +97,7 @@ export const AiSetting = observer(() => {
           size='sm'
           label="API key"
           variant="bordered"
-          className="w-[300px]"
+          className="w-full md:w-[300px]"
           placeholder="Enter your api key"
           value={store.apiKey}
           onChange={e => { store.apiKey = e.target.value }}
@@ -118,6 +120,7 @@ export const AiSetting = observer(() => {
         />
       } />
     <Item
+      type={isPc ? 'row' : 'col'}
       leftContent={<div className="flex flex-col gap-1">
         <>{t('api-endpoint')}</>
         <div className="text-desc text-xs">{t('must-start-with-http-s-or-use-api-openai-as-default')}</div>
@@ -126,7 +129,7 @@ export const AiSetting = observer(() => {
         size='sm'
         label={t('api-endpoint')}
         variant="bordered"
-        className="w-[300px]"
+        className="w-full md:w-[300px]"
         placeholder="https://api.openapi.com"
         value={store.apiEndPoint}
         onChange={e => { store.apiEndPoint = e.target.value }}

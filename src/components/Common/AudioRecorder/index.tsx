@@ -113,7 +113,6 @@ const AudioRecorder: (props: Props) => ReactElement = ({
           <div onClick={() => stopAudioRecorder()}><StopIcon data-testid="ar_mic" /> </div>
           :
           <div onClick={e => {
-            console.log(e)
             startRecording()
           }} >
             <RecordIcon data-testid="ar_mic" />

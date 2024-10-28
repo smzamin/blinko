@@ -53,7 +53,6 @@ export class UserStore implements User, Store {
     useEffect(() => {
       const userStore = RootStore.Get(UserStore);
       if (!userStore.isLogin && session) {
-        console.log(session.user)
         //@ts-ignore
         userStore.ready({ ...session.user, token: session.token });
       }

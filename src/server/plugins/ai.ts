@@ -35,7 +35,6 @@ export class AiService {
 
     if (globalConfig.aiApiEndpoint) {
       modelParmas.config.baseURL = globalConfig.aiApiEndpoint
-      console.log(modelParmas.config.baseURL)
     }
     let chatModel = 'gpt-3.5-turbo'
     if (globalConfig.aiModel) {
@@ -82,7 +81,6 @@ export class AiService {
 
   static async embeddingUpsert({ id, content, type }: { id: number, content: string, type: 'update' | 'insert' }) {
     const { VectorStore, Splitter } = await AiService.getModelProivder()
-    console.log("VectorStore inint")
     const chunks = await Splitter.splitText(content);
     if (type == 'update') {
       for (const index of new Array(999).keys()) {
@@ -102,7 +100,6 @@ export class AiService {
     })
     await VectorStore.addDocuments(documents, { ids: documents.map(i => i.metadata.uniqDocId) });
     await VectorStore.save(FaissStorePath)
-    console.log("VectorStore save")
     return { ok: true }
   }
 
@@ -161,15 +158,17 @@ export class AiService {
     try {
       const { LLM, VectorStore } = await AiService.getModelProivder()
       let searchRes = await AiService.similaritySearch({ question })
-      console.log(searchRes)
-      let notes = await prisma.notes.findMany({
-        where: {
-          id: {
-            in: _.uniqWith(searchRes.map(i => i.metadata?.noteId))
+      let notes: any[] = []
+      if (searchRes && searchRes.length != 0) {
+        notes = await prisma.notes.findMany({
+          where: {
+            id: {
+              in: _.uniqWith(searchRes.map(i => i.metadata?.noteId)).filter(i => !!i)
+            }
           }
-        }
-      })
-      notes = notes.map(i => { return { ...i, index: searchRes.findIndex(t => t.metadata.noteId == i.id) } })
+        })
+      }
+      notes = notes?.map(i => { return { ...i, index: searchRes.findIndex(t => t.metadata.noteId == i.id) } }) ?? []
       //@ts-ignore
       notes.sort((a, b) => a.index! - b.index!)
       const chat_history = AiService.getChatHistory({ conversations })
@@ -178,7 +177,7 @@ export class AiService {
       const result = await qaChain.stream({
         chat_history,
         input: question,
-        context: notes.map(i => i.content)
+        context: notes?.map(i => i.content)
       })
       return { result, notes }
     } catch (error) {

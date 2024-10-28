@@ -22,7 +22,6 @@ export const userRouter = router({
     .output(z.boolean())
     .mutation(async () => {
       const count = await prisma.accounts.count()
-      console.log({ count })
       if (count > 0) {
         return false
       } else {
