@@ -103,5 +103,6 @@
   "there-are-no-resources-yet-go-upload-them-now": "还没有资源，现在就去上传吧",
   "daily-review": "每日回顾",
   "detail": "详情",
-  "total": "全部"
+  "total": "全部",
+  "enter-send-shift-enter-for-new-line": "Enter发送，Shift+Enter 换行"
 }
