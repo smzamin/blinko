@@ -2,7 +2,7 @@
  * This file contains the root router of your tRPC-backend
  */
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
-import { createCallerFactory, router } from '../trpc';
+import { router, t } from '../trpc';
 import { aiRouter } from './ai';
 import { attachmentsRouter } from './attachment';
 import { noteRouter } from './note';
@@ -23,7 +23,7 @@ export const appRouter = router({
   task: taskRouter
 });
 
-export const createCaller = createCallerFactory(appRouter);
+export const createCaller = t.createCallerFactory(appRouter);
 export const caller = createCaller({ ok: true });
 
 export type AppRouter = typeof appRouter;

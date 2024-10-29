@@ -2,19 +2,22 @@ import { router, publicProcedure, authProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { ConfigKey, ZConfigKey } from '../types';
+import { GlobalConfig, ZConfigKey } from '../types';
+export const getGlobalConfig = async () => {
+  const config = await prisma.config.findMany()
+  const globalConfig = config.reduce((acc, item) => {
+    const config = item.config as { type: string, value: any }
+    acc[item.key] = config.value
+    return acc
+  }, {})
+  return globalConfig as GlobalConfig
+}
 
 export const configRouter = router({
   list: authProcedure
     .input(z.void())
     .query(async function () {
-      const config = await prisma.config.findMany()
-      const globalConfig = config.reduce((acc, item) => {
-        const config = item.config as { type: string, value: any }
-        acc[item.key] = config.value
-        return acc
-      }, {})
-      return globalConfig as { [key in ConfigKey]: any }
+      return await getGlobalConfig()
     }),
   update: authProcedure
     .input(z.object({

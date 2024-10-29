@@ -81,19 +81,21 @@ export const BlinkoAiChat = observer(() => {
           className="w-[85%]"
           variant="bordered"
           onKeyDown={e => {
-            if (ai.aiSearchText == '') return
-            if (e.key == 'Enter') {
-              if (e.altKey) {
-                ai.aiSearchText += '\n'
-              } else {
-                e.preventDefault();
-                ai.completionsStream()
-                ai.aiSearchText = ''
-              }
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
+          onKeyUp={event => {
+            event.preventDefault();
+            if (event.key === 'Enter' && event.shiftKey) {
+              ai.aiSearchText += '\n'
+            } else if (event.key === 'Enter') {
+              ai.completionsStream()
+              ai.aiSearchText = ''
             }
           }}
           minRows={1}
-          placeholder={t('ask-about-your-notes')}
+          placeholder={t('enter-send-shift-enter-for-new-line')}
           value={ai.aiSearchText} onChange={e => {
             ai.aiSearchText = e.target.value
           }}

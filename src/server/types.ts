@@ -1,4 +1,3 @@
-import { type Decimal } from "@prisma/client/runtime/library"
 import { RouterOutput, RouterInput } from "./routers/_app"
 import { z } from "zod"
 
@@ -24,3 +23,17 @@ export const ZConfigKey = z.union([
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
+
+export const ZConfigSchema = z.object({
+  isAutoArchived: z.boolean(),
+  autoArchivedDays: z.number(),
+  isUseAI: z.boolean(),
+  aiModelProvider: z.enum(['OpenAI']),
+  aiApiKey: z.string(),
+  aiApiEndpoint: z.string().url(),
+  aiModel: z.string(),
+  isHiddenMobileBar: z.boolean(),
+});
+
+export type GlobalConfig = z.infer<typeof ZConfigSchema>;
+

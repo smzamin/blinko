@@ -13,7 +13,7 @@ import type { Context } from './context';
 import superjson from 'superjson'
 import { OpenApiMeta } from 'trpc-to-openapi';
 
-const t = initTRPC.meta<OpenApiMeta>().context<Context>().create({
+export const t = initTRPC.meta<OpenApiMeta>().context<Context>().create({
   transformer: superjson,
   errorFormatter({ shape }) {
     return shape;
@@ -35,4 +35,3 @@ export const authProcedure = t.procedure.use(async ({ctx, next}) => {
 })
 
 export const mergeRouters = t.mergeRouters;
-export const createCallerFactory = t.createCallerFactory;

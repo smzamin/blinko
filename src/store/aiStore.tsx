@@ -5,7 +5,7 @@ import { ToastPlugin } from './module/Toast/Toast';
 import { RootStore } from './root';
 import { streamApi } from '@/lib/trpc';
 import { StorageListState } from './standard/StorageListState';
-import { Note } from '@/server/types';
+import { GlobalConfig, Note } from '@/server/types';
 import { makeAutoObservable } from 'mobx';
 
 type Chat = {
@@ -25,7 +25,7 @@ export class AiStore implements Store {
     content: "",
     notes: [] as Note[]
   }
-  modelProviderSelect = [
+  modelProviderSelect: { label: string, value: GlobalConfig['aiModelProvider'] }[] = [
     {
       label: "OpenAI",
       value: "OpenAI"
