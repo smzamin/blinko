@@ -24,8 +24,8 @@ export const AiSetting = observer(() => {
     apiEndPoint: '',
   }))
   useEffect(() => {
-    store.apiEndPoint = blinko.config.value?.aiApiEndpoint
-    store.apiKey = blinko.config.value?.aiApiKey
+    store.apiEndPoint = blinko.config.value?.aiApiEndpoint!
+    store.apiKey = blinko.config.value?.aiApiKey!
   }, [blinko.config.value])
   return <Card shadow="none" className="flex flex-col p-4 bg-background pb-6">
     <div className='text-desc text-sm'>AI</div>
@@ -46,7 +46,7 @@ export const AiSetting = observer(() => {
         <Select
           selectedKeys={[blinko.config.value?.aiModelProvider!]}
           onChange={e => {
-            blinko.config.value!.aiModelProvider = e.target.value
+            blinko.config.value!.aiModelProvider = e.target.value as any
             PromiseCall(api.config.update.mutate({
               key: 'aiModelProvider',
               value: e.target.value

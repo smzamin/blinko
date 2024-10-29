@@ -21,7 +21,7 @@ export const TaskSetting = observer(() => {
   const [autoArchivedDays, setAutoArchivedDays] = useState("90")
   useEffect(() => {
     if (blinko.config.value?.autoArchivedDays) {
-      setAutoArchivedDays(blinko.config.value?.autoArchivedDays)
+      setAutoArchivedDays(String(blinko.config.value?.autoArchivedDays))
     }
   }, [blinko.config.value?.autoArchivedDays])
 
