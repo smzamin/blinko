@@ -13,8 +13,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    # volumes:
-    #   - <your volumn>:/app/.blinko
+    volumes:
+      - ~/.blinko:/app/.blinko
     restart: always
     logging:
       options:
@@ -40,8 +40,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
       TZ: Asia/Shanghai
-    # volumes:
-    #   - <your volumn>:/var/lib/postgresql/data
     healthcheck:
       test:
         ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
