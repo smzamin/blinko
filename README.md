@@ -1,5 +1,6 @@
 
-<img align='right' height='40px' src="./public/single-logo.svg" alt="Blinko" />
+<img align='left' style='margin-right:8px' height='40px' src="./public/single-logo.svg" alt="Blinko" />
+
 
 # Blinko - Open Source, Self-hosted
 [Home Page](https://blinko-doc.vercel.app/) •
@@ -9,13 +10,26 @@
 > username:blinko
 > password:blinko
 
-Blinko is an innovative open-source project designed for individuals who want to quickly capture and organize their fleeting thoughts. Inspired by the idea of "lightning notes," Blinko allows users to seamlessly jot down ideas the moment they strike, ensuring that no spark of creativity is lost.
+<div align="center">
 
-What sets Blinko apart is its AI-powered capabilities, offering intelligent suggestions and context-aware enhancements to make your notes more insightful and actionable. Built with a focus on privacy and control, Blinko is fully self-hosted, meaning you can run it on your own server or infrastructure, ensuring your data stays secure and under your ownership.
+<!-- ![GitHub forks](https://img.shields.io/github/forks/blinko-space/blinko?style=social) -->
+![GitHub issues](https://img.shields.io/github/issues/blinko-space/blinko)
+![GitHub license](https://img.shields.io/github/license/blinko-space/blinko)
+![GitHub last commit](https://img.shields.io/github/last-commit/blinko-space/blinko)
+![GitHub release](https://img.shields.io/github/v/release/blinko-space/blinko)
+![GitHub contributors](https://img.shields.io/github/contributors/blinko-space/blinko)
+<!-- ![Downloads](https://img.shields.io/github/downloads/blinko-space/blinko/total) -->
+
+[![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/denser-org/denser-retriever/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
+![Maintenance](https://img.shields.io/badge/Maintained-Actively-green)
+
+</div>
+
+Blinko is an innovative open-source project designed for individuals who want to quickly capture and organize their fleeting thoughts. Blinko allows users to seamlessly jot down ideas the moment they strike, ensuring that no spark of creativity is lost.
 
 <img style="border-radius:20px" src="./public/home.png" alt="Blinko" />
 
-## Main Features
+## 🚀Main Features
 - **AI-Enhanced Note Retrieval** 🤖：With Blinko's advanced AI-powered RAG (Retrieval-Augmented Generation), you can quickly search and access your notes using natural language queries, making it effortless to find exactly what you need.
 
 - **Data Ownership** 🔒:Your privacy matters. All your notes and data are stored securely in your self-hosted environment, ensuring complete control over your information.
@@ -28,13 +42,13 @@ What sets Blinko apart is its AI-powered capabilities, offering intelligent sugg
 
 - **Completely Free** 🎉:Blinko is and always will be free to use, with no hidden costs or premium features locked behind paywalls.
 
-## Deploy with Docker in seconds
+## 📦Deploy with Docker in seconds
 
 ```bash
-docker-compose -f docker-compose.prod.yml up -d
+curl -s https://raw.githubusercontent.com/blinko-space/blinko/main/install.sh | bash
 ```
 
-## Contribution
+## 👨🏼‍💻Contribution
 Contributions are the heart of what makes the open-source community so dynamic, creative, and full of learning opportunities. Your involvement helps drive innovation and growth. We deeply value any contribution you make, and we're excited to have you as part of our community. Thank you for your support! 🙌
 
 ## Sponsorship
