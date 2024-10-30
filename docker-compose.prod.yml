@@ -1,5 +1,3 @@
-# docker-compose.dev.yml
-
 services:
   blinko-website:
     image: blinkospace/blinko:latest
