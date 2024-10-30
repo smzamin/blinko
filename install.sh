@@ -53,4 +53,3 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Docker Compose is up and running."
-
