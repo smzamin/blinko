@@ -15,7 +15,7 @@ const highlightTags = (text) => {
     return parts.map((part, index) => {
       if (part.match(helper.regex.isContainHashTag)) {
         return (
-          <span key={index} className='blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' >
+          <span key={index} className='select-none blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' >
             {part + " "}
           </span>
         );

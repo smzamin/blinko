@@ -77,9 +77,9 @@ export const BlinkoAiChat = observer(() => {
       })}
     </ScrollArea>
     <div className="flex gap-2 mt-auto w-full ">
-      <div className="relative w-full ">
+      <div className="relative w-full pb-4 md:pb-0">
         <Textarea
-          className="w-[85%]"
+          className="w-[78%]"
           variant="bordered"
           onKeyDown={e => {
             if (e.key === 'Enter') {
@@ -101,19 +101,22 @@ export const BlinkoAiChat = observer(() => {
             ai.aiSearchText = e.target.value
           }}
         />
-        <div onClick={e => {
-          if (ai.aiSearchText == '') return
-          ai.completionsStream()
-          ai.aiSearchText = ''
-        }} className={`${ai.aiSearchText == '' ? 'opacity-30 select-none' : ''} absolute bottom-[9px] right-[5px] cursor-pointer hover:opacity-80 transition-all rounded-full bg-primary text-primary-foreground`}>
-          <Icon icon="uil:arrow-up" width="20" height="20" />
-        </div>
 
+        <div className="flex gap-3 absolute bottom-[22px] md:bottom-[7px] right-[5px] ">
         <div onClick={e => {
-          ai.aiSearchText = ''
-          ai.chatHistory.clear()
-        }} className="absolute bottom-[9px] right-[35px] cursor-pointer hover:opacity-80 transition-all rounded-full ">
-          <Icon icon="ant-design:clear-outlined" width="20" height="20" />
+            ai.aiSearchText = ''
+            ai.chatHistory.clear()
+          }} className="cursor-pointer hover:opacity-80 transition-all rounded-full">
+            <Icon icon="ant-design:clear-outlined" width="26" height="26" />
+          </div>
+
+          <div onClick={e => {
+            if (ai.aiSearchText == '') return
+            ai.completionsStream()
+            ai.aiSearchText = ''
+          }} className={`${ai.aiSearchText == '' ? 'opacity-30 select-none' : ''} cursor-pointer hover:opacity-70 transition-all rounded-full bg-primary text-primary-foreground`}>
+            <Icon icon="uil:arrow-up" width="26" height="26" />
+          </div>
         </div>
       </div>
     </div>
@@ -147,12 +150,10 @@ export const BlinkoAi = observer(() => {
     {
       isPc ? <Popover placement="top">
         <PopoverTrigger>
-          <div>
-            <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
-              className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-10 opacity-70 text-primary-foreground">
-              <Icon icon="mingcute:ai-line" width="20" height="20" />
-            </motion.div>
-          </div>
+          <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
+            className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-10 opacity-70 text-primary-foreground">
+            <Icon icon="mingcute:ai-line" width="20" height="20" />
+          </motion.div>
         </PopoverTrigger>
         <PopoverContent>
           <div className="h-[420px] w-[420px]">

@@ -27,7 +27,7 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
           }
         }}>
         <Card shadow='none' className={`mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
-          <div className="flex items-center">
+          <div className="flex items-center select-none">
             <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.createdAt).fromNow()}</div>
             {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}
           </div>
@@ -40,11 +40,11 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
             blinkoItem.type == NoteType.BLINKO ?
               <div className='flex items-center justify-start mt-2'>
                 <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
-                <div className='text-desc text-xs font-bold ml-1'>{t('blinko')}</div>
+                <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
               </div> :
               <div className='flex items-center justify-start mt-2'>
                 <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
-                <div className='text-desc text-xs font-bold ml-1'>{t('note')}</div>
+                <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
               </div>
           }
         </Card>

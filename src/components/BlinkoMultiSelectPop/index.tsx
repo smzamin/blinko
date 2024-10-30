@@ -15,7 +15,7 @@ import { api } from '@/lib/trpc';
 
 const SelectBox = `select-none multi-select-toolbar flex fixed w-fit h-[50px] 
 p-4 rounded-xl font-bold items-center justify-center 
-left-[calc(50%_-_190px)] md:left-[40%] top-10 md:bottom-10 md:top-auto
+left-[calc(50%_-_150px)] md:left-[40%] top-10 md:bottom-10 md:top-auto
 bg-primary text-primary-foreground z-[-99] gap-4  shadow-lg`
 
 const SelectItems = "flex items-center justify-center gap-1 cursor-pointer hover:opacity-80 transition-all"
@@ -42,13 +42,14 @@ export const BlinkoMultiSelectPop = observer(() => {
       },
     }}
     className={SelectBox}>
-    <div className='flex items-center justify-center gap-2'>
+    <div className='items-center justify-center gap-2 hidden md:flex'>
       <Icon onClick={e => {
         blinko.curMultiSelectIds = blinko.noteList.value?.map(i => i.id) || []
       }}
         className='cursor-pointer hover:opacity-80 transition-all' icon="fluent:select-all-on-16-filled" width="20" height="20" />
       {blinko.noteList.value?.length}/{blinko.curMultiSelectIds.length} {t('items')}</div>
-    <div className='w-[2px] rounded-sm h-full bg-primary-foreground'></div>
+      
+    <div className='w-[2px] rounded-sm h-full bg-primary-foreground hidden md:flex'></div>
 
     <div className={SelectItems}
       onClick={async () => {

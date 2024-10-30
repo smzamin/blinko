@@ -12,7 +12,6 @@ if [ $? -ne 0 ]; then
   echo "Failed to download the docker-compose file. Please check your internet connection or the GitHub URL."
   exit 1
 fi
-
 echo "Successfully downloaded docker-compose file: $compose_file"
 
 # Default environment variables
@@ -26,8 +25,6 @@ if [[ "$change_nextauth_url" == "y" || "$change_nextauth_url" == "Y" ]]; then
 else
   NEXTAUTH_URL=$NEXTAUTH_URL_DEFAULT
 fi
-
-
 
 # Ask user if they want to change NEXT_PUBLIC_BASE_URL
 read -p "Do you want to change NEXT_PUBLIC_BASE_URL from the default ($NEXT_PUBLIC_BASE_URL_DEFAULT)? [y/N]: " change_next_public_base_url
