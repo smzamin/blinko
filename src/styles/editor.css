@@ -88,6 +88,12 @@
   margin-bottom: 0 !important;
   margin-top: 0 !important;
 }
+.prose :where(ol):not(:where([class~=not-prose], [class~=not-prose] *)) {
+  list-style-type: auto !important;
+  padding-inline-start: 15px !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
 
 .prose :where(.prose > :last-child):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   margin-top: 0 !important;
@@ -103,6 +109,9 @@
 }
 
 .prose ul>li {
+  margin: 0 !important;
+}
+.prose ol>li {
   margin: 0 !important;
 }
 

@@ -59,6 +59,19 @@ export const BlinkoRightClickMenu = observer(() => {
       </div>
     </ContextMenuItem>
 
+    <ContextMenuItem
+      onClick={e => {
+        blinko.upsertNote.call({
+          id: blinko.curSelectedNote?.id,
+          isTop: !blinko.curSelectedNote?.isTop
+        })
+      }}>
+      <div className="flex items-start gap-2">
+        <Icon icon="lets-icons:pin" width="20" height="20" />
+        <div>{t('top')}</div>
+      </div>
+    </ContextMenuItem>
+
     <ContextMenuItem onClick={e => {
       blinko.upsertNote.call({ id: blinko.curSelectedNote?.id, isArchived: !blinko.curSelectedNote?.isArchived })
     }}>

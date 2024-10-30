@@ -255,7 +255,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                   </ButtonWithTooltip>
 
                   <Divider orientation="vertical" />
-                  {isPc && <ListsToggle />}
+                  <ListsToggle />
                   {isPc && <InsertTable />}
                   <ConditionalContents
                     options={[

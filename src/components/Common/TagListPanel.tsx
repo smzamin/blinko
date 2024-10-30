@@ -68,9 +68,10 @@ export const TagListPanel = observer(() => {
         }) => (
           <div {...getNodeProps()} style={{ paddingLeft: 20 * (level - 1) + 6 }} >
             <div className={`${SideBarItem} mb-1 relative group ${(isSelected(element.id)) ? '!bg-primary !text-primary-foreground' : ''}`}
-              onClick={e => {
+              onClick={async e => {
                 base.currentRouter = blinko.allTagRouter
-                router.push('/all?tagId=' + element.id, undefined, { shallow: true })
+                await router.push('/all?tagId=' + element.id, undefined, { shallow: true })
+                blinko.forceQuery++
               }}
             >
               {isBranch ? (

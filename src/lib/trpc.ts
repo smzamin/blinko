@@ -1,13 +1,23 @@
-import { createTRPCClient, httpBatchLink, unstable_httpBatchStreamLink } from '@trpc/client';
+import { createTRPCClient, httpBatchLink, httpLink, splitLink, unstable_httpBatchStreamLink } from '@trpc/client';
 import type { AppRouter } from '@/server/routers/_app';
 import superjson from 'superjson';
 
 export const api = createTRPCClient<AppRouter>({
   links: [
-    httpBatchLink({
-      url: `/api/trpc`,
-      transformer: superjson
-    }),
+    splitLink({
+      condition(op) {
+        return op.context.skipBatch === true;
+      },
+      true: httpLink({
+        url: `/api/trpc`,
+        transformer: superjson
+      }),
+      // when condition is false, use batching
+      false: httpBatchLink({
+        url: `/api/trpc`,
+        transformer: superjson
+      }),
+    })
   ],
 });
 

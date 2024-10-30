@@ -105,5 +105,8 @@
   "confrim": "Confirm",
   "daily-review": "Daily Review",
   "detail": "Detail",
-  "enter-send-shift-enter-for-new-line": "Enter send, Shift+Enter for new line"
+  "enter-send-shift-enter-for-new-line": "Enter send, Shift+Enter for new line",
+  "show-less": "Show Less",
+  "show-more": "Show More",
+  "top": "Top"
 }

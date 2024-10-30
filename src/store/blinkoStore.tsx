@@ -45,15 +45,14 @@ export class BlinkoStore implements Store {
   updateTicker = 0
   fullNoteList: Note[] = []
   upsertNote = new PromiseState({
-    function: async ({ content = '', isArchived, type, id, attachments = [], refresh = true }:
-      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean }) => {
+    function: async ({ content = '', isArchived, type, id, attachments = [], refresh = true, isTop }:
+      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
-      // const res = await BlinkoController.upsertBlinko({ content, type, isArchived, id, attachments })
-      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments })
+      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop })
       if (res?.id) {
-        api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' })
+        api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
       }
       eventBus.emit('editor:clear')
       RootStore.Get(ToastPlugin).success(id ? i18n.t("update-successfully") : i18n.t("create-successfully"))

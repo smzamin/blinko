@@ -104,5 +104,8 @@
   "daily-review": "每日回顾",
   "detail": "详情",
   "total": "全部",
-  "enter-send-shift-enter-for-new-line": "Enter发送，Shift+Enter 换行"
+  "enter-send-shift-enter-for-new-line": "Enter发送，Shift+Enter 换行",
+  "show-less": "收起",
+  "show-more": "展开",
+  "top": "置顶"
 }

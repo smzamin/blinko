@@ -1,3 +1,18 @@
+.content {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.collapsed {
+  -webkit-line-clamp: 20; 
+}
+
+.expanded {
+  -webkit-line-clamp: unset;
+}
+
+
 .markdown-body {
   --base-size-4: 0.25rem;
   --base-size-8: 0.5rem;

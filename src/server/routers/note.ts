@@ -40,7 +40,7 @@ export const noteRouter = router({
       if (type != -1) { where.type = type }
       return await prisma.notes.findMany({
         where,
-        orderBy: { createdAt: orderBy },
+        orderBy: [{ isTop: "desc" }, { updatedAt: orderBy }],
         skip: (page - 1) * size,
         take: size,
         include: { tags: true, attachments: true }
@@ -74,10 +74,11 @@ export const noteRouter = router({
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
       attachments: z.custom<Pick<Prisma.attachmentsCreateInput, 'name' | 'path' | 'size'>[]>().default([]),
       id: z.number().optional(),
-      isArchived: z.union([z.boolean(), z.null()]).default(null)
+      isArchived: z.union([z.boolean(), z.null()]).default(null),
+      isTop: z.union([z.boolean(), z.null()]).default(null),
     }))
     .mutation(async function ({ input }) {
-      let { id, isArchived, type, attachments, content } = input
+      let { id, isArchived, type, attachments, content, isTop } = input
       content = content?.replace(/\\/g, '').replace(/&#x20;/g, ' ')
       const tagTree = helper.buildHashTagTreeFromHashString(helper.extractHashtags(content ?? ''))
 
@@ -103,11 +104,13 @@ export const noteRouter = router({
       const update: Prisma.notesUpdateInput = {
         ...(type !== -1 && { type }),
         ...(isArchived !== null && { isArchived }),
+        ...(isTop !== null && { isTop }),
         ...(content && { content })
       }
 
       if (id) {
         const note = await prisma.notes.update({ where: { id }, data: update })
+        if (!content) return note
         const oldTagsInThisNote = await prisma.tagsToNote.findMany({ where: { noteId: note.id }, include: { tag: true } })
         await handleAddTags(tagTree, undefined)
         const oldTags = oldTagsInThisNote.map(i => i.tag).filter(i => !!i)
@@ -115,6 +118,7 @@ export const noteRouter = router({
         const newTagsString = newTags.map(i => `${i?.name}<key>${i?.parent}`)
         const needTobeAddedRelationTags = _.difference(newTagsString, oldTagsString);
         const needToBeDeletedRelationTags = _.difference(oldTagsString, newTagsString);
+        console.log({ needToBeDeletedRelationTags, oldTagsString, newTagsString })
         if (needToBeDeletedRelationTags.length != 0) {
           await prisma.tagsToNote.deleteMany({
             where: {

@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import DraggableDiv from "../Common/DragContainer";
 
 export const BlinkoAiChat = observer(() => {
   const ai = RootStore.Get(AiStore)
@@ -120,18 +121,21 @@ export const BlinkoAiChat = observer(() => {
 })
 export const BlinkoAiButton = () => {
   const isPc = useMediaQuery('(min-width: 768px)')
-  return <motion.div onClick={e => {
-    if (!isPc) {
-      RootStore.Get(DialogStore).setData({
-        isOpen: true,
-        content: <BlinkoAiChat />,
-        size: '5xl'
-      })
-    }
-  }} whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
-    className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-10 opacity-70 text-primary-foreground">
-    <Icon icon="mingcute:ai-line" width="20" height="20" />
-  </motion.div>
+  return <DraggableDiv >
+    <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
+      className="rounded-full p-2 cursor-pointer bg-primary !z-20 opacity-70 text-primary-foreground" onClick={e => {
+        if (!isPc) {
+          RootStore.Get(DialogStore).setData({
+            isOpen: true,
+            content: <BlinkoAiChat />,
+            size: '5xl'
+          })
+        }
+      }}
+    >
+      <Icon icon="mingcute:ai-line" width="20" height="20" />
+    </motion.div>
+  </DraggableDiv>
 }
 
 export const BlinkoAi = observer(() => {
@@ -139,19 +143,19 @@ export const BlinkoAi = observer(() => {
   const isPc = useMediaQuery('(min-width: 768px)')
 
   return <>
+
     {
       isPc ? <Popover placement="top">
         <PopoverTrigger>
-          <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
-            className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-10 opacity-70 text-primary-foreground">
-            <Icon icon="mingcute:ai-line" width="20" height="20" />
-          </motion.div>
+          <div>
+            <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
+              className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-10 opacity-70 text-primary-foreground">
+              <Icon icon="mingcute:ai-line" width="20" height="20" />
+            </motion.div>
+          </div>
         </PopoverTrigger>
         <PopoverContent>
           <div className="h-[420px] w-[420px]">
-            {/* <div className="flex">
-              <div className="ml-auto"><Icon icon="ic:round-close" width="20" height="20" /></div>
-            </div> */}
             <BlinkoAiChat />
           </div>
         </PopoverContent>

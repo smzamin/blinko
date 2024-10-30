@@ -27,7 +27,11 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
           }
         }}>
         <Card shadow='none' className={`mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
-          <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.createdAt).fromNow()}</div>
+          <div className="flex items-center">
+            <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.createdAt).fromNow()}</div>
+            {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}
+          </div>
+
           <MarkdownRender content={blinkoItem.content} />
           <div className={blinkoItem.attachments?.length != 0 ? 'my-2' : ''}>
             <FilesAttachmentRender files={blinkoItem.attachments ?? []} preview />
