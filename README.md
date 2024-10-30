@@ -2,8 +2,10 @@
 <img align='right' height='40px' src="./public/single-logo.svg" alt="Blinko" />
 
 # Blinko - Open Source, Self-hosted
+[Home Page](https://blinko-doc.vercel.app/) •
+[Live Demo](https://blinko-demo.vercel.app/) •
+[Docs](https://blinko-doc.vercel.app/intro.html)
 
-<a href="https://blinko-five.vercel.app/">Live Demo</a>
 > username:blinko
 > password:blinko
 
