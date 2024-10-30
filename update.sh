@@ -28,6 +28,7 @@ fi
 echo "Fetching docker-compose file from GitHub..."
 curl -o $compose_file $github_url
 
+
 if [ $? -ne 0 ]; then
   echo "Failed to download the docker-compose file. Please check your internet connection or the GitHub URL."
   exit 1
