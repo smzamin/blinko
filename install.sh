@@ -28,6 +28,7 @@ else
 fi
 
 
+
 # Ask user if they want to change NEXT_PUBLIC_BASE_URL
 read -p "Do you want to change NEXT_PUBLIC_BASE_URL from the default ($NEXT_PUBLIC_BASE_URL_DEFAULT)? [y/N]: " change_next_public_base_url
 if [[ "$change_next_public_base_url" == "y" || "$change_next_public_base_url" == "Y" ]]; then

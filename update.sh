@@ -36,6 +36,7 @@ fi
 
 echo "Successfully downloaded docker-compose file: $compose_file"
 
+
 # Default environment variables
 NEXTAUTH_URL_DEFAULT="http://localhost:1111"
 NEXT_PUBLIC_BASE_URL_DEFAULT="http://localhost:1111"
