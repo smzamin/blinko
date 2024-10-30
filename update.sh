@@ -4,6 +4,26 @@
 github_url="https://raw.githubusercontent.com/blinko-space/blinko/refs/heads/main/docker-compose.prod.yml"
 compose_file="docker-compose.prod.yml"
 
+# Remove existing Docker image and container
+echo "Removing existing blinkospace/blinko Docker image..."
+docker rmi blinkospace/blinko:latest -f
+
+if [ $? -ne 0 ]; then
+  echo "Failed to remove Docker image. It may not exist or there may be an issue with Docker."
+else
+  echo "Successfully removed Docker image: blinkospace/blinko:latest"
+fi
+
+# Remove existing blinko-website container
+echo "Removing existing blinko-website container..."
+docker rm blinko-website -f
+
+if [ $? -ne 0 ]; then
+  echo "Failed to remove Docker container. It may not exist or there may be an issue with Docker."
+else
+  echo "Successfully removed Docker container: blinko-website"
+fi
+
 # Fetch docker-compose file using curl
 echo "Fetching docker-compose file from GitHub..."
 curl -o $compose_file $github_url
@@ -42,9 +62,9 @@ sed -i "s|NEXT_PUBLIC_BASE_URL:.*|NEXT_PUBLIC_BASE_URL: $NEXT_PUBLIC_BASE_URL|" 
 
 echo "Environment variables updated."
 
-# Run the docker-compose file
-echo "Starting the Docker Compose setup..."
-docker-compose -f $compose_file up -d
+# Run the docker-compose file (excluding postgres)
+echo "Starting the Docker Compose setup without postgres..."
+docker compose -f $compose_file up -d blinko-website
 
 if [ $? -ne 0 ]; then
   echo "Failed to start Docker Compose. Please check the docker-compose file and your Docker setup."
