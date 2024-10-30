@@ -1,14 +1,7 @@
 
 <img align='left' style='margin-right:8px' height='40px' src="./public/single-logo.svg" alt="Blinko" />
 
-
 # Blinko - Open Source, Self-hosted
-[Home Page](https://blinko-doc.vercel.app/) •
-[Live Demo](https://blinko-demo.vercel.app/) •
-[Docs](https://blinko-doc.vercel.app/intro.html)
-
-> username:blinko
-> password:blinko
 
 <div align="center">
 
@@ -24,6 +17,16 @@
 ![Maintenance](https://img.shields.io/badge/Maintained-Actively-green)
 
 </div>
+
+<div align="center">
+
+[Home Page](https://blinko-doc.vercel.app/) •
+[Live Demo](https://blinko-demo.vercel.app/) •
+[Docs](https://blinko-doc.vercel.app/intro.html)
+</div>
+
+> username:blinko
+> password:blinko
 
 Blinko is an innovative open-source project designed for individuals who want to quickly capture and organize their fleeting thoughts. Blinko allows users to seamlessly jot down ideas the moment they strike, ensuring that no spark of creativity is lost.
 
