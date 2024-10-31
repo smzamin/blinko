@@ -45,7 +45,7 @@ Blinko is an innovative open-source project designed for individuals who want to
 
 - **Completely Free** 🎉:Blinko is and always will be free to use, with no hidden costs or premium features locked behind paywalls.
 
-## 📦Deploy with Docker in seconds
+## 📦Start with Docker Compose in seconds
 
 ```bash
 curl -s https://raw.githubusercontent.com/blinko-space/blinko/main/install.sh | bash
