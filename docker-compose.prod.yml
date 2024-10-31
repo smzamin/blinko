@@ -1,3 +1,9 @@
+version: '3.8'
+
+networks:
+  blinko-network:
+    driver: bridge
+
 services:
   blinko-website:
     image: blinkospace/blinko:latest
@@ -26,6 +32,8 @@ services:
       timeout: 10s   
       retries: 5     
       start_period: 30s 
+    networks:
+      - blinko-network
 
   postgres:
     image: postgres:14
@@ -44,3 +52,5 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+    networks:
+      - blinko-network
