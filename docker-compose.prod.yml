@@ -17,8 +17,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ~/.blinko:/app/.blinko
+    # Make sure you have enough permissions.
+    # volumes:
+      # - ~/your-name/.blinko:/app/.blinko 
     restart: always
     logging:
       options:
