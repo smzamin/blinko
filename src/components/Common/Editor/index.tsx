@@ -22,6 +22,7 @@ import AudioRecorder from '../AudioRecorder';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
+import { UPLOAD_FILE_PATH } from '@/lib/constant';
 const { MDXEditor } = await import('@mdxeditor/editor')
 
 // https://mdxeditor.dev/editor/docs/theming
@@ -78,7 +79,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     },
     (err) => console.table(err)
   );
-  
+
   const store = RootStore.Local(() => ({
     files: [] as FileType[],
     get canSend() {
@@ -148,7 +149,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                 body: formData,
               });
               const data = await response.json();
-              store.speechToText('upload/' + data.fileName)
+              store.speechToText(UPLOAD_FILE_PATH + '/' + data.fileName)
               if (data.filePath) {
                 return data.filePath
               }
