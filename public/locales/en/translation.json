@@ -108,5 +108,6 @@
   "enter-send-shift-enter-for-new-line": "Enter send, Shift+Enter for new line",
   "show-less": "Show Less",
   "show-more": "Show More",
-  "top": "Top"
+  "top": "Top",
+  "cancel-top": "Cancel Top"
 }

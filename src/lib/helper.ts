@@ -15,7 +15,8 @@ export type TagTreeDBNode = Tag & { children?: TagTreeDBNode[]; metadata: { icon
 export const helper = {
   regex: {
     isEndsWithHashTag: /#[\w\u4e00-\u9fa5]*$/,
-    isContainHashTag: /#[^\s#]*(?<![*?.。])/g
+    //lookbehind assertions in ios regex is not supported
+    isContainHashTag: /#[^\s#]*(?:[*?.。]|$)/g
   },
   assemblyPageResult<T>(args: { data: T[], page: number, size: number, result: T[] }): { result: T[], isLoadAll: boolean, isEmpty: boolean } {
     const { data, page, size } = args
@@ -38,7 +39,7 @@ export const helper = {
     return { result, isLoadAll, isEmpty: data.length == 0 }
   },
   extractHashtags(input: string): string[] {
-    const hashtagRegex = /#[^\s#]*(?<![*?.。])/g;
+    const hashtagRegex = /#[^\s#]*(?:[*?.。]|$)/g;
     const matches = input.match(hashtagRegex);
     return matches ? matches : [];
   },
@@ -202,6 +203,7 @@ export const helper = {
   env: {
     //@ts-ignore
     isBrowser: typeof window === 'undefined' ? false : true,
+    isIOS: typeof window === 'undefined' ? false : /iPad|iPhone|iPod/.test(navigator.userAgent)
   },
   cron: {
     human(cronTime: string) {

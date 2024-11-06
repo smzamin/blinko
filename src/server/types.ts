@@ -5,7 +5,7 @@ export type Note = Partial<NonNullable<RouterOutput['notes']['list'][0]>>
 export type Attachment = NonNullable<Note['attachments']>[0] & { size: any }
 export type Tag = NonNullable<RouterOutput['tags']['list']>[0]
 export type Config = NonNullable<RouterOutput['config']['list']>
-
+export type LinkInfo = NonNullable<RouterOutput['public']['linkPreview']>
 export enum NoteType {
   'BLINKO',
   'NOTE'

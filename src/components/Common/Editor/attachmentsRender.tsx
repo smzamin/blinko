@@ -81,7 +81,7 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
       </PhotoProvider>
 
     </div>
-    <div className={`columns-${columns} mt-3 select-none`}>
+    <div className={`${helper.env.isIOS ? 'columns-1' : 'columns-' + columns} mt-3 select-none`}>
       {files?.filter(i => !i.isImage).map((file, index) => (
         <div onClick={() => {
           if (preview) {
@@ -95,7 +95,7 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
               file={file} />}
         </div>
       ))}
-    </div>
+    </div >
   </>
 })
 

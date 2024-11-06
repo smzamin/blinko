@@ -20,7 +20,6 @@ export const hashTagPlugin = realmPlugin({
     }
     currentEditor.registerNodeTransform(TextNode, (textNode) => {
       const currentText = textNode.getTextContent();
-      const endsWithAnyTextNoHashRegex = /\S(?<!#)$/g
       const hasHashTagRegex = /#[^\s#]+/g
       const endsWithBankRegex = /\s$/g
 

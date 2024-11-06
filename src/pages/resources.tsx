@@ -13,8 +13,6 @@ import { Icon } from "@iconify/react";
 import { showTipsDialog } from "@/components/Common/TipsDialog";
 import { useTranslation } from "react-i18next";
 import { PromiseCall } from "@/store/standard/PromiseState";
-import { api } from "@/lib/trpc";
-import { fetchApi } from "@/lib/fetch";
 import { DialogStore } from "@/store/module/Dialog";
 
 const Page = observer(() => {

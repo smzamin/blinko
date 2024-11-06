@@ -1,6 +1,6 @@
 const isProduction = process.env.NODE_ENV === 'production';
 module.exports = {
-  transpilePackages: ['@mdxeditor/editor', 'react-diff-view'],
+  transpilePackages: ['@mdxeditor/editor', 'react-diff-view','highlight.js','remark-gfm'],
   webpack: (config, { isServer }) => {
     config.experiments = { ...config.experiments, topLevelAwait: true };
     if (!isServer) {
@@ -11,9 +11,9 @@ module.exports = {
     }
     return config;
   },
-  outputFileTracing: false,
+  // outputFileTracing: false,
   reactStrictMode: isProduction? true : false,
-  swcMinify:false,
+  swcMinify: true,
   eslint: {
     ignoreDuringBuilds: true,
   },

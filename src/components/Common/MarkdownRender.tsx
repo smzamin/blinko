@@ -7,6 +7,11 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
+import { api } from '@/lib/trpc';
+import { LinkInfo } from '@/server/types';
+import { Card, Image } from '@nextui-org/react';
+import { RootStore } from '@/store';
+import { StorageState } from '@/store/standard/StorageState';
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -47,6 +52,42 @@ const Code = ({ className, children, ...props }) => {
   );
 };
 
+const LinkPreview = ({ href }) => {
+  // const [previewData, setPreviewData] = useState<LinkInfo | null>(null);
+  const store = RootStore.Local(() => ({
+    previewData: new StorageState<LinkInfo | null>({ key: href, default: null }),
+  }))
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!store.previewData.value) {
+          const info = await api.public.linkPreview.query(href)
+          store.previewData.setValue(info)
+        }
+      } catch (error) {
+        console.error('Error fetching preview data:', error);
+      }
+    };
+
+    fetchData();
+  }, [href]);
+
+  return (
+    <div className="link-preview">
+      <a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
+      {store.previewData.value && <Card className='p-2 my-1 bg-sencondbackground rounded-lg select-none' radius='none' shadow='none'>
+        <div className='flex items-center gap-2'>
+          {store.previewData.value.image && <Image className='rounded-none' src={store.previewData.value.image} width={20} height={20}></Image>}
+          <div>{store.previewData.value.domain}</div>
+        </div>
+        <div className='font-bold'>{store.previewData.value.title}</div>
+        <div className='text-desc truncate'>{store.previewData.value.description}</div>
+      </Card>}
+    </div>
+  );
+};
+
+
 export const MarkdownRender = ({ content }) => {
   const { theme } = useTheme()
   const [isExpanded, setIsExpanded] = useState(false);
@@ -57,7 +98,7 @@ export const MarkdownRender = ({ content }) => {
     if (contentRef.current) {
       //@ts-ignore
       const isContentOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
-        //@ts-ignore
+      //@ts-ignore
       const isSingleLine = contentRef.current.clientHeight === parseFloat(getComputedStyle(contentRef.current).lineHeight);
       setIsOverflowing(isContentOverflowing && !isSingleLine);
     }
@@ -74,7 +115,8 @@ export const MarkdownRender = ({ content }) => {
           remarkPlugins={[remarkGfm]}
           components={{
             p: ({ node, children }) => <p>{highlightTags(children)}</p>,
-            code: Code
+            code: Code,
+            a: ({ node, children }) => <LinkPreview href={children} />
           }}
         >
           {content}

@@ -5,7 +5,9 @@ import { Prisma } from '@prisma/client';
 import { helper, TagTreeNode } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
 import { NoteType } from '../types';
-import { fetchApi } from '@/lib/fetch';
+import path from 'path';
+import { UPLOAD_FILE_PATH } from '@/lib/constant';
+import { unlink } from 'fs/promises';
 
 export const noteRouter = router({
   list: authProcedure
@@ -222,14 +224,13 @@ export const noteRouter = router({
           if (note.attachments) {
             for (const attachment of note.attachments) {
               try {
-                await fetchApi(`/api/file/delete`, {
-                  method: 'POST',
-                  body: JSON.stringify({ attachment_path: attachment.path }),
-                });
+                const filepath = path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + attachment.path.replace('/api/file/', ""))
+                await unlink(filepath)
               } catch (error) {
                 console.log(error)
               }
             }
+            await prisma.attachments.deleteMany({ where: { id: { in: note.attachments.map(i => i.id) } } })
           }
         }
       }
