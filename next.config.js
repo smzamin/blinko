@@ -11,6 +11,7 @@ module.exports = {
     }
     return config;
   },
+  outputFileTracing: false,
   reactStrictMode: isProduction? true : false,
   swcMinify: true,
   eslint: {
