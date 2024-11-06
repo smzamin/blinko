@@ -244,8 +244,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     }
                   }}>
                     {
-                      blinko.noteTypeDefault == NoteType.BLINKO ? <LightningIcon className='!text-yellow-500' /> :
-                        <NotesIcon className='!text-blue-500' />
+                      blinko.noteTypeDefault == NoteType.BLINKO ? <LightningIcon className='blinko' /> :
+                        <NotesIcon className='note' />
                     }
                   </ButtonWithTooltip>
 
@@ -298,7 +298,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     onChange?.('')
                     store.files = []
                   }} className='ml-auto w-[60px] group' isIconOnly color='primary' >
-                    <SendIcon className='!text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
+                    <SendIcon className='primary-foreground group-hover:rotate-[-35deg] transition-all' />
                   </Button>
                 </div>
               </div>

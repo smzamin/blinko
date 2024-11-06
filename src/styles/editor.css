@@ -1,3 +1,22 @@
+.ͼo {
+  background-color: transparent !important;
+}
+.ͼ1x {
+  background-color: var(--background);
+  color: var(--foreground);
+  height: 100%;
+}
+
+._codeMirrorToolbar_uazmk_408 {
+  background-color: transparent !important;
+}
+
+@media (hover: hover) {
+  ._toolbarToggleItem_uazmk_206:hover, ._toolbarButton_uazmk_237:hover {
+      background-color: var(--sencondbackground)!important;
+  }
+}
+
 .mdxeditor-toolbar {
   background-color: transparent !important;
   padding: 0 !important;
@@ -7,12 +26,33 @@
   width: 20px !important;
   height: 20px !important;
   cursor: pointer;
+  color: var(--foreground) !important;
+}
+
+.mdxeditor-toolbar .blinko {
+  color: #EAB308 !important;
+}
+
+.mdxeditor-toolbar .note {
+  color: #3B82F6 !important;
+}
+
+.mdxeditor-toolbar .primary-foreground {
+  color: var(--primary-foreground) !important;
 }
 
 .mdxeditor-toolbar .custom-svg {
   width: 18px !important;
   height: 18px !important;
   cursor: pointer;
+}
+
+._contentEditable_uazmk_379 {
+  color: var(--foreground);
+}
+
+._contentEditable_uazmk_379 {
+  color: var(--foreground) !important;
 }
 
 .mdxeditor-root-contenteditable>div:first-of-type {
@@ -82,12 +122,17 @@
   margin-right: 3px !important;
 }
 
+.contextmenu .contextmenu__item:hover {
+  background-color: var(--sencondbackground) !important;
+}
+
 .prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   list-style-type: disc;
   padding-inline-start: 15px !important;
   margin-bottom: 0 !important;
   margin-top: 0 !important;
 }
+
 .prose :where(ol):not(:where([class~=not-prose], [class~=not-prose] *)) {
   list-style-type: auto !important;
   padding-inline-start: 15px !important;
@@ -111,6 +156,7 @@
 .prose ul>li {
   margin: 0 !important;
 }
+
 .prose ol>li {
   margin: 0 !important;
 }
