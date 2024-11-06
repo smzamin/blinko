@@ -27,6 +27,7 @@ services:
       timeout: 10s   
       retries: 5     
       start_period: 30s 
+    network_mode: bridge
 
   postgres:
     image: postgres:14
@@ -45,3 +46,4 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+    network_mode: bridge
