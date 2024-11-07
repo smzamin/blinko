@@ -39,50 +39,87 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
       }
     })
   }))
-  const DeleteIcon = observer(({ className, file }: { className: string, file: FileType }) => {
+
+  const DeleteIcon = observer(({ className, file, size = 20 }: { className: string, file: FileType, size?: number }) => {
     return <>
       <TipsPopover isLoading={store.deleteFile.loading.value} content={t('this-operation-will-be-delete-resource-are-you-sure')}
         onConfirm={async e => {
           store.deleteFile.call(file)
         }}>
-        <Icon className={className}
-          icon="basil:cross-solid" width="20" height="20" />
+        <div className={`opacity-70 hover:opacity-100 !bg-foreground cursor-pointer rounded-sm transition-al ${className}`}>
+          <Icon className='white' icon="basil:cross-solid" width={size} height={size} />
+        </div>
+
       </TipsPopover >
     </>
   })
 
+  const DownloadIcon = observer(({ className, file, size = 20 }: { className: string, file: FileType, size?: number }) => {
+    return <div className={`hidden p-1 group-hover:block transition-all absolute z-10 right-[5px] top-[5px] !text-background opacity-70 hover:opacity-100 !bg-foreground cursor-pointer rounded-sm transition-all ${className}`}>
+      <Icon onClick={() => {
+        helper.download.downloadByLink(file.uploadPromise.value)
+      }} icon="tabler:download" width="15" height="15" />
+    </div>
+  })
+
   return <>
+    {/* image render  */}
     <div className={`columns-${columns} md:columns-${columns}`}>
       <PhotoProvider>
-        {files?.filter(i => i.isImage).map((file, index) => (
+        {files?.filter(i => i.previewType == 'image').map((file, index) => (
           <div className='relative group'>
             {file.uploadPromise?.loading?.value && <div className='absolute inset-0 flex items-center justify-center w-full h-full'>
               <Icon icon="line-md:uploading-loop" width="40" height="40" />
             </div>}
 
             <PhotoView width={150} src={file.preview} >
-              <Image
-                src={file.preview}
-                className='rounded-lg mb-4'
-              // onLoad={() => { URL.revokeObjectURL(file.preview) }}
-              />
+              <Image src={file.preview} className='rounded-lg mb-4' />
             </PhotoView>
 
             {!file.uploadPromise?.loading?.value && !preview &&
-              <DeleteIcon className='absolute z-10 right-[5px] top-[5px] !text-background opacity-80 hover:opacity-100 bg-foreground cursor-pointer rounded-sm transition-all'
+              <DeleteIcon className='absolute z-10 right-[5px] top-[5px]'
                 file={file} />
             }
-            {preview && <Icon onClick={() => {
-              helper.download.downloadByLink(file.uploadPromise.value)
-            }} className='hidden er:block transition-all absolute z-10 right-[5px] top-[5px] !text-background opacity-80 hover:opacity-100 bg-foreground cursor-pointer rounded-sm transition-all' icon="tabler:download" width="15" height="15" />
+            {preview && <DownloadIcon className=''
+              file={file} />
             }
           </div>
         ))}
       </PhotoProvider>
-
     </div>
+
+    {/* video render  */}
+    <div className={`columns-1 md:columns-1`}>
+      {files?.filter(i => i.previewType == 'video').map((file, index) => (
+        <div className='group relative flex p-2 items-center gap-2 cursor-pointer tansition-all rounded-2xl'>
+          <video src={file.preview} id="player" playsInline controls className='rounded-2xl w-full z-0' />
+          {!file.uploadPromise?.loading?.value && !preview &&
+            <DeleteIcon className='absolute z-10 right-[5px] top-[5px]'
+              file={file} />
+          }
+          {preview && <DownloadIcon className='top-[8px] right-[8px]' file={file} />}
+        </div>
+      ))}
+    </div>
+
+    {/* audio render  */}
+    <div className={`columns-1 md:columns-1`}>
+      {files?.filter(i => i.previewType == 'audio').map((file, index) => (
+        <div className='group relative flex p-2 items-center gap-2 cursor-pointer tansition-all rounded-2xl'>
+          <audio src={file.preview} id="player" playsInline controls className='rounded-2xl w-full' />
+          {!file.uploadPromise?.loading?.value && !preview &&
+            <DeleteIcon className='absolute z-10 right-[5px] top-[5px]'
+              file={file} />
+          }
+          {preview && <DownloadIcon className='top-[8px] right-[8px]' file={file} />}
+        </div>
+      ))}
+    </div >
+
+
+    {/* other file render  */}
     <div className={`${helper.env.isIOS ? 'columns-1' : 'columns-' + columns} mt-3 select-none`}>
-      {files?.filter(i => !i.isImage).map((file, index) => (
+      {files?.filter(i => i.previewType == 'other').map((file, index) => (
         <div onClick={() => {
           if (preview) {
             helper.download.downloadByLink(file.uploadPromise.value)
@@ -91,8 +128,7 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
           <FileIcons path={file.name} isLoading={file.uploadPromise?.loading?.value} />
           <div className='truncate text-sm font-bold'>{file.name}</div>
           {!file.uploadPromise?.loading?.value && !preview &&
-            <DeleteIcon className='ml-auto w-[35px] !text-foreground hover:bg-background cursor-pointer rounded-sm tansition-all'
-              file={file} />}
+            <DeleteIcon className='ml-auto w-[35px]' file={file} />}
         </div>
       ))}
     </div >

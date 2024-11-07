@@ -29,7 +29,7 @@ const Page = observer(() => {
             const extension = helper.getFileExtension(i.path)
             return <Card shadow="none" className="group bg-background cursor-pointer px-4 pt-4 mb-4 pb-2 flex flex-col gap-2 items-center">
               {
-                helper.isImage(i.path) ?
+                helper.getFileType(i.path) == 'image' ?
                   <PhotoView width={150} src={i.path} >
                     <Image radius="sm" className="w-full" src={i.path} alt='' />
                   </PhotoView> :

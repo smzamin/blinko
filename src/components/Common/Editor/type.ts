@@ -36,7 +36,7 @@ export type OnSendContentType = {
 export type FileType = {
   name: string
   size: number
-  isImage: boolean
+  previewType: 'image' | 'audio' | 'video' | 'other'
   extension: string
   preview: any
   uploadPromise: PromiseState<any>

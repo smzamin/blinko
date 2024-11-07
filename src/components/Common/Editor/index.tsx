@@ -41,11 +41,11 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
   if (originFiles.length == 0) return []
   const res = originFiles?.map(file => {
     const extension = helper.getFileExtension(file.name)
+    const previewType = helper.getFileType(file.name)
     return {
       name: file.name,
       size: file.size,
-      //@ts-ignore
-      isImage: 'JPEG/JPG/PNG/BMP/TIFF/TIF/WEBP/SVG'.includes(extension?.toUpperCase() ?? null),
+      previewType,
       extension: extension ?? '',
       preview: file.path,
       uploadPromise: new PromiseState({ function: async () => file.path })
@@ -54,7 +54,6 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
   res.map(i => i.uploadPromise.call())
   return res
 }
-
 
 
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles }: IProps) => {
@@ -134,11 +133,11 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     uploadFiles(acceptedFiles) {
       const _acceptedFiles = acceptedFiles.map(file => {
         const extension = helper.getFileExtension(file.name)
+        const previewType = helper.getFileType(file.name)
         return {
           name: file.name,
           size: file.size,
-          //@ts-ignore
-          isImage: 'JPEG/JPG/PNG/BMP/TIFF/TIF/WEBP/SVG'.includes(extension?.toUpperCase() ?? null),
+          previewType,
           extension: extension ?? '',
           preview: URL.createObjectURL(file),
           uploadPromise: new PromiseState({

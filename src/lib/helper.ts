@@ -1,6 +1,7 @@
 import { type Tag } from '@/server/types';
 import { _ } from './lodash';
 import i18n from './i18n';
+import { FileType } from '@/components/Common/Editor/type';
 
 const valMap = {
   undefined: '',
@@ -111,9 +112,18 @@ export const helper = {
     }
     return null
   },
-  isImage(filename: string) {
-    const extension = helper.getFileExtension(filename) ?? '';
-    return 'JPEG/JPG/PNG/BMP/TIFF/TIF/WEBP/SVG'.includes(extension?.toUpperCase() ?? null)
+  getFileType(filename: string): FileType['previewType'] {
+    const extension = helper.getFileExtension(filename) ?? ''
+    if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension?.toLowerCase() ?? null)) {
+      return 'image'
+    }
+    if ('mp4/webm/ogg/mov/wmv'.includes(extension?.toLowerCase() ?? null)) {
+      return 'video';
+    }
+    if ('mp3/aac/wav/ogg'.includes(extension?.toLowerCase() ?? null)) {
+      return 'audio';
+    }
+    return 'other'
   },
   promise: {
     async sleep(ms) {
