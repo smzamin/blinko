@@ -34,7 +34,7 @@ fi
 
 # Step 2: Remove existing blinkospace/blinko Docker image
 echo -e "${YELLOW}1. 🗑 Removing existing blinkospace/blinko Docker image...${NC}"
-# docker rmi "$image_name" -f
+docker rmi "$image_name" -f
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to remove Docker image. It may not exist or there may be an issue with Docker.${NC}"
