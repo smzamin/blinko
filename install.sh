@@ -21,7 +21,7 @@ fi
 
 # Step 1: Fetch docker-compose file using curl
 echo -e "${YELLOW}1. ✅ Fetching docker-compose file from GitHub...${NC}"
-# curl -o $compose_file $github_url
+curl -o $compose_file $github_url
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to download the docker-compose file. Please check your internet connection or the GitHub URL.${NC}"
