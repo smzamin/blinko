@@ -20,6 +20,4 @@ public/assets
 .blinko/faiss/*
 .blinko/pgdump/*
 .blinko/files/*
-!.blinko/files/pic0*.png
-!.blinko/files/story.txt
 dump.sql

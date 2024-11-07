@@ -7,13 +7,11 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Set GitHub URL for the docker-compose file
 github_url="https://raw.githubusercontent.com/blinko-space/blinko/refs/heads/main/docker-compose.prod.yml"
 compose_file="docker-compose.prod.yml"
 
-# Step 1: Remove existing Docker image
-echo -e "${YELLOW}1. 🗑 Removing existing blinkospace/blinko Docker image...${NC}"
-docker rmi blinkospace/blinko:latest -f
+# echo -e "${YELLOW}1. 🗑 Removing existing blinkospace/blinko Docker image...${NC}"
+# docker rmi blinkospace/blinko:latest -f
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to remove Docker image. It may not exist or there may be an issue with Docker.${NC}"
