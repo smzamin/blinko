@@ -9,6 +9,12 @@ import path from 'path';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
 
+const extractHashtags = (input: string): string[] => {
+  const hashtagRegex = /#[^\s#]*(?<![*?.。])/g;
+  const matches = input.match(hashtagRegex);
+  return matches ? matches : [];
+}
+
 export const noteRouter = router({
   list: authProcedure
     .input(z.object({
@@ -72,7 +78,7 @@ export const noteRouter = router({
     }),
   upsert: authProcedure
     .input(z.object({
-      content: z.string().default(''),
+      content: z.union([z.string(), z.null()]).default(null),
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
       attachments: z.custom<Pick<Prisma.attachmentsCreateInput, 'name' | 'path' | 'size'>[]>().default([]),
       id: z.number().optional(),
@@ -81,9 +87,10 @@ export const noteRouter = router({
     }))
     .mutation(async function ({ input }) {
       let { id, isArchived, type, attachments, content, isTop } = input
-      content = content?.replace(/\\/g, '').replace(/&#x20;/g, ' ')
-      const tagTree = helper.buildHashTagTreeFromHashString(helper.extractHashtags(content ?? ''))
-
+      if (content != null) {
+        content = content?.replace(/\\/g, '').replace(/&#x20;/g, ' ')
+      }
+      const tagTree = helper.buildHashTagTreeFromHashString(extractHashtags(content ?? ''))
       let newTags: Prisma.tagCreateManyInput[] = []
       const handleAddTags = async (tagTree: TagTreeNode[], parentTag: Prisma.tagCreateManyInput | undefined, noteId?: number) => {
         for (const i of tagTree) {
@@ -102,17 +109,15 @@ export const noteRouter = router({
         }
       }
 
-
       const update: Prisma.notesUpdateInput = {
         ...(type !== -1 && { type }),
         ...(isArchived !== null && { isArchived }),
         ...(isTop !== null && { isTop }),
-        ...(content && { content })
+        ...(content != null && { content })
       }
 
       if (id) {
         const note = await prisma.notes.update({ where: { id }, data: update })
-        if (!content) return note
         const oldTagsInThisNote = await prisma.tagsToNote.findMany({ where: { noteId: note.id }, include: { tag: true } })
         await handleAddTags(tagTree, undefined)
         const oldTags = oldTagsInThisNote.map(i => i.tag).filter(i => !!i)
@@ -120,7 +125,6 @@ export const noteRouter = router({
         const newTagsString = newTags.map(i => `${i?.name}<key>${i?.parent}`)
         const needTobeAddedRelationTags = _.difference(newTagsString, oldTagsString);
         const needToBeDeletedRelationTags = _.difference(oldTagsString, newTagsString);
-        console.log({ needToBeDeletedRelationTags, oldTagsString, newTagsString })
         if (needToBeDeletedRelationTags.length != 0) {
           await prisma.tagsToNote.deleteMany({
             where: {
@@ -147,7 +151,6 @@ export const noteRouter = router({
             })
           })
         }
-
         //delete unused tags
         const allTagsIds = oldTags?.map(i => i?.id)
         const usingTags = (await prisma.tagsToNote.findMany({ where: { tagId: { in: allTagsIds } } })).map(i => i.tagId).filter(i => !!i)
@@ -155,7 +158,6 @@ export const noteRouter = router({
         if (needTobeDeledTags) {
           await prisma.tag.deleteMany({ where: { id: { in: needTobeDeledTags } } })
         }
-
         //insert not repeate attachments
         try {
           if (attachments?.length != 0) {
@@ -174,7 +176,7 @@ export const noteRouter = router({
         return note
       } else {
         try {
-          const note = await prisma.notes.create({ data: { content, type } })
+          const note = await prisma.notes.create({ data: { content: content ?? '', type } })
           await handleAddTags(tagTree, undefined, note.id)
           await prisma.attachments.createMany({
             data: attachments.map(i => { return { noteId: note.id, ...i } })

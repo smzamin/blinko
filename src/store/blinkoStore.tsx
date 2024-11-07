@@ -45,8 +45,8 @@ export class BlinkoStore implements Store {
   updateTicker = 0
   fullNoteList: Note[] = []
   upsertNote = new PromiseState({
-    function: async ({ content = '', isArchived, type, id, attachments = [], refresh = true, isTop }:
-      { content?: string, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean }) => {
+    function: async ({ content = null, isArchived, type, id, attachments = [], refresh = true, isTop }:
+      { content?: string | null, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
@@ -183,11 +183,13 @@ export class BlinkoStore implements Store {
     this.task.call()
   }
 
-  refreshData() {
-    this.tagList.call()
-    this.noteList.resetAndCall({})
-    this.config.call()
-    this.dailyReviewNoteList.call()
+  async refreshData() {
+    return await Promise.all([
+      this.tagList.call(),
+      this.noteList.resetAndCall({}),
+      this.config.call(),
+      this.dailyReviewNoteList.call()
+    ])
   }
 
   use() {

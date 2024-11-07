@@ -223,7 +223,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           onChange?.(v)
         }}
         autoFocus={{
-          defaultSelection: 'rootEnd'
+          defaultSelection: 'rootEnd',
+          preventScroll:true
         }}
         markdown={content}
         plugins={[

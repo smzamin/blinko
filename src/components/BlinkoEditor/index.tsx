@@ -22,7 +22,12 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {
-        onHeightChange?.(editorRef.current?.clientHeight ?? 90)
+        console.log(v, 'onChange is empty??')
+        if (v == '') {
+          onHeightChange?.(editorRef.current?.clientHeight < 90 ? editorRef.current?.clientHeight : 90)
+        } else {
+          onHeightChange?.(editorRef.current?.clientHeight ?? 90)
+        }
         isCreateMode ? (blinko.noteContent = v) : (blinko.curSelectedNote!.content = v)
       }}
       isSendLoading={blinko.upsertNote.loading.value}
@@ -46,10 +51,13 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
           }
           blinko.updateTicker++
         } else {
+          console.log(files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } }))
           await blinko.upsertNote.call({
             id: blinko.curSelectedNote!.id,
             //@ts-ignore
-            content: blinko.curSelectedNote.content, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } })
+            content: blinko.curSelectedNote.content,
+            //@ts-ignore
+            attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } })
           })
         }
         onSended?.()

@@ -92,7 +92,7 @@ export const CommonLayout = observer(({
 
 
   return (
-    <div className="flex w-full h-mobile-full">
+    <div className="flex w-full h-mobile-full overflow-x-hidden">
       {
         blinkoStore.showAi && <BlinkoAi />
       }

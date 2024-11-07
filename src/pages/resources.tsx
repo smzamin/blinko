@@ -22,7 +22,7 @@ const Page = observer(() => {
     blinko.resourceList.resetAndCall({})
   }, [])
   return <ScrollArea onBottom={() => blinko.resourceList.callNextPage({})} className="px-2 md:px-6 h-[calc(100vh_-_100px)]">
-    <div className="columns-3 md:columns-3 lg:columns-5 gap-4 mt-4 relative">
+    <div className="columns-2 md:columns-3 lg:columns-5 gap-4 mt-4 relative">
       <PhotoProvider>
         {
           blinko.resourceList.value?.map(i => {
