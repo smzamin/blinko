@@ -131,7 +131,7 @@ export const CommonLayout = observer(({
               />
             </Button>
             <div className="w-full truncate text-xl font-normal md:font-bold text-default-700 flex gap-2 items-center justify-center">
-              <div className="w-[3px] h-[16px] bg-primary" />
+              <div className="w-[4px] h-[16px] bg-primary rounded-xl" />
               {/* @ts-ignore */}
               <div className="font-black select-none">{t(base.currentTitle)}</div>
               <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={e => blinkoStore.updateTicker++} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
