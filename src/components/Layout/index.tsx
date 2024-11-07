@@ -61,8 +61,6 @@ export const CommonLayout = observer(({
           style={{ "clipPath": "circle(35% at 50% 50%)" }} />
       </div>
 
-
-
       <div className="flex items-center gap-2 px-2 select-none w-full">
         {
           theme == 'dark' ? <Image src="/logo-dark.svg" width={100} /> : <Image src="/logo.svg" width={100} />
@@ -88,7 +86,7 @@ export const CommonLayout = observer(({
 
             <div>
               {blinkoStore.tagList.value?.listTags.length != 0 && blinkoStore.tagList.value?.listTags && <>
-                <div className="ml-2 my-2 text-xs font-bold text-[#a252e1]">{t('total-tags')}</div>
+             
                 <TagListPanel />
               </>}
             </div>
@@ -134,7 +132,7 @@ export const CommonLayout = observer(({
               <div className="w-[4px] h-[16px] bg-primary rounded-xl" />
               {/* @ts-ignore */}
               <div className="font-black select-none">{t(base.currentTitle)}</div>
-              <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={e => blinkoStore.updateTicker++} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
+              <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={() => blinkoStore.refreshData()} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
               <Input
                 fullWidth
                 size={isPc ? 'md' : 'sm'}

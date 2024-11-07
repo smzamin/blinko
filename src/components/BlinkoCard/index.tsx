@@ -31,9 +31,9 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
           }
         }}>
         <Card onContextMenu={e => !isPc && e.stopPropagation()} shadow='none'
-         className={`hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
+          className={`hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
           <div className="flex items-center select-none">
-            <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.createdAt).fromNow()}</div>
+            <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
             {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}
             <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
           </div>
@@ -42,17 +42,22 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
           <div className={blinkoItem.attachments?.length != 0 ? 'my-2' : ''}>
             <FilesAttachmentRender files={blinkoItem.attachments ?? []} preview />
           </div>
-          {
-            blinkoItem.type == NoteType.BLINKO ?
-              <div className='flex items-center justify-start mt-2'>
-                <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
-                <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
-              </div> :
-              <div className='flex items-center justify-start mt-2'>
-                <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
-                <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
-              </div>
-          }
+          <div className="flex items-center">
+            {
+              blinkoItem.type == NoteType.BLINKO ?
+                <div className='flex items-center justify-start mt-2'>
+                  <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
+                  <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
+                </div> :
+                <div className='flex items-center justify-start mt-2'>
+                  <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
+                  <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
+                </div>
+            }
+            {
+              (dayjs(blinkoItem.createdAt).fromNow() !== dayjs(blinkoItem.updatedAt).fromNow()) && <div className='ml-auto text-xs text-desc'>Created in {dayjs(blinkoItem.createdAt).fromNow()}</div>
+            }
+          </div>
         </Card>
       </div>
     </ContextMenuTrigger>

@@ -14,6 +14,7 @@ import { ShowUpdateTagDialog } from "./UpdateTagPop";
 import { api } from "@/lib/trpc";
 import { PromiseCall } from "@/store/standard/PromiseState";
 import { BaseStore } from "@/store/baseStore";
+import { useTranslation } from "react-i18next";
 
 const EmojiPick = ({ children, element }) => {
   const { theme } = useTheme();
@@ -34,7 +35,8 @@ const EmojiPick = ({ children, element }) => {
 
 export const TagListPanel = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
-  const base = RootStore.Get(BaseStore)
+  const base = RootStore.Get(BaseStore);
+  const {t} = useTranslation()
   const router = useRouter()
   const isSelected = (id) => {
     return blinko.noteListFilterConfig.tagId == id && router.pathname == '/all'
@@ -42,6 +44,7 @@ export const TagListPanel = observer(() => {
   useEffect(() => { }, [blinko.noteListFilterConfig.tagId])
   return (
     <>
+      <div className="ml-2 my-2 text-xs font-bold text-[#a252e1]">{t('total-tags')}</div>
       <TreeView
         data={flattenTree({
           name: "",

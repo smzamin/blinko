@@ -184,12 +184,10 @@ export class BlinkoStore implements Store {
   }
 
   async refreshData() {
-    return await Promise.all([
-      this.tagList.call(),
-      this.noteList.resetAndCall({}),
-      this.config.call(),
-      this.dailyReviewNoteList.call()
-    ])
+    this.tagList.call()
+    this.noteList.resetAndCall({})
+    this.config.call()
+    this.dailyReviewNoteList.call()
   }
 
   use() {

@@ -42,12 +42,10 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
           if (blinko.noteTypeDefault == NoteType.NOTE && router.pathname != '/notes') {
             await router.push('/notes')
             blinko.forceQuery++
-            return
           }
           if (blinko.noteTypeDefault == NoteType.BLINKO && router.pathname != '/') {
             await router.push('/')
             blinko.forceQuery++
-            return
           }
           blinko.updateTicker++
         } else {
