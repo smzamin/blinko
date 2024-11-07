@@ -30,7 +30,8 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
             blinko.onMultiSelectNote(blinkoItem.id!)
           }
         }}>
-        <Card onContextMenu={e => !isPc && e.stopPropagation()} shadow='none' className={`mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
+        <Card onContextMenu={e => !isPc && e.stopPropagation()} shadow='none'
+         className={`hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
           <div className="flex items-center select-none">
             <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.createdAt).fromNow()}</div>
             {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}

@@ -3,7 +3,8 @@ import { router, publicProcedure } from '../trpc';
 import packageJson from '../../../package.json'
 import axios from 'axios'
 import { cache } from '@/lib/cache';
-import extractLinkPreview from 'link-preview-extractor';
+import { unfurl } from 'unfurl.js'
+
 export const publicRouter = router({
   version: publicProcedure
     .input(z.void())
@@ -36,7 +37,8 @@ export const publicRouter = router({
     .query(async function ({ input }) {
       return await cache.wrap(input, async () => {
         try {
-          return await extractLinkPreview(input);
+          const result = await unfurl(input)
+          return result
         } catch (error) {
           return null
         }

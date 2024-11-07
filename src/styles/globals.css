@@ -88,7 +88,7 @@ body {
     --foreground: hsl(222.2 47.4% 11.2%);
     --sencondbackground: #f8f8f8;
 
-    --hover: #eaeaec;
+    --hover: #efeee7d9;
     --hover-foreground: hsl(215.4 16.3% 46.9%);
 
     /* like: time  */
@@ -108,7 +108,7 @@ body {
     --card: hsl(0 0% 100%);
     --card-foreground: hsl(222.2 47.4% 11.2%);
 
-    --border: hsl(253, 53%, 59%);
+    --border: #E7E7E5;
     --input: hsl(214.3 31.8% 91.4%);
 
     --primary: black;
@@ -160,7 +160,7 @@ body {
     --card: hsl(224 71% 4%);
     --card-foreground: hsl(213 31% 91%);
 
-    --border: hsl(250, 5%, 25%);
+    --border: #0b0b0c;
     --input: hsl(216 34% 17%);
 
     --primary: #7A1CAC;

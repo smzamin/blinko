@@ -68,7 +68,6 @@
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.3.2",
     "lexical": "0.17.1",
-    "link-preview-extractor": "^1.0.2",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "mantine-datatable": "^7.12.4",
@@ -114,6 +113,7 @@
     "trpc-to-openapi": "^2.0.2",
     "typed-emitter": "^2.1.0",
     "typeorm": "^0.3.20",
+    "unfurl.js": "^6.4.0",
     "usehooks-ts": "^3.1.0",
     "zod": "^3.23.8"
   },

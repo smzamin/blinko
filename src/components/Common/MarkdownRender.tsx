@@ -75,13 +75,12 @@ const LinkPreview = ({ href }) => {
   return (
     <div className="link-preview">
       <a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
-      {store.previewData.value && <Card className='p-2 my-1 bg-sencondbackground rounded-lg select-none' radius='none' shadow='none'>
-        <div className='flex items-center gap-2'>
-          {store.previewData.value.image && <Image className='rounded-none' src={store.previewData.value.image} width={20} height={20}></Image>}
-          <div>{store.previewData.value.domain}</div>
+      {store.previewData.value && <Card className='p-2 my-1 bg-sencondbackground rounded-xl select-none ' radius='none' shadow='none'>
+        <div className='flex items-center gap-2 w-full'>
+          <div className='font-bold truncate text-sm'>{store.previewData.value?.title}</div>
+          {store.previewData.value?.favicon && <Image fallbackSrc="/fallback.png" className='flex-1 rounded-full ml-auto' src={store.previewData.value.favicon} width={16} height={16}></Image>}
         </div>
-        <div className='font-bold'>{store.previewData.value.title}</div>
-        <div className='text-desc truncate'>{store.previewData.value.description}</div>
+        <div className='text-desc truncate text-xs'>{store.previewData.value?.description}</div>
       </Card>}
     </div>
   );

@@ -110,6 +110,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     clearMarkdown() {
       if (mdxEditorRef.current) {
         mdxEditorRef.current.setMarkdown("")
+        if (!isPc) return
         mdxEditorRef.current.focus(() => {
           onChange?.("")
         })
@@ -203,7 +204,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
 
   return <Card
     shadow='none' {...getRootProps()}
-    className={`p-2 relative border-2 border-[#cfcfcf] transition-all ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''}`}>
+    className={`p-2 relative border-2 border-border transition-all ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''}`}>
     <div ref={cardRef}>
       <MDXEditor
         translation={(key, defaultValue) => {
@@ -223,8 +224,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           onChange?.(v)
         }}
         autoFocus={{
-          defaultSelection: 'rootEnd',
-          preventScroll:true
+          defaultSelection: 'rootEnd'
         }}
         markdown={content}
         plugins={[

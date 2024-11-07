@@ -17,8 +17,9 @@ import { BlinkoAi } from "../BlinkoAi";
 import { ScrollArea } from "../Common/ScrollArea";
 import { BlinkoNewVersion } from "../BlinkoNewVersion";
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
+import { useMediaQuery } from "usehooks-ts";
 
-export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover hover:bg-hover-foreground rounded-xl transition-all"
+export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
 export const CommonLayout = observer(({
   children,
   header,
@@ -29,6 +30,7 @@ export const CommonLayout = observer(({
   const router = useRouter()
   const [isOpen, setisOpen] = useState(false)
   const [isClient, setClient] = useState(false)
+  const isPc = useMediaQuery('(min-width: 768px)')
   const { t } = useTranslation()
   const { theme } = useTheme();
   const user = RootStore.Get(UserStore)
@@ -53,7 +55,14 @@ export const CommonLayout = observer(({
   }
 
   const content = (
-    <div className="flex h-full w-64 flex-1 flex-col p-4">
+    <div className="flex h-full w-64 flex-1 flex-col p-4 relative">
+      <div className="absolute  inset-0 z-[-1] h-[250px] w-[250px] overflow-hidden blur-3xl ">
+        <div className="w-full h-[100%] bg-[#ffc65c] opacity-20"
+          style={{ "clipPath": "circle(35% at 50% 50%)" }} />
+      </div>
+
+
+
       <div className="flex items-center gap-2 px-2 select-none w-full">
         {
           theme == 'dark' ? <Image src="/logo-dark.svg" width={100} /> : <Image src="/logo.svg" width={100} />
@@ -101,8 +110,12 @@ export const CommonLayout = observer(({
       </SidebarDrawer>
       <div className="flex w-full flex-col gap-y-1 sm:max-w-[calc(100%_-_250px)] bg-sencondbackground">
         {/* nav bar  */}
-        <header className="flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-4 pt-2 pb-2">
-          <div className="flex max-w-full items-center gap-2 md:p-2 w-full">
+        <header className="relative flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 pb-2">
+          <div className="absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">
+            <div className="w-full h-[100%] bg-[#9936e6] opacity-20"
+              style={{ "clipPath": "circle(50% at 50% 50%)" }} />
+          </div>
+          <div className="flex max-w-full items-center gap-2 md:p-2 w-full z-[1]">
             <Button
               isIconOnly
               className="flex sm:hidden"
@@ -124,6 +137,7 @@ export const CommonLayout = observer(({
               <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={e => blinkoStore.updateTicker++} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
               <Input
                 fullWidth
+                size={isPc ? 'md' : 'sm'}
                 variant="flat"
                 aria-label="search"
                 className={`ml-auto w-[200px] md:w-[300px]`}
@@ -177,10 +191,10 @@ export const CommonLayout = observer(({
           </div>
           {header}
         </header>
-
+        {/* backdrop  */}
 
         <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
-          <div className="flex h-full w-full flex-col rounded-medium" >
+          <div className="relative flex h-full w-full flex-col rounded-medium " >
             {children}
           </div>
         </ScrollArea>

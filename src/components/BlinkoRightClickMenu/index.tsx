@@ -136,7 +136,7 @@ export const BlinkoRightClickMenu = observer(() => {
 export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () => void, className: string }) => {
   return <Dropdown onOpenChange={e => onTrigger()}>
     <DropdownTrigger >
-      <Icon onClick={onTrigger} className={`${className} text-desc hover:text-primary cursor-pointer`} icon="fluent:more-vertical-16-regular" width="16" height="16" />
+      <Icon onClick={onTrigger} className={`${className} text-desc hover:text-primary cursor-pointer hover:scale-1.3 transition-all`} icon="fluent:more-vertical-16-regular" width="16" height="16" />
     </DropdownTrigger>
     <DropdownMenu aria-label="Static Actions">
       <DropdownItem key="EditItem"><EditItem /></DropdownItem>
@@ -151,10 +151,9 @@ export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () 
         <ArchivedItem />
       </DropdownItem>
 
-      <DropdownItem key="DeleteItem" className="text-danger" color="danger">
+      <DropdownItem key="DeleteItem" className="text-danger" >
         <DeleteItem />
       </DropdownItem>
-
     </DropdownMenu>
   </Dropdown>
 })
