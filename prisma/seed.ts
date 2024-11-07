@@ -206,8 +206,12 @@ async function main() {
     await prisma.$executeRaw`SELECT setval('"tagsToNote_id_seq"', (SELECT MAX(id) FROM "tagsToNote") + 1);`
     await prisma.$executeRaw`SELECT setval('attachments_id_seq', (SELECT MAX(id) FROM "attachments") + 1);`
   }
-  await fs.mkdir(".blinko")
-  await Promise.all([fs.mkdir(".blinko/files"), fs.mkdir(".blinko/faiss"), fs.mkdir(".blinko/pgdump")])
+  try {
+    await fs.mkdir(".blinko")
+  } catch (error) { }
+  try {
+    await Promise.all([fs.mkdir(".blinko/files"), fs.mkdir(".blinko/faiss"), fs.mkdir(".blinko/pgdump")])
+  } catch (error) {}
   ncp('prisma/seedfiles', ".blinko/files", (err) => {
     if (err) {
       console.log(err)
