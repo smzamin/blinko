@@ -208,8 +208,10 @@ async function main() {
     await prisma.$executeRaw`SELECT setval('attachments_id_seq', (SELECT MAX(id) FROM "attachments") + 1);`
   }
   await Promise.all([fs.mkdir(UPLOAD_FILE_PATH), fs.mkdir(FAISS_PATH), fs.mkdir(DBBAKUP_PATH)])
-  ncp('prisma/seedfiles', UPLOAD_FILE_PATH,(err)=>{
-    console.log(err)
+  ncp('prisma/seedfiles', UPLOAD_FILE_PATH, (err) => {
+    if (err) {
+      console.log(err)
+    }
   })
 }
 
