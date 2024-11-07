@@ -69,8 +69,6 @@ docker run -d \
   $docker_volume \
   -p 1111:1111 \
   -e NODE_ENV=production \
-  -e NEXTAUTH_URL=http://localhost:1111 \
-  -e NEXT_PUBLIC_BASE_URL=http://localhost:1111 \
   -e NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret \
   -e DATABASE_URL=postgresql://postgres:mysecretpassword@blinko-postgres:5432/postgres \
   --restart always \
