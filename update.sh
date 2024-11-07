@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 
 container_name="blinko-website"
 image_name="blinkospace/blinko:latest"
-backup_dir=".blinko-$(date +"%Y%m%d_%H%M%S")"
+backup_dir="blinko-backup-$(date +"%Y%m%d_%H%M%S")"
 docker_volume=""
 
 # Step 1: Backup data from the container
@@ -64,7 +64,7 @@ fi
 
 # Run the new container with the existing volume if found
 docker run -d \
-  --name "$container_name" \
+  --name blinko-website \
   --network blinko-network \
   $docker_volume \
   -p 1111:1111 \
@@ -72,7 +72,7 @@ docker run -d \
   -e NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret \
   -e DATABASE_URL=postgresql://postgres:mysecretpassword@blinko-postgres:5432/postgres \
   --restart always \
-  "$image_name"
+  blinkospace/blinko:latest
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to start Docker container. Please check your Docker setup.${NC}"
