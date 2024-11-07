@@ -1,4 +1,3 @@
-import { DBBAKUP_PATH, FAISS_PATH, UPLOAD_FILE_PATH } from '../src/lib/constant'
 import { PrismaClient } from '@prisma/client'
 import fs from 'fs/promises'
 import { ncp } from 'ncp'
@@ -207,8 +206,8 @@ async function main() {
     await prisma.$executeRaw`SELECT setval('"tagsToNote_id_seq"', (SELECT MAX(id) FROM "tagsToNote") + 1);`
     await prisma.$executeRaw`SELECT setval('attachments_id_seq', (SELECT MAX(id) FROM "attachments") + 1);`
   }
-  await Promise.all([fs.mkdir(UPLOAD_FILE_PATH), fs.mkdir(FAISS_PATH), fs.mkdir(DBBAKUP_PATH)])
-  ncp('prisma/seedfiles', UPLOAD_FILE_PATH, (err) => {
+  await Promise.all([fs.mkdir(".blinko/files"), fs.mkdir(".blinko/faiss"), fs.mkdir(".blinko/pgdump")])
+  ncp('prisma/seedfiles', ".blinko/files", (err) => {
     if (err) {
       console.log(err)
     }
