@@ -9,9 +9,30 @@ NC='\033[0m' # No Color
 
 github_url="https://raw.githubusercontent.com/blinko-space/blinko/refs/heads/main/docker-compose.prod.yml"
 compose_file="docker-compose.prod.yml"
+container_name="blinko-website"
 
-# echo -e "${YELLOW}1. 🗑 Removing existing blinkospace/blinko Docker image...${NC}"
-# docker rmi blinkospace/blinko:latest -f
+# Step 1: Backup data from the container
+timestamp=$(date +"%Y%m%d_%H%M%S")
+backup_dir=".blinko-${timestamp}"
+
+echo -e "${YELLOW}🔄 Backing up data from the container...${NC} "
+
+# Create backup directory
+mkdir -p "$backup_dir"
+
+# Copy data from the container
+docker cp "${container_name}:/app/.blinko" "$backup_dir"
+
+if [ $? -ne 0 ]; then
+  echo -e "${RED}Failed to backup data from the container. Please check the container name and your Docker setup.${NC}"
+  exit 1
+fi
+
+echo -e "${GREEN}✅ Data backed up to: $backup_dir${NC}"
+
+# Step 2: Remove existing blinkospace/blinko Docker image
+echo -e "${YELLOW}1. 🗑 Removing existing blinkospace/blinko Docker image...${NC}"
+docker rmi blinkospace/blinko:latest -f
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to remove Docker image. It may not exist or there may be an issue with Docker.${NC}"
@@ -19,9 +40,9 @@ else
   echo -e "${GREEN}Successfully removed Docker image: blinkospace/blinko:latest${NC}"
 fi
 
-# Step 2: Fetch docker-compose file using curl
+# Step 3: Fetch docker-compose file using curl
 echo -e "${YELLOW}2. ✅ Fetching docker-compose file from GitHub...${NC}"
-curl -o $compose_file $github_url
+curl -o "$compose_file" "$github_url"
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to download the docker-compose file. Please check your internet connection or the GitHub URL.${NC}"
@@ -29,9 +50,9 @@ if [ $? -ne 0 ]; then
 fi
 echo -e "${GREEN}Successfully downloaded docker-compose file: $compose_file${NC}"
 
-# Step 6: Restart the blinko-website service without affecting postgres
+# Step 4: Restart the blinko-website service without affecting postgres
 echo -e "${YELLOW}6. ⏳ Restarting the blinko-website service...${NC}"
-docker-compose -f $compose_file up -d --no-deps blinko-website
+docker-compose -f "$compose_file" up -d --no-deps "$container_name"
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to start Docker Compose. Please check the docker-compose file and your Docker setup.${NC}"
