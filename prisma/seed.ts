@@ -141,6 +141,16 @@ const notes = [
     "isShare": false,
     "isTop": false,
     "sharePassword": ""
+  },
+  {
+    "id": 6,
+    "type": 0,
+    "content": "https://github.com/blinko-space/blinko/",
+    "isArchived": false,
+    "isRecycle": false,
+    "isShare": false,
+    "isTop": false,
+    "sharePassword": ""
   }
 ]
 
