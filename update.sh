@@ -36,6 +36,15 @@ fi
 echo -e "${YELLOW}1. 🗑 Removing existing blinkospace/blinko Docker image...${NC}"
 docker rmi "$image_name" -f
 
+# Check if the container has a volume mounted
+volume_path=$(docker inspect -f '{{ range .Mounts }}{{ if eq .Destination "/app/.blinko" }}{{ .Source }}{{ end }}{{ end }}' "$container_name")
+if [ -z "$volume_path" ]; then
+  echo -e "${YELLOW}No existing volume found for container $container_name.${NC}"
+else
+  echo -e "${YELLOW}Using existing volume: $volume_path${NC}"
+  docker_volume="-v $volume_path:/app/.blinko"
+fi
+
 if [ $? -ne 0 ]; then
   echo -e "${RED}Failed to remove Docker image. It may not exist or there may be an issue with Docker.${NC}"
 else
@@ -52,14 +61,6 @@ if [ "$(docker ps -q -f name=$container_name)" ]; then
   docker rm "$container_name"
 fi
 
-# Check if the container has a volume mounted
-volume_path=$(docker inspect -f '{{ range .Mounts }}{{ if eq .Destination "/app/.blinko" }}{{ .Source }}{{ end }}{{ end }}' "$container_name")
-if [ -z "$volume_path" ]; then
-  echo -e "${YELLOW}No existing volume found for container $container_name.${NC}"
-else
-  echo -e "${YELLOW}Using existing volume: $volume_path${NC}"
-  docker_volume="-v $volume_path:/app/.blinko"
-fi
 
 # Run the new container with the existing volume if found
 docker run -d \
