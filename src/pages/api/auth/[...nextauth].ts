@@ -56,4 +56,8 @@ export default NextAuth({
       return { ...session, token: token.token, }
     },
   },
+  session: {
+    // Set session maxAge to 30 days (30 days * 24 hours * 60 minutes * 60 seconds)
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  }
 });

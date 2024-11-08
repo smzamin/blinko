@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { useTranslation } from "react-i18next";
 import { api } from "@/lib/trpc";
+import { StorageState } from "@/store/standard/StorageState";
 
 export default function Component() {
   const router = useRouter()
@@ -15,11 +16,20 @@ export default function Component() {
   const [password, setPassword] = React.useState("");
   const [canRegister, setCanRegister] = useState(false)
   const { t } = useTranslation()
+
+  const userStorage = new StorageState({ key: 'username' })
+  const passwordStorage = new StorageState({ key: 'password' })
   useEffect(() => {
     try {
       api.users.canRegister.mutate().then(v => {
         setCanRegister(v)
       })
+      if (userStorage.value) {
+        setUser(userStorage.value)
+      }
+      if (passwordStorage.value) {
+        setPassword(passwordStorage.value)
+      }
     } catch (error) {
     }
   }, [])
@@ -63,12 +73,9 @@ export default function Component() {
             onChange={e => setPassword(e.target.value)}
           />
           <div className="flex items-center justify-between px-1 pl-2 pr-2">
-            <Checkbox defaultChecked name="remember" size="sm">
+            <Checkbox defaultSelected name="remember" size="sm">
               {t('keep-sign-in')}
             </Checkbox>
-            {/* <Link className="text-default-500" href="#" size="sm">
-              忘记密码?
-            </Link> */}
           </div>
           <Button color="primary" onClick={async e => {
             try {
@@ -79,6 +86,8 @@ export default function Component() {
                 redirect: false,
               })
               if (res?.ok) {
+                userStorage.setValue(user)
+                passwordStorage.setValue(password)
                 router.push('/')
               } else {
                 RootStore.Get(ToastPlugin).error(res?.error ?? t('user-or-password-error'))

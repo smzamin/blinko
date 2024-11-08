@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, ScrollShadow, Image, Input, Popover, PopoverTrigger, PopoverContent, Card, Badge } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { UserStore } from "@/store/user";
@@ -36,16 +36,17 @@ export const CommonLayout = observer(({
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
   const base = RootStore.Get(BaseStore)
-  let debounceSearch: any = null
+  let debounceSearch = _.debounce(() => {
+    blinkoStore.noteList.resetAndCall({})
+  })
+
+
   blinkoStore.use()
   user.use()
   base.useInitApp(router)
 
   useEffect(() => {
     setClient(true)
-    debounceSearch = _.debounce(() => {
-      blinkoStore.noteList.resetAndCall({})
-    })
   }, [])
 
   if (!isClient) return <></>
@@ -86,7 +87,7 @@ export const CommonLayout = observer(({
 
             <div>
               {blinkoStore.tagList.value?.listTags.length != 0 && blinkoStore.tagList.value?.listTags && <>
-             
+
                 <TagListPanel />
               </>}
             </div>

@@ -37,7 +37,7 @@ export const noteRouter = router({
         where.id = { in: tags?.map(i => i.noteId) }
       }
       if (searchText != '') {
-        where.content = { contains: searchText }
+        where.content = { contains: searchText, mode: 'insensitive' }
       }
       if (withFile) {
         where.attachments = { some: {} }
