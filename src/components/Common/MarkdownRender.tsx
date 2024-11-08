@@ -12,6 +12,7 @@ import { LinkInfo } from '@/server/types';
 import { Card, Image } from '@nextui-org/react';
 import { RootStore } from '@/store';
 import { StorageState } from '@/store/standard/StorageState';
+import { Icon } from '@iconify/react';
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -115,7 +116,23 @@ export const MarkdownRender = ({ content }) => {
           components={{
             p: ({ node, children }) => <p>{highlightTags(children)}</p>,
             code: Code,
-            a: ({ node, children }) => <LinkPreview href={children} />
+            a: ({ node, children }) => <LinkPreview href={children} />,
+            li: ({ node, children }) => {
+              console.log({ node, children })
+              if (children?.[0]?.type == 'input') {
+                if (children?.[0]?.props.checked) {
+                  return <div className='!ml-[-18px] flex items-center'>
+                    <Icon className='text-[#EAB308]' icon="lets-icons:check-fill" width="20" height="20" />
+                    <div className='line-through text-desc'>{children[2]}</div>
+                  </div>
+                }
+                return <div className='!ml-[-18px] flex items-center'>
+                  <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
+                  <div>{children[2]}</div>
+                </div>
+              }
+              return <li >{children}</li>
+            },
           }}
         >
           {content}
