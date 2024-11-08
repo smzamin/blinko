@@ -88,7 +88,7 @@ const LinkPreview = ({ href }) => {
 };
 
 
-export const MarkdownRender = ({ content }) => {
+export const MarkdownRender = observer(({ content = '', onChange }: { content?: string, onChange?: (newContent: string) => void }) => {
   const { theme } = useTheme()
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -118,16 +118,26 @@ export const MarkdownRender = ({ content }) => {
             code: Code,
             a: ({ node, children }) => <LinkPreview href={children} />,
             li: ({ node, children }) => {
-              console.log({ node, children })
               if (children?.[0]?.type == 'input') {
                 if (children?.[0]?.props.checked) {
-                  return <div className='!ml-[-18px] flex items-center'>
-                    <Icon className='text-[#EAB308]' icon="lets-icons:check-fill" width="20" height="20" />
+                  return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
+                    onClick={() => {
+                      onChange?.(content!.replace(`* [x] ${children[2]}`, `* [ ] ${children[2]}`).replace(`- [x] ${children[2]}`, `- [ ] ${children[2]}`))
+                    }}>
+                    <div className='w-[20px] h-[20px]'>
+                      <Icon className='text-[#EAB308]' icon="lets-icons:check-fill" width="20" height="20" />
+                    </div>
                     <div className='line-through text-desc'>{children[2]}</div>
                   </div>
                 }
-                return <div className='!ml-[-18px] flex items-center'>
-                  <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
+                return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
+                  onClick={() => {
+                    console.log(`* [ ] ${children[2]}`)
+                    onChange?.(content!.replace(`* [ ] ${children[2]}`, `* [x] ${children[2]}`).replace(`- [ ] ${children[2]}`, `- [x] ${children[2]}`))
+                  }}>
+                 <div className='w-[20px] h-[20px]'>
+                    <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
+                  </div>
                   <div>{children[2]}</div>
                 </div>
               }
@@ -137,14 +147,13 @@ export const MarkdownRender = ({ content }) => {
         >
           {content}
         </ReactMarkdown>
-
       </div>
       {isOverflowing && content && (
         <div className='mt-2 cursor-pointer font-bold select-none hover:opacity-70 transition-all' onClick={toggleExpand}>{isExpanded ? t('show-less') : t('show-more')}</div>
       )}
     </div>
   );
-};
+});
 
 
 export const StreamingCodeBlock = observer(({ markdown }: any) => {

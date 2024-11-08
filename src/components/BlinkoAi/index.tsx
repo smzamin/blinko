@@ -1,23 +1,20 @@
 import { Icon } from "@iconify/react"
 import { observer } from "mobx-react-lite"
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
-import { Button, Image, Textarea } from "@nextui-org/react";
+import {  Image, Textarea } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
-import { api, streamApi } from "@/lib/trpc";
 import { motion } from "framer-motion"
 import { AiStore } from "@/store/aiStore";
 import { useEffect, useRef } from "react";
-import { MarkdownRender, StreamingCodeBlock } from "../Common/MarkdownRender";
-import dayjs from "@/lib/dayjs";
 import { useMediaQuery } from "usehooks-ts";
 import { DialogStore } from "@/store/module/Dialog";
 import { UserStore } from "@/store/user";
 import { useTranslation } from "react-i18next";
 import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import DraggableDiv from "../Common/DragContainer";
+import dayjs from "@/lib/dayjs";
 
 export const BlinkoAiChat = observer(() => {
   const ai = RootStore.Get(AiStore)

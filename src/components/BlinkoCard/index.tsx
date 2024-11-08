@@ -38,7 +38,10 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
             <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
           </div>
 
-          <MarkdownRender content={blinkoItem.content} />
+          <MarkdownRender content={blinkoItem.content} onChange={(newContent) => {
+            blinkoItem.content = newContent
+            blinko.upsertNote.call({ id: blinkoItem.id, content: newContent, refresh: false })
+          }} />
           <div className={blinkoItem.attachments?.length != 0 ? 'my-2' : ''}>
             <FilesAttachmentRender files={blinkoItem.attachments ?? []} preview />
           </div>

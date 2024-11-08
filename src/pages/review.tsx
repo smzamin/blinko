@@ -90,7 +90,10 @@ const App = observer(() => {
                           </div>
                       }
                     </div>
-                    <MarkdownRender content={i.content} />
+                    <MarkdownRender content={i.content} onChange={(newContent) => {
+                      i.content = newContent
+                      blinko.upsertNote.call({ id: i.id, content: newContent, refresh: false })
+                    }} />
                     <div className={i.attachments?.length != 0 ? 'my-2' : ''}>
                       <FilesAttachmentRender columns={2} files={i.attachments ?? []} preview />
                     </div>
