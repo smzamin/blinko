@@ -1,4 +1,4 @@
-import { router, authProcedure } from '../trpc';
+import { router, authProcedure, demoAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { caller } from './_app';
@@ -51,7 +51,7 @@ export const tagRouter = router({
       const { id, icon } = input
       return await prisma.tag.update({ where: { id }, data: { icon } })
     }),
-  deleteOnlyTag: authProcedure
+  deleteOnlyTag: authProcedure.use(demoAuthMiddleware)
     .input(z.object({
       id: z.number()
     }))
@@ -67,7 +67,7 @@ export const tagRouter = router({
       await prisma.tag.delete({ where: { id } })
       return true
     }),
-  deleteTagWithAllNote: authProcedure
+  deleteTagWithAllNote: authProcedure.use(demoAuthMiddleware)
     .input(z.object({
       id: z.number()
     }))

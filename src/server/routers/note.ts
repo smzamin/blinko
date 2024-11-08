@@ -1,4 +1,4 @@
-import { router, authProcedure } from '../trpc';
+import { router, authProcedure, demoAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { Prisma } from '@prisma/client';
@@ -203,7 +203,7 @@ export const noteRouter = router({
       }
       return await prisma.notes.updateMany({ where: { id: { in: ids } }, data: update })
     }),
-  deleteMany: authProcedure
+  deleteMany: authProcedure.use(demoAuthMiddleware)
     .input(z.object({
       ids: z.array(z.number())
     }))

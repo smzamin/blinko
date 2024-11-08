@@ -22,16 +22,30 @@ export const t = initTRPC.meta<OpenApiMeta>().context<Context>().create({
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
-export const authProcedure = t.procedure.use(async ({ctx, next}) => {
-    if (!ctx.ok) {
-        throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: 'Unauthorized'
-        })
-    }
-    return next({
-        ctx
+export const authProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.ok) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: 'Unauthorized'
     })
+  }
+  return next({
+    ctx
+  })
 })
+
+
+export const demoAuthMiddleware = t.middleware(async ({ ctx, next }) => {
+  if (process.env.IS_DEMO) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: 'The operation is rejected because this is a demo environment'
+    })
+  }
+  return next({
+    ctx
+  });
+});
+
 
 export const mergeRouters = t.mergeRouters;
