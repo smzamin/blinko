@@ -109,5 +109,8 @@
   "show-less": "Show Less",
   "show-more": "Show More",
   "top": "Top",
-  "cancel-top": "Cancel Top"
+  "cancel-top": "Cancel Top",
+  "created-in": "Created in",
+  "set-as-public": "Set as Public",
+  "unset-as-public": "Unset as Public"
 }

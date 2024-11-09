@@ -36,10 +36,10 @@ export const CommonLayout = observer(({
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
   const base = RootStore.Get(BaseStore)
+
   let debounceSearch = _.debounce(() => {
     blinkoStore.noteList.resetAndCall({})
   })
-
 
   blinkoStore.use()
   user.use()
@@ -51,7 +51,7 @@ export const CommonLayout = observer(({
 
   if (!isClient) return <></>
 
-  if (router.pathname == '/signin' || router.pathname == '/signup' || router.pathname == '/api-doc') {
+  if (router.pathname == '/signin' || router.pathname == '/signup' || router.pathname == '/api-doc' || router.pathname == '/share') {
     return <>{children}</>
   }
 
@@ -87,7 +87,6 @@ export const CommonLayout = observer(({
 
             <div>
               {blinkoStore.tagList.value?.listTags.length != 0 && blinkoStore.tagList.value?.listTags && <>
-
                 <TagListPanel />
               </>}
             </div>

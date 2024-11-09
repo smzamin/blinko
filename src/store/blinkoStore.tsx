@@ -45,12 +45,12 @@ export class BlinkoStore implements Store {
   updateTicker = 0
   fullNoteList: Note[] = []
   upsertNote = new PromiseState({
-    function: async ({ content = null, isArchived, type, id, attachments = [], refresh = true, isTop }:
-      { content?: string | null, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean }) => {
+    function: async ({ content = null, isArchived, type, id, attachments = [], refresh = true, isTop, isShare }:
+      { content?: string | null, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean, isShare?: boolean }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
-      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop })
+      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop, isShare })
       if (res?.id) {
         api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
       }

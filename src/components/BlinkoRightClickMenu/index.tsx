@@ -74,6 +74,20 @@ export const TopItem = observer(() => {
   </div>
 })
 
+export const PublicItem = observer(() => {
+  const { t } = useTranslation();
+  const blinko = RootStore.Get(BlinkoStore)
+  return <div className="flex items-start gap-2" onClick={e => {
+    blinko.upsertNote.call({
+      id: blinko.curSelectedNote?.id,
+      isShare: !blinko.curSelectedNote?.isShare
+    })
+  }}>
+    <Icon icon="ic:outline-share" width="20" height="20" />
+    <div>{blinko.curSelectedNote?.isShare ? t('unset-as-public') : t('set-as-public')}</div>
+  </div>
+})
+
 export const ArchivedItem = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
@@ -120,8 +134,13 @@ export const BlinkoRightClickMenu = observer(() => {
     </ContextMenuItem>
 
     <ContextMenuItem>
+      <PublicItem />
+    </ContextMenuItem>
+
+    <ContextMenuItem>
       <ArchivedItem />
     </ContextMenuItem>
+
 
     <ContextMenuItem className='select-none divider hover:!bg-none'>
       <Divider orientation="horizontal" />
@@ -146,6 +165,9 @@ export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () 
       <DropdownItem key="ConvertItem"> <ConvertItem /></DropdownItem>
 
       <DropdownItem key="TopItem" > <TopItem />  </DropdownItem>
+
+      <DropdownItem key="ShareItem" > <PublicItem />  </DropdownItem>
+
 
       <DropdownItem key="ArchivedItem" >
         <ArchivedItem />

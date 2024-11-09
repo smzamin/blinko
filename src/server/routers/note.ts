@@ -1,4 +1,4 @@
-import { router, authProcedure, demoAuthMiddleware } from '../trpc';
+import { router, authProcedure, demoAuthMiddleware, publicProcedure } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { Prisma } from '@prisma/client';
@@ -54,6 +54,20 @@ export const noteRouter = router({
         include: { tags: true, attachments: true }
       })
     }),
+  publicList: publicProcedure.input(z.object({
+    page: z.number().optional().default(1),
+    size: z.number().optional().default(30)
+  }))
+    .mutation(async function ({ input }) {
+      const { page, size } = input
+      return await prisma.notes.findMany({
+        where: { isShare: true },
+        orderBy: [{ isTop: "desc" }, { updatedAt: 'desc' }],
+        skip: (page - 1) * size,
+        take: size,
+        include: { tags: true, attachments: true },
+      })
+    }),
   detail: authProcedure
     .input(z.object({
       id: z.number(),
@@ -84,9 +98,10 @@ export const noteRouter = router({
       id: z.number().optional(),
       isArchived: z.union([z.boolean(), z.null()]).default(null),
       isTop: z.union([z.boolean(), z.null()]).default(null),
+      isShare: z.union([z.boolean(), z.null()]).default(null),
     }))
     .mutation(async function ({ input }) {
-      let { id, isArchived, type, attachments, content, isTop } = input
+      let { id, isArchived, type, attachments, content, isTop, isShare } = input
       if (content != null) {
         content = content?.replace(/\\/g, '').replace(/&#x20;/g, ' ')
       }
@@ -113,6 +128,7 @@ export const noteRouter = router({
         ...(type !== -1 && { type }),
         ...(isArchived !== null && { isArchived }),
         ...(isTop !== null && { isTop }),
+        ...(isShare !== null && { isShare }),
         ...(content != null && { content })
       }
 
