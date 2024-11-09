@@ -136,7 +136,7 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
 
 export class PromisePageState<T extends (...args: any) => Promise<any>, U = ReturnType<T>> {
   page: number = 1;
-  size: number = 10;
+  size: number = 30;
   sid = "PromisePageState";
   key?: string;
   loading = new BooleanState();

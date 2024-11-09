@@ -74,8 +74,8 @@ const App = observer(() => {
           >
             {
               blinko.dailyReviewNoteList.value?.map((i, index) => (
-                <SwiperSlide key={i.id} data-id={i.id} className='bg-white shadow-lg p-4 w-full overflow-hidden h-full'>
-                  <div className='bg-white p-0 w-full overflow-y-scroll h-full'>
+                <SwiperSlide key={i.id} data-id={i.id} className='bg-background shadow-lg p-4 w-full overflow-hidden h-full'>
+                  <div className='bg-background p-0 w-full overflow-y-scroll h-full'>
                     <div className='flex items-center gap-2 mb-2'>
                       <div className='text-xs text-desc'>{dayjs(i.createdAt).fromNow()}</div>
                       {

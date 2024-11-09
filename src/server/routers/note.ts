@@ -20,7 +20,7 @@ export const noteRouter = router({
     .input(z.object({
       tagId: z.union([z.number(), z.null()]).default(null),
       page: z.number().default(1),
-      size: z.number().default(10),
+      size: z.number().default(30),
       orderBy: z.enum(["asc", 'desc']).default('desc'),
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
       isArchived: z.boolean().default(false).optional(),
