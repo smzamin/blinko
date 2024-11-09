@@ -109,5 +109,8 @@
   "convert-to-note": "Convertir en nota",
   "import": "Importar",
   "create-successfully": "Crear con éxito",
-  "insert-sandpack": "Insertar saco de arena"
+  "insert-sandpack": "Insertar saco de arena",
+  "created-in": "Creado en",
+  "set-as-public": "Establecer como público",
+  "unset-as-public": "Desactivado como Público"
 }

@@ -109,5 +109,8 @@
   "your-changes-have-been-saved": "Vos modifications ont été enregistrées !",
   "keep-sign-in": "Garder la connexion",
   "operation-failed": "L'opération a échoué.",
-  "reviewed": "Examiné"
+  "reviewed": "Examiné",
+  "created-in": "Créé en",
+  "set-as-public": "Définir comme public",
+  "unset-as-public": "Non défini comme public"
 }

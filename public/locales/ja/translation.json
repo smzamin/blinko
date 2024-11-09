@@ -109,5 +109,8 @@
   "name": "名称",
   "schedule": "スケジュール",
   "sign-up": "会員登録",
-  "the-two-passwords-are-inconsistent": "2つのパスワードは矛盾している"
+  "the-two-passwords-are-inconsistent": "2つのパスワードは矛盾している",
+  "created-in": "で作成された。",
+  "set-as-public": "公開設定",
+  "unset-as-public": "公開未設定"
 }

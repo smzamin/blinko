@@ -109,5 +109,8 @@
   "show-more": "展開",
   "top": "置頂",
   "cancel-top": "取消置頂",
-  "save": "保存"
-  }
+  "save": "保存",
+  "created-in": "创建于",
+  "set-as-public": "设置为公开",
+  "unset-as-public": "取消公开"
+}

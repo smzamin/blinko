@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { BlinkoStore } from '@/store/blinkoStore';
-import { Card, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
+import { Card, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
 import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
 import { RootStore } from '@/store';
@@ -14,7 +14,7 @@ import { Note, NoteType } from '@/server/types';
 import { LeftCickMenu } from "../BlinkoRightClickMenu";
 import { useMediaQuery } from "usehooks-ts";
 
-export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
+export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blinkoItem: Note, isShareMode?: boolean }) => {
   const { t } = useTranslation();
   const isPc = useMediaQuery('(min-width: 768px)')
   const blinko = RootStore.Get(BlinkoStore)
@@ -32,10 +32,20 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
         }}>
         <Card onContextMenu={e => !isPc && e.stopPropagation()} shadow='none'
           className={`hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
-          <div className="flex items-center select-none">
-            <div className='mb-2 text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
-            {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}
-            <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
+          <div className="flex items-center select-none ">
+            <div className="mb-2 flex items-center w-full gap-1">
+              {
+                blinkoItem.isShare && !isShareMode &&
+                <Tooltip content='Externally accessible'>
+                  <Icon className="cursor-pointer text-[#8600EF]" icon="prime:eye" width="16" height="16" onClick={e => window.open('/share')} />
+                </Tooltip>
+              }
+              <div className='text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
+              {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}
+              {
+                !isShareMode && <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
+              }
+            </div>
           </div>
 
           <MarkdownRender content={blinkoItem.content} onChange={(newContent) => {
@@ -58,7 +68,7 @@ export const BlinkoCard = observer(({ blinkoItem }: { blinkoItem: Note }) => {
                 </div>
             }
             {
-              (dayjs(blinkoItem.createdAt).fromNow() !== dayjs(blinkoItem.updatedAt).fromNow()) && <div className='ml-auto text-xs text-desc'>Created in {dayjs(blinkoItem.createdAt).fromNow()}</div>
+              (dayjs(blinkoItem.createdAt).fromNow() !== dayjs(blinkoItem.updatedAt).fromNow()) && <div className='ml-auto text-xs text-desc'>{t('created-in')} {dayjs(blinkoItem.createdAt).fromNow()}</div>
             }
           </div>
         </Card>

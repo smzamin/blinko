@@ -108,5 +108,8 @@
   "basic-information": "Informações básicas",
   "convert-to-blinko": "Converter para Blinko",
   "recovery": "Recuperação",
-  "detail": "Detalhes"
+  "detail": "Detalhes",
+  "created-in": "Criado em",
+  "set-as-public": "Definir como público",
+  "unset-as-public": "Não definido como público"
 }

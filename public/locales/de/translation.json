@@ -109,5 +109,8 @@
   "model-provider": "Modell-Anbieter",
   "must-start-with-http-s-or-use-api-openai-as-default": "Muss mit http(s):// beginnen oder /api/openai als Standard verwenden",
   "recovery": "Erholung",
-  "reviewed": "Überprüft"
+  "reviewed": "Überprüft",
+  "created-in": "Erstellt in",
+  "set-as-public": "Als öffentlich festlegen",
+  "unset-as-public": "Nicht als öffentlich gekennzeichnet"
 }
