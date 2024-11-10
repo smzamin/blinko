@@ -41,7 +41,7 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
         <Card onContextMenu={e => !isPc && e.stopPropagation()} shadow='none'
           className={`group/card hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
           <div className="flex items-center select-none ">
-            <div className="mb-2 flex items-center w-full">
+            <div className="mb-2 flex items-center w-full gap-1">
               {
                 blinkoItem.isShare && !isShareMode &&
                 <Tooltip content='Externally accessible'>

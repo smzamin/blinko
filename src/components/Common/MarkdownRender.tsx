@@ -149,7 +149,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
         </ReactMarkdown>
       </div>
       {isOverflowing && content && (
-        <div className='mt-2 cursor-pointer font-bold select-none hover:opacity-70 transition-all' onClick={toggleExpand}>{isExpanded ? t('show-less') : t('show-more')}</div>
+        <div className='mt-2 cursor-pointer font-bold select-none hover:opacity-70 transition-all  tex-sm' onClick={toggleExpand}>{isExpanded ? t('show-less') : t('show-more')}</div>
       )}
     </div>
   );
