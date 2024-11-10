@@ -56,14 +56,15 @@ const Code = ({ className, children, ...props }) => {
 
 const LinkPreview = ({ href }) => {
   console.log(String(href))
-  if (href?.startsWith('<img')) {
-    return <PhotoProvider>
-      <PhotoView src={href.match(/src="([^"]+)"/)?.[1]}>
-        <div className='rounded-lg cursor-pointer' dangerouslySetInnerHTML={{ __html: href }} />
-      </PhotoView>
-    </PhotoProvider>
-
-
+  try {
+    if (href?.startsWith('<img')) {
+      return <PhotoProvider>
+        <PhotoView src={href.match(/src="([^"]+)"/)?.[1]}>
+          <div className='rounded-lg cursor-pointer' dangerouslySetInnerHTML={{ __html: href }} />
+        </PhotoView>
+      </PhotoProvider>
+    }
+  } catch (error) {
   }
   // const [previewData, setPreviewData] = useState<LinkInfo | null>(null);
   const store = RootStore.Local(() => ({
