@@ -5,7 +5,27 @@ const { codeBlockPlugin, tablePlugin, listsPlugin, quotePlugin, markdownShortcut
 export const MyPlugins = [
   codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
   sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
-  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
+  codeMirrorPlugin({
+    codeBlockLanguages: {
+      js: "JavaScript",
+      javascript: "JavaScript",
+      typescript: "TypeScript",
+      html: "HTML",
+      python: "Python",
+      java: "Java",
+      c: "C",
+      csharp: "C#",
+      php: "PHP",
+      sql: "SQL",
+      lua: "Lua",
+      bash: "Shell (Bash)",
+      shell: "Shell Script",
+      json: "JSON",
+      xml: "XML",
+      yaml: "YAML",
+      ini: "INI",
+    }
+  }),
   listsPlugin(),
   linkPlugin(),
   quotePlugin(),

@@ -2,9 +2,9 @@ import { generateOpenApiDocument } from 'trpc-to-openapi';
 import { appRouter } from './routers/_app';
 
 export const openApiDocument = generateOpenApiDocument(appRouter, {
-  title: 'Example CRUD API',
-  description: 'OpenAPI compliant REST API built using tRPC with Next.js',
+  title: 'Blinko CRUD API V1',
+  description: 'blinko api for public endpoints',
   version: '1.0.0',
-  baseUrl: 'http://localhost:3000/api',
-  tags: ['auth', 'users', 'posts'],
+  baseUrl: '/api',
+  tags: ['Note', 'User', 'Task', 'Tag', 'Public', 'Config'],
 });

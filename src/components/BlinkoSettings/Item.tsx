@@ -1,5 +1,10 @@
 import { observer } from "mobx-react-lite"
 
+type IProps = {
+  leftContent?: any,
+  rightContent?: any,
+  type: 'row' | 'col'
+}
 export const Item = observer(({ leftContent, rightContent, type = 'row' }: any) => {
 
   if (type == 'col') {
@@ -9,8 +14,8 @@ export const Item = observer(({ leftContent, rightContent, type = 'row' }: any) 
     </div>
   } else {
     return <div className="flex flex-row items-center py-2">
-      <div className="font-bold">{leftContent}</div>
-      <div className="ml-auto">{rightContent}</div>
+      {!!leftContent && <div className={rightContent ? "font-bold" : 'w-full'}>{leftContent}</div>}
+      {!!rightContent && <div className="ml-auto">{rightContent}</div>}
     </div>
   }
 })

@@ -2,18 +2,23 @@ import { router, authProcedure, demoAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { caller } from './_app';
+import { tagSchema } from 'prisma/zod';
 
 export const tagRouter = router({
   list: authProcedure
+    // .meta({ openapi: { method: 'GET', path: '/v1/tags/list', summary: 'Get user tags', protect: true } })
     .input(z.void())
+    // .output(z.array(tagSchema))
     .query(async function ({ input }) {
       return await prisma.tag.findMany()
     }),
   updateTagMany: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/batch-update', summary: 'Batch update tags', protect: true , tags: ['Tag']} })
     .input(z.object({
       ids: z.array(z.number()),
       tag: z.string()
     }))
+    .output(z.boolean())
     .mutation(async function ({ input }) {
       const { ids, tag } = input
       const notes = await prisma.notes.findMany({ where: { id: { in: ids } } })
@@ -24,11 +29,13 @@ export const tagRouter = router({
       return true
     }),
   updateTagName: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/update-name', summary: 'Update tag name', protect: true , tags: ['Tag']} })
     .input(z.object({
       oldName: z.string(),
       newName: z.string(),
       id: z.number()
     }))
+    .output(z.boolean())
     .mutation(async function ({ input }) {
       const { id, oldName, newName } = input
       const tagToNote = await prisma.tagsToNote.findMany({ where: { tagId: id } })
@@ -43,18 +50,22 @@ export const tagRouter = router({
       return true
     }),
   updateTagIcon: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/update-icon', summary: 'Update tag icon', protect: true , tags: ['Tag']} })
     .input(z.object({
       id: z.number(),
       icon: z.string()
     }))
+    .output(tagSchema)
     .mutation(async function ({ input }) {
       const { id, icon } = input
       return await prisma.tag.update({ where: { id }, data: { icon } })
     }),
   deleteOnlyTag: authProcedure.use(demoAuthMiddleware)
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/delete-only-tag', summary: 'Only delete tag ,not delete notes', protect: true, tags: ['Tag'] } })
     .input(z.object({
       id: z.number()
     }))
+    .output(z.boolean())
     .mutation(async function ({ input }) {
       const { id } = input
       const tag = await prisma.tag.findFirst({ where: { id }, include: { tagsToNote: true } })
@@ -68,9 +79,11 @@ export const tagRouter = router({
       return true
     }),
   deleteTagWithAllNote: authProcedure.use(demoAuthMiddleware)
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/delete-tag-with-notes', summary: 'Delete tagnot and delete notes', protect: true, tags: ['Tag'] } })
     .input(z.object({
       id: z.number()
     }))
+    .output(z.boolean())
     .mutation(async function ({ input }) {
       const { id } = input
       const tag = await prisma.tag.findFirst({ where: { id }, include: { tagsToNote: true } })

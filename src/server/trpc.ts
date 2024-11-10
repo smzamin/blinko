@@ -13,7 +13,7 @@ import type { Context } from './context';
 import superjson from 'superjson'
 import { OpenApiMeta } from 'trpc-to-openapi';
 
-export const t = initTRPC.meta<OpenApiMeta>().context<Context>().create({
+export const t = initTRPC.context<Context>().meta<OpenApiMeta>().create({
   transformer: superjson,
   errorFormatter({ shape }) {
     return shape;

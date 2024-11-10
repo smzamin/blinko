@@ -6,6 +6,8 @@ import { RootStore } from './root';
 import { Store } from './standard/base';
 import { eventBus } from '@/lib/event';
 import { makeAutoObservable } from 'mobx';
+import { PromiseState } from './standard/PromiseState';
+import { api } from '@/lib/trpc';
 
 export class UserStore implements User, Store {
   sid = 'user';
@@ -39,6 +41,12 @@ export class UserStore implements User, Store {
     return !!this.token;
   }
 
+  userInfo = new PromiseState({
+    function: async (id: number) => {
+      return await api.users.detail.query({ id })
+    }
+  })
+
   setData(args: Partial<UserStore>) {
     Object.assign(this, args);
   }
@@ -55,6 +63,7 @@ export class UserStore implements User, Store {
       if (!userStore.isLogin && session) {
         //@ts-ignore
         userStore.ready({ ...session.user, token: session.token });
+        this.userInfo.call(Number(this.id))
       }
     }, [session]);
     useEffect(() => {

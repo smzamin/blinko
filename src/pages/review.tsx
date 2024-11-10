@@ -107,7 +107,7 @@ const App = observer(() => {
             <Tooltip content={t('reviewed')}>
               <Button onClick={async e => {
                 if (!store.currentNote) return
-                PromiseCall(api.notes.reviewNote.mutate(store.currentNote!.id!))
+                PromiseCall(api.notes.reviewNote.mutate({ id: store.currentNote!.id! }))
               }} isIconOnly color='primary' startContent={<Icon icon="ci:check-all" width="24" height="24" />} />
             </Tooltip>
 
@@ -115,7 +115,7 @@ const App = observer(() => {
               <Button isIconOnly onClick={async e => {
                 if (!store.currentNote) return
                 await blinko.upsertNote.call({ id: store.currentNote.id, type: store.isBlinko ? NoteType.NOTE : NoteType.BLINKO })
-                await api.notes.reviewNote.mutate(store.currentNote.id!)
+                await api.notes.reviewNote.mutate({ id: store.currentNote!.id! })
                 await blinko.dailyReviewNoteList.call()
               }}
                 color='primary'

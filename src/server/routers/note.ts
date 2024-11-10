@@ -8,6 +8,7 @@ import { NoteType } from '../types';
 import path from 'path';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
+import { attachmentsSchema, notesSchema, tagsToNoteSchema } from 'prisma/zod';
 
 const extractHashtags = (input: string): string[] => {
   const hashtagRegex = /#[^\s#]+(?<![*?.。])/g;
@@ -17,6 +18,7 @@ const extractHashtags = (input: string): string[] => {
 
 export const noteRouter = router({
   list: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/list', summary: 'Query notes list', protect: true, tags: ['Note'] } })
     .input(z.object({
       tagId: z.union([z.number(), z.null()]).default(null),
       page: z.number().default(1),
@@ -29,6 +31,12 @@ export const noteRouter = router({
       withoutTag: z.boolean().default(false).optional(),
       withFile: z.boolean().default(false).optional()
     }))
+    .output(z.array(notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema),
+        tags: z.array(tagsToNoteSchema)
+      }))
+    ))
     .mutation(async function ({ input }) {
       const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag } = input
       let where: Prisma.notesWhereInput = { isArchived, isRecycle }
@@ -54,10 +62,17 @@ export const noteRouter = router({
         include: { tags: true, attachments: true }
       })
     }),
-  publicList: publicProcedure.input(z.object({
-    page: z.number().optional().default(1),
-    size: z.number().optional().default(30)
-  }))
+  publicList: publicProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/public-list', summary: 'Query share notes list', tags: ['Note'] } })
+    .input(z.object({
+      page: z.number().optional().default(1),
+      size: z.number().optional().default(30)
+    }))
+    .output(z.array(notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema)
+      }))
+    ))
     .mutation(async function ({ input }) {
       const { page, size } = input
       return await prisma.notes.findMany({
@@ -69,15 +84,23 @@ export const noteRouter = router({
       })
     }),
   detail: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/detail', summary: 'Query note detail', protect: true, tags: ['Note'] } })
     .input(z.object({
       id: z.number(),
     }))
+    .output(z.union([z.null(), notesSchema]))
     .mutation(async function ({ input }) {
       const { id } = input
       return await prisma.notes.findFirst({ where: { id } })
     }),
   dailyReviewNoteList: authProcedure
+    .meta({ openapi: { method: 'GET', path: '/v1/note/daily-review-list', summary: 'Query daily review note list', protect: true, tags: ['Note'] } })
     .input(z.void())
+    .output(z.array(notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema)
+      }))
+    ))
     .query(async function () {
       return await prisma.notes.findMany({
         where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false },
@@ -86,11 +109,14 @@ export const noteRouter = router({
       })
     }),
   reviewNote: authProcedure
-    .input(z.number())
+    .meta({ openapi: { method: 'POST', path: '/v1/note/review', summary: 'Review a note', protect: true, tags: ['Note'] } })
+    .input(z.object({ id: z.number() }))
+    .output(z.union([z.null(), notesSchema]))
     .mutation(async function ({ input }) {
-      return await prisma.notes.update({ where: { id: input }, data: { isReviewed: true } })
+      return await prisma.notes.update({ where: { id: input.id }, data: { isReviewed: true } })
     }),
   upsert: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/upsert', summary: 'Update or create note', protect: true, tags: ['Note'] } })
     .input(z.object({
       content: z.union([z.string(), z.null()]).default(null),
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
@@ -100,6 +126,7 @@ export const noteRouter = router({
       isTop: z.union([z.boolean(), z.null()]).default(null),
       isShare: z.union([z.boolean(), z.null()]).default(null),
     }))
+    .output(z.any())
     .mutation(async function ({ input }) {
       let { id, isArchived, type, attachments, content, isTop, isShare } = input
       if (content != null) {
@@ -205,12 +232,14 @@ export const noteRouter = router({
       }
     }),
   updateMany: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/batch-update', summary: 'Batch update note', protect: true, tags: ['Note'] } })
     .input(z.object({
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
       isArchived: z.union([z.boolean(), z.null()]).default(null),
       isRecycle: z.union([z.boolean(), z.null()]).default(null),
       ids: z.array(z.number())
     }))
+    .output(z.any())
     .mutation(async function ({ input }) {
       const { type, isArchived, isRecycle, ids } = input
       const update: Prisma.notesUpdateInput = {
@@ -221,9 +250,12 @@ export const noteRouter = router({
       return await prisma.notes.updateMany({ where: { id: { in: ids } }, data: update })
     }),
   deleteMany: authProcedure.use(demoAuthMiddleware)
+    .meta({ openapi: { method: 'POST', path: '/v1/note/batch-delete', summary: 'Batch delete update note', protect: true, tags: ['Note'] } })
+    // .output(z.union([z.null(), notesSchema]))
     .input(z.object({
       ids: z.array(z.number())
     }))
+    .output(z.any())
     .mutation(async function ({ input }) {
       const { ids } = input
       const notes = await prisma.notes.findMany({ where: { id: { in: ids } }, include: { tags: { include: { tag: true } }, attachments: true } })

@@ -62,7 +62,7 @@ const LinkPreview = ({ href }) => {
     const fetchData = async () => {
       try {
         if (!store.previewData.value) {
-          const info = await api.public.linkPreview.query(href)
+          const info = await api.public.linkPreview.query({ url: href })
           store.previewData.setValue(info)
         }
       } catch (error) {
@@ -135,7 +135,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
                     console.log(`* [ ] ${children[2]}`)
                     onChange?.(content!.replace(`* [ ] ${children[2]}`, `* [x] ${children[2]}`).replace(`- [ ] ${children[2]}`, `- [x] ${children[2]}`))
                   }}>
-                 <div className='w-[20px] h-[20px]'>
+                  <div className='w-[20px] h-[20px]'>
                     <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
                   </div>
                   <div>{children[2]}</div>

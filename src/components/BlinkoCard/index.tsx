@@ -15,6 +15,7 @@ import { ConvertItemFunction, LeftCickMenu, ShowEditBlinkoModel } from "../Blink
 import { useMediaQuery } from "usehooks-ts";
 import { useState } from "react";
 import copy from 'copy-to-clipboard';
+import { Copy } from "../Common/Copy";
 
 export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blinkoItem: Note, isShareMode?: boolean }) => {
   const { t } = useTranslation();
@@ -48,25 +49,13 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
                 </Tooltip>
               }
               <div className='text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
-
-              <div className="ml-auto opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 ">
-                {
-                  !isCopy ? <Icon className="text-desc cursor-pointer" icon="si:copy-duotone" width="16" height="16" onClick={() => {
-                    copy(blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`)
-                    setCopy(true)
-                    setTimeout(() => { setCopy(false) }, 1000)
-                  }} />
-                    : <Icon className="text-green-500" icon="line-md:check-all" width="16" height="16" />
-                }
-              </div>
-
+              <Copy size={16} className="ml-auto opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 " content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`} />
               {blinkoItem.isTop && <Icon className="ml-auto group-hover/card:ml-2 text-[#EFC646]" icon="solar:bookmark-bold" width="16" height="16" />}
               {
                 !isShareMode && <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
               }
             </div>
           </div>
-
           <MarkdownRender content={blinkoItem.content} onChange={(newContent) => {
             blinkoItem.content = newContent
             blinko.upsertNote.call({ id: blinkoItem.id, content: newContent, refresh: false })
@@ -102,6 +91,6 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
           </div>
         </Card>
       </div>
-    </ContextMenuTrigger>
-  </motion.div>
+    </ContextMenuTrigger >
+  </motion.div >
 })

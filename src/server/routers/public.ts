@@ -4,9 +4,11 @@ import packageJson from '../../../package.json'
 import axios from 'axios'
 import { cache } from '@/lib/cache';
 import { unfurl } from 'unfurl.js'
+import { Metadata } from 'unfurl.js/dist/types';
 
 export const publicRouter = router({
   version: publicProcedure
+    .meta({ openapi: { method: 'GET', path: '/v1/public/version', summary: 'Update user config' , tags: ['Public']} })
     .input(z.void())
     .output(z.string())
     .query(async function () {
@@ -33,16 +35,25 @@ export const publicRouter = router({
       }, { ttl: 60 * 60 * 1000 })
     }),
   linkPreview: publicProcedure
-    .input(z.string())
+    .meta({ openapi: { method: 'GET', path: '/v1/public/link-preview', summary: 'Get a link preview info', tags: ['Public'] } })
+    .input(z.object({ url: z.string() }))
+    .output(z.object({
+      title: z.string(),
+      favicon: z.string(),
+      description: z.string()
+    }))
     .query(async function ({ input }) {
-      return await cache.wrap(input, async () => {
+      return await cache.wrap(input.url, async () => {
         try {
-          const result = await unfurl(input)
-          return result
+          const result: Metadata = await unfurl(input.url)
+          return {
+            title: result.title,
+            favicon: result.favicon,
+            description: result.description
+          }
         } catch (error) {
           return null
         }
       }, { ttl: 60 * 60 * 24 * 1000 })
-
     }),
 })

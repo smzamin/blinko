@@ -16,19 +16,38 @@ const genToken = async ({ id, name }: { id: number, name: string, }) => {
 }
 
 export const userRouter = router({
+  detail: publicProcedure
+    .meta({ openapi: { method: 'GET', path: '/v1/user/detail', summary: 'Find user detail from user id', tags: ['User'] } })
+    .input(z.object({ id: z.number() }))
+    .output(z.object({
+      id: z.number(),
+      name: z.string(),
+      nickName: z.string(),
+      token: z.string()
+    }))
+    .query(async ({ input }) => {
+      const user = await prisma.accounts.findFirst({ where: { id: input.id } })
+      return {
+        id: input.id,
+        name: user?.name ?? '',
+        nickName: user?.nickname ?? '',
+        token: user?.apiToken ?? ''
+      }
+    }),
   canRegister: publicProcedure
-    .meta({ openapi: { method: 'POST', path: '/user/can-register' } })
+    .meta({ openapi: { method: 'POST', path: '/v1/user/can-register', summary: 'Check if can register admin', tags: ['User'] } })
     .input(z.void())
-    .output(z.boolean())
+    .output(z.object({ ok: z.boolean() }))
     .mutation(async () => {
       const count = await prisma.accounts.count()
       if (count > 0) {
-        return false
+        return { ok: false }
       } else {
-        return true
+        return { ok: true }
       }
     }),
   createAdmin: publicProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/user/create-admin', summary: 'Create admin user', tags: ['User'] } })
     .input(z.object({
       name: z.string(),
       password: z.string()
@@ -50,6 +69,7 @@ export const userRouter = router({
       })
     }),
   upsertUser: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/user/upsert', summary: 'Update or create user', tags: ['User'] } })
     .input(z.object({
       id: z.number().optional(),
       name: z.string().optional(),
