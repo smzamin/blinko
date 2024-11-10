@@ -8,7 +8,7 @@ import { NoteType } from '../types';
 import path from 'path';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
-import { attachmentsSchema, notesSchema, tagsToNoteSchema } from 'prisma/zod';
+import { attachmentsSchema, notesSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
 
 const extractHashtags = (input: string): string[] => {
   const hashtagRegex = /#[^\s#]+(?<![*?.。])/g;

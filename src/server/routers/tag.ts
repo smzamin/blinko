@@ -2,7 +2,7 @@ import { router, authProcedure, demoAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { caller } from './_app';
-import { tagSchema } from 'prisma/zod';
+import { tagSchema } from '@/lib/prismaZodType';
 
 export const tagRouter = router({
   list: authProcedure

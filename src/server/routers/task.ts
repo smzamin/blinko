@@ -4,7 +4,7 @@ import { prisma } from '../prisma';
 import { DBJob } from '../plugins/dbjob';
 import { ArchiveJob } from '../plugins/archivejob';
 import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
-import { scheduledTaskSchema } from 'prisma/zod';
+import { scheduledTaskSchema } from '@/lib/prismaZodType';
 
 export const taskRouter = router({
   list: authProcedure

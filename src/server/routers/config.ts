@@ -2,7 +2,7 @@ import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { GlobalConfig, ZConfigKey, ZConfigSchema } from '../types';
-import { configSchema } from 'prisma/zod';
+import { configSchema } from '@/lib/prismaZodType';
 
 export const getGlobalConfig = async () => {
   const config = await prisma.config.findMany()
