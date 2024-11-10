@@ -19,6 +19,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const router = useRouter()
   return <div ref={editorRef} id='global-editor'>
     <Editor
+      mode={mode}
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {

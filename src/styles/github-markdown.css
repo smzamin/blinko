@@ -250,6 +250,7 @@ menu {
   border-style: none;
   max-width: 100%;
   box-sizing: content-box;
+  border-radius: 16px;
 }
 
 .markdown-body code,

@@ -5,11 +5,9 @@ import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
 import { Icon } from "@iconify/react";
 import { api } from "@/lib/trpc";
-import { UserStore } from "@/store/user";
 import { AiStore } from "@/store/aiStore";
 import { useTranslation } from "react-i18next";
 import { Item } from "./Item";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
 

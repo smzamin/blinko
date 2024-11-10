@@ -65,15 +65,15 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
   const imageRenderClassName = useMemo(() => {
     const imageLength = files?.filter(i => i.previewType == 'image')?.length
     if (imageLength == 1) {
-      return `abc flex`
+      return `flex`
     }
     if (imageLength > 1 && imageLength < 5) {
-      return `abc grid grid-cols-2 gap-2`
+      return `grid grid-cols-2 gap-2`
     }
     if (imageLength > 5) {
-      return `abc grid grid-cols-3 gap-2`
+      return `grid grid-cols-3 gap-2`
     }
-    return 'abc'
+    return ''
   }, [files?.filter(i => i.previewType == 'image')])
 
   const imageHeight = useMemo(() => {
@@ -102,7 +102,7 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
 
             <div className='w-full'>
               <PhotoView src={file.preview}>
-                <Image src={file.preview} className={`rounded-lg mb-4 ${imageHeight} object-cover w-[1000px]`} />
+                <Image src={file.preview} style={{borderRadius:'13px'}} className={`rounded-xl mb-4 ${imageHeight} object-cover w-[1000px]`} />
               </PhotoView>
             </div>
 

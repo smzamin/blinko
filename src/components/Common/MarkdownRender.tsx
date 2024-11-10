@@ -13,6 +13,7 @@ import { Card, Image } from '@nextui-org/react';
 import { RootStore } from '@/store';
 import { StorageState } from '@/store/standard/StorageState';
 import { Icon } from '@iconify/react';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -54,6 +55,16 @@ const Code = ({ className, children, ...props }) => {
 };
 
 const LinkPreview = ({ href }) => {
+  console.log(String(href))
+  if (href?.startsWith('<img')) {
+    return <PhotoProvider>
+      <PhotoView src={href.match(/src="([^"]+)"/)?.[1]}>
+        <div className='rounded-lg cursor-pointer' dangerouslySetInnerHTML={{ __html: href }} />
+      </PhotoView>
+    </PhotoProvider>
+
+
+  }
   // const [previewData, setPreviewData] = useState<LinkInfo | null>(null);
   const store = RootStore.Local(() => ({
     previewData: new StorageState<LinkInfo | null>({ key: href, default: null }),

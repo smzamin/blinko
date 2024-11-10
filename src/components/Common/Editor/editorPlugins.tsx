@@ -1,4 +1,4 @@
-import { codeMirrorPlugin, headingsPlugin, linkPlugin, sandpackPlugin } from '@mdxeditor/editor';
+import { codeMirrorPlugin, headingsPlugin, imagePlugin, linkPlugin, sandpackPlugin } from '@mdxeditor/editor';
 import { simpleSandpackConfig } from './type';
 const { codeBlockPlugin, tablePlugin, listsPlugin, quotePlugin, markdownShortcutPlugin } = await import('@mdxeditor/editor')
 
@@ -26,6 +26,7 @@ export const MyPlugins = [
       ini: "INI",
     }
   }),
+  imagePlugin(),
   listsPlugin(),
   linkPlugin(),
   quotePlugin(),

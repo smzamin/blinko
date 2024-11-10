@@ -20,16 +20,15 @@ import { Copy } from "../Common/Copy";
 export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blinkoItem: Note, isShareMode?: boolean }) => {
   const { t } = useTranslation();
   const isPc = useMediaQuery('(min-width: 768px)')
-  const [isCopy, setCopy] = useState(false)
   const blinko = RootStore.Get(BlinkoStore)
 
   return <motion.div key={blinkoItem.id} className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }}>
     <ContextMenuTrigger id="blink-item-context-menu" >
       <div
-        onContextMenu={e => {
+        onContextMenu={() => {
           blinko.curSelectedNote = _.cloneDeep(blinkoItem)
         }}
-        onDoubleClick={e => {
+        onDoubleClick={() => {
           blinko.curSelectedNote = _.cloneDeep(blinkoItem)
           ShowEditBlinkoModel()
         }}

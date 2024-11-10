@@ -1,10 +1,9 @@
-
 .ͼo {
   background-color: transparent !important;
 }
 
-.ͼ1 .cm-scroller{
-  font-family: system-ui!important;
+.ͼ1 .cm-scroller {
+  font-family: system-ui !important;
 }
 
 .ͼ1x {
@@ -13,13 +12,46 @@
   height: 100%;
 }
 
+#radix-\:r51\:,
+#radix-\:rq8\: {
+  display: none;
+}
+
+._dialogContent_uazmk_602 {
+  border-radius: 16px !important;
+  filter: unset;
+}
+
+._imageWrapper_uazmk_922 img {
+  border-radius: 16px!important;
+}
+
+._imageResizer_uazmk_1027 {
+  border-radius: 2px!important;
+  background-color: var(--desc)!important;
+}
+
+._editImageToolbar_uazmk_935{
+  background-color: transparent!important;
+}
+
+._primaryButton_uazmk_506,
+._secondaryButton_uazmk_507 {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-radius: 12px !important;
+  cursor: pointer;
+}
+
 ._codeMirrorToolbar_uazmk_408 {
   background-color: transparent !important;
 }
 
 @media (hover: hover) {
-  ._toolbarToggleItem_uazmk_206:hover, ._toolbarButton_uazmk_237:hover {
-      background-color: var(--sencondbackground)!important;
+
+  ._toolbarToggleItem_uazmk_206:hover,
+  ._toolbarButton_uazmk_237:hover {
+    background-color: var(--sencondbackground) !important;
   }
 }
 

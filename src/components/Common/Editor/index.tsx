@@ -1,7 +1,7 @@
 import '@mdxeditor/editor/style.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
+import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertImage, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
 import { Button, Card, Divider, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
 import React, { ReactElement, useEffect } from 'react';
@@ -14,7 +14,7 @@ import { MyPlugins } from './editorPlugins';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
-import { FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon } from '../Icons';
+import { CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
 import usePasteFile from '@/lib/hooks';
 import useAudioRecorder from '../AudioRecorder/hook';
@@ -24,12 +24,14 @@ import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { showTagSelectPop } from '../TagSelectPop';
+import { DialogStore } from '@/store/module/Dialog';
 const { MDXEditor } = await import('@mdxeditor/editor')
 
 // https://mdxeditor.dev/editor/docs/theming
 // https://react-dropzone.js.org/
 
 type IProps = {
+  mode: 'create' | 'edit',
   content: string,
   onChange?: (content: string) => void,
   onSend?: (args: OnSendContentType) => Promise<any>,
@@ -57,7 +59,7 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
 }
 
 
-const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles }: IProps) => {
+const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
   const { t } = useTranslation()
   const isPc = useMediaQuery('(min-width: 768px)')
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
@@ -91,7 +93,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     replaceMarkdownTag(text) {
       if (mdxEditorRef.current) {
         if (store.lastRange) {
-          const selection = window.getSelection();
+          // const selection = window.getSelection();
           const currentTextBeforeRange = store.lastRangeText.replace(/&#x20;/g, " ") ?? ''
           const currentText = mdxEditorRef.current!.getMarkdown().replace(/\\/g, '').replace(/&#x20;/g, " ")
           const tag = currentTextBeforeRange.replace(helper.regex.isEndsWithHashTag, "#" + text + '&#x20;')
@@ -283,7 +285,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                         <NotesIcon className='note' />
                     }
                   </ButtonWithTooltip>
-
                   <ButtonWithTooltip className='!w-[24px] !h-[24px] mr-2' title={t('insert-hashtag')} onClick={e => {
                     store.inertHash()
                   }}>
@@ -291,8 +292,10 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                   </ButtonWithTooltip>
 
                   <Divider orientation="vertical" />
+
                   <ListsToggle />
                   {isPc && <InsertTable />}
+                  <InsertImage />
                   <ConditionalContents
                     options={[
                       { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
@@ -325,6 +328,12 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     </ButtonWithTooltip>
                   }
 
+                  <Button isDisabled={!store.canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={() => {
+                    RootStore.Get(DialogStore).close()
+                  }} className={`${mode == 'create' ? 'hidden' : 'group ml-auto mr-2'}`} isIconOnly>
+                    <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
+                  </Button>
+
                   <Button isDisabled={!store.canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={async e => {
                     await onSend?.({
                       content,
@@ -332,7 +341,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     })
                     onChange?.('')
                     store.files = []
-                  }} className='ml-auto w-[60px] group' isIconOnly color='primary' >
+                  }} className={`${mode == 'create' ? 'ml-auto' : ''} w-[60px] group`} isIconOnly color='primary' >
                     <SendIcon className='primary-foreground group-hover:rotate-[-35deg] transition-all' />
                   </Button>
                 </div>

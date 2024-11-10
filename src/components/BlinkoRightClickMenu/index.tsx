@@ -18,14 +18,12 @@ export const ShowEditBlinkoModel = () => {
     size: '2xl',
     isOpen: true,
     onlyContent: true,
+    isDismissable: false,
     content: <BlinkoEditor mode='edit' key='create-key' onSended={() => RootStore.Get(DialogStore).close()} />
   })
 }
 export const EditItem = observer(() => {
   const { t } = useTranslation();
-  const store = RootStore.Local(() => ({
-    editorHeight: 90,
-  }))
   return <div className="flex items-start gap-2" onClick={e => ShowEditBlinkoModel()}>
     <Icon icon="tabler:edit" width="20" height="20" />
     <div>{t('edit')}</div>
