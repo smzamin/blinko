@@ -11,7 +11,7 @@ import { MarkdownRender } from '@/components/Common/MarkdownRender';
 import { Icon } from '@iconify/react';
 import dayjs from '@/lib/dayjs';
 import { Note, NoteType } from '@/server/types';
-import { LeftCickMenu, ShowEditBlinkoModel } from "../BlinkoRightClickMenu";
+import { ConvertItemFunction, LeftCickMenu, ShowEditBlinkoModel } from "../BlinkoRightClickMenu";
 import { useMediaQuery } from "usehooks-ts";
 import { useState } from "react";
 import copy from 'copy-to-clipboard';
@@ -77,14 +77,24 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
           <div className="flex items-center">
             {
               blinkoItem.type == NoteType.BLINKO ?
-                <div className='flex items-center justify-start mt-2'>
-                  <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
-                  <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
-                </div> :
-                <div className='flex items-center justify-start mt-2'>
-                  <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
-                  <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
-                </div>
+                <Tooltip content={t('convert-to') + ' Note'} delay={1000} >
+                  <div className='flex items-center justify-start mt-2 cursor-pointer' onClick={() => {
+                    blinko.curSelectedNote = _.cloneDeep(blinkoItem)
+                    ConvertItemFunction()
+                  }}>
+                    <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
+                    <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
+                  </div>
+                </Tooltip> :
+                <Tooltip content={t('convert-to') + ' Blinko'} delay={1000}>
+                  <div className='flex items-center justify-start mt-2 cursor-pointer' onClick={() => {
+                    blinko.curSelectedNote = _.cloneDeep(blinkoItem)
+                    ConvertItemFunction()
+                  }}>
+                    <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
+                    <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
+                  </div>
+                </Tooltip>
             }
             {
               (dayjs(blinkoItem.createdAt).fromNow() !== dayjs(blinkoItem.updatedAt).fromNow()) && <div className='ml-auto text-xs text-desc'>{t('created-in')} {dayjs(blinkoItem.createdAt).fromNow()}</div>

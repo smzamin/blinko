@@ -44,15 +44,18 @@ export const MutiSelectItem = observer(() => {
   </div>
 })
 
+export const ConvertItemFunction = () => {
+  const blinko = RootStore.Get(BlinkoStore)
+  blinko.upsertNote.call({
+    id: blinko.curSelectedNote?.id,
+    type: blinko.curSelectedNote?.type == NoteType.NOTE ? NoteType.BLINKO : NoteType.NOTE
+  })
+}
+
 export const ConvertItem = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
-  return <div className="flex items-start gap-2" onClick={e => {
-    blinko.upsertNote.call({
-      id: blinko.curSelectedNote?.id,
-      type: blinko.curSelectedNote?.type == NoteType.NOTE ? NoteType.BLINKO : NoteType.NOTE
-    })
-  }}>
+  return <div className="flex items-start gap-2" onClick={() => { ConvertItemFunction() }}>
     <Icon icon="ri:exchange-2-line" width="20" height="20" />
     <div>{t('convert-to')} {blinko.curSelectedNote?.type == NoteType.NOTE ?
       <span className='text-yellow-500'>{t('blinko')}</span> : <span className='text-blue-500'>{t('note')}</span>}</div>
