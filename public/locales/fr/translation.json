@@ -112,5 +112,8 @@
   "reviewed": "Examiné",
   "created-in": "Créé en",
   "set-as-public": "Définir comme public",
-  "unset-as-public": "Non défini comme public"
+  "unset-as-public": "Non défini comme public",
+  "no-tag": "Pas d'étiquette",
+  "with-link": "Avec lien",
+  "has-file": "A le fichier"
 }

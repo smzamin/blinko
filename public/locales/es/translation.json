@@ -112,5 +112,8 @@
   "insert-sandpack": "Insertar saco de arena",
   "created-in": "Creado en",
   "set-as-public": "Establecer como público",
-  "unset-as-public": "Desactivado como Público"
+  "unset-as-public": "Desactivado como Público",
+  "no-tag": "Sin etiqueta",
+  "with-link": "Con enlace",
+  "has-file": "Tiene archivo"
 }

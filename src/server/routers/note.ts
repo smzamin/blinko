@@ -29,7 +29,8 @@ export const noteRouter = router({
       isRecycle: z.boolean().default(false).optional(),
       searchText: z.string().default('').optional(),
       withoutTag: z.boolean().default(false).optional(),
-      withFile: z.boolean().default(false).optional()
+      withFile: z.boolean().default(false).optional(),
+      withLink: z.boolean().default(false).optional(),
     }))
     .output(z.array(notesSchema.merge(
       z.object({
@@ -38,7 +39,7 @@ export const noteRouter = router({
       }))
     ))
     .mutation(async function ({ input }) {
-      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag } = input
+      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink } = input
       let where: Prisma.notesWhereInput = { isArchived, isRecycle }
       if (tagId) {
         const tags = await prisma.tagsToNote.findMany({ where: { tagId } })
@@ -52,6 +53,12 @@ export const noteRouter = router({
       }
       if (withoutTag) {
         where.tags = { none: {} }
+      }
+      if (withLink) {
+        where.OR = [
+          { content: { contains: 'http://', mode: 'insensitive' } },
+          { content: { contains: 'https://', mode: 'insensitive' } }
+        ];
       }
       if (type != -1) { where.type = type }
       return await prisma.notes.findMany({

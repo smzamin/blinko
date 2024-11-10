@@ -38,7 +38,8 @@ export class BlinkoStore implements Store {
     tagId: null as number | null,
     searchText: "",
     withoutTag: false,
-    withFile: false
+    withFile: false,
+    withLink: false
   }
   noteTypeDefault: NoteType = NoteType.BLINKO
   currentCommonFilter: filterType | null = null
@@ -202,7 +203,7 @@ export class BlinkoStore implements Store {
   }
 
   useQuery(router) {
-    const { tagId, withoutTag, withFile } = router.query;
+    const { tagId, withoutTag, withFile, withLink } = router.query;
     useEffect(() => {
       if (!router.isReady) return
       this.noteListFilterConfig.type = NoteType.BLINKO
@@ -210,6 +211,7 @@ export class BlinkoStore implements Store {
       this.noteListFilterConfig.tagId = null
       this.noteListFilterConfig.isArchived = false
       this.noteListFilterConfig.withoutTag = false
+      this.noteListFilterConfig.withLink = false
       this.noteListFilterConfig.withFile = false
 
       if (router.pathname == '/notes') {
@@ -221,6 +223,9 @@ export class BlinkoStore implements Store {
       }
       if (withoutTag) {
         this.noteListFilterConfig.withoutTag = true
+      }
+      if (withLink) {
+        this.noteListFilterConfig.withLink = true
       }
       if (withFile) {
         this.noteListFilterConfig.withFile = true

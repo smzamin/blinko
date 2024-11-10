@@ -111,5 +111,8 @@
   "detail": "Detalhes",
   "created-in": "Criado em",
   "set-as-public": "Definir como público",
-  "unset-as-public": "Não definido como público"
+  "unset-as-public": "Não definido como público",
+  "no-tag": "Sem etiqueta",
+  "with-link": "Com ligação",
+  "has-file": "Tem ficheiro"
 }

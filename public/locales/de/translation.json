@@ -112,5 +112,8 @@
   "reviewed": "Überprüft",
   "created-in": "Erstellt in",
   "set-as-public": "Als öffentlich festlegen",
-  "unset-as-public": "Nicht als öffentlich gekennzeichnet"
+  "unset-as-public": "Nicht als öffentlich gekennzeichnet",
+  "no-tag": "Keine Markierung",
+  "with-link": "Mit Link",
+  "has-file": "Hat Datei"
 }

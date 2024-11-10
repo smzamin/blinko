@@ -111,5 +111,8 @@
   "upload-file": "파일 업로드",
   "your-changes-have-been-saved": "변경 사항이 저장되었습니다!",
   "created-in": "에 생성됨",
-  "unset-as-public": "공개로 설정 해제"
+  "unset-as-public": "공개로 설정 해제",
+  "no-tag": "태그 없음",
+  "with-link": "링크 사용",
+  "has-file": "파일 있음"
 }

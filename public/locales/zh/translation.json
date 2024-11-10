@@ -112,5 +112,7 @@
   "save": "保存",
   "created-in": "创建于",
   "set-as-public": "设置为公开",
-  "unset-as-public": "取消公开"
+  "unset-as-public": "取消公开",
+  "with-link": "带链接",
+  "has-file": "有文件"
 }

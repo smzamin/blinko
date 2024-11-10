@@ -163,17 +163,24 @@ export const CommonLayout = observer(({
                 </PopoverTrigger>
                 <PopoverContent>
                   <div className="p-2 flex gap-2">
+                    <Link href='/all?withLink=true' onClick={() => blinkoStore.forceQuery++}>
+                      <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
+                      <Icon icon="ri:link" width="24" height="24" />
+                        <div className="text-sm">{t('with-link')}</div>
+                      </Card>
+                    </Link>
+
                     <Link href='/all?withoutTag=true' onClick={() => blinkoStore.forceQuery++}>
                       <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
                         <Icon icon="majesticons:tag-off-line" width="24" height="24" />
-                        <div className="text-sm" >No Tag</div>
+                        <div className="text-sm" >{t('no-tag')}</div>
                       </Card>
                     </Link>
 
                     <Link href='/all?withFile=true' onClick={() => blinkoStore.forceQuery++}>
                       <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
                         <Icon icon="ic:round-attachment" width="24" height="24" />
-                        <div className="text-sm">Has File</div>
+                        <div className="text-sm">{t('has-file')}</div>
                       </Card>
                     </Link>
                   </div>

@@ -112,5 +112,8 @@
   "the-two-passwords-are-inconsistent": "2つのパスワードは矛盾している",
   "created-in": "で作成された。",
   "set-as-public": "公開設定",
-  "unset-as-public": "公開未設定"
+  "unset-as-public": "公開未設定",
+  "no-tag": "タグなし",
+  "with-link": "リンク付き",
+  "has-file": "ファイル"
 }
