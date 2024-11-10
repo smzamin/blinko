@@ -328,7 +328,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     </ButtonWithTooltip>
                   }
 
-                  <Button isDisabled={!store.canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={() => {
+                  <Button size='sm' radius='md' onClick={() => {
                     RootStore.Get(DialogStore).close()
                   }} className={`${mode == 'create' ? 'hidden' : 'group ml-auto mr-2'}`} isIconOnly>
                     <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
