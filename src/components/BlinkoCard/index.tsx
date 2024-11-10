@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { BlinkoStore } from '@/store/blinkoStore';
-import { Card, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
+import { Button, Card, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
 import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
 import { RootStore } from '@/store';
@@ -11,12 +11,15 @@ import { MarkdownRender } from '@/components/Common/MarkdownRender';
 import { Icon } from '@iconify/react';
 import dayjs from '@/lib/dayjs';
 import { Note, NoteType } from '@/server/types';
-import { LeftCickMenu } from "../BlinkoRightClickMenu";
+import { ConvertItemFunction, LeftCickMenu, ShowEditBlinkoModel } from "../BlinkoRightClickMenu";
 import { useMediaQuery } from "usehooks-ts";
+import { useState } from "react";
+import copy from 'copy-to-clipboard';
 
 export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blinkoItem: Note, isShareMode?: boolean }) => {
   const { t } = useTranslation();
   const isPc = useMediaQuery('(min-width: 768px)')
+  const [isCopy, setCopy] = useState(false)
   const blinko = RootStore.Get(BlinkoStore)
 
   return <motion.div key={blinkoItem.id} className='w-full' style={{ boxShadow: '0 0 15px -5px #5858581a' }}>
@@ -25,25 +28,41 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
         onContextMenu={e => {
           blinko.curSelectedNote = _.cloneDeep(blinkoItem)
         }}
+        onDoubleClick={e => {
+          blinko.curSelectedNote = _.cloneDeep(blinkoItem)
+          ShowEditBlinkoModel()
+        }}
         onClick={() => {
           if (blinko.isMultiSelectMode) {
             blinko.onMultiSelectNote(blinkoItem.id!)
           }
         }}>
         <Card onContextMenu={e => !isPc && e.stopPropagation()} shadow='none'
-          className={`hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
+          className={`group/card hover:translate-y-1 mb-4 flex flex-col p-4 bg-background transition-all ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}`}>
           <div className="flex items-center select-none ">
-            <div className="mb-2 flex items-center w-full gap-1">
+            <div className="mb-2 flex items-center w-full">
               {
                 blinkoItem.isShare && !isShareMode &&
                 <Tooltip content='Externally accessible'>
-                  <Icon className="cursor-pointer text-[#8600EF]" icon="prime:eye" width="16" height="16" onClick={e => window.open('/share')} />
+                  <Icon className="cursor-pointer text-[#8600EF]" icon="prime:eye" width="16" height="16" onClick={() => window.open('/share')} />
                 </Tooltip>
               }
               <div className='text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
-              {blinkoItem.isTop && <Icon className="ml-auto text-[#EFC646]" icon="solar:bookmark-bold" width="24" height="24" />}
+
+              <div className="ml-auto opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 ">
+                {
+                  !isCopy ? <Icon className="text-desc cursor-pointer" icon="si:copy-duotone" width="16" height="16" onClick={() => {
+                    copy(blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`)
+                    setCopy(true)
+                    setTimeout(() => { setCopy(false) }, 1000)
+                  }} />
+                    : <Icon className="text-green-500" icon="line-md:check-all" width="16" height="16" />
+                }
+              </div>
+
+              {blinkoItem.isTop && <Icon className="ml-auto group-hover/card:ml-2 text-[#EFC646]" icon="solar:bookmark-bold" width="16" height="16" />}
               {
-                !isShareMode && <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
+                !isShareMode && <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />
               }
             </div>
           </div>
@@ -58,14 +77,24 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
           <div className="flex items-center">
             {
               blinkoItem.type == NoteType.BLINKO ?
-                <div className='flex items-center justify-start mt-2'>
-                  <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
-                  <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
-                </div> :
-                <div className='flex items-center justify-start mt-2'>
-                  <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
-                  <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
-                </div>
+                <Tooltip content={t('convert-to') + ' Note'} delay={1000} >
+                  <div className='flex items-center justify-start mt-2 cursor-pointer' onClick={() => {
+                    blinko.curSelectedNote = _.cloneDeep(blinkoItem)
+                    ConvertItemFunction()
+                  }}>
+                    <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
+                    <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
+                  </div>
+                </Tooltip> :
+                <Tooltip content={t('convert-to') + ' Blinko'} delay={1000}>
+                  <div className='flex items-center justify-start mt-2 cursor-pointer' onClick={() => {
+                    blinko.curSelectedNote = _.cloneDeep(blinkoItem)
+                    ConvertItemFunction()
+                  }}>
+                    <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
+                    <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
+                  </div>
+                </Tooltip>
             }
             {
               (dayjs(blinkoItem.createdAt).fromNow() !== dayjs(blinkoItem.updatedAt).fromNow()) && <div className='ml-auto text-xs text-desc'>{t('created-in')} {dayjs(blinkoItem.createdAt).fromNow()}</div>
