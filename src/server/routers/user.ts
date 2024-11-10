@@ -37,13 +37,13 @@ export const userRouter = router({
   canRegister: publicProcedure
     .meta({ openapi: { method: 'POST', path: '/v1/user/can-register', summary: 'Check if can register admin', tags: ['User'] } })
     .input(z.void())
-    .output(z.object({ ok: z.boolean() }))
+    .output(z.boolean())
     .mutation(async () => {
       const count = await prisma.accounts.count()
       if (count > 0) {
-        return { ok: false }
+        return false
       } else {
-        return { ok: true }
+        return true
       }
     }),
   createAdmin: publicProcedure

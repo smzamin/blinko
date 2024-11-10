@@ -57,7 +57,7 @@ export const AiSetting = observer(() => {
           label="Select Model Provider"
         >
           {ai.modelProviderSelect.map((item) => (
-            <SelectItem key={item.value}>
+            <SelectItem key={item.value ?? ''}>
               {item.label}
             </SelectItem>
           ))}
