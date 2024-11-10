@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FileIcons } from '../FileIcon';
 import { observer } from 'mobx-react-lite';
 import { FileType } from './type';
@@ -62,19 +62,50 @@ const AttachmentsRender = observer(({ files, preview = false, columns = 3 }: IPr
     </div>
   })
 
+  const imageRenderClassName = useMemo(() => {
+    const imageLength = files?.filter(i => i.previewType == 'image')?.length
+    if (imageLength == 1) {
+      return `abc flex`
+    }
+    if (imageLength > 1 && imageLength < 5) {
+      return `abc grid grid-cols-2 gap-2`
+    }
+    if (imageLength > 5) {
+      return `abc grid grid-cols-3 gap-2`
+    }
+    return 'abc'
+  }, [files?.filter(i => i.previewType == 'image')])
+
+  const imageHeight = useMemo(() => {
+    const imageLength = files?.filter(i => i.previewType == 'image')?.length
+    if (imageLength == 1) {
+      return `h-auto`
+    }
+    if (imageLength > 1 && imageLength < 5) {
+      return `md:h-[180px] h-[160px]`
+    }
+    if (imageLength > 5) {
+      return `md:h-[120px] h-[100px]`
+    }
+    return ''
+  }, [files?.filter(i => i.previewType == 'image')])
+
   return <>
     {/* image render  */}
-    <div className={`columns-${columns} md:columns-${columns}`}>
+    <div className={imageRenderClassName}>
       <PhotoProvider>
         {files?.filter(i => i.previewType == 'image').map((file, index) => (
-          <div className='relative group'>
+          <div className={`relative group w-full ${imageHeight}`}>
             {file.uploadPromise?.loading?.value && <div className='absolute inset-0 flex items-center justify-center w-full h-full'>
               <Icon icon="line-md:uploading-loop" width="40" height="40" />
             </div>}
 
-            <PhotoView width={150} src={file.preview} >
-              <Image src={file.preview} className='rounded-lg mb-4' />
-            </PhotoView>
+            <div className='w-full'>
+              <PhotoView src={file.preview}>
+                <Image src={file.preview} className={`rounded-lg mb-4 ${imageHeight} object-cover w-[1000px]`} />
+              </PhotoView>
+            </div>
+
 
             {!file.uploadPromise?.loading?.value && !preview &&
               <DeleteIcon className='absolute z-10 right-[5px] top-[5px]'
