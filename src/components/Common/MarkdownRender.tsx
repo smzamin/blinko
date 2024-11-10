@@ -55,7 +55,7 @@ const Code = ({ className, children, ...props }) => {
 };
 
 const LinkPreview = ({ href }) => {
-  console.log(String(href))
+  console.log((href))
   try {
     if (href?.startsWith('<img')) {
       return <PhotoProvider>
