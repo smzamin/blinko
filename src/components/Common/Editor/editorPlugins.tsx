@@ -1,7 +1,6 @@
 import { codeMirrorPlugin, linkPlugin, sandpackPlugin } from '@mdxeditor/editor';
 import { simpleSandpackConfig } from './type';
 const { codeBlockPlugin, tablePlugin, listsPlugin, quotePlugin, markdownShortcutPlugin } = await import('@mdxeditor/editor')
-import { hashTagPlugin } from '../MdxPlugin/hashTagPlugin';
 
 export const MyPlugins = [
   codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
@@ -11,6 +10,5 @@ export const MyPlugins = [
   linkPlugin(),
   quotePlugin(),
   tablePlugin(),
-  markdownShortcutPlugin(),
-  hashTagPlugin(),
+  markdownShortcutPlugin()
 ]

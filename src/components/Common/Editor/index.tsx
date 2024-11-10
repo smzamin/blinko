@@ -23,6 +23,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
+import { showTagSelectPop } from '../TagSelectPop';
 const { MDXEditor } = await import('@mdxeditor/editor')
 
 // https://mdxeditor.dev/editor/docs/theming
@@ -81,20 +82,26 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
 
   const store = RootStore.Local(() => ({
     files: [] as FileType[],
+    lastRange: null as Range | null,
+    lastRangeText: '',
     get canSend() {
       if (store.files.length == 0) return true
       return store.files?.every(i => !i?.uploadPromise?.loading?.value)
     },
     replaceMarkdownTag(text) {
       if (mdxEditorRef.current) {
-        const Mycontent = mdxEditorRef.current!.getMarkdown().replace(helper.regex.isEndsWithHashTag, "#" + text + '&#x20;')
-        mdxEditorRef.current.setMarkdown(Mycontent)
-        mdxEditorRef.current.focus(() => {
-          setTimeout(() => eventBus.emit('hashpop:hidden'), 100)
-          onChange?.(Mycontent)
-        }, {
-          defaultSelection: 'rootEnd'
-        })
+        if (store.lastRange) {
+          const selection = window.getSelection();
+          const currentTextBeforeRange = store.lastRangeText.replace(/&#x20;/g, " ") ?? ''
+          const currentText = mdxEditorRef.current!.getMarkdown().replace(/\\/g, '').replace(/&#x20;/g, " ")
+          const tag = currentTextBeforeRange.replace(helper.regex.isEndsWithHashTag, "#" + text + '&#x20;')
+          const MyContent = currentText.replace(currentTextBeforeRange, tag)
+          mdxEditorRef.current.setMarkdown(MyContent)
+          onChange?.(MyContent)
+          mdxEditorRef.current!.focus()
+          // selection!.removeAllRanges();
+          // selection!.addRange(store.lastRange);
+        }
       }
     },
     insertMarkdown(text) {
@@ -118,6 +125,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     inertHash() {
       mdxEditorRef.current!.insertMarkdown("&#x20;#")
       mdxEditorRef.current!.focus()
+      store.handlePopTag()
     },
     async speechToText(filePath) {
       if (!blinko.showAi) {
@@ -166,6 +174,32 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         lastModified: Date.now(), // 可以指定最后修改时间为当前时间
       });
       store.uploadFiles([mp3File])
+    },
+    handlePopTag() {
+      const selection = window.getSelection();
+      if (selection!.rangeCount > 0) {
+        let lastRange = selection!.getRangeAt(0);
+        store.lastRange = lastRange
+        store.lastRangeText = lastRange.endContainer.textContent?.slice(0, lastRange.endOffset) ?? ''
+        console.log(store.lastRange, 'lastRangeText!!!')
+        const hasHashTagRegex = /#[^\s#]+/g
+        const endsWithBankRegex = /\s$/g
+        const currentText = store.lastRange.startContainer.textContent?.slice(0, store.lastRange.endOffset) ?? ''
+        const isEndsWithBank = endsWithBankRegex.test(currentText)
+        const isEndsWithHashTag = helper.regex.isEndsWithHashTag.test(currentText)
+        if (currentText == '' || !isEndsWithHashTag) {
+          setTimeout(() => eventBus.emit('hashpop:hidden'))
+          return
+        }
+        if (isEndsWithHashTag && currentText != '' && !isEndsWithBank) {
+          const match = currentText.match(hasHashTagRegex)
+          let searchText = match?.[match?.length - 1] ?? ''
+          if (currentText.endsWith("#")) {
+            searchText = ''
+          }
+          showTagSelectPop(searchText.toLowerCase())
+        }
+      }
     }
   }))
 
@@ -221,6 +255,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         contentEditableClassName='prose'
         onChange={v => {
           onChange?.(v)
+          store.handlePopTag()
         }}
         autoFocus={{
           defaultSelection: 'rootEnd'

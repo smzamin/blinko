@@ -15,7 +15,7 @@ export interface TagTreeNode {
 export type TagTreeDBNode = Tag & { children?: TagTreeDBNode[]; metadata: { icon: string, path: string } }
 export const helper = {
   regex: {
-    isEndsWithHashTag: /#[\w\u4e00-\u9fa5]*$/,
+    isEndsWithHashTag: /#[/\w\p{L}\p{N}]*$/u,
     //lookbehind assertions in ios regex is not supported
     isContainHashTag: /#[^\s#]*(?:[*?.。]|$)/g
   },

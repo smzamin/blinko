@@ -32,10 +32,12 @@ const TagSelectPop = observer(() => {
     height: 200,
     maxWith: 250,
     get tagList() {
+      console.log(store.searchText, store.searchText == '' || !store.searchText)
       if (store.searchText == '' || !store.searchText) {
         return blinko.tagList?.value?.pathTags
       }
-      return blinko.tagList?.value?.pathTags?.filter(i => i.includes(store.searchText.replace("#", '')))
+      console.log(store.searchText, JSON.parse(JSON.stringify(blinko.tagList?.value?.pathTags.map(i => i.toLowerCase()))))
+      return blinko.tagList?.value?.pathTags.filter(i => i.toLowerCase().includes(store.searchText.toLowerCase().replace("#", '')))
     },
     hidden() {
       store.show = false

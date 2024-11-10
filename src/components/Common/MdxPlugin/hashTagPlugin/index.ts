@@ -7,6 +7,8 @@ import {
 } from "@mdxeditor/editor";
 import { TextNode } from "lexical";
 import { showTagSelectPop } from "../../TagSelectPop";
+
+//@deprecated
 export const hashTagPlugin = realmPlugin({
   init(realm): void {
     realm.pubIn({

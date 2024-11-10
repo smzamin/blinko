@@ -10,7 +10,7 @@ import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
 
 const extractHashtags = (input: string): string[] => {
-  const hashtagRegex = /#[^\s#]*(?<![*?.。])/g;
+  const hashtagRegex = /#[^\s#]+(?<![*?.。])/g;
   const matches = input.match(hashtagRegex);
   return matches ? matches : [];
 }

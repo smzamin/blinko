@@ -22,7 +22,6 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {
-        console.log(v, 'onChange is empty??')
         if (v == '') {
           onHeightChange?.(editorRef.current?.clientHeight < 90 ? editorRef.current?.clientHeight : 90)
         } else {
