@@ -55,21 +55,46 @@ const Code = ({ className, children, ...props }) => {
 };
 
 const LinkPreview = ({ href }) => {
-  console.log((href))
+  const store = RootStore.Local(() => ({
+    previewData: new StorageState<LinkInfo | null>({ key: href, default: null })
+  }))
   try {
+    if (typeof href == 'object') {
+      return <div className='react-image'>
+        <PhotoProvider >
+          <PhotoView src={href?.props?.src}>
+            <Image src={href?.props?.src} />
+          </PhotoView>
+        </PhotoProvider>
+      </div>
+    }
     if (href?.startsWith('<img')) {
-      return <PhotoProvider>
-        <PhotoView src={href.match(/src="([^"]+)"/)?.[1]}>
-          <div className='rounded-lg cursor-pointer' dangerouslySetInnerHTML={{ __html: href }} />
-        </PhotoView>
-      </PhotoProvider>
+      const src = href.match(/src="([^"]+)"/)?.[1]
+      const regex = /height="(\d+)"\s+width="(\d+)"/;
+      const matches = href.match(regex);
+      console.log(matches)
+      let style = {}
+      if (matches) {
+        let height = matches[1];
+        let width = matches[2];
+        style = { height: height + 'px', width: width + 'px' }
+        console.log(`Height: ${height}, Width: ${width}`);
+      } else {
+        console.log("No match found.");
+      }
+      return <div className='text-image'>
+        <PhotoProvider >
+          <PhotoView src={src}>
+            <Image src={src}  {...style} />
+          </PhotoView>
+        </PhotoProvider>
+      </div>
     }
   } catch (error) {
+    console.log(error)
+    return href
   }
-  // const [previewData, setPreviewData] = useState<LinkInfo | null>(null);
-  const store = RootStore.Local(() => ({
-    previewData: new StorageState<LinkInfo | null>({ key: href, default: null }),
-  }))
+
   useEffect(() => {
     const fetchData = async () => {
       try {
