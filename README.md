@@ -22,7 +22,9 @@
 
 [Home Page](https://blinko-doc.vercel.app/) •
 [Live Demo](https://blinko-demo.vercel.app/) •
-[Docs](https://blinko-doc.vercel.app/intro.html)
+[Docs](https://blinko-doc.vercel.app/intro.html) •
+[Telegram Chinese](https://t.me/blinkoChinese) •
+[Telegram English](https://t.me/blinkoEnglish)
 </div>
 
 > username:blinko
