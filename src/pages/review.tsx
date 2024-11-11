@@ -20,7 +20,7 @@ import { showTipsDialog } from '@/components/Common/TipsDialog';
 import { DialogStore } from '@/store/module/Dialog';
 import confetti from 'canvas-confetti'
 import { useMediaQuery } from 'usehooks-ts';
-import { FilesAttachmentRender } from '@/components/Common/Editor/attachmentsRender';
+import { FilesAttachmentRender } from '@/components/Common/AttachmentRender';
 const App = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const swiperRef = useRef(null);
