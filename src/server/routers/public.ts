@@ -47,9 +47,9 @@ export const publicRouter = router({
         try {
           const result: Metadata = await unfurl(input.url)
           return {
-            title: result.title ?? '',
-            favicon: result.favicon ?? '',
-            description: result.description ?? ''
+            title: result?.title ?? '',
+            favicon: result?.favicon ?? '',
+            description: result?.description ?? ''
           }
         } catch (error) {
           return null

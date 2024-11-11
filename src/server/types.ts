@@ -28,10 +28,10 @@ export const ZConfigSchema = z.object({
   isAutoArchived: z.boolean().optional(),
   autoArchivedDays: z.number().optional(),
   isUseAI: z.boolean().optional(),
-  aiModelProvider: z.enum(['OpenAI']).optional(),
-  aiApiKey: z.string().optional(),
-  aiApiEndpoint: z.string().optional(),
-  aiModel: z.string().optional(),
+  aiModelProvider: z.any(),
+  aiApiKey: z.any(),
+  aiApiEndpoint: z.any(),
+  aiModel: z.any(),
   isHiddenMobileBar: z.boolean().optional(),
 });
 
