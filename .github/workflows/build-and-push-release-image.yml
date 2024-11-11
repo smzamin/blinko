@@ -2,8 +2,8 @@ name: Build and Push Release Docker Image
 
 on:
   push:
-    branches:
-      - "v*"
+    tags:
+      - "v*.*.*"
 jobs:
   build:
     runs-on: ubuntu-latest
