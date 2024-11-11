@@ -8,7 +8,7 @@ import { Metadata } from 'unfurl.js/dist/types';
 
 export const publicRouter = router({
   version: publicProcedure
-    .meta({ openapi: { method: 'GET', path: '/v1/public/version', summary: 'Update user config' , tags: ['Public']} })
+    .meta({ openapi: { method: 'GET', path: '/v1/public/version', summary: 'Update user config', tags: ['Public'] } })
     .input(z.void())
     .output(z.string())
     .query(async function () {
@@ -37,19 +37,19 @@ export const publicRouter = router({
   linkPreview: publicProcedure
     .meta({ openapi: { method: 'GET', path: '/v1/public/link-preview', summary: 'Get a link preview info', tags: ['Public'] } })
     .input(z.object({ url: z.string() }))
-    .output(z.object({
+    .output(z.union([z.object({
       title: z.string(),
       favicon: z.string(),
       description: z.string()
-    }))
+    }), z.null()]))
     .query(async function ({ input }) {
       return await cache.wrap(input.url, async () => {
         try {
           const result: Metadata = await unfurl(input.url)
           return {
-            title: result.title,
-            favicon: result.favicon,
-            description: result.description
+            title: result.title ?? '',
+            favicon: result.favicon ?? '',
+            description: result.description ?? ''
           }
         } catch (error) {
           return null
