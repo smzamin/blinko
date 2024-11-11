@@ -41,7 +41,7 @@ type IProps = {
 }
 
 export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
-  if (originFiles.length == 0) return []
+  if (originFiles?.length == 0) return []
   const res = originFiles?.map(file => {
     const extension = helper.getFileExtension(file.name)
     const previewType = helper.getFileType(file.name)
@@ -54,7 +54,7 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
       uploadPromise: new PromiseState({ function: async () => file.path })
     }
   })
-  res.map(i => i.uploadPromise.call())
+  res?.map(i => i.uploadPromise.call())
   return res
 }
 
@@ -87,7 +87,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     lastRange: null as Range | null,
     lastRangeText: '',
     get canSend() {
-      if (store.files.length == 0) return true
+      if (store.files?.length == 0) return true
       return store.files?.every(i => !i?.uploadPromise?.loading?.value)
     },
     replaceMarkdownTag(text) {

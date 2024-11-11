@@ -95,10 +95,13 @@ export const noteRouter = router({
     .input(z.object({
       id: z.number(),
     }))
-    .output(z.union([z.null(), notesSchema]))
+    .output(z.union([z.null(), notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema)
+      }))]))
     .mutation(async function ({ input }) {
       const { id } = input
-      return await prisma.notes.findFirst({ where: { id } })
+      return await prisma.notes.findFirst({ where: { id }, include: { tags: true, attachments: true }, })
     }),
   dailyReviewNoteList: authProcedure
     .meta({ openapi: { method: 'GET', path: '/v1/note/daily-review-list', summary: 'Query daily review note list', protect: true, tags: ['Note'] } })

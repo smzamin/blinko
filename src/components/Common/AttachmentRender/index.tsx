@@ -67,6 +67,7 @@ const AttachmentsRender = observer((props: IProps) => {
 })
 
 const FilesAttachmentRender = observer(({ files, preview, columns }: { files: Attachment[], preview?: boolean, columns?: number }) => {
+  console.log(files,'111111111111111111111')
   const [handledFiles, setFiles] = useState<FileType[]>([])
   useEffect(() => {
     setFiles(HandleFileType(files))
