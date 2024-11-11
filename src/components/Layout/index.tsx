@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ScrollShadow, Image, Input, Popover, PopoverTrigger, PopoverContent, Card, Badge } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { UserStore } from "@/store/user";
@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
-import SidebarDrawer from "./sidebar-drawer";
 import { TagListPanel } from "../Common/TagListPanel";
 import { useTheme } from "next-themes";
 import { _ } from "@/lib/lodash";
@@ -18,6 +17,7 @@ import { ScrollArea } from "../Common/ScrollArea";
 import { BlinkoNewVersion } from "../BlinkoNewVersion";
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
 import { useMediaQuery } from "usehooks-ts";
+import { push as Menu } from 'react-burger-menu';
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
 export const CommonLayout = observer(({
@@ -48,6 +48,9 @@ export const CommonLayout = observer(({
   useEffect(() => {
     setClient(true)
   }, [])
+  useEffect(() => {
+    if (isPc) setisOpen(false)
+  }, [isPc])
 
   if (!isClient) return <></>
 
@@ -55,8 +58,8 @@ export const CommonLayout = observer(({
     return <>{children}</>
   }
 
-  const content = (
-    <div className="flex h-full w-64 flex-1 flex-col p-4 relative">
+  const SideBarContent = (
+    <div className="flex h-full w-[288px] flex-1 flex-col p-4 relative bg-white">
       <div className="absolute  inset-0 z-[-1] h-[250px] w-[250px] overflow-hidden blur-3xl ">
         <div className="w-full h-[100%] bg-[#ffc65c] opacity-20"
           style={{ "clipPath": "circle(35% at 50% 50%)" }} />
@@ -68,7 +71,7 @@ export const CommonLayout = observer(({
         }
         <BlinkoNewVersion />
       </div>
-      <ScrollShadow className="-mr-6 mt-[-5px] h-full max-h-full pr-6">
+      <ScrollShadow className="-mr-[16px] mt-[-5px] h-full max-h-full pr-6">
         <div>
           <div className="flex flex-col gap-1 mt-4 font-semibold">
             {
@@ -96,20 +99,19 @@ export const CommonLayout = observer(({
     </div>
   );
 
-
-
   return (
-    <div className="flex w-full h-mobile-full overflow-x-hidden">
+    <div className="flex w-full h-mobile-full overflow-x-hidden" id="outer-container">
       {
         blinkoStore.showAi && <BlinkoAi />
       }
-      <SidebarDrawer className="flex-none" isOpen={isOpen} onOpenChange={e => setisOpen(false)}>
-        {content}
-      </SidebarDrawer>
-      <div className="flex w-full flex-col gap-y-1 sm:max-w-[calc(100%_-_250px)] bg-sencondbackground">
+      <Menu disableAutoFocus onClose={()=>setisOpen(false)} onOpen={setisOpen} isOpen={isOpen} pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
+        {SideBarContent}
+      </Menu>
+      {isPc && SideBarContent}
+      <main id="page-wrap" className="flex w-full flex-col gap-y-1 bg-sencondbackground sm:max-w-[calc(100%_-_250px)]">
         {/* nav bar  */}
         <header className="relative flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 pb-2">
-          <div className="absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">
+          <div className="hidden md:block absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">
             <div className="w-full h-[100%] bg-[#9936e6] opacity-20"
               style={{ "clipPath": "circle(50% at 50% 50%)" }} />
           </div>
@@ -119,7 +121,7 @@ export const CommonLayout = observer(({
               className="flex sm:hidden"
               size="sm"
               variant="light"
-              onPress={e => setisOpen(true)}
+              onClick={() => setisOpen(!isOpen)}
             >
               <Icon
                 className="text-default-500"
@@ -165,7 +167,7 @@ export const CommonLayout = observer(({
                   <div className="p-2 flex gap-2">
                     <Link href='/all?withLink=true' onClick={() => blinkoStore.forceQuery++}>
                       <Card shadow="none" className="hover:shadow cursor-pointer p-2 flex flex-col items-center text-desc border">
-                      <Icon icon="ri:link" width="24" height="24" />
+                        <Icon icon="ri:link" width="24" height="24" />
                         <div className="text-sm">{t('with-link')}</div>
                       </Card>
                     </Link>
@@ -221,7 +223,7 @@ export const CommonLayout = observer(({
         </div>
 
         <BlinkoRightClickMenu />
-      </div>
+      </main>
     </div>
   );
 })

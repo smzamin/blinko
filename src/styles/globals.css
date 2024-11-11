@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+.bm-burger-button
+ {
+  display: none;
+}
+
+.bm-menu-wrap {
+  width: fit-content;
+  height: 100%;
+  overflow: hidden!important;
+}
+
+.bm-menu {
+  overflow: hidden!important;
+}
+
 ::selection {
   background-color: #47a3f3;
   color: #fefefe;
