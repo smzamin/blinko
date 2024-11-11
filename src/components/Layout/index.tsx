@@ -189,7 +189,7 @@ export const CommonLayout = observer(({
                 </PopoverContent>
               </Popover>
               {blinkoStore.dailyReviewNoteList.value?.length != 0 &&
-                <Badge size="sm" className="mr-2" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
+                <Badge size="sm" className="mr-2 scale-75" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
                   <Link href={'/review'}>
                     <Icon className="mr-2 text-[#8600EF] cursor-pointer" icon="bxs:message-square-detail" width="24" height="24" />
                   </Link>
