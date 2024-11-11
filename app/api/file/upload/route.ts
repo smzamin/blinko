@@ -27,6 +27,9 @@ export const POST = async (req: Request, res: NextResponse) => {
   if (!file) {
     return NextResponse.json({ error: "No files received." }, { status: 400 });
   }
+  if(process.env.IS_DEMO){
+    return NextResponse.json({ error: "In Demo App" }, { status: 401 });
+  }
   //@ts-ignore
   const buffer = Buffer.from(await file.arrayBuffer());
   //@ts-ignore

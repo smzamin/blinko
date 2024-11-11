@@ -45,7 +45,7 @@ export const BasicSetting = observer(() => {
       } />
     <Item
       leftContent={<>Access Token</>}
-      rightContent={<Input disabled className="md:w-[300px]" value={user.userInfo.value?.token} endContent={<Copy size={20} content={user.userInfo.value?.token ?? ''} />} />} />
+      rightContent={<Input disabled className="w-[150px] md:w-[300px]" value={user.userInfo.value?.token} endContent={<Copy size={20} content={user.userInfo.value?.token ?? ''} />} />} />
 
     <Item
       leftContent={

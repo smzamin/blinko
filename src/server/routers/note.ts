@@ -11,7 +11,7 @@ import { unlink } from 'fs/promises';
 import { attachmentsSchema, notesSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
 
 const extractHashtags = (input: string): string[] => {
-  const hashtagRegex = /#[^\s#]+(?<![*?.。])/g;
+  const hashtagRegex = /(?<!:\/\/)(?<=\s|^)#[^\s#]+(?=\s|$)/g;
   const matches = input.match(hashtagRegex);
   return matches ? matches : [];
 }
@@ -139,7 +139,7 @@ export const noteRouter = router({
       if (content != null) {
         content = content?.replace(/\\/g, '').replace(/&#x20;/g, ' ')
       }
-      const tagTree = helper.buildHashTagTreeFromHashString(extractHashtags(content ?? ''))
+      const tagTree = helper.buildHashTagTreeFromHashString(extractHashtags(content + ' '))
       let newTags: Prisma.tagCreateManyInput[] = []
       const handleAddTags = async (tagTree: TagTreeNode[], parentTag: Prisma.tagCreateManyInput | undefined, noteId?: number) => {
         for (const i of tagTree) {

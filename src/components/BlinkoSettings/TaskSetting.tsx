@@ -110,10 +110,14 @@ const TasksPanel = observer(() => {
             <TableCell>{dayjs(i?.lastRun).fromNow()}</TableCell>
             <TableCell>
               <div className="flex items-center gap-1">
-                {/* @ts-ignore  */}
-                {i.output?.filePath}
-                {/* @ts-ignore  */}
-                <Icon className='cursor-pointer' onClick={e => helper.download.downloadByLink(i?.output?.apiPath)} className="cursor-pointer" icon="tabler:download" width="24" height="24" />
+                {
+                  i.output?.filePath && <>
+                    {/* @ts-ignore  */}
+                    {i.output?.filePath}
+                    {/* @ts-ignore  */}
+                    <Icon className='cursor-pointer' onClick={e => helper.download.downloadByLink(i?.output?.apiPath)} className="cursor-pointer" icon="tabler:download" width="24" height="24" />
+                  </>
+                }
               </div>
             </TableCell>
             <TableCell>
