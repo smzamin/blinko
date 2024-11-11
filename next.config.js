@@ -1,5 +1,8 @@
 const isProduction = process.env.NODE_ENV === 'production';
-module.exports = {
+const withPWA = require('next-pwa')({
+  dest: 'public'
+})
+module.exports = withPWA({
   transpilePackages: ['@mdxeditor/editor', 'react-diff-view','highlight.js','remark-gfm'],
   webpack: (config, { isServer }) => {
     config.experiments = { ...config.experiments, topLevelAwait: true };
@@ -17,4 +20,4 @@ module.exports = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-}
+})
