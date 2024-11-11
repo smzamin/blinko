@@ -9,7 +9,6 @@ export const GET = async (req: Request, { params }: any) => {
   const { filename } = params;
   const encodeFileName = encodeURIComponent(filename)
   const filePath = path.join(process.cwd(), UPLOAD_FILE_PATH, encodeFileName);
-  console.log({filePath})
   try {
     await stat(filePath);
     const fileContent = await readFile(filePath);

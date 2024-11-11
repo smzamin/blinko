@@ -18,11 +18,14 @@ const writeFileSafe = async (baseName: string, extension: string, buffer: Buffer
       //@ts-ignore
       buffer
     );
-    console.log(extension)
-    if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension.replace('.', '')?.toLowerCase() ?? null)) {
-      await sharp(`${UPLOAD_FILE_PATH}/` + filename)
-        .resize(500, 500)
-        .toFile(UPLOAD_FILE_PATH + '/thumbnail_' + filename);
+    try {
+      if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension.replace('.', '')?.toLowerCase() ?? null)) {
+        await sharp(`${UPLOAD_FILE_PATH}/` + filename)
+          .resize(500, 500)
+          .toFile(UPLOAD_FILE_PATH + '/thumbnail_' + filename);
+      }
+    } catch (error) {
+      console.error("Error thumbnail occurred ", error);
     }
     return filename
   }
