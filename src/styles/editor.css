@@ -7,7 +7,16 @@
 }
 
 .prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: #0969da !important
+  color: #0969da !important;
+}
+
+.prose :where(h1):not(:where([class~="not-prose"],[class~="not-prose"] *)),
+.prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *)),
+.prose :where(h3):not(:where([class~="not-prose"],[class~="not-prose"] *)),
+.prose :where(h4):not(:where([class~="not-prose"],[class~="not-prose"] *)),
+.prose :where(h5):not(:where([class~="not-prose"],[class~="not-prose"] *)),
+.prose :where(h6):not(:where([class~="not-prose"],[class~="not-prose"] *)){
+  color:var(--foreground)!important;
 }
 
 .ͼ1x {

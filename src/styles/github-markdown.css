@@ -219,7 +219,6 @@ menu {
   font-weight: var(--base-text-weight-semibold, 600);
   padding-bottom: .3em;
   font-size: 2em;
-  border-bottom: 1px solid var(--borderColor-muted);
 }
 
 .markdown-body mark {
@@ -426,7 +425,6 @@ menu {
   font-weight: var(--base-text-weight-semibold, 600);
   padding-bottom: .3em;
   font-size: 1.5em;
-  border-bottom: 1px solid var(--borderColor-muted);
 }
 
 .markdown-body h3 {
