@@ -1,11 +1,10 @@
 import { observer } from "mobx-react-lite";
 import { BlinkoStore } from '@/store/blinkoStore';
-import { Button, Card, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
+import { Card, Tooltip } from '@nextui-org/react';
 import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
 import { RootStore } from '@/store';
 import { motion } from "framer-motion"
-import { FilesAttachmentRender } from '@/components/Common/Editor/attachmentsRender';
 import { ContextMenuTrigger } from '@/components/Common/ContextMenu';
 import { MarkdownRender } from '@/components/Common/MarkdownRender';
 import { Icon } from '@iconify/react';
@@ -13,9 +12,8 @@ import dayjs from '@/lib/dayjs';
 import { Note, NoteType } from '@/server/types';
 import { ConvertItemFunction, LeftCickMenu, ShowEditBlinkoModel } from "../BlinkoRightClickMenu";
 import { useMediaQuery } from "usehooks-ts";
-import { useState } from "react";
-import copy from 'copy-to-clipboard';
 import { Copy } from "../Common/Copy";
+import { FilesAttachmentRender } from "../Common/AttachmentRender";
 
 export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blinkoItem: Note, isShareMode?: boolean }) => {
   const { t } = useTranslation();

@@ -6,6 +6,10 @@
   font-family: system-ui !important;
 }
 
+.prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: #0969da !important
+}
+
 .ͼ1x {
   background-color: var(--background);
   color: var(--foreground);
@@ -23,16 +27,16 @@
 }
 
 ._imageWrapper_uazmk_922 img {
-  border-radius: 16px!important;
+  border-radius: 16px !important;
 }
 
 ._imageResizer_uazmk_1027 {
-  border-radius: 2px!important;
-  background-color: var(--desc)!important;
+  border-radius: 2px !important;
+  background-color: var(--desc) !important;
 }
 
-._editImageToolbar_uazmk_935{
-  background-color: transparent!important;
+._editImageToolbar_uazmk_935 {
+  background-color: transparent !important;
 }
 
 ._primaryButton_uazmk_506,

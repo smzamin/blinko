@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { stat, writeFile } from "fs/promises";
 import { UPLOAD_FILE_PATH } from "@/lib/constant";
+import sharp from 'sharp';
 
 const writeFileSafe = async (baseName: string, extension: string, buffer: Buffer) => {
   let filename = encodeURIComponent(`${baseName}${extension}`)
@@ -17,6 +18,12 @@ const writeFileSafe = async (baseName: string, extension: string, buffer: Buffer
       //@ts-ignore
       buffer
     );
+    console.log(extension)
+    if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension.replace('.', '')?.toLowerCase() ?? null)) {
+      await sharp(`${UPLOAD_FILE_PATH}/` + filename)
+        .resize(500, 500)
+        .toFile(UPLOAD_FILE_PATH + '/thumbnail_' + filename);
+    }
     return filename
   }
 }
@@ -27,7 +34,7 @@ export const POST = async (req: Request, res: NextResponse) => {
   if (!file) {
     return NextResponse.json({ error: "No files received." }, { status: 400 });
   }
-  if(process.env.IS_DEMO){
+  if (process.env.IS_DEMO) {
     return NextResponse.json({ error: "In Demo App" }, { status: 401 });
   }
   //@ts-ignore
@@ -38,6 +45,7 @@ export const POST = async (req: Request, res: NextResponse) => {
   const baseName = path.basename(originalName, extension);
   try {
     const filename = await writeFileSafe(baseName, extension, buffer)
+
     // const filePath = path.join(process.cwd(), "upload/", filename);
     return NextResponse.json({ Message: "Success", status: 200, filePath: `/api/file/${filename}`, fileName: filename });
   } catch (error) {

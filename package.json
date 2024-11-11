@@ -1,6 +1,6 @@
 {
   "name": "blinko",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "browser": {
     "fs": false,
@@ -111,6 +111,7 @@
     "react-photo-view": "^1.2.6",
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^4.0.0",
+    "sharp": "^0.33.5",
     "superjson": "^2.2.1",
     "swagger-ui-react": "^5.17.14",
     "swiper": "^11.1.14",

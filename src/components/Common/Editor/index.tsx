@@ -9,7 +9,6 @@ import { useDropzone } from 'react-dropzone';
 import { observer } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
 import { FileType, OnSendContentType } from './type';
-import { AttachmentsRender } from './attachmentsRender';
 import { MyPlugins } from './editorPlugins';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
@@ -25,6 +24,7 @@ import { NoteType, type Attachment } from '@/server/types';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { showTagSelectPop } from '../TagSelectPop';
 import { DialogStore } from '@/store/module/Dialog';
+import { AttachmentsRender } from '../AttachmentRender';
 const { MDXEditor } = await import('@mdxeditor/editor')
 
 // https://mdxeditor.dev/editor/docs/theming
