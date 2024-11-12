@@ -15,10 +15,10 @@ export default NextAuth({
           console.log({ credentials })
           const user = await prisma.accounts.findMany({
             where: { name: credentials!.username, password: credentials!.password },
-            select: { name: true, nickname: true, id: true }
+            select: { name: true, nickname: true, id: true, role: true }
           })
           if (user?.[0]) {
-            return { id: user[0]!.id.toString(), name: user[0]!.name || '', nickname: user[0]!.nickname };
+            return { id: user[0]!.id.toString(), name: user[0]!.name || '', nickname: user[0]!.nickname, role: user[0]!.role };
           }
           throw new Error(JSON.stringify({ errors: 'user not found', status: false }))
         } catch (error) {
@@ -37,6 +37,8 @@ export default NextAuth({
         //@ts-ignore
         token.nickname = user.nickname
         //@ts-ignore
+        token.role = user.role
+        //@ts-ignore
         token.id = user.id
       }
       return token;
@@ -53,6 +55,8 @@ export default NextAuth({
       session.user!.nickname = token.nickname
       //@ts-ignore
       session.user!.id = token.id
+      //@ts-ignore
+      session.user!.role = token.role
       return { ...session, token: token.token, }
     },
   },

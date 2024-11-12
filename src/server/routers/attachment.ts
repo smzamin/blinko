@@ -9,10 +9,11 @@ export const attachmentsRouter = router({
       size: z.number().default(10),
       searchText: z.string().default('').optional()
     }))
-    .query(async function ({ input }) {
+    .query(async function ({ input, ctx }) {
       const { page, size } = input
       const result = await prisma.attachments.findMany({
         skip: (page - 1) * size,
+        where: { note: { accountId: Number(ctx.id) } },
         take: size,
         orderBy: {
           createdAt: 'desc'

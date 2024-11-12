@@ -115,5 +115,10 @@
   "unset-as-public": "Nicht als öffentlich gekennzeichnet",
   "no-tag": "Keine Markierung",
   "with-link": "Mit Link",
-  "has-file": "Hat Datei"
+  "has-file": "Hat Datei",
+  "created-at": "Erstellen am",
+  "role": "Rolle",
+  "create-user": "Benutzer erstellen",
+  "action": "Aktion",
+  "original-password": "Original-Passwort"
 }

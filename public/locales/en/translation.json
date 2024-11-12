@@ -56,7 +56,7 @@
   "ai-model": "AI Model",
   "logout": "Logout",
   "user-or-password-error": "User or password error",
-  "username": "username",
+  "username": "Username",
   "enter-your-name": "Enter your name",
   "password": "password",
   "enter-your-password": "Enter your password",
@@ -115,5 +115,13 @@
   "unset-as-public": "Unset as Public",
   "with-link": "With Link",
   "no-tag": "No Tag",
-  "has-file": "Has File"
+  "has-file": "Has File",
+  "created-at": "Create At",
+  "updated-at": "Update At",
+  "role": "Role",
+  "user-list": "User List",
+  "create-user": "Create User",
+  "action": "Action",
+  "original-password": "Original Password",
+  "edit-user": "Edit User"
 }

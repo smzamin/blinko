@@ -5,15 +5,20 @@ import { PerferSetting } from "@/components/BlinkoSettings/PerferSetting";
 import { TaskSetting } from "@/components/BlinkoSettings/TaskSetting";
 import { ImportSetting } from "@/components/BlinkoSettings/ImportSetting";
 import { ScrollArea } from "@/components/Common/ScrollArea";
+import { UserStore } from "@/store/user";
+import { RootStore } from "@/store";
+import { UserSetting } from "@/components/BlinkoSettings/UserSetting";
 
 const Page = observer(() => {
+  const user = RootStore.Get(UserStore)
   return <div className="h-mobile-full ">
     <ScrollArea onBottom={() => { }} className="px-2 md:px-6 pt-2 pb-6 flex flex-col gap-8 ">
       <BasicSetting />
       <PerferSetting />
-      <AiSetting />
-      <TaskSetting />
-      <ImportSetting />
+      {user.isSuperAdmin && <UserSetting />}
+      {user.isSuperAdmin && <AiSetting />}
+      {user.isSuperAdmin && <TaskSetting />}
+      {user.isSuperAdmin && <ImportSetting />}
     </ScrollArea >
   </div>
 });

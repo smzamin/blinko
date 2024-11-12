@@ -115,5 +115,9 @@
   "unset-as-public": "公開未設定",
   "no-tag": "タグなし",
   "with-link": "リンク付き",
-  "has-file": "ファイル"
+  "has-file": "ファイル",
+  "created-at": "で作成する",
+  "role": "役割",
+  "create-user": "ユーザー作成",
+  "edit-user": "編集ユーザー"
 }

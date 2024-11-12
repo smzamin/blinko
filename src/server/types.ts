@@ -20,6 +20,7 @@ export const ZConfigKey = z.union([
   z.literal('aiApiEndpoint'),
   z.literal('aiModel'),
   z.literal('isHiddenMobileBar'),
+  z.literal('isAllowRegister'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -33,6 +34,7 @@ export const ZConfigSchema = z.object({
   aiApiEndpoint: z.any().optional(),
   aiModel: z.any().optional(),
   isHiddenMobileBar: z.boolean().optional(),
+  isAllowRegister: z.any().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

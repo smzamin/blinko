@@ -22,6 +22,7 @@ model accounts {
   role      String   @default("") @db.VarChar
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  notes     notes[]
 }
 
 model attachments {
@@ -46,20 +47,21 @@ model config {
 
 model notes {
   id            Int           @id @default(autoincrement())
-  type          Int           @default(0)
-  content       String        @default("") @db.VarChar
-  isArchived    Boolean       @default(false)
-  isRecycle     Boolean       @default(false)
-  isShare       Boolean       @default(false)
-  isTop         Boolean       @default(false)
-  isReviewed    Boolean       @default(false)
-  sharePassword String        @default("") @db.VarChar
-  metadata      Json?         @db.Json
-  users         Int           @default(0)
-  createdAt     DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime      @updatedAt @db.Timestamptz(6)
+  type          Int          @default(0)
+  content       String       @default("") @db.VarChar
+  isArchived    Boolean      @default(false)
+  isRecycle     Boolean      @default(false)
+  isShare       Boolean      @default(false)
+  isTop         Boolean      @default(false)
+  isReviewed    Boolean      @default(false)
+  sharePassword String       @default("") @db.VarChar
+  metadata      Json?        @db.Json
+  accountId     Int?         
+  createdAt     DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime     @updatedAt @db.Timestamptz(6)
   attachments   attachments[]
   tags          tagsToNote[]
+  account       accounts?     @relation(fields: [accountId], references: [id])
 }
 
 model tag {

@@ -48,6 +48,7 @@ export const CommonLayout = observer(({
   useEffect(() => {
     setClient(true)
   }, [])
+
   useEffect(() => {
     if (isPc) setisOpen(false)
   }, [isPc])
@@ -103,11 +104,12 @@ export const CommonLayout = observer(({
       {
         blinkoStore.showAi && <BlinkoAi />
       }
-      <Menu disableAutoFocus onClose={()=>setisOpen(false)} onOpen={setisOpen} isOpen={isOpen} pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
+      <Menu disableAutoFocus onClose={() => setisOpen(false)} onOpen={setisOpen} isOpen={isOpen} pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
         {SideBarContent}
       </Menu>
       {isPc && SideBarContent}
-      <main id="page-wrap" className="flex w-full flex-col gap-y-1 bg-sencondbackground sm:max-w-[calc(100%_-_250px)]">
+      {/* sm:max-w-[calc(100%_-_250px)] */}
+      <main id="page-wrap" className={`flex w-full flex-col gap-y-1 bg-sencondbackground ${isPc ? 'max-w-[calc(100%_-_250px)]' : ''}`}>
         {/* nav bar  */}
         <header className="relative flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 pb-2">
           <div className="hidden md:block absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">

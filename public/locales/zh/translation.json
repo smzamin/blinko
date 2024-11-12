@@ -115,5 +115,10 @@
   "unset-as-public": "取消公开",
   "with-link": "带链接",
   "has-file": "有文件",
-  "no-tag": "无标签"
+  "no-tag": "无标签",
+  "created-at": "在",
+  "user-list": "用户列表",
+  "action": "行动",
+  "original-password": "原始密码",
+  "edit-user": "编辑用户"
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FileType } from '../Editor/type';
 import { Image, Skeleton } from '@nextui-org/react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
@@ -12,6 +12,28 @@ type IProps = {
   preview?: boolean
   columns?: number
 }
+const ImageThumbnailRender = ({ file, className }: { file: FileType, className?: string }) => {
+  const [isOriginalError, setIsOriginalError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(
+    file.preview.replace('/api/file/', '/api/file/thumbnail_')
+  );
+  useEffect(() => {
+    if (isOriginalError) {
+      setCurrentSrc('/image-fallback.svg')
+    }
+  }, [isOriginalError])
+  return <Image
+    src={currentSrc}
+    onError={() => {
+      if (file.preview == currentSrc) {
+        return setIsOriginalError(true)
+      }
+      setCurrentSrc(file.preview)
+    }}
+    style={{ borderRadius: '13px' }}
+    className={className}
+  />
+}
 
 const ImageRender = observer((props: IProps) => {
   const { files, preview = false, columns = 3 } = props
@@ -22,7 +44,7 @@ const ImageRender = observer((props: IProps) => {
     if (imageLength == 1) {
       return `flex`
     }
-    if (imageLength > 1 && imageLength < 5) {
+    if (imageLength > 1 && imageLength <= 5) {
       return `grid grid-cols-2 gap-2`
     }
     if (imageLength > 5) {
@@ -36,7 +58,7 @@ const ImageRender = observer((props: IProps) => {
     if (imageLength == 1) {
       return `h-auto`
     }
-    if (imageLength > 1 && imageLength < 5) {
+    if (imageLength > 1 && imageLength <= 5) {
       return `md:h-[180px] h-[160px]`
     }
     if (imageLength > 5) {
@@ -44,7 +66,6 @@ const ImageRender = observer((props: IProps) => {
     }
     return ''
   }, [images])
-
 
   return <div className={imageRenderClassName}>
     <PhotoProvider>
@@ -55,7 +76,10 @@ const ImageRender = observer((props: IProps) => {
           </div>}
           <div className='w-full'>
             <PhotoView src={file.preview}>
-              <Image src={file.preview.replace('/api/file/','/api/file/thumbnail_')} fallbackSrc={file.preview} style={{ borderRadius: '13px' }} className={`rounded-xl mb-4 ${imageHeight} object-cover w-[1000px]`} />
+              {/* <Image src={file.preview}></Image> */}
+             <div>
+             <ImageThumbnailRender file={file} className={`rounded-xl mb-4 ${imageHeight} object-cover w-[1000px]`} />
+             </div>
             </PhotoView>
           </div>
           {!file.uploadPromise?.loading?.value && !preview &&

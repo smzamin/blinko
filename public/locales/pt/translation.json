@@ -114,5 +114,12 @@
   "unset-as-public": "Não definido como público",
   "no-tag": "Sem etiqueta",
   "with-link": "Com ligação",
-  "has-file": "Tem ficheiro"
+  "has-file": "Tem ficheiro",
+  "created-at": "Criar em",
+  "role": "Papel",
+  "user-list": "Lista de utilizadores",
+  "create-user": "Criar utilizador",
+  "action": "Ação",
+  "original-password": "Palavra-passe original",
+  "edit-user": "Editar utilizador"
 }

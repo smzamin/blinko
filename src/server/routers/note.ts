@@ -38,9 +38,9 @@ export const noteRouter = router({
         tags: z.array(tagsToNoteSchema)
       }))
     ))
-    .mutation(async function ({ input }) {
+    .mutation(async function ({ input, ctx }) {
       const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink } = input
-      let where: Prisma.notesWhereInput = { isArchived, isRecycle }
+      let where: Prisma.notesWhereInput = { isArchived, isRecycle, accountId: Number(ctx.id) }
       if (tagId) {
         const tags = await prisma.tagsToNote.findMany({ where: { tagId } })
         where.id = { in: tags?.map(i => i.noteId) }
@@ -111,9 +111,9 @@ export const noteRouter = router({
         attachments: z.array(attachmentsSchema)
       }))
     ))
-    .query(async function () {
+    .query(async function ({ ctx }) {
       return await prisma.notes.findMany({
-        where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false, isArchived: false },
+        where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false, isArchived: false, accountId: Number(ctx.id) },
         orderBy: { id: 'desc' },
         include: { attachments: true }
       })
@@ -137,7 +137,7 @@ export const noteRouter = router({
       isShare: z.union([z.boolean(), z.null()]).default(null),
     }))
     .output(z.any())
-    .mutation(async function ({ input }) {
+    .mutation(async function ({ input, ctx }) {
       let { id, isArchived, type, attachments, content, isTop, isShare } = input
       if (content != null) {
         content = content?.replace(/\\/g, '').replace(/&#x20;/g, ' ')
@@ -166,7 +166,7 @@ export const noteRouter = router({
         ...(isArchived !== null && { isArchived }),
         ...(isTop !== null && { isTop }),
         ...(isShare !== null && { isShare }),
-        ...(content != null && { content })
+        ...(content != null && { content }),
       }
 
       if (id) {
@@ -230,7 +230,7 @@ export const noteRouter = router({
         return note
       } else {
         try {
-          const note = await prisma.notes.create({ data: { content: content ?? '', type } })
+          const note = await prisma.notes.create({ data: { content: content ?? '', type, accountId: Number(ctx.id) } })
           await handleAddTags(tagTree, undefined, note.id)
           await prisma.attachments.createMany({
             data: attachments.map(i => { return { noteId: note.id, ...i } })

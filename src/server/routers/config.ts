@@ -1,4 +1,4 @@
-import { router, authProcedure } from '../trpc';
+import { router, authProcedure, superAdminAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { GlobalConfig, ZConfigKey, ZConfigSchema } from '../types';
@@ -23,7 +23,7 @@ export const configRouter = router({
       console.log(await getGlobalConfig())
       return await getGlobalConfig()
     }),
-  update: authProcedure
+  update: authProcedure.use(superAdminAuthMiddleware)
     .meta({ openapi: { method: 'POST', path: '/v1/config/update', summary: 'Update user config', protect: true, tags: ['Config'] } })
     .input(z.object({
       key: ZConfigKey,

@@ -115,5 +115,10 @@
   "unset-as-public": "Non défini comme public",
   "no-tag": "Pas d'étiquette",
   "with-link": "Avec lien",
-  "has-file": "A le fichier"
+  "has-file": "A le fichier",
+  "created-at": "Créer à",
+  "create-user": "Créer un utilisateur",
+  "action": "Action",
+  "original-password": "Mot de passe original",
+  "edit-user": "Modifier l'utilisateur"
 }

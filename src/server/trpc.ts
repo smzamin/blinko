@@ -23,7 +23,7 @@ export const t = initTRPC.context<Context>().meta<OpenApiMeta>().create({
 export const router = t.router;
 export const publicProcedure = t.procedure;
 export const authProcedure = t.procedure.use(async ({ ctx, next }) => {
-  if (!ctx.ok) {
+  if (!ctx?.id) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: 'Unauthorized'
@@ -40,6 +40,18 @@ export const demoAuthMiddleware = t.middleware(async ({ ctx, next }) => {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: 'The operation is rejected because this is a demo environment'
+    })
+  }
+  return next({
+    ctx
+  });
+});
+
+export const superAdminAuthMiddleware = t.middleware(async ({ ctx, next }) => {
+  if (ctx.role !== 'superadmin') {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: 'You are not allowed to perform this operation'
     })
   }
   return next({
