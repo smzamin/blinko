@@ -52,7 +52,7 @@ export const POST = async (req: Request, res: NextResponse) => {
     // const filePath = path.join(process.cwd(), "upload/", filename);
     return NextResponse.json({ Message: "Success", status: 200, filePath: `/api/file/${filename}`, fileName: filename });
   } catch (error) {
-    console.log("Error occured ", error);
+    console.log("Error occurred ", error);
     return NextResponse.json({ Message: "Failed", status: 500 });
   }
 };
