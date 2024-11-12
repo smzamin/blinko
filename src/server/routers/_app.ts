@@ -24,7 +24,7 @@ export const appRouter = router({
 });
 
 export const createCaller = t.createCallerFactory(appRouter);
-export const caller = createCaller({ ok: true });
+export const caller = createCaller({});
 
 export type AppRouter = typeof appRouter;
 export type RouterOutput = inferRouterOutputs<AppRouter>;
