@@ -4,7 +4,7 @@ const withPWA = require('next-pwa')({
   disable: process.env.NODE_ENV === 'development',
 })
 module.exports = withPWA({
-  transpilePackages: ['@mdxeditor/editor', 'react-diff-view','highlight.js','remark-gfm'],
+  transpilePackages: ['@mdxeditor/editor', 'react-diff-view','highlight.js','remark-gfm','rehype-raw'],
   webpack: (config, { isServer }) => {
     config.experiments = { ...config.experiments, topLevelAwait: true };
     if (!isServer) {

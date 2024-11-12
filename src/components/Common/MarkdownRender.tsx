@@ -14,6 +14,8 @@ import { RootStore } from '@/store';
 import { StorageState } from '@/store/standard/StorageState';
 import { Icon } from '@iconify/react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -58,43 +60,6 @@ const LinkPreview = ({ href }) => {
   const store = RootStore.Local(() => ({
     previewData: new StorageState<LinkInfo | null>({ key: href, default: null })
   }))
-  try {
-    if (typeof href == 'object') {
-      return <div className='react-image'>
-        <PhotoProvider >
-          <PhotoView src={href?.props?.src}>
-            <Image src={href?.props?.src} />
-          </PhotoView>
-        </PhotoProvider>
-      </div>
-    }
-    if (href?.startsWith('<img')) {
-      const src = href.match(/src="([^"]+)"/)?.[1]
-      const regex = /height="(\d+)"\s+width="(\d+)"/;
-      const matches = href.match(regex);
-      console.log(matches)
-      let style = {}
-      if (matches) {
-        let height = matches[1];
-        let width = matches[2];
-        style = { height: height + 'px', width: width + 'px' }
-        console.log(`Height: ${height}, Width: ${width}`);
-      } else {
-        console.log("No match found.");
-      }
-      return <div className='text-image'>
-        <PhotoProvider >
-          <PhotoView src={src}>
-            <Image src={src}  {...style} />
-          </PhotoView>
-        </PhotoProvider>
-      </div>
-    }
-  } catch (error) {
-    console.log(error)
-    return href
-  }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -124,6 +89,21 @@ const LinkPreview = ({ href }) => {
   );
 };
 
+const ImageWrapper = ({ src, alt, width, height }) => {
+  return (
+    <div className="custom-image-wrapper">
+      <div className='react-image'>
+        <PhotoProvider >
+          <PhotoView src={src}>
+            <Image src={src} width={width} height={height} />
+          </PhotoView>
+        </PhotoProvider>
+      </div>
+    </div>
+  );
+};
+
+
 
 export const MarkdownRender = observer(({ content = '', onChange }: { content?: string, onChange?: (newContent: string) => void }) => {
   const { theme } = useTheme()
@@ -150,6 +130,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
       <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content ${isExpanded ? "expanded" : "collapsed"}`}>
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw, rehypeSanitize]} //xss
           components={{
             p: ({ node, children }) => <p>{highlightTags(children)}</p>,
             code: Code,
@@ -180,6 +161,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
               }
               return <li >{children}</li>
             },
+            img: ImageWrapper
           }}
         >
           {content}

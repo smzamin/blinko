@@ -10,6 +10,10 @@
   color: #0969da !important;
 }
 
+._linkDialogPopoverContent_uazmk_600, ._tableColumnEditorPopoverContent_uazmk_601, ._dialogContent_uazmk_602{
+  background-color:var(--background)!important;
+}
+
 .prose :where(h1):not(:where([class~="not-prose"],[class~="not-prose"] *)),
 .prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *)),
 .prose :where(h3):not(:where([class~="not-prose"],[class~="not-prose"] *)),
@@ -25,8 +29,7 @@
   height: 100%;
 }
 
-#radix-\:r51\:,
-#radix-\:rq8\: {
+[id^="radix-"] {
   display: none;
 }
 
