@@ -113,7 +113,7 @@ export const noteRouter = router({
     ))
     .query(async function () {
       return await prisma.notes.findMany({
-        where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false },
+        where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false, isArchived: false },
         orderBy: { id: 'desc' },
         include: { attachments: true }
       })

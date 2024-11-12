@@ -96,9 +96,14 @@ body {
   }
 }
 
+.swiper-3d .swiper-slide-shadow{
+  background: var(--swiper-3d-shadow)!important;
+}
+
 
 @layer base {
   :root {
+    --swiper-3d-shadow: rgba(0,0,0,.15);
     --background: hsl(0 0% 100%);
     --foreground: hsl(222.2 47.4% 11.2%);
     --sencondbackground: #f8f8f8;
@@ -152,6 +157,7 @@ body {
   }
 
   .dark {
+    --swiper-3d-shadow: rgb(241 241 241 / 15%);
     --background: #0B0B0C;
     --foreground: #E1E1E1;
     --sencondbackground: #1C1C1E;

@@ -143,27 +143,29 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
             code: Code,
             a: ({ node, children }) => <LinkPreview href={children} />,
             li: ({ node, children }) => {
+              console.log({ children,content })
               if (children?.[0]?.type == 'input') {
+                const text = children[2]?.trim() ?? children[1]?.trim()
                 if (children?.[0]?.props.checked) {
                   return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
                     onClick={() => {
-                      onChange?.(content!.replace(`* [x] ${children[2]}`, `* [ ] ${children[2]}`).replace(`- [x] ${children[2]}`, `- [ ] ${children[2]}`))
+                      onChange?.(content!.replace(`* [x] ${text}`, `* [ ] ${text}`).replace(`- [x] ${text}`, `- [ ] ${text}`))
                     }}>
                     <div className='w-[20px] h-[20px]'>
                       <Icon className='text-[#EAB308]' icon="lets-icons:check-fill" width="20" height="20" />
                     </div>
-                    <div className='line-through text-desc'>{children[2]}</div>
+                    <div className='line-through text-desc'>{text}</div>
                   </div>
                 }
                 return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
                   onClick={() => {
-                    console.log(`* [ ] ${children[2]}`)
-                    onChange?.(content!.replace(`* [ ] ${children[2]}`, `* [x] ${children[2]}`).replace(`- [ ] ${children[2]}`, `- [x] ${children[2]}`))
+                    console.log(`* [ ] ${text}`)
+                    onChange?.(content!.replace(`* [ ] ${text}`, `* [x] ${text}`).replace(`- [ ] ${text}`, `- [x] ${text}`))
                   }}>
                   <div className='w-[20px] h-[20px]'>
                     <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
                   </div>
-                  <div>{children[2]}</div>
+                  <div>{text}</div>
                 </div>
               }
               return <li >{children}</li>

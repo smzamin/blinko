@@ -60,18 +60,13 @@ export const CommonLayout = observer(({
 
   const SideBarContent = (
     <div className="flex h-full w-[288px] flex-1 flex-col p-4 relative bg-background">
-      <div className="absolute  inset-0 z-[-1] h-[250px] w-[250px] overflow-hidden blur-3xl ">
-        <div className="w-full h-[100%] bg-[#ffc65c] opacity-20"
-          style={{ "clipPath": "circle(35% at 50% 50%)" }} />
-      </div>
-
-      <div className="flex items-center gap-2 px-2 select-none w-full">
+      <div className="flex items-center gap-2 px-2 select-none w-full ">
         {
           theme == 'dark' ? <Image src="/logo-dark.svg" width={100} /> : <Image src="/logo.svg" width={100} />
         }
         <BlinkoNewVersion />
       </div>
-      <ScrollShadow className="-mr-[16px] mt-[-5px] h-full max-h-full pr-6">
+      <ScrollShadow className="-mr-[16px] mt-[-5px] h-full max-h-full pr-6 ">
         <div>
           <div className="flex flex-col gap-1 mt-4 font-semibold">
             {
@@ -96,6 +91,10 @@ export const CommonLayout = observer(({
           </div>
         </div>
       </ScrollShadow>
+      <div className="absolute inset-0 h-[250px] w-[250px] overflow-hidden blur-3xl z-[0] pointer-events-none">
+        <div className="w-full h-[100%] bg-[#ffc65c] opacity-20"
+          style={{ "clipPath": "circle(35% at 50% 50%)" }} />
+      </div>
     </div>
   );
 

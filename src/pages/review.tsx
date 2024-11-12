@@ -123,12 +123,12 @@ const App = observer(() => {
               </Button>
             </Tooltip>
 
-            <Tooltip content={t('archive')} onClick={async e => {
+            <Tooltip content={t('archive')} >
+              <Button onClick={async e => {
               if (!store.currentNote) return
               await blinko.upsertNote.call({ id: store.currentNote.id, isArchived: true })
               await blinko.dailyReviewNoteList.call()
-            }}>
-              <Button isIconOnly color='primary' startContent={<Icon icon="eva:archive-outline" width="20" height="20" />}></Button>
+            }} isIconOnly color='primary' startContent={<Icon icon="eva:archive-outline" width="20" height="20" />}></Button>
             </Tooltip>
 
             <Button
