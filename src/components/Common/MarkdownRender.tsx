@@ -33,7 +33,6 @@ const highlightTags = (text) => {
       }
     });
   } catch (e) {
-    // console.error(e)
     return text
   }
 };
@@ -143,32 +142,50 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
             code: Code,
             a: ({ node, children }) => <LinkPreview href={children} />,
             li: ({ node, children }) => {
-              console.log({ children,content })
-              if (children?.[0]?.type == 'input') {
-                const text = children[2]?.trim() ?? children[1]?.trim()
-                if (children?.[0]?.props.checked) {
+              try {
+                if (children?.[0]?.type == 'input') {
+                  let text = ''
+                  let renderItem: React.ReactElement[] = []
+                  if (Array.isArray(children)) {
+                    new Array(children.length).fill(0).map((i, index) => {
+                      if (index == 0) return
+                      const item = children[index]
+                      if (item?.$$typeof === Symbol.for('react.element')) {
+                        text += item?.props?.children ?? ''
+                        renderItem.push(item as React.ReactElement)
+                      }
+                      if (typeof item == 'string') {
+                        text += item
+                        renderItem.push(<span key={index}>{item}</span>)
+                      }
+                    })
+                  }
+                  if (children?.[0]?.props.checked) {
+                    return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
+                      onClick={() => {
+                        onChange?.(content!.replace(`* [x]${text}`, `* [ ]${text}`).replace(`- [x]${text}`, `- [ ]${text}`))
+                      }}>
+                      <div className='w-[20px] h-[20px]'>
+                        <Icon className='text-[#EAB308]' icon="lets-icons:check-fill" width="20" height="20" />
+                      </div>
+                      <div className='line-through text-desc'>{renderItem}</div>
+                    </div>
+                  }
                   return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
                     onClick={() => {
-                      onChange?.(content!.replace(`* [x] ${text}`, `* [ ] ${text}`).replace(`- [x] ${text}`, `- [ ] ${text}`))
+                      console.log(`* [ ]${text}`)
+                      onChange?.(content!.replace(`* [ ]${text}`, `* [x] ${text}`).replace(`- [ ]${text}`, `- [x]${text}`))
                     }}>
                     <div className='w-[20px] h-[20px]'>
-                      <Icon className='text-[#EAB308]' icon="lets-icons:check-fill" width="20" height="20" />
+                      <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
                     </div>
-                    <div className='line-through text-desc'>{text}</div>
+                    <div>{renderItem}</div>
                   </div>
                 }
-                return <div className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
-                  onClick={() => {
-                    console.log(`* [ ] ${text}`)
-                    onChange?.(content!.replace(`* [ ] ${text}`, `* [x] ${text}`).replace(`- [ ] ${text}`, `- [x] ${text}`))
-                  }}>
-                  <div className='w-[20px] h-[20px]'>
-                    <Icon className='text-[#EAB308]' icon="ci:radio-unchecked" width="20" height="20" />
-                  </div>
-                  <div>{text}</div>
-                </div>
+                return <li>{children}</li>
+              } catch (error) {
+                return <li>{children}</li>
               }
-              return <li >{children}</li>
             },
             img: ImageWrapper
           }}
