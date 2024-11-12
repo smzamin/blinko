@@ -65,7 +65,7 @@ export const notesSchema = z.object({
   isReviewed: z.boolean(),
   sharePassword: z.string(),
   metadata: z.any(),
-  users: z.number().int(),
+  accountId: z.union([z.number().int(), z.null()]),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })

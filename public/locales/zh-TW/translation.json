@@ -115,5 +115,9 @@
   "unset-as-public": "取消公开",
   "no-tag": "无标签",
   "with-link": "带链接",
-  "has-file": "有文件"
+  "has-file": "有文件",
+  "created-at": "在",
+  "create-user": "创建用户",
+  "action": "行动",
+  "edit-user": "编辑用户"
 }

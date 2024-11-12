@@ -9,8 +9,20 @@ export const tagRouter = router({
     // .meta({ openapi: { method: 'GET', path: '/v1/tags/list', summary: 'Get user tags', protect: true } })
     .input(z.void())
     // .output(z.array(tagSchema))
-    .query(async function ({ input }) {
-      return await prisma.tag.findMany()
+    .query(async function ({ ctx }) {
+      const tags = await prisma.tag.findMany({
+        where: {
+          tagsToNote: {
+            some: {
+              note: {
+                accountId: Number(ctx.id)
+              }
+            }
+          }
+        },
+        distinct: ['id'] 
+      });
+      return tags;
     }),
   updateTagMany: authProcedure
     .meta({ openapi: { method: 'POST', path: '/v1/tags/batch-update', summary: 'Batch update tags', protect: true , tags: ['Tag']} })

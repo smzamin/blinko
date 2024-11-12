@@ -8,6 +8,7 @@ import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { useTranslation } from "react-i18next";
 import { api } from "@/lib/trpc";
 import { StorageState } from "@/store/standard/StorageState";
+import { UserStore } from "@/store/user";
 
 export default function Component() {
   const router = useRouter()
@@ -21,8 +22,8 @@ export default function Component() {
   const passwordStorage = new StorageState({ key: 'password' })
   useEffect(() => {
     try {
-      api.users.canRegister.mutate().then(v => {
-        setCanRegister(v)
+      RootStore.Get(UserStore).canRegister.call().then(v => {
+        setCanRegister(v ?? false)
       })
       if (userStorage.value) {
         setUser(userStorage.value)

@@ -13,6 +13,7 @@ import { type RouterOutput } from '@/server/routers/_app';
 import { Attachment, NoteType, type Note } from '@/server/types';
 import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
 import { makeAutoObservable } from 'mobx';
+import { UserStore } from './user';
 
 type filterType = {
   label: string;
@@ -67,6 +68,12 @@ export class BlinkoStore implements Store {
     function: async ({ page, size }) => {
       const notes = await api.notes.list.mutate({ ...this.noteListFilterConfig, page, size })
       return notes.map(i => { return { ...i, isExpand: false } })
+    }
+  })
+
+  userList = new PromiseState({
+    function: async () => {
+      return await api.users.list.query()
     }
   })
 
@@ -194,7 +201,7 @@ export class BlinkoStore implements Store {
   use() {
     useEffect(() => {
       this.firstLoad()
-    }, [])
+    }, [RootStore.Get(UserStore).id])
 
     useEffect(() => {
       if (this.updateTicker == 0) return

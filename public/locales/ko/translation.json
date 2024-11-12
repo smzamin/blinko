@@ -114,5 +114,11 @@
   "unset-as-public": "공개로 설정 해제",
   "no-tag": "태그 없음",
   "with-link": "링크 사용",
-  "has-file": "파일 있음"
+  "has-file": "파일 있음",
+  "created-at": "다음에서 만들기",
+  "role": "역할",
+  "create-user": "사용자 만들기",
+  "action": "액션",
+  "original-password": "원래 비밀번호",
+  "edit-user": "사용자 편집"
 }

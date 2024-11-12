@@ -19,6 +19,7 @@ export class UserStore implements User, Store {
   nickname?: string = '';
   image?: string = '';
   token: string = '';
+  role: string = '';
 
   wait() {
     return new Promise<UserStore>((res, rej) => {
@@ -33,6 +34,10 @@ export class UserStore implements User, Store {
     });
   }
 
+  get isSuperAdmin() {
+    return this.role === 'superadmin'
+  }
+
   static wait() {
     return RootStore.Get(UserStore).wait();
   }
@@ -44,6 +49,12 @@ export class UserStore implements User, Store {
   userInfo = new PromiseState({
     function: async (id: number) => {
       return await api.users.detail.query({ id })
+    }
+  })
+
+  canRegister = new PromiseState({
+    function: async () => {
+      return await api.users.canRegister.mutate()
     }
   })
 
@@ -61,11 +72,13 @@ export class UserStore implements User, Store {
     useEffect(() => {
       const userStore = RootStore.Get(UserStore);
       if (!userStore.isLogin && session) {
+        console.log(session.user)
         //@ts-ignore
         userStore.ready({ ...session.user, token: session.token });
         this.userInfo.call(Number(this.id))
       }
     }, [session]);
+
     useEffect(() => {
       eventBus.on('user:signout', () => {
         if (router.pathname == '/signup' || router.pathname == '/api-doc' || router.pathname == '/share') {

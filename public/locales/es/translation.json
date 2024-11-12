@@ -115,5 +115,8 @@
   "unset-as-public": "Desactivado como Público",
   "no-tag": "Sin etiqueta",
   "with-link": "Con enlace",
-  "has-file": "Tiene archivo"
+  "has-file": "Tiene archivo",
+  "created-at": "Crear en",
+  "user-list": "Lista de usuarios",
+  "create-user": "Crear usuario"
 }
