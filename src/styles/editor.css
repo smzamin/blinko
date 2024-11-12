@@ -155,6 +155,9 @@
   margin-top: 0;
   margin-bottom: 0.75em;
 }
+.prose :where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *)){
+  color: var(--foreground)!important;
+}
 
 .blinko-toolbaricon {
   color: rgb(234 179 8 / var(--tw-text-opacity)) !important;

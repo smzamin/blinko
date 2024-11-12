@@ -60,6 +60,16 @@ const LinkPreview = ({ href }) => {
   const store = RootStore.Local(() => ({
     previewData: new StorageState<LinkInfo | null>({ key: href, default: null })
   }))
+
+  try {
+    if (typeof href == 'object') {
+      return <ImageWrapper src={href?.props?.src} width={href?.props?.width} height={href?.props?.height} />
+    }
+  } catch (error) {
+    console.log(error)
+    return href
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,7 +86,7 @@ const LinkPreview = ({ href }) => {
   }, [href]);
 
   return (
-    <div className="link-preview">
+    <>
       <a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
       {store.previewData.value && <Card className='p-2 my-1 bg-sencondbackground rounded-xl select-none ' radius='none' shadow='none'>
         <div className='flex items-center gap-2 w-full'>
@@ -85,21 +95,18 @@ const LinkPreview = ({ href }) => {
         </div>
         <div className='text-desc truncate text-xs'>{store.previewData.value?.description}</div>
       </Card>}
-    </div>
+    </>
   );
 };
 
-const ImageWrapper = ({ src, alt, width, height }) => {
+const ImageWrapper = ({ src, width, height }) => {
+  const props = { width, height }
   return (
-    <div className="custom-image-wrapper">
-      <div className='react-image'>
-        <PhotoProvider >
-          <PhotoView src={src}>
-            <Image src={src} width={width} height={height} />
-          </PhotoView>
-        </PhotoProvider>
-      </div>
-    </div>
+    <PhotoProvider>
+      <PhotoView src={src}>
+        <Image src={src} {...props} />
+      </PhotoView>
+    </PhotoProvider>
   );
 };
 
