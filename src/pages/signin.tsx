@@ -47,7 +47,7 @@ export default function Component() {
             type="text"
             variant="bordered"
             value={user}
-            onChange={e => setUser(e.target.value)}
+            onChange={e => setUser(e.target.value?.trim())}
           />
           <Input
             endContent={
@@ -71,7 +71,7 @@ export default function Component() {
             type={isVisible ? "text" : "password"}
             variant="bordered"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value?.trim())}
           />
           <div className="flex items-center justify-between px-1 pl-2 pr-2">
             <Checkbox defaultSelected name="remember" size="sm">
