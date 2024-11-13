@@ -118,5 +118,7 @@
   "has-file": "Tiene archivo",
   "created-at": "Crear en",
   "user-list": "Lista de usuarios",
-  "create-user": "Crear usuario"
+  "create-user": "Crear usuario",
+  "import-from-memos-memos_prod-db": "Importar de Memos(memos_prod.db)",
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Al exportar memos_prod.db, cierre el contenedor de memos para evitar la pérdida parcial de datos."
 }

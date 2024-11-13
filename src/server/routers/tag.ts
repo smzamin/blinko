@@ -1,7 +1,7 @@
 import { router, authProcedure, demoAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { caller } from './_app';
+import { adminCaller } from './_app';
 import { tagSchema } from '@/lib/prismaZodType';
 
 export const tagRouter = router({
@@ -36,7 +36,7 @@ export const tagRouter = router({
       const notes = await prisma.notes.findMany({ where: { id: { in: ids } } })
       for (const note of notes) {
         const newContent = note.content += ' #' + tag
-        await caller.notes.upsert({ content: newContent, id: note.id })
+        await adminCaller.notes.upsert({ content: newContent, id: note.id })
       }
       return true
     }),
@@ -57,7 +57,7 @@ export const tagRouter = router({
         i.content = i.content.replace(new RegExp(`#${oldName}`, 'g'), "#" + newName)
       })
       for (const note of hasTagNote) {
-        await caller.notes.upsert({ content: note.content, id: note.id })
+        await adminCaller.notes.upsert({ content: note.content, id: note.id })
       }
       return true
     }),
@@ -100,7 +100,7 @@ export const tagRouter = router({
       const { id } = input
       const tag = await prisma.tag.findFirst({ where: { id }, include: { tagsToNote: true } })
       const allNotesId = tag?.tagsToNote.map(i => i.noteId) ?? []
-      await caller.notes.deleteMany({ ids: allNotesId })
+      await adminCaller.notes.deleteMany({ ids: allNotesId })
       return true
     }),
 })

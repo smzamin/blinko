@@ -123,5 +123,7 @@
   "create-user": "Create User",
   "action": "Action",
   "original-password": "Original Password",
-  "edit-user": "Edit User"
+  "edit-user": "Edit User",
+  "import-from-memos-memos_prod-db": "Import from Memos(memos_prod.db)",
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "When exporting memos_prod.db, please close the memos container to avoid partial loss of data."
 }

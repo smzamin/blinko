@@ -1,7 +1,7 @@
 import { CronJob, CronTime } from "cron";
 import { ARCHIVE_BLINKO_TASK_NAME, } from "@/lib/constant";
 import { prisma } from "../prisma";
-import { caller } from "../routers/_app";
+import { adminCaller } from "../routers/_app";
 import { NoteType } from "../types";
 
 export class ArchiveJob {
@@ -16,7 +16,7 @@ export class ArchiveJob {
 
   static async RunTask() {
     try {
-      const config = await caller.config.list()
+      const config = await adminCaller.config.list()
       let autoArchivedDays = config.autoArchivedDays ?? 30
       const notes = await prisma.notes.findMany({
         where: {
