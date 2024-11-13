@@ -121,5 +121,7 @@
   "create-user": "Criar utilizador",
   "action": "Ação",
   "original-password": "Palavra-passe original",
-  "edit-user": "Editar utilizador"
+  "edit-user": "Editar utilizador",
+  "import-from-memos-memos_prod-db": "Importar de Memos(memos_prod.db)",
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Ao exportar memos_prod.db, feche o contentor de memos para evitar a perda parcial de dados."
 }

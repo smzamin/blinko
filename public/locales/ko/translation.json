@@ -120,5 +120,7 @@
   "create-user": "사용자 만들기",
   "action": "액션",
   "original-password": "원래 비밀번호",
-  "edit-user": "사용자 편집"
+  "edit-user": "사용자 편집",
+  "import-from-memos-memos_prod-db": "메모(memos_prod.db)에서 가져오기",
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "memos_prod.db를 내보낼 때는 데이터의 일부가 손실되지 않도록 메모 컨테이너를 닫아 주세요."
 }

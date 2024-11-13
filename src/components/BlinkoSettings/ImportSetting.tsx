@@ -34,7 +34,10 @@ export const ImportSetting = observer(() => {
 
     <Item
       type={isPc ? 'row' : 'col'}
-      leftContent={<>Import from Memos(memos_prod.db)</>}
+      leftContent={<div className="flex flex-col  gap-2">
+        <div>{t('import-from-memos-memos_prod-db')}</div>
+        <div className="text-desc text-xs">{t('when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data')}</div>
+      </div>}
       rightContent={<div>
         <UploadFileWrapper onUpload={async ({ filePath, fileName }) => {
           if (!fileName.endsWith('.db')) {
