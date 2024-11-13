@@ -1,10 +1,12 @@
-import { router, authProcedure } from '../trpc';
+import { router, authProcedure, demoAuthMiddleware } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { DBJob } from '../plugins/dbjob';
 import { ArchiveJob } from '../plugins/archivejob';
 import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
 import { scheduledTaskSchema } from '@/lib/prismaZodType';
+import sqlite3 from 'sqlite3';
+import { Memos } from '../plugins/memos';
 
 export const taskRouter = router({
   list: authProcedure
@@ -34,7 +36,7 @@ export const taskRouter = router({
         return task == DBBAK_TASK_NAME ? await DBJob.SetCornTime(time) : await ArchiveJob.SetCornTime(time)
       }
     }),
-  restoreDB: authProcedure
+  restoreDB: authProcedure.use(demoAuthMiddleware)
     .meta({ openapi: { method: 'GET', path: '/v1/tasks/restore-db', summary: 'Restore user data from .bko file', protect: true, tags: ['Task'] } })
     .input(z.object({
       fileName: z.string()
@@ -44,4 +46,18 @@ export const taskRouter = router({
       const { fileName } = input
       return DBJob.RestoreDB(fileName)
     }),
+
+  importFromMemos: authProcedure.use(demoAuthMiddleware)
+    .meta({ openapi: { method: 'GET', path: '/v1/tasks/import-from-memos', summary: 'Import from Memos', protect: true, tags: ['Task'] } })
+    .input(z.object({
+      fileName: z.string()
+    }))
+    .output(z.union([z.boolean(), z.any()]))
+    .query(async ({ input }) => {
+      const memos = new Memos()
+      memos.initDB(input.fileName)
+      await memos.importMemosDB()
+      await memos.importFiles()
+      return true
+    })
 })

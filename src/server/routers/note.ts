@@ -129,7 +129,7 @@ export const noteRouter = router({
     .meta({ openapi: { method: 'POST', path: '/v1/note/upsert', summary: 'Update or create note', protect: true, tags: ['Note'] } })
     .input(z.object({
       content: z.union([z.string(), z.null()]).default(null),
-      type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
+      type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(0),
       attachments: z.custom<Pick<Prisma.attachmentsCreateInput, 'name' | 'path' | 'size'>[]>().default([]),
       id: z.number().optional(),
       isArchived: z.union([z.boolean(), z.null()]).default(null),
