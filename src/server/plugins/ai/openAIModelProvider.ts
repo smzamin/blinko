@@ -1,6 +1,4 @@
-import { caller } from '@/server/routers/_app'
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
-import { cache } from "@/lib/cache"
 import { MarkdownTextSplitter } from "@langchain/textsplitters"
 import { FaissStore } from "@langchain/community/vectorstores/faiss"
 import path from "path"
@@ -8,7 +6,6 @@ import { FAISS_PATH } from "@/lib/constant"
 import { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { Embeddings } from "@langchain/core/embeddings"
 import { GlobalConfig } from "@/server/types"
-import { getGlobalConfig } from "@/server/routers/config"
 import { BufferLoader } from "langchain/document_loaders/fs/buffer";
 import { OpenAIWhisperAudio } from "@langchain/community/document_loaders/fs/openai_whisper_audio"
 
