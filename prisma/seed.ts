@@ -219,7 +219,9 @@ async function main() {
   //Compatible with users prior to v0.2.9
   const account = await prisma.accounts.findFirst()
   if (account) {
-    await prisma.accounts.update({ where: { id: account.id }, data: { role: 'superadmin' } })
+    if (!account.role) {
+      await prisma.accounts.update({ where: { id: account.id }, data: { role: 'superadmin' } })
+    }
     await prisma.notes.updateMany({ where: { accountId: null }, data: { accountId: account.id } })
   }
 
