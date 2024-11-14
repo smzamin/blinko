@@ -21,33 +21,40 @@ export class Memos {
   }
   async importMemosDB() {
     return new Promise((resolve, reject) => {
-      this.db.each(`SELECT * FROM memo`, async (err, row: Memo) => {
-        console.log(row)
-        const blinkoNote = await prisma.notes.findFirst({ where: { content: row.content } })
-        if (blinkoNote) {
-          return
-        }
-        const note = await adminCaller.notes.upsert({
-          content: row.content,
-        })
-        if (note) {
-          await prisma.notes.update({
-            where: { id: note.id },
-            data: {
-              createdAt: new Date(row.created_ts * 1000),
-              updatedAt: new Date(row.updated_ts * 1000),
-            }
-          })
-        }
-        console.log('import memos success->', note?.content)
-      }, (err, numRows) => {
+      this.db.all(`SELECT * FROM memo`, async (err, rows: Memo[]) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true)
+          return;
         }
-      })
-    })
+        try {
+          for (const row of rows) {
+            console.log(row);
+            const blinkoNote = await prisma.notes.findFirst({ where: { content: row.content } });
+            if (blinkoNote) {
+              continue;
+            }
+
+            const note = await adminCaller.notes.upsert({
+              content: row.content,
+            });
+
+            if (note) {
+              await prisma.notes.update({
+                where: { id: note.id },
+                data: {
+                  createdAt: new Date(row.created_ts * 1000),
+                  updatedAt: new Date(row.updated_ts * 1000),
+                }
+              });
+            }
+            console.log('import memos success->', note?.content);
+          }
+          resolve(true);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 
   async importFiles() {
