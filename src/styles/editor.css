@@ -10,17 +10,24 @@
   color: #0969da !important;
 }
 
-._linkDialogPopoverContent_uazmk_600, ._tableColumnEditorPopoverContent_uazmk_601, ._dialogContent_uazmk_602{
-  background-color:var(--background)!important;
+._linkDialogPopoverContent_uazmk_600,
+._tableColumnEditorPopoverContent_uazmk_601,
+._dialogContent_uazmk_602 {
+  background-color: var(--background) !important;
 }
 
-.prose :where(h1):not(:where([class~="not-prose"],[class~="not-prose"] *)),
-.prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *)),
-.prose :where(h3):not(:where([class~="not-prose"],[class~="not-prose"] *)),
-.prose :where(h4):not(:where([class~="not-prose"],[class~="not-prose"] *)),
-.prose :where(h5):not(:where([class~="not-prose"],[class~="not-prose"] *)),
-.prose :where(h6):not(:where([class~="not-prose"],[class~="not-prose"] *)){
-  color:var(--foreground)!important;
+._contentEditable_uazmk_379 {
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
+.prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h4):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h5):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h6):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: var(--foreground) !important;
 }
 
 .ͼ1x {
@@ -29,9 +36,7 @@
   height: 100%;
 }
 
-[id^="radix-"] {
-  display: none;
-}
+
 
 ._dialogContent_uazmk_602 {
   border-radius: 16px !important;
@@ -59,8 +64,63 @@
   cursor: pointer;
 }
 
-._codeMirrorToolbar_uazmk_408 {
+
+[id^="radix-"]:not(._selectItem_uazmk_300 [id^="radix-"]) {
+  display: none;
+}
+
+#radix-\:rc2\: {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+._selectItem_uazmk_300 {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  /* height: 30px !important;00 */
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+
+.ͼo .cm-activeLineGutter {
+  background-color: #7a1cac !important;
+  color: white !important;
+}
+
+#cm-ac-czkr li {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+#cm-ac-czkr li[aria-selected="true"] {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+}
+
+._selectItem_uazmk_300:hover {
+  background-color: var(--sencondbackground) !important;
+  transition: all 0.2s ease-in-out;
+}
+
+#radix-\:r4q\: {
+  color: var(--foreground) !important;
+  display: block !important;
+}
+
+/* ._codeMirrorToolbar_uazmk_408 {
   background-color: transparent !important;
+} */
+
+._toolbarNodeKindSelectTrigger_uazmk_305,
+._toolbarButtonSelectTrigger_uazmk_306,
+._selectTrigger_uazmk_307 {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
 }
 
 @media (hover: hover) {
@@ -155,8 +215,9 @@
   margin-top: 0;
   margin-bottom: 0.75em;
 }
-.prose :where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *)){
-  color: var(--foreground)!important;
+
+.prose :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: var(--foreground) !important;
 }
 
 .blinko-toolbaricon {

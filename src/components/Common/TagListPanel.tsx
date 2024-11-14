@@ -15,18 +15,22 @@ import { api } from "@/lib/trpc";
 import { PromiseCall } from "@/store/standard/PromiseState";
 import { BaseStore } from "@/store/baseStore";
 import { useTranslation } from "react-i18next";
+import { useMediaQuery } from "usehooks-ts";
+import { eventBus } from "@/lib/event";
 
 const EmojiPick = ({ children, element }) => {
   const { theme } = useTheme();
-  return <Popover placement="bottom" showArrow={true}>
+  const [open, setOpen] = useState(false)
+  return <Popover placement="bottom" showArrow={true} isOpen={open} onOpenChange={setOpen}>
     <PopoverTrigger>
-      <div className="hover:translate-x-1 transition-all rounded-md px-1">
+      <div className="hover:translate-x-1 transition-all rounded-md px-1" >
         {children}
       </div>
     </PopoverTrigger>
     <PopoverContent>
       <EmojiPicker emojiStyle={EmojiStyle.NATIVE} theme={theme == 'dark' ? Theme.DARK : Theme.LIGHT} onEmojiClick={async e => {
-        PromiseCall(api.tags.updateTagIcon.mutate({ id: element.id, icon: e.emoji }))
+        await PromiseCall(api.tags.updateTagIcon.mutate({ id: element.id, icon: e.emoji }))
+        setOpen(false)
       }} />
     </PopoverContent>
   </Popover>
@@ -36,7 +40,8 @@ const EmojiPick = ({ children, element }) => {
 export const TagListPanel = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
   const base = RootStore.Get(BaseStore);
-  const {t} = useTranslation()
+  const isPc = useMediaQuery('(min-width: 768px)')
+  const { t } = useTranslation()
   const router = useRouter()
   const isSelected = (id) => {
     return blinko.noteListFilterConfig.tagId == id && router.pathname == '/all'
@@ -113,6 +118,9 @@ export const TagListPanel = observer(() => {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
                   <DropdownItem key="delete" onClick={async () => {
+                    if (!isPc) {
+                      eventBus.emit('close-sidebar')
+                    }
                     ShowUpdateTagDialog({
                       defaultValue: (element.metadata?.path! as string),
                       onSave: async (tagName) => {
@@ -124,6 +132,7 @@ export const TagListPanel = observer(() => {
                         router.push('/all')
                       }
                     })
+
                   }}>
                     Update name
                   </DropdownItem>

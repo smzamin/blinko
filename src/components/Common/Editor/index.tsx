@@ -183,7 +183,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         let lastRange = selection!.getRangeAt(0);
         store.lastRange = lastRange
         store.lastRangeText = lastRange.endContainer.textContent?.slice(0, lastRange.endOffset) ?? ''
-        console.log(store.lastRange, 'lastRangeText!!!')
         const hasHashTagRegex = /#[^\s#]+/g
         const endsWithBankRegex = /\s$/g
         const currentText = store.lastRange.startContainer.textContent?.slice(0, store.lastRange.endOffset) ?? ''
