@@ -122,5 +122,6 @@
   "original-password": "Mot de passe original",
   "edit-user": "Modifier l'utilisateur",
   "import-from-memos-memos_prod-db": "Importation de Memos(memos_prod.db)",
-  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Lors de l'exportation de memos_prod.db, veuillez fermer le conteneur memos afin d'éviter une perte partielle des données."
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Lors de l'exportation de memos_prod.db, veuillez fermer le conteneur memos afin d'éviter une perte partielle des données.",
+  "go-to-share-page": "Aller à la page de partage"
 }

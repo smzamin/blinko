@@ -69,7 +69,7 @@ export const noteRouter = router({
       if (type != -1) { where.type = type }
       return await prisma.notes.findMany({
         where,
-        orderBy: [{ isTop: "desc" }, { contentUpdateAt: orderBy }, { createdAt: orderBy }],
+        orderBy: [{ isTop: "desc" }, { updatedAt: orderBy }],
         skip: (page - 1) * size,
         take: size,
         include: { tags: true, attachments: true }
@@ -185,8 +185,7 @@ export const noteRouter = router({
         ...(isArchived !== null && { isArchived }),
         ...(isTop !== null && { isTop }),
         ...(isShare !== null && { isShare }),
-        ...(content != null && { content }),
-        ...(content != null && { contentUpdateAt: new Date() }),
+        ...(content != null && { content })
       }
 
       if (id) {

@@ -122,5 +122,6 @@
   "action": "Aktion",
   "original-password": "Original-Passwort",
   "import-from-memos-memos_prod-db": "Import aus Memos(memos_prod.db)",
-  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Wenn Sie memos_prod.db exportieren, schließen Sie bitte den Memos-Container, um einen teilweisen Datenverlust zu vermeiden."
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Wenn Sie memos_prod.db exportieren, schließen Sie bitte den Memos-Container, um einen teilweisen Datenverlust zu vermeiden.",
+  "go-to-share-page": "Zur Freigabeseite gehen"
 }

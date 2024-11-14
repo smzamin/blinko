@@ -27,19 +27,19 @@ const Page = observer(() => {
   }, [router.isReady])
 
   useEffect(() => {
-    if(!isPc) return
+    if (!isPc) return
     const elements = document.querySelectorAll(".tilt-card");
     VanillaTilt.init(elements as any, {
-      max: 5, 
-      speed: 400, 
+      max: 5,
+      speed: 400,
       glare: true,
-      "max-glare": 0.5, 
+      "max-glare": 0.5,
     });
   }, [store.shareNote?.value]);
 
   return <div className='p-4 h-[100vh] w-full flex justify-center items-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500' >
     {
-      store.shareNote?.value && 
+      store.shareNote?.value &&
       <div className="tilt-card bg-background max-h-[90vh] overflow-y-scroll max-w-[500px] md:max-w-[600px] rounded-lg shadow-[1px_0_25px_11px_rgba(98,0,114,0.17)]">
         <BlinkoCard blinkoItem={store.shareNote?.value} isShareMode />
       </div>

@@ -55,7 +55,7 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
                 <Icon icon="tabler:share-2" width="16" height="16" className="cursor-pointer text-desc ml-2 opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 "
                   onClick={async () => {
                     if(!blinkoItem.isShare) {
-                      await blinko.upsertNote.call({ id: blinkoItem.id, isShare: true })
+                      await blinko.upsertNote.call({ id: blinkoItem.id, isShare: true ,showToast: false})
                     }
                     copy(`${window.location.origin}/share/${blinkoItem.id}`)
                     RootStore.Get(ToastPlugin).success('Copied successfully~ Go to share!')
