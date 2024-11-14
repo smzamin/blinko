@@ -8,7 +8,7 @@ export async function hashPassword(password: string): Promise<string> {
     const salt = crypto.randomBytes(16).toString('hex');
     crypto.pbkdf2(password, salt, 100000, 64, 'sha512', (err, derivedKey) => {
       if (err) reject(err);
-      resolve('$pbkdf2$:' + salt + ':' + derivedKey.toString('hex'));
+      resolve('pbkdf2:' + salt + ':' + derivedKey.toString('hex'));
     });
   });
 }
@@ -16,7 +16,7 @@ export async function hashPassword(password: string): Promise<string> {
 export async function verifyPassword(inputPassword: string, hashedPassword: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const [prefix, salt, hash] = hashedPassword.split(':');
-    if (prefix !== '$pbkdf2$:') {
+    if (prefix !== 'pbkdf2:') {
       return resolve(false);
     }
     crypto.pbkdf2(inputPassword, salt!, 100000, 64, 'sha512', (err, derivedKey) => {
@@ -254,7 +254,7 @@ async function main() {
   //database password hash
   const accounts = await prisma.accounts.findMany()
   for (const account of accounts) {
-    const isHash = account.password.startsWith('$pbkdf2$:')
+    const isHash = account.password.startsWith('pbkdf2:')
     if (!isHash) {
       await prisma.accounts.update({ where: { id: account.id }, data: { password: await hashPassword(account.password) } })
     }
