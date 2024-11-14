@@ -201,6 +201,9 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           showTagSelectPop(searchText.toLowerCase())
         }
       }
+    },
+    handleEditorHeight() {
+    
     }
   }))
 
@@ -257,6 +260,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         onChange={v => {
           onChange?.(v)
           store.handlePopTag()
+          store.handleEditorHeight()
         }}
         autoFocus={{
           defaultSelection: 'rootEnd'

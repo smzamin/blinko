@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FileIcons } from '../FileIcon';
 import { observer } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
@@ -49,13 +49,13 @@ const AttachmentsRender = observer((props: IProps) => {
 
 
     {/* other file render  */}
-    <div className={`${helper.env.isIOS ? 'columns-1' : 'columns-' + columns} mt-3 select-none`}>
+    <div className={`grid grid-cols-${(columns - 1) < 1 ? 1 : (columns - 1)} md:grid-cols-${columns} gap-2 mt-3 select-none`}>
       {files?.filter(i => i.previewType == 'other').map((file, index) => (
         <div onClick={() => {
           if (preview) {
             helper.download.downloadByLink(file.uploadPromise.value)
           }
-        }} className='relative flex p-2 items-center gap-2 cursor-pointer bg-sencondbackground hover:bg-hover tansition-all rounded-md '>
+        }} className='relative flex p-2 w-full items-center gap-2 cursor-pointer bg-sencondbackground hover:bg-hover tansition-all rounded-md '>
           <FileIcons path={file.name} isLoading={file.uploadPromise?.loading?.value} />
           <div className='truncate text-sm font-bold'>{file.name}</div>
           {!file.uploadPromise?.loading?.value && !preview &&

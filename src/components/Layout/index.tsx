@@ -62,12 +62,12 @@ export const CommonLayout = observer(({
 
   if (!isClient) return <></>
 
-  if (router.pathname == '/signin' || router.pathname == '/signup' || router.pathname == '/api-doc' || router.pathname == '/share') {
+  if (router.pathname == '/signin' || router.pathname == '/signup' || router.pathname == '/api-doc' || router.pathname.includes('/share')) {
     return <>{children}</>
   }
 
   const SideBarContent = (
-    <div className="flex h-full w-[288px] flex-1 flex-col p-4 relative bg-background">
+    <div className="flex h-full w-[288px] flex-1 flex-col p-4 relative bg-background ">
       <div className="flex items-center gap-2 px-2 select-none w-full ">
         {
           theme == 'dark' ? <Image src="/logo-dark.svg" width={100} /> : <Image src="/logo.svg" width={100} />
@@ -116,7 +116,7 @@ export const CommonLayout = observer(({
       </Menu>
       {isPc && SideBarContent}
       {/* sm:max-w-[calc(100%_-_250px)] */}
-      <main id="page-wrap" className={`flex w-full flex-col gap-y-1 bg-sencondbackground ${isPc ? 'max-w-[calc(100%_-_250px)]' : ''}`}>
+      <main id="page-wrap" className={`flex overflow-y-hidden w-full flex-col gap-y-1 bg-sencondbackground ${isPc ? 'max-w-[calc(100%_-_250px)]' : ''}`}>
         {/* nav bar  */}
         <header className="relative flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 pb-2">
           <div className="hidden md:block absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">

@@ -40,7 +40,13 @@ export const noteRouter = router({
     ))
     .mutation(async function ({ input, ctx }) {
       const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink } = input
-      let where: Prisma.notesWhereInput = { isArchived, isRecycle, accountId: Number(ctx.id) }
+      let where: Prisma.notesWhereInput = {
+        isArchived, isRecycle,
+        OR: [
+          { accountId: Number(ctx.id) },
+          { accountId: null }
+        ]
+      }
       if (tagId) {
         const tags = await prisma.tagsToNote.findMany({ where: { tagId } })
         where.id = { in: tags?.map(i => i.noteId) }
@@ -63,7 +69,7 @@ export const noteRouter = router({
       if (type != -1) { where.type = type }
       return await prisma.notes.findMany({
         where,
-        orderBy: [{ isTop: "desc" }, { updatedAt: orderBy }],
+        orderBy: [{ isTop: "desc" }, { contentUpdateAt: orderBy }, { createdAt: orderBy }],
         skip: (page - 1) * size,
         take: size,
         include: { tags: true, attachments: true }
@@ -89,6 +95,19 @@ export const noteRouter = router({
         take: size,
         include: { tags: true, attachments: true },
       })
+    }),
+  publicDetail: publicProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/public-detail', summary: 'Query share note detail', tags: ['Note'] } })
+    .input(z.object({
+      id: z.number(),
+    }))
+    .output(z.union([z.null(), notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema)
+      }))]))
+    .mutation(async function ({ input }) {
+      const { id } = input
+      return await prisma.notes.findFirst({ where: { id, isShare: true }, include: { tags: true, attachments: true }, })
     }),
   detail: authProcedure
     .meta({ openapi: { method: 'POST', path: '/v1/note/detail', summary: 'Query note detail', protect: true, tags: ['Note'] } })
@@ -167,6 +186,7 @@ export const noteRouter = router({
         ...(isTop !== null && { isTop }),
         ...(isShare !== null && { isShare }),
         ...(content != null && { content }),
+        ...(content != null && { contentUpdateAt: new Date() }),
       }
 
       if (id) {
