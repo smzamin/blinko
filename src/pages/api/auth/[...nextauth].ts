@@ -21,6 +21,7 @@ export default NextAuth({
           if (users.length === 0) {
             throw new Error("user not found")
           }
+          console.log(users, 'users')
           const correctUsers = (await Promise.all(users.map(async (user) => {
             if (await verifyPassword(credentials!.password, user.password ?? '')) {
               return user
