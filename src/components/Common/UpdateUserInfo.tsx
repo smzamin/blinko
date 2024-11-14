@@ -67,16 +67,18 @@ export const UpdateUserPassword = observer(() => {
   const [originalPassword, setOriginalPassword] = useState("");
   const router = useRouter()
   return <>
-    <div className="flex w-full mt-2">
-      <PasswordInput className='mb-2' label={t('original-password')} value={originalPassword} onChange={e => setOriginalPassword(e.target.value)} />
-      <PasswordInput label={t('password')} value={password} onChange={e => setPassword(e.target.value)} />
-      <PasswordInput label={t('confirm-password')} value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
-      <Button className="ml-auto" color='primary' onClick={async e => {
-        await PromiseCall(api.users.upsertUser.mutate({ id: Number(user.id), password }))
-        RootStore.Get(DialogStore).close()
-        await signOut()
-        router.push('/signin')
-      }}>{t('save')}</Button>
+    <div className="flex w-full mt-2 flex-col gap-2">
+      <PasswordInput placeholder={t('enter-your-password')}label={t('original-password')} value={originalPassword} onChange={e => setOriginalPassword(e.target.value)} />
+      <PasswordInput placeholder={t('enter-your-password')} label={t('password')} value={password} onChange={e => setPassword(e.target.value)} />
+      <PasswordInput placeholder={t('enter-your-password')} label={t('confirm-password')} value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
+      <div className="flex w-full justify-end">
+        <Button className="ml-auto" color='primary' onClick={async e => {
+          await PromiseCall(api.users.upsertUser.mutate({ id: Number(user.id), password }))
+          RootStore.Get(DialogStore).close()
+          await signOut()
+          router.push('/signin')
+        }}>{t('save')}</Button>
+      </div>
     </div>
   </>
 })

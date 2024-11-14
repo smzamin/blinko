@@ -5,6 +5,7 @@ import { prisma } from '../prisma';
 import { encode } from 'next-auth/jwt';
 import { Prisma } from '@prisma/client';
 import { accountsSchema } from '@/lib/prismaZodType';
+import { hashPassword, verifyPassword } from '@/lib/serverHelper';
 
 const genToken = async ({ id, name, role }: { id: number, name: string, role: string }) => {
   return await encode({
@@ -67,9 +68,10 @@ export const userRouter = router({
     .mutation(async ({ input }) => {
       return prisma.$transaction(async () => {
         const { name, password } = input
+        const passwordHash = await hashPassword(password)
         const count = await prisma.accounts.count()
         if (count == 0) {
-          const res = await prisma.accounts.create({ data: { name, password, nickname: name, role: 'superadmin' } })
+          const res = await prisma.accounts.create({ data: { name, password: passwordHash, nickname: name, role: 'superadmin' } })
           await prisma.accounts.update({ where: { id: res.id }, data: { apiToken: await genToken({ id: res.id, name, role: 'superadmin' }) } })
           return true
         } else {
@@ -81,14 +83,14 @@ export const userRouter = router({
               message: 'User set is not allow register',
             });
           } else {
-            const hasSameUser = await prisma.accounts.findFirst({ where: { name, password } })
-            if (hasSameUser) {
+            const hasSameUser = await prisma.accounts.findFirst({ where: { name } })
+            if (hasSameUser && await verifyPassword(password, hasSameUser?.password ?? '')) {
               throw new TRPCError({
                 code: 'INTERNAL_SERVER_ERROR',
                 message: 'User and password already exists',
               });
             }
-            const res = await prisma.accounts.create({ data: { name, password, nickname: name, role: 'user' } })
+            const res = await prisma.accounts.create({ data: { name, password: passwordHash, nickname: name, role: 'user' } })
             await prisma.accounts.update({ where: { id: res.id }, data: { apiToken: await genToken({ id: res.id, name, role: 'user' }) } })
             return true
           }
@@ -121,21 +123,29 @@ export const userRouter = router({
     .mutation(async ({ input }) => {
       return prisma.$transaction(async () => {
         const { id, nickname, name, password, originalPassword } = input
+
         const update: Prisma.accountsUpdateInput = {}
         if (id) {
           if (name) update.name = name
-          if (password) update.password = password
+          if (password) {
+            const passwordHash = await hashPassword(password)
+            update.password = passwordHash
+          }
           if (nickname) update.nickname = nickname
           if (originalPassword) {
             const user = await prisma.accounts.findFirst({ where: { id } })
-            if (user?.password !== originalPassword) {
+            if (user && !(await verifyPassword(originalPassword, user?.password ?? ''))) {
               throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Password is incorrect' });
             }
           }
           await prisma.accounts.update({ where: { id }, data: update })
           return true
         } else {
-          const res = await prisma.accounts.create({ data: { name, password, nickname: name, role: 'user' } })
+          if (!password) {
+            throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Password is required' });
+          }
+          const passwordHash = await hashPassword(password!)
+          const res = await prisma.accounts.create({ data: { name, password: passwordHash, nickname: name, role: 'user' } })
           await prisma.accounts.update({ where: { id: res.id }, data: { apiToken: await genToken({ id: res.id, name: name ?? '', role: 'user' }) } })
           return true
         }
@@ -153,20 +163,32 @@ export const userRouter = router({
     .mutation(async ({ input }) => {
       return prisma.$transaction(async () => {
         const { id, nickname, name, password } = input
+
         const update: Prisma.accountsUpdateInput = {}
-        const hasSameUser = await prisma.accounts.findFirst({ where: { name, password } })
-        console.log(hasSameUser,'hasSameuse')
+        const hasSameUser = await prisma.accounts.findFirst({ where: { name } })
         if (hasSameUser) {
+          if (password) {
+            if (hasSameUser && await verifyPassword(password, hasSameUser?.password ?? '')) {
+              throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User and password already exists' });
+            }
+          }
           throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User and password already exists' });
         }
         if (id) {
           if (name) update.name = name
-          if (password) update.password = password
+          if (password) {
+            const passwordHash = await hashPassword(password)
+            update.password = passwordHash
+          }
           if (nickname) update.nickname = nickname
           await prisma.accounts.update({ where: { id }, data: update })
           return true
         } else {
-          const res = await prisma.accounts.create({ data: { name, password, nickname: name, role: 'user' } })
+          if (!password) {
+            throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Password is required' });
+          }
+          const passwordHash = await hashPassword(password!)
+          const res = await prisma.accounts.create({ data: { name, password: passwordHash, nickname: name, role: 'user' } })
           await prisma.accounts.update({ where: { id: res.id }, data: { apiToken: await genToken({ id: res.id, name: name ?? '', role: 'user' }) } })
           return true
         }

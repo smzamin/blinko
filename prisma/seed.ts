@@ -1,6 +1,10 @@
+import { hashPassword } from '../src/lib/serverHelper'
 import { PrismaClient } from '@prisma/client'
 import fs from 'fs/promises'
 import { ncp } from 'ncp'
+
+
+
 const tag = [
   {
     "id": 1,
@@ -223,6 +227,15 @@ async function main() {
       await prisma.accounts.update({ where: { id: account.id }, data: { role: 'superadmin' } })
     }
     await prisma.notes.updateMany({ where: { accountId: null }, data: { accountId: account.id } })
+  }
+
+  //database password hash
+  const accounts = await prisma.accounts.findMany()
+  for (const account of accounts) {
+    const isHash = account.password.startsWith('$pbkdf2$:')
+    if (!isHash) {
+      await prisma.accounts.update({ where: { id: account.id }, data: { password: await hashPassword(account.password) } })
+    }
   }
 
   try {

@@ -74,7 +74,6 @@ export const UserSetting = observer(() => {
       leftContent={blinko.userList.value ? <Table shadow="none" className="mb-2">
         <TableHeader>
           <TableColumn>{t('name-db')}</TableColumn>
-          <TableColumn>{t('password')}</TableColumn>
           <TableColumn>{t('role')}</TableColumn>
           <TableColumn>{t('action')}</TableColumn>
         </TableHeader>
@@ -83,7 +82,6 @@ export const UserSetting = observer(() => {
             blinko.userList.value!.map(i => {
               return <TableRow>
                 <TableCell>{i.name}</TableCell>
-                <TableCell>{i.password}</TableCell>
                 <TableCell>
                   <Chip size="sm" color="warning" variant="bordered">{i.role}</Chip>
                 </TableCell>
