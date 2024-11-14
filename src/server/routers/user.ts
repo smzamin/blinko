@@ -5,7 +5,7 @@ import { prisma } from '../prisma';
 import { encode } from 'next-auth/jwt';
 import { Prisma } from '@prisma/client';
 import { accountsSchema } from '@/lib/prismaZodType';
-import { hashPassword, verifyPassword } from '@/lib/serverHelper';
+import { hashPassword, verifyPassword } from 'prisma/seed';
 
 const genToken = async ({ id, name, role }: { id: number, name: string, role: string }) => {
   return await encode({

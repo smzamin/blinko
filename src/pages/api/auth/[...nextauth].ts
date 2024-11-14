@@ -1,7 +1,7 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
 import { prisma } from '@/server/prisma';
-import { verifyPassword } from '@/lib/serverHelper';
+import { verifyPassword } from 'prisma/seed';
 
 export default NextAuth({
   providers: [
