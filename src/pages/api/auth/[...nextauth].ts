@@ -1,6 +1,7 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
 import { prisma } from '@/server/prisma';
+import { verifyPassword } from '@/lib/serverHelper';
 
 export default NextAuth({
   providers: [
@@ -13,17 +14,27 @@ export default NextAuth({
       async authorize(credentials) {
         try {
           console.log({ credentials })
-          const user = await prisma.accounts.findMany({
-            where: { name: credentials!.username, password: credentials!.password },
-            select: { name: true, nickname: true, id: true, role: true }
+          const users = await prisma.accounts.findMany({
+            where: { name: credentials!.username },
+            select: { name: true, nickname: true, id: true, role: true, password: true }
           })
-          if (user?.[0]) {
-            return { id: user[0]!.id.toString(), name: user[0]!.name || '', nickname: user[0]!.nickname, role: user[0]!.role };
+          if (users.length === 0) {
+            throw new Error("user not found")
           }
-          throw new Error(JSON.stringify({ errors: 'user not found', status: false }))
+          const correctUsers = (await Promise.all(users.map(async (user) => {
+            if (await verifyPassword(credentials!.password, user.password ?? '')) {
+              return user
+            }
+          }))).filter(user => user !== undefined)
+          console.log(correctUsers, 'correctUsers')
+          if (!correctUsers || correctUsers.length === 0) {
+            throw new Error("password is incorrect")
+          }
+          const user = correctUsers![0]
+          return { id: user!.id.toString(), name: user!.name || '', nickname: user!.nickname, role: user!.role };
         } catch (error) {
           console.log(error)
-          throw new Error(JSON.stringify({ errors: error.message, status: false }))
+          throw new Error(error.message)
         }
       }
     })
