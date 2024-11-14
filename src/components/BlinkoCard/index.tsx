@@ -14,6 +14,8 @@ import { ConvertItemFunction, LeftCickMenu, ShowEditBlinkoModel } from "../Blink
 import { useMediaQuery } from "usehooks-ts";
 import { Copy } from "../Common/Copy";
 import { FilesAttachmentRender } from "../Common/AttachmentRender";
+import copy from "copy-to-clipboard";
+import { ToastPlugin } from "@/store/module/Toast/Toast";
 
 export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blinkoItem: Note, isShareMode?: boolean }) => {
   const { t } = useTranslation();
@@ -41,12 +43,24 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
             <div className="mb-2 flex items-center w-full gap-1">
               {
                 blinkoItem.isShare && !isShareMode &&
-                <Tooltip content='Externally accessible'>
-                  <Icon className="cursor-pointer text-[#8600EF]" icon="prime:eye" width="16" height="16" onClick={() => window.open('/share')} />
+                <Tooltip content={t('go-to-share-page')}>
+                  <Icon className="cursor-pointer text-[#8600EF]" icon="prime:eye" width="16" height="16" onClick={() => {
+                    window.open(`/share`)
+                  }} />
                 </Tooltip>
               }
               <div className='text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
               <Copy size={16} className="ml-auto opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 " content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`} />
+              <Tooltip content={blinkoItem.isShare ? 'Copy share link' : 'Share and copy link'}>
+                <Icon icon="tabler:share-2" width="16" height="16" className="cursor-pointer text-desc ml-2 opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 "
+                  onClick={async () => {
+                    if(!blinkoItem.isShare) {
+                      await blinko.upsertNote.call({ id: blinkoItem.id, isShare: true })
+                    }
+                    copy(`${window.location.origin}/share/${blinkoItem.id}`)
+                    RootStore.Get(ToastPlugin).success('Copied successfully~ Go to share!')
+                  }} />
+              </Tooltip>
               {blinkoItem.isTop && <Icon className="ml-auto group-hover/card:ml-2 text-[#EFC646]" icon="solar:bookmark-bold" width="16" height="16" />}
               {
                 !isShareMode && <LeftCickMenu className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} />

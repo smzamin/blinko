@@ -17,7 +17,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const blinko = RootStore.Get(BlinkoStore)
   const editorRef = useRef<any>(null)
   const router = useRouter()
-  return <div ref={editorRef} id='global-editor'>
+  return <div ref={editorRef} id='global-editor' >
     <Editor
       mode={mode}
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}

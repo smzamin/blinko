@@ -59,6 +59,7 @@ model notes {
   accountId     Int?         
   createdAt     DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime     @updatedAt @db.Timestamptz(6)
+  contentUpdateAt DateTime   @default(now()) @db.Timestamptz(6)
   attachments   attachments[]
   tags          tagsToNote[]
   account       accounts?     @relation(fields: [accountId], references: [id])

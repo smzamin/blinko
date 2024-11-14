@@ -126,7 +126,7 @@ const notes = [
     "isRecycle": false,
     "isShare": false,
     "isTop": false,
-    "sharePassword": "",
+    "sharePassword": ""
   },
   {
     "id": 2,

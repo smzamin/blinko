@@ -121,5 +121,6 @@
   "create-user": "ユーザー作成",
   "edit-user": "編集ユーザー",
   "import-from-memos-memos_prod-db": "メモからのインポート(memos_prod.db)",
-  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "memos_prod.dbをエクスポートする際は、データの一部消失を避けるため、メモコンテナを閉じてください。"
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "memos_prod.dbをエクスポートする際は、データの一部消失を避けるため、メモコンテナを閉じてください。",
+  "go-to-share-page": "シェアページへ"
 }

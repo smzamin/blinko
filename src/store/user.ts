@@ -81,7 +81,7 @@ export class UserStore implements User, Store {
 
     useEffect(() => {
       eventBus.on('user:signout', () => {
-        if (router.pathname == '/signup' || router.pathname == '/api-doc' || router.pathname == '/share') {
+        if (router.pathname == '/signup' || router.pathname == '/api-doc' || router.pathname.includes('/share')) {
           return
         }
         router.push('/signin')

@@ -121,5 +121,6 @@
   "action": "行动",
   "edit-user": "编辑用户",
   "import-from-memos-memos_prod-db": "从备忘录导入（memos_prod.db）",
-  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "导出 memos_prod.db 时，请关闭备忘录容器，以免丢失部分数据。"
+  "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "导出 memos_prod.db 时，请关闭备忘录容器，以免丢失部分数据。",
+  "go-to-share-page": "转到分享页面"
 }

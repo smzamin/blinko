@@ -15,7 +15,10 @@ export const tagRouter = router({
           tagsToNote: {
             some: {
               note: {
-                accountId: Number(ctx.id)
+                OR: [
+                  { accountId: Number(ctx.id) },
+                  { accountId: null }
+                ]
               }
             }
           }

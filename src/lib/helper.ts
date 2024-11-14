@@ -213,7 +213,7 @@ export const helper = {
   env: {
     //@ts-ignore
     isBrowser: typeof window === 'undefined' ? false : true,
-    isIOS: typeof window === 'undefined' ? false : /iPad|iPhone|iPod/.test(navigator.userAgent)
+    isIOS:  /iPad|iPhone|iPod/.test(navigator.userAgent)
   },
   cron: {
     human(cronTime: string) {

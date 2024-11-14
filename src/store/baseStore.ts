@@ -4,6 +4,7 @@ import { StorageState } from './standard/StorageState';
 import { makeAutoObservable } from 'mobx';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
 
 export class BaseStore implements Store {
   sid = 'BaseStore';
@@ -63,9 +64,27 @@ export class BaseStore implements Store {
   }
 
   useInitApp(router) {
+    const isPc = useMediaQuery('(min-width: 768px)')
     const documentHeight = () => {
       const doc = document.documentElement
       doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
+      if(!isPc) return
+      const editor = document.getElementsByClassName('_contentEditable_uazmk_379')
+      try {
+        for (let i = 0; i < editor?.length; i++) {
+          //@ts-ignore
+          if (editor[i].ariaLabel == "editable markdown") {
+            const editorHeight = window.innerHeight - 200
+            //@ts-ignore
+            if (editor[i].style.height > editorHeight) {
+              //@ts-ignore
+              editor[i].style!.height = `${editorHeight}px`
+            }
+            //@ts-ignore
+            editor[i].style!.maxHeight = `${editorHeight}px`
+          }
+        }
+      } catch (error) { }
     }
     const { t, i18n } = useTranslation()
     useEffect(() => {
@@ -80,7 +99,7 @@ export class BaseStore implements Store {
       } else if (router.pathname == '/detail') {
         this.currentTitle = 'detail'
       } else if (router.pathname == '/all') {
-        this.currentTitle = t('total' )
+        this.currentTitle = t('total')
       } else {
         this.currentTitle = this.currentRouter?.title ?? ''
       }
