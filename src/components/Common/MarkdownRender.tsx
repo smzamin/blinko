@@ -15,7 +15,9 @@ import { StorageState } from '@/store/standard/StorageState';
 import { Icon } from '@iconify/react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -135,8 +137,27 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
     <div className={`markdown-body`}>
       <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content ${isExpanded ? "expanded" : "collapsed"}`}>
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw, rehypeSanitize]} //xss
+          remarkPlugins={[
+            remarkGfm, 
+            [remarkMath, {
+              singleDollarTextMath: true,
+              inlineMath: [
+                ['$', '$'],
+              ],
+              blockMath: [
+                ['$$', '$$'],
+              ]
+            }]
+          ]}
+          rehypePlugins={[
+            rehypeRaw,
+            [rehypeKatex, { 
+              throwOnError: false, 
+              output: 'html',
+              trust: true,
+              strict: false
+            }]
+          ]}
           components={{
             p: ({ node, children }) => <p>{highlightTags(children)}</p>,
             code: Code,
