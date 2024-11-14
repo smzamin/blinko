@@ -18,6 +18,7 @@ import { BlinkoNewVersion } from "../BlinkoNewVersion";
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
 import { useMediaQuery } from "usehooks-ts";
 import { push as Menu } from 'react-burger-menu';
+import { eventBus } from "@/lib/event";
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
 export const CommonLayout = observer(({
@@ -52,6 +53,12 @@ export const CommonLayout = observer(({
   useEffect(() => {
     if (isPc) setisOpen(false)
   }, [isPc])
+
+  useEffect(() => {
+    eventBus.on('close-sidebar', () => {
+      setisOpen(false)
+    })
+  }, [])
 
   if (!isClient) return <></>
 

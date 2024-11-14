@@ -16,7 +16,6 @@ export async function hashPassword(password: string): Promise<string> {
 export async function verifyPassword(inputPassword: string, hashedPassword: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const [prefix, salt, hash] = hashedPassword.split(':');
-    console.log(prefix, salt, hash, 'prefix, salt, hash')
     if (prefix !== 'pbkdf2') {
       return resolve(false);
     }

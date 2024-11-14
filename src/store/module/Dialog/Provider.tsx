@@ -10,6 +10,7 @@ const Dialog = observer(() => {
   const Content = typeof content === 'function' ? content : () => content;
   return (
     <Modal
+      style={{ zIndex: 2000 }}
       onClose={() => {
         // isOpen=true
       }}
