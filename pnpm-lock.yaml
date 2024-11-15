@@ -333,6 +333,9 @@ importers:
       '@types/lodash':
         specifier: ^4.14.195
         version: 4.17.10
+      '@types/ncp':
+        specifier: ^2.0.8
+        version: 2.0.8
       '@types/node':
         specifier: 20.2.5
         version: 20.2.5
@@ -4078,6 +4081,9 @@ packages:
 
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
+
+  '@types/ncp@2.0.8':
+    resolution: {integrity: sha512-pLNWVLCVWBLVM4F2OPjjK6FWFtByFKD7LhHryF+MbVLws7ENj09mKxRFlhkGPOXfJuaBAG+2iADKJsZwnAbYDw==}
 
   '@types/node-fetch@2.6.11':
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
@@ -14709,6 +14715,10 @@ snapshots:
   '@types/minimatch@5.1.2': {}
 
   '@types/ms@0.7.34': {}
+
+  '@types/ncp@2.0.8':
+    dependencies:
+      '@types/node': 20.2.5
 
   '@types/node-fetch@2.6.11':
     dependencies:
