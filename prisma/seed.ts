@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client'
-import fs from 'fs/promises'
 import { ncp } from 'ncp'
-import crypto from 'crypto'
+import { promises as fs } from 'fs'
+import { randomBytes, pbkdf2 } from 'crypto'
 
 export async function hashPassword(password: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const salt = crypto.randomBytes(16).toString('hex');
-    crypto.pbkdf2(password, salt, 1000, 64, 'sha512', (err, derivedKey) => {
+    const salt = randomBytes(16).toString('hex');
+    pbkdf2(password, salt, 1000, 64, 'sha512', (err, derivedKey) => {
       if (err) reject(err);
       resolve('pbkdf2:' + salt + ':' + derivedKey.toString('hex'));
     });
@@ -19,7 +19,7 @@ export async function verifyPassword(inputPassword: string, hashedPassword: stri
     if (prefix !== 'pbkdf2') {
       return resolve(false);
     }
-    crypto.pbkdf2(inputPassword, salt!, 1000, 64, 'sha512', (err, derivedKey) => {
+    pbkdf2(inputPassword, salt!, 1000, 64, 'sha512', (err, derivedKey) => {
       if (err) reject(err);
       resolve(derivedKey.toString('hex') === hash);
     });
@@ -243,7 +243,7 @@ async function main() {
     await prisma.$executeRaw`SELECT setval('attachments_id_seq', (SELECT MAX(id) FROM "attachments") + 1);`
   }
   //Compatible with users prior to v0.2.9
-  const account = await prisma.accounts.findFirst()
+  const account = await prisma.accounts.findFirst({ orderBy: { id: 'asc' } })
   if (account) {
     if (!account.role) {
       await prisma.accounts.update({ where: { id: account.id }, data: { role: 'superadmin' } })
