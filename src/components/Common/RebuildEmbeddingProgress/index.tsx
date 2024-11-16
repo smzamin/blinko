@@ -1,3 +1,4 @@
+import i18n from '@/lib/i18n'
 import { streamApi } from '@/lib/trpc'
 import { type ProgressResult } from '@/server/plugins/memos'
 import { RootStore } from '@/store'
@@ -7,9 +8,7 @@ import { Progress } from '@nextui-org/react'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-
-export const ImportProgress = observer(({ fileName }: { fileName: string }) => {
+export const ImportProgress = observer(() => {
   const { t } = useTranslation()
   const blinko = RootStore.Get(BlinkoStore)
   const store = RootStore.Local(() => ({
@@ -27,7 +26,7 @@ export const ImportProgress = observer(({ fileName }: { fileName: string }) => {
       return store.status === 'error'
     },
     handleAsyncGenerator: async () => {
-      const asyncGeneratorRes = await streamApi.task.importFromMemos.mutate({ fileName })
+      const asyncGeneratorRes = await streamApi.ai.rebuildingEmbeddings.mutate()
       for await (const item of asyncGeneratorRes) {
         console.log(item)
         store.progress = item.progress?.current ?? 0
@@ -69,10 +68,10 @@ export const ImportProgress = observer(({ fileName }: { fileName: string }) => {
   </div>
 })
 
-export const ShowMemosProgressDialog = async (fileName: string) => {
+export const ShowRebuildEmbeddingProgressDialog = async () => {
   RootStore.Get(DialogStore).setData({
-    title: 'Import Progress',
-    content: <ImportProgress fileName={fileName} />,
+    title: i18n.t('rebuilding-embedding-progress'),
+    content: <ImportProgress />,
     isOpen: true,
     size: 'lg',
   })

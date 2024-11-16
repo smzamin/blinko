@@ -122,5 +122,8 @@
   "edit-user": "編集ユーザー",
   "import-from-memos-memos_prod-db": "メモからのインポート(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "memos_prod.dbをエクスポートする際は、データの一部消失を避けるため、メモコンテナを閉じてください。",
-  "go-to-share-page": "シェアページへ"
+  "go-to-share-page": "シェアページへ",
+  "rebuilding-embedding-progress": "再構築 進歩の定着",
+  "rebuild": "再構築",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "多くのノートをお持ちの場合、一定数のトークンを消費する可能性があります。"
 }

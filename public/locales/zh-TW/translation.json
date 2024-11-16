@@ -123,5 +123,9 @@
   "import-from-memos-memos_prod-db": "从备忘录导入（memos_prod.db）",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "导出 memos_prod.db 时，请关闭备忘录容器，以免丢失部分数据。",
   "go-to-share-page": "转到分享页面",
-  "import-done": "导入完成"
+  "import-done": "导入完成",
+  "rebuilding-embedding-progress": "重建 嵌入 进展",
+  "rebuild-embedding-index": "重建嵌入索引",
+  "rebuild": "重建",
+  "notes-imported-by-other-means-may-not-have-embedded-vectors": "通过其他方式导入的票据可能没有嵌入向量"
 }

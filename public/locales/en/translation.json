@@ -127,5 +127,10 @@
   "import-from-memos-memos_prod-db": "Import from Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "When exporting memos_prod.db, please close the memos container to avoid partial loss of data.",
   "go-to-share-page": "Go to share page",
-  "import-done": "Import done"
+  "import-done": "Import done",
+  "rebuilding-embedding-progress": "Rebuilding Embedding Progress",
+  "rebuild-embedding-index": "Rebuild Embedding Index",
+  "rebuild": "Rebuild",
+  "notes-imported-by-other-means-may-not-have-embedded-vectors": "Notes imported by other means may not have embedded vectors",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "If you have a lot of notes you may consume a certain number of tokens"
 }

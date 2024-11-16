@@ -68,7 +68,7 @@ export class BaseStore implements Store {
     const documentHeight = () => {
       const doc = document.documentElement
       doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
-      if(!isPc) return
+      if(isPc) return
       const editor = document.getElementsByClassName('_contentEditable_uazmk_379')
       try {
         for (let i = 0; i < editor?.length; i++) {
