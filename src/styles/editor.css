@@ -65,8 +65,20 @@
 }
 
 
-[id^="radix-"]:not(._selectItem_uazmk_300 [id^="radix-"]) {
+/* [id^="radix-"]:not(._selectItem_uazmk_300 [id^="radix-"]),
+[id^="radix-"]:not(._dialogContent_uazmk_602 [id^="radix-"]){
   display: none;
+} */
+#radix-\:r1dv\: {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+._textInput_uazmk_1186 {
+  border: none!important;
+  background-color: var(--sencondbackground) !important;
+  border-radius: 12px !important;
 }
 
 #radix-\:rc2\: {

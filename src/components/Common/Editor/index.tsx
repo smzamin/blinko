@@ -9,7 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import { observer } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
 import { FileType, OnSendContentType } from './type';
-import { MyPlugins } from './editorPlugins';
+import { MyPlugins, ProcessCodeBlocks } from './editorPlugins';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
@@ -60,6 +60,7 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
 
 
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
+  content = ProcessCodeBlocks(content)
   const { t } = useTranslation()
   const isPc = useMediaQuery('(min-width: 768px)')
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
