@@ -75,7 +75,7 @@ const LinkPreview = ({ href }) => {
     const fetchData = async () => {
       try {
         if (!store.previewData.value) {
-          const info = await api.public.linkPreview.query({ url: href })
+          const info = await api.public.linkPreview.query({ url: href }, { context: { skipBatch: true } })
           store.previewData.setValue(info)
         }
       } catch (error) {
@@ -138,7 +138,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
       <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content ${isExpanded ? "expanded" : "collapsed"}`}>
         <ReactMarkdown
           remarkPlugins={[
-            remarkGfm, 
+            remarkGfm,
             [remarkMath, {
               singleDollarTextMath: true,
               inlineMath: [
@@ -151,8 +151,8 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
           ]}
           rehypePlugins={[
             rehypeRaw,
-            [rehypeKatex, { 
-              throwOnError: false, 
+            [rehypeKatex, {
+              throwOnError: false,
               output: 'html',
               trust: true,
               strict: false

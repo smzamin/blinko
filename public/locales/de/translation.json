@@ -40,7 +40,7 @@
   "every-month": "Jeden Monat",
   "hello": "hallo",
   "hi-user-name-i-can-search-for-the-notes-for-you-how-can-i-help-you-today": "Hallo {{Name}}, ich kann die Notizen für Sie suchen, wie kann ich Ihnen heute helfen?",
-  "impoort-from-bko": "Importieren von .bko",
+  "import-from-bko": "Importieren von .bko",
   "import": "Importieren",
   "insert-hashtag": "Hashtag einfügen",
   "items": "Artikel",

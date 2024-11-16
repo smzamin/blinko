@@ -250,6 +250,9 @@ async function main() {
     }
     await prisma.notes.updateMany({ where: { accountId: null }, data: { accountId: account.id } })
   }
+  if(!account && process.env.NODE_ENV === 'development') {
+    await prisma.accounts.create({ data: { name: 'admin', password: await hashPassword('123456'), role: 'superadmin' } })
+  }
 
   //database password hash
   const accounts = await prisma.accounts.findMany()

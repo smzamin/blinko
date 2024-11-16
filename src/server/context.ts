@@ -1,5 +1,6 @@
 import type * as trpcNext from '@trpc/server/adapters/next';
 import { getToken } from 'next-auth/jwt';
+import { prisma } from './prisma';
 export type User = {
   name: string,
   sub: string,
@@ -12,7 +13,6 @@ export async function createContext(
   opts: trpcNext.CreateNextContextOptions,
 ) {
   const token = await getToken({ req: opts.req, secret: process.env.NEXTAUTH_SECRE }) as User ;
-  console.log({ token })
   if (!token?.sub) {
     return {} as User;
   }
