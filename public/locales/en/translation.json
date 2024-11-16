@@ -86,7 +86,7 @@
   "every-three-month": "Every three month",
   "every-half-year": "Every half year",
   "import": "Import",
-  "impoort-from-bko": "Import from .bko",
+  "import-from-bko": "Import from .bko",
   "not-a-bko-file": "not a bko file",
   "convert-to-note": "Convert to Note",
   "convert-to-blinko": "Convert to Blinko",
@@ -126,5 +126,6 @@
   "edit-user": "Edit User",
   "import-from-memos-memos_prod-db": "Import from Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "When exporting memos_prod.db, please close the memos container to avoid partial loss of data.",
-  "go-to-share-page": "Go to share page"
+  "go-to-share-page": "Go to share page",
+  "import-done": "Import done"
 }

@@ -32,7 +32,7 @@
   "every-week": "Chaque semaine",
   "hello": "Bonjour",
   "hi-user-name-i-can-search-for-the-notes-for-you-how-can-i-help-you-today": "Bonjour {{nom}}, je peux rechercher les notes pour vous, comment puis-je vous aider aujourd'hui ?",
-  "impoort-from-bko": "Importation à partir de .bko",
+  "import-from-bko": "Importation à partir de .bko",
   "in-progress": "En cours...",
   "insert-codeblock": "Insérer un bloc de code",
   "insert-sandpack": "Insérer le sac de sable",
@@ -123,5 +123,6 @@
   "edit-user": "Modifier l'utilisateur",
   "import-from-memos-memos_prod-db": "Importation de Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Lors de l'exportation de memos_prod.db, veuillez fermer le conteneur memos afin d'éviter une perte partielle des données.",
-  "go-to-share-page": "Aller à la page de partage"
+  "go-to-share-page": "Aller à la page de partage",
+  "import-done": "Importation effectuée"
 }

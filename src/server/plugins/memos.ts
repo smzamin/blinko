@@ -9,7 +9,11 @@ type Memo = {
   updated_ts: number,
   content: string,
 }
-
+export type ImportResult = {
+  type: 'success' | 'skip' | 'error';
+  content?: string;
+  error?: unknown;
+}
 export class Memos {
   private db: sqlite3.Database
   initDB(filePath: string) {
@@ -19,86 +23,135 @@ export class Memos {
       }
     });
   }
-  async importMemosDB() {
-    return new Promise((resolve, reject) => {
-      this.db.all(`SELECT * FROM memo`, async (err, rows: Memo[]) => {
+  closeDB() {
+    this.db.close()
+  }
+
+  async *importMemosDB(): AsyncGenerator<ImportResult & { progress?: { current: number, total: number } }, void, unknown> {
+    const rows: Memo[] = await new Promise((resolve, reject) => {
+      this.db.all(`SELECT * FROM memo`, (err, rows: Memo[]) => {
         if (err) {
           reject(err);
           return;
         }
-        try {
-          for (const row of rows) {
-            console.log(row);
-            const blinkoNote = await prisma.notes.findFirst({ where: { content: row.content } });
-            if (blinkoNote) {
-              continue;
-            }
-
-            const note = await adminCaller.notes.upsert({
-              content: row.content,
-            });
-
-            if (note) {
-              await prisma.notes.update({
-                where: { id: note.id },
-                data: {
-                  createdAt: new Date(row.created_ts * 1000),
-                  updatedAt: new Date(row.updated_ts * 1000),
-                }
-              });
-            }
-            console.log('import memos success->', note?.content);
-          }
-          resolve(true);
-        } catch (error) {
-          reject(error);
-        }
+        resolve(rows);
       });
     });
+
+    const total = rows.length;
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      try {
+        const blinkoNote = await prisma.notes.findFirst({ where: { content: row?.content } });
+        if (blinkoNote) {
+          yield { type: 'skip', content: row?.content, progress: { current: i + 1, total } };
+          continue;
+        }
+
+        const note = await adminCaller.notes.upsert({
+          content: row?.content,
+        });
+
+        if (note) {
+          await prisma.notes.update({
+            where: { id: note.id },
+            data: {
+              createdAt: new Date(row!.created_ts * 1000),
+              updatedAt: new Date(row!.updated_ts * 1000),
+            }
+          });
+          yield {
+            type: 'success',
+            content: note.content.slice(0, 30),
+            progress: { current: i + 1, total }
+          };
+        }
+      } catch (error) {
+        console.error('import memos error->', error);
+        yield {
+          type: 'error',
+          content: row?.content.slice(0, 30),
+          error,
+          progress: { current: i + 1, total }
+        };
+      }
+    }
   }
 
-  async importFiles() {
-    return new Promise((resolve, reject) => {
-      this.db.each(`SELECT * FROM resource`, async (err, row: {
-        memo_id: number,
-        filename: string,
-        blob: string,
-        size: number,
-      }) => {
-        console.log(row)
-        this.db.get(`SELECT * FROM memo WHERE id = ${row.memo_id}`, async (err, memo: Memo) => {
-          if (memo) {
-            const node = await prisma.notes.findFirst({ where: { content: memo.content } })
-            if (node) {
-              try {
-                const attachment = await prisma.attachments.findFirst({ where: { name: row.filename } })
-                if (attachment) {
-                  return
-                }
-                const fileName = 'memosfile_' + row.filename
-                const filePath = UPLOAD_FILE_PATH + '/' + fileName
-                await fs.writeFile(filePath, row.blob)
-                await prisma.attachments.create({
-                  data: {
-                    name: row.filename,
-                    path: '/api/file/' + fileName,
-                    size: row.size,
-                    noteId: node.id,
-                  }
-                })
-              } catch (error) {
-                console.error('import files error->', error)
-              }
-            }
+  async *importFiles(): AsyncGenerator<ImportResult & { progress?: { current: number, total: number } }, void, unknown> {
+    const resources = await new Promise<Array<{
+      memo_id: number,
+      filename: string,
+      blob: string,
+      size: number,
+    }>>((resolve, reject) => {
+      const results: any[] = [];
+      this.db.each(
+        `SELECT * FROM resource`,
+        (err, row) => {
+          if (err) {
+            reject(err);
+            return;
           }
-        })
-      }, (err, numRows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true)
+          results.push(row);
+        },
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
         }
-      })
-    })
+      );
+    });
+
+    const total = resources.length;
+    for (let i = 0; i < resources.length; i++) {
+      const row = resources[i];
+      const memo: Memo = await new Promise<Memo>((resolve, reject) => {
+        this.db.get(`SELECT * FROM memo WHERE id = ${row?.memo_id}`, (err, memo: Memo) => {
+          if (err) reject(err);
+          else resolve(memo);
+        });
+      });
+
+      if (!memo) continue;
+
+      const node = await prisma.notes.findFirst({ where: { content: memo.content } });
+      if (!node) continue;
+
+      try {
+        const attachment = await prisma.attachments.findFirst({ where: { name: row?.filename } });
+        if (attachment) {
+          yield { type: 'skip', content: row?.filename, progress: { current: i + 1, total } };
+          continue;
+        }
+
+        const fileName = row?.filename;
+        const filePath = UPLOAD_FILE_PATH + '/' + fileName;
+        await fs.writeFile(filePath, row!.blob);
+        await prisma.attachments.create({
+          data: {
+            name: row?.filename,
+            path: '/api/file/' + fileName,
+            size: row?.size,
+            noteId: node.id,
+          }
+        });
+        yield {
+          type: 'success',
+          content: row?.filename,
+          progress: { current: i + 1, total }
+        };
+      } catch (error) {
+        console.error('import files error->', error);
+        yield {
+          type: 'error',
+          content: row?.filename,
+          error,
+          progress: { current: i + 1, total }
+        };
+      }
+    }
   }
 }

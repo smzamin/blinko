@@ -85,7 +85,7 @@
   "every-week": "每周",
   "every-day": "每天",
   "import": "導入",
-  "impoort-from-bko": "從.bko文件導入",
+  "import-from-bko": "從.bko文件導入",
   "not-a-bko-file": "不是 bko 文件",
   "convert-to-note": "轉換為筆記",
   "convert-to-blinko": "轉換為閃念",
@@ -122,5 +122,6 @@
   "edit-user": "编辑用户",
   "import-from-memos-memos_prod-db": "从备忘录导入（memos_prod.db）",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "导出 memos_prod.db 时，请关闭备忘录容器，以免丢失部分数据。",
-  "go-to-share-page": "转到分享页面"
+  "go-to-share-page": "转到分享页面",
+  "import-done": "导入完成"
 }

@@ -3,10 +3,10 @@ import { z } from 'zod';
 import { prisma } from '../prisma';
 import { DBJob } from '../plugins/dbjob';
 import { ArchiveJob } from '../plugins/archivejob';
-import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
+import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME, UPLOAD_FILE_PATH } from '@/lib/constant';
 import { scheduledTaskSchema } from '@/lib/prismaZodType';
-import sqlite3 from 'sqlite3';
 import { Memos } from '../plugins/memos';
+import { unlink } from 'fs/promises';
 
 export const taskRouter = router({
   list: authProcedure
@@ -36,28 +36,43 @@ export const taskRouter = router({
         return task == DBBAK_TASK_NAME ? await DBJob.SetCornTime(time) : await ArchiveJob.SetCornTime(time)
       }
     }),
-  restoreDB: authProcedure.use(demoAuthMiddleware)
-    .meta({ openapi: { method: 'GET', path: '/v1/tasks/restore-db', summary: 'Restore user data from .bko file', protect: true, tags: ['Task'] } })
+  importFromBlinko: authProcedure.use(demoAuthMiddleware)
     .input(z.object({
       fileName: z.string()
     }))
-    .output(z.boolean())
-    .query(async ({ input }) => {
+    .mutation(async function* ({ input }) {
       const { fileName } = input
-      return DBJob.RestoreDB(fileName)
+      try {
+        const res = DBJob.RestoreDB(fileName)
+        for await (const result of res) {
+          yield result;
+        }
+        await unlink(UPLOAD_FILE_PATH + '/' + fileName)
+      } catch (error) {
+        await unlink(UPLOAD_FILE_PATH + '/' + fileName)
+        throw new Error(error)
+      }
     }),
 
   importFromMemos: authProcedure.use(demoAuthMiddleware)
-    .meta({ openapi: { method: 'GET', path: '/v1/tasks/import-from-memos', summary: 'Import from Memos', protect: true, tags: ['Task'] } })
     .input(z.object({
-      fileName: z.string()
+      fileName: z.string() //xxxx.db
     }))
-    .output(z.union([z.boolean(), z.any()]))
-    .query(async ({ input }) => {
-      const memos = new Memos()
-      memos.initDB(input.fileName)
-      await memos.importMemosDB()
-      await memos.importFiles()
-      return true
-    })
+    .mutation(async function* ({ input }) {
+      try {
+        const memos = new Memos();
+        memos.initDB(input.fileName);
+        for await (const result of memos.importMemosDB()) {
+          yield result;
+        }
+
+        for await (const result of memos.importFiles()) {
+          yield result;
+        }
+        memos.closeDB();
+        await unlink(UPLOAD_FILE_PATH + '/' + input.fileName)
+      } catch (error) {
+        throw new Error(error)
+      }
+    }),
 })

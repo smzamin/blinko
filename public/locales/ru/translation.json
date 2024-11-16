@@ -34,7 +34,7 @@
   "every-three-month": "Каждые три месяца",
   "every-week": "Каждую неделю",
   "hi-user-name-i-can-search-for-the-notes-for-you-how-can-i-help-you-today": "Привет {{имя}}! Я могу найти для вас ноты, как я могу помочь вам сегодня?",
-  "impoort-from-bko": "Импорт из .bko",
+  "import-from-bko": "Импорт из .bko",
   "import": "Импорт",
   "in-progress": "В процессе...",
   "insert-codeblock": "Вставка блока кода",
@@ -124,5 +124,6 @@
   "edit-user": "Редактировать пользователя",
   "import-from-memos-memos_prod-db": "Импорт из Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "При экспорте memos_prod.db закройте контейнер memos, чтобы избежать частичной потери данных.",
-  "go-to-share-page": "Перейдите на страницу обмена информацией"
+  "go-to-share-page": "Перейдите на страницу обмена информацией",
+  "import-done": "Импорт выполнен"
 }

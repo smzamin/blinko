@@ -63,6 +63,12 @@ export default NextAuth({
       return baseUrl;
     },
     async session({ session, token }) {
+      const user = await prisma.accounts.findUnique({
+        where: { id: Number(token.id) },
+      });
+      if (!user) {
+        throw new Error('User no longer exists');
+      }
       //@ts-ignore
       session.user!.nickname = token.nickname
       //@ts-ignore

@@ -8,6 +8,11 @@ COPY package.json pnpm-lock.yaml ./
 COPY prisma ./
 
 RUN npm install -g pnpm && \
+    if [ "$USE_MIRROR" = "true" ]; then \
+        echo "Using mirror registry..." && \
+        npm install -g nrm && \
+        nrm use taobao; \
+    fi && \
     pnpm install
 
 COPY . .
@@ -18,8 +23,8 @@ RUN pnpm build-seed
 
 FROM node:18-alpine AS runner
 
-RUN apk add --no-cache postgresql14-client
-
+# RUN apk add --no-cache postgresql14-client
+RUN npm install -g prisma
 WORKDIR /app
 
 COPY --from=builder /app/next.config.js ./
@@ -35,4 +40,4 @@ ENV PORT=1111
 
 EXPOSE 1111
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node seed.js && node server.js"]
+CMD ["sh", "-c", "prisma migrate deploy && node seed.js && node server.js"]

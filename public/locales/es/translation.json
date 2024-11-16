@@ -36,7 +36,7 @@
   "every-week": "Cada semana",
   "hello": "hola",
   "hi-user-name-i-can-search-for-the-notes-for-you-how-can-i-help-you-today": "Hola {{nombre}}, puedo buscarte las notas, ¿en qué puedo ayudarte hoy?",
-  "impoort-from-bko": "Importar desde .bko",
+  "import-from-bko": "Importar desde .bko",
   "in-progress": "En curso...",
   "insert-codeblock": "Insertar codeBlock",
   "insert-hashtag": "Insertar hashtag",
@@ -121,5 +121,6 @@
   "create-user": "Crear usuario",
   "import-from-memos-memos_prod-db": "Importar de Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Al exportar memos_prod.db, cierre el contenedor de memos para evitar la pérdida parcial de datos.",
-  "go-to-share-page": "Ir a la página para compartir"
+  "go-to-share-page": "Ir a la página para compartir",
+  "import-done": "Importación realizada"
 }

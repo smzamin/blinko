@@ -92,7 +92,7 @@
   "delete-success": "삭제 성공",
   "every-day": "매일",
   "every-half-year": "반기마다",
-  "impoort-from-bko": ".bko에서 가져오기",
+  "import-from-bko": ".bko에서 가져오기",
   "insert-codeblock": "코드 블록 삽입",
   "multiple-select": "다중 선택",
   "new-version-detected-click-to-get-the-latest-version": "🎉새 버전이 감지되었습니다, 최신 버전을 받으려면 클릭하세요.",
@@ -123,5 +123,6 @@
   "edit-user": "사용자 편집",
   "import-from-memos-memos_prod-db": "메모(memos_prod.db)에서 가져오기",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "memos_prod.db를 내보낼 때는 데이터의 일부가 손실되지 않도록 메모 컨테이너를 닫아 주세요.",
-  "go-to-share-page": "공유 페이지로 이동"
+  "go-to-share-page": "공유 페이지로 이동",
+  "import-done": "가져오기 완료"
 }

@@ -36,7 +36,7 @@
   "every-week": "Todas as semanas",
   "hello": "Olá",
   "hi-user-name-i-can-search-for-the-notes-for-you-how-can-i-help-you-today": "Olá {{nome}}, posso procurar as notas para si, como posso ajudá-lo hoje?",
-  "impoort-from-bko": "Importar de .bko",
+  "import-from-bko": "Importar de .bko",
   "import": "Importação",
   "in-progress": "Em curso...",
   "insert-codeblock": "Inserir codeBlock",
