@@ -94,15 +94,3 @@ fi
 
 echo -e "${GREEN}✅ All containers are up and running.${NC}"
 
-
-docker run -d \
-  --name blinko-website \
-  --network blinko-network \
-  -p 1111:1111 \
-  -e NODE_ENV=production \
-  -e NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret \
-  -e DATABASE_URL=postgresql://postgres:mysecretpassword@blinko-postgres:5432/postgres \
-  --restart always \
-  blinkospace/blinko:053ef0f
-
-
