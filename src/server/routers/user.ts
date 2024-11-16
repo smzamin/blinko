@@ -1,4 +1,4 @@
-import { router, publicProcedure, authProcedure, superAdminAuthMiddleware } from '../trpc';
+import { router, publicProcedure, authProcedure, superAdminAuthMiddleware, demoAuthMiddleware } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../prisma';
@@ -110,7 +110,7 @@ export const userRouter = router({
         return false
       }
     }),
-  upsertUser: authProcedure
+  upsertUser: authProcedure.use(demoAuthMiddleware)
     .meta({ openapi: { method: 'POST', path: '/v1/user/upsert', summary: 'Update or create user', tags: ['User'] } })
     .input(z.object({
       id: z.number().optional(),
@@ -151,7 +151,7 @@ export const userRouter = router({
         }
       })
     }),
-  upsertUserByAdmin: authProcedure.use(superAdminAuthMiddleware)
+  upsertUserByAdmin: authProcedure.use(superAdminAuthMiddleware).use(demoAuthMiddleware)
     .meta({ openapi: { method: 'POST', path: '/v1/user/upsert-by-admin', summary: 'Update or create user by admin', tags: ['User'] } })
     .input(z.object({
       id: z.number().optional(),
