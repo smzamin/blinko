@@ -123,5 +123,10 @@
   "original-password": "Original-Passwort",
   "import-from-memos-memos_prod-db": "Import aus Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "Wenn Sie memos_prod.db exportieren, schließen Sie bitte den Memos-Container, um einen teilweisen Datenverlust zu vermeiden.",
-  "go-to-share-page": "Zur Freigabeseite gehen"
+  "go-to-share-page": "Zur Freigabeseite gehen",
+  "import-done": "Import abgeschlossen",
+  "rebuilding-embedding-progress": "Wiederaufbau Einbettung des Fortschritts",
+  "rebuild": "Wiederherstellen",
+  "notes-imported-by-other-means-may-not-have-embedded-vectors": "Auf anderem Wege importierte Noten haben möglicherweise keine eingebetteten Vektoren",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Wenn Sie viele Scheine haben, können Sie eine bestimmte Anzahl von Token verbrauchen."
 }

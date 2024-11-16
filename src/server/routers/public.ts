@@ -5,6 +5,8 @@ import axios from 'axios'
 import { cache } from '@/lib/cache';
 import { unfurl } from 'unfurl.js'
 import { Metadata } from 'unfurl.js/dist/types';
+import pLimit from 'p-limit';
+const limit = pLimit(5);
 
 export const publicRouter = router({
   version: publicProcedure
@@ -43,17 +45,29 @@ export const publicRouter = router({
       description: z.string()
     }), z.null()]))
     .query(async function ({ input }) {
-      return await cache.wrap(input.url, async () => {
+      return cache.wrap(input.url, async () => {
         try {
-          const result: Metadata = await unfurl(input.url)
-          return {
-            title: result?.title ?? '',
-            favicon: result?.favicon ?? '',
-            description: result?.description ?? ''
-          }
+          const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Timeout')), 3000);
+          });
+          const fetchPromise = limit(async () => {
+            const result: Metadata = await unfurl(input.url);
+            return {
+              title: result?.title ?? '',
+              favicon: result?.favicon ?? '',
+              description: result?.description ?? ''
+            };
+          });
+          const result: any = await Promise.race([fetchPromise, timeoutPromise]);
+          return result;
         } catch (error) {
-          return null
+          console.error('Link preview error:', error);
+          return {
+            title: '',
+            favicon: '',
+            description: ''
+          };
         }
-      }, { ttl: 60 * 60 * 24 * 1000 })
+      }, { ttl: 60 * 60 * 1000 })
     }),
 })

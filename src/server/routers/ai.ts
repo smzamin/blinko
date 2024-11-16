@@ -1,6 +1,7 @@
 import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { AiService } from '../plugins/ai';
+import { prisma } from '../prisma';
 
 export const aiRouter = router({
   embeddingUpsert: authProcedure
@@ -57,6 +58,17 @@ export const aiRouter = router({
       try {
         const doc = await AiService.speechToText(filePath)
         return doc
+      } catch (error) {
+        throw new Error(error)
+      }
+    }),
+  rebuildingEmbeddings: authProcedure
+    .input(z.void())
+    .mutation(async function* () {
+      try {
+        for await (const result of AiService.rebuildEmbeddingIndex()) {
+          yield result;
+        }
       } catch (error) {
         throw new Error(error)
       }

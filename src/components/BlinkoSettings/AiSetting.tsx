@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Card, Input, Select, SelectItem, Switch } from "@nextui-org/react";
+import { Button, Card, Input, Select, SelectItem, Switch } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 import { Item } from "./Item";
 import { useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import { ShowRebuildEmbeddingProgressDialog } from "../Common/RebuildEmbeddingProgress";
+import { showTipsDialog } from "../Common/TipsDialog";
 
 export const AiSetting = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
@@ -138,6 +140,22 @@ export const AiSetting = observer(() => {
           }))
         }}
       />} />
+
+    <Item
+      type={isPc ? 'row' : 'col'}
+      leftContent={<div className="flex flex-col  gap-2">
+        <div>{t('rebuild-embedding-index')}</div>
+        <div className="text-desc text-xs">{t('notes-imported-by-other-means-may-not-have-embedded-vectors')}</div>
+      </div>}
+      rightContent={<Button color='primary' startContent={<Icon icon="mingcute:refresh-4-ai-line" width="20" height="20" />} onClick={() => {
+        showTipsDialog({
+          title: t('rebuild-embedding-index'),
+          content:t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
+          onConfirm: () => {
+            ShowRebuildEmbeddingProgressDialog()
+          }
+        })
+      }}>{t('rebuild')}</Button>} />
 
   </Card>
 })

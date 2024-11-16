@@ -12,6 +12,13 @@ export const POST = async (req: Request, res: NextResponse) => {
       await prisma.attachments.delete({ where: { id: attachment.id } })
     }
     const filepath = path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + attachment_path.replace('/api/file/', ""))
+    if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(attachment_path.replace('.', '')?.toLowerCase() ?? null)) {
+      try {
+        await unlink(path.join(process.cwd(), `${UPLOAD_FILE_PATH}/thumbnail_` + attachment_path.replace('/api/file/', "")))
+      } catch (error) {
+        // console.log(error)
+      }
+    }
     await unlink(filepath)
     return NextResponse.json({ Message: "Success", status: 200 });
   } catch (error) {

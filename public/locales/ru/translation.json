@@ -125,5 +125,8 @@
   "import-from-memos-memos_prod-db": "Импорт из Memos(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "При экспорте memos_prod.db закройте контейнер memos, чтобы избежать частичной потери данных.",
   "go-to-share-page": "Перейдите на страницу обмена информацией",
-  "import-done": "Импорт выполнен"
+  "import-done": "Импорт выполнен",
+  "rebuild-embedding-index": "Восстановить индекс встраивания",
+  "notes-imported-by-other-means-may-not-have-embedded-vectors": "Ноты, импортированные другими способами, могут не иметь встроенных векторов",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Если у вас много заметок, вы можете израсходовать определенное количество жетонов."
 }

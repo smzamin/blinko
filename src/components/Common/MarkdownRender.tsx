@@ -82,7 +82,6 @@ const LinkPreview = ({ href }) => {
         console.error('Error fetching preview data:', error);
       }
     };
-
     fetchData();
   }, [href]);
 

@@ -9,7 +9,7 @@ type Memo = {
   updated_ts: number,
   content: string,
 }
-export type ImportResult = {
+export type ProgressResult = {
   type: 'success' | 'skip' | 'error';
   content?: string;
   error?: unknown;
@@ -27,7 +27,7 @@ export class Memos {
     this.db.close()
   }
 
-  async *importMemosDB(): AsyncGenerator<ImportResult & { progress?: { current: number, total: number } }, void, unknown> {
+  async *importMemosDB(): AsyncGenerator<ProgressResult & { progress?: { current: number, total: number } }, void, unknown> {
     const rows: Memo[] = await new Promise((resolve, reject) => {
       this.db.all(`SELECT * FROM memo`, (err, rows: Memo[]) => {
         if (err) {
@@ -78,7 +78,7 @@ export class Memos {
     }
   }
 
-  async *importFiles(): AsyncGenerator<ImportResult & { progress?: { current: number, total: number } }, void, unknown> {
+  async *importFiles(): AsyncGenerator<ProgressResult & { progress?: { current: number, total: number } }, void, unknown> {
     const resources = await new Promise<Array<{
       memo_id: number,
       filename: string,

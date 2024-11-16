@@ -20,7 +20,6 @@ export const GET = async (req: Request, { params }: any) => {
       },
     });
   } catch (error) {
-    console.error("Error occurred ", error);
     return NextResponse.json({ Message: "File not found", status: 404 });
   }
 };
