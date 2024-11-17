@@ -27,7 +27,7 @@ export const UpdateTag = observer(({ onSave, defaultValue = '', type = 'input' }
     {
       type == 'input' ? <Input value={store.tagName} onChange={e => store.tagName = (e.target.value)} />
         : <Select
-          label="Select an animal"
+          label="Select a tag"
           className="max-w-xs"
           onChange={e => store.tagName = e.target.value}
         >

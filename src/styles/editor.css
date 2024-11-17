@@ -19,6 +19,9 @@
 ._contentEditable_uazmk_379 {
   max-height: 80vh;
   overflow-y: scroll;
+  color: var(--foreground) !important;
+  padding: 0 !important;
+  padding-left: 7px !important;
 }
 
 .prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)),
@@ -182,13 +185,6 @@
   cursor: pointer;
 }
 
-._contentEditable_uazmk_379 {
-  color: var(--foreground);
-}
-
-._contentEditable_uazmk_379 {
-  color: var(--foreground) !important;
-}
 
 .mdxeditor-root-contenteditable>div:first-of-type {
   padding: 0 !important;
@@ -196,10 +192,7 @@
   padding-right: 5px !important;
 }
 
-._contentEditable_uazmk_379 {
-  padding: 0 !important;
-  padding-left: 7px !important;
-}
+
 
 ._popupContainer_uazmk_1220 {
   position: relative;

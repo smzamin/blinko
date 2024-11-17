@@ -128,5 +128,7 @@
   "import-done": "Импорт выполнен",
   "rebuild-embedding-index": "Восстановить индекс встраивания",
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "Ноты, импортированные другими способами, могут не иметь встроенных векторов",
-  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Если у вас много заметок, вы можете израсходовать определенное количество жетонов."
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Если у вас много заметок, вы можете израсходовать определенное количество жетонов.",
+  "order-by-create-time": "Заказать по времени создания",
+  "time-format": "Формат времени"
 }

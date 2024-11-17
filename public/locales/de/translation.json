@@ -128,5 +128,6 @@
   "rebuilding-embedding-progress": "Wiederaufbau Einbettung des Fortschritts",
   "rebuild": "Wiederherstellen",
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "Auf anderem Wege importierte Noten haben möglicherweise keine eingebetteten Vektoren",
-  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Wenn Sie viele Scheine haben, können Sie eine bestimmte Anzahl von Token verbrauchen."
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Wenn Sie viele Scheine haben, können Sie eine bestimmte Anzahl von Token verbrauchen.",
+  "time-format": "Zeitformat"
 }

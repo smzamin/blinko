@@ -125,5 +125,7 @@
   "go-to-share-page": "シェアページへ",
   "rebuilding-embedding-progress": "再構築 進歩の定着",
   "rebuild": "再構築",
-  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "多くのノートをお持ちの場合、一定数のトークンを消費する可能性があります。"
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "多くのノートをお持ちの場合、一定数のトークンを消費する可能性があります。",
+  "order-by-create-time": "作成時間順",
+  "time-format": "時間形式"
 }

@@ -21,6 +21,8 @@ export const ZConfigKey = z.union([
   z.literal('aiModel'),
   z.literal('isHiddenMobileBar'),
   z.literal('isAllowRegister'),
+  z.literal('isOrderByCreateTime'),
+  z.literal('timeFormat'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -35,6 +37,8 @@ export const ZConfigSchema = z.object({
   aiModel: z.any().optional(),
   isHiddenMobileBar: z.boolean().optional(),
   isAllowRegister: z.any().optional(),
+  isOrderByCreateTime: z.any().optional(),
+  timeFormat: z.any().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

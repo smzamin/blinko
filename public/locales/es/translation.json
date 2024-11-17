@@ -126,5 +126,7 @@
   "rebuilding-embedding-progress": "Reconstruir Integrar el progreso",
   "rebuild-embedding-index": "Reconstruir índice de incrustación",
   "rebuild": "Reconstruir",
-  "notes-imported-by-other-means-may-not-have-embedded-vectors": "Los billetes importados por otros medios pueden no tener vectores incrustados"
+  "notes-imported-by-other-means-may-not-have-embedded-vectors": "Los billetes importados por otros medios pueden no tener vectores incrustados",
+  "order-by-create-time": "Ordenar por hora de creación",
+  "time-format": "Formato de hora"
 }

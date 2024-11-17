@@ -127,5 +127,7 @@
   "rebuilding-embedding-progress": "重建 嵌入 进展",
   "rebuild-embedding-index": "重建嵌入索引",
   "rebuild": "重建",
-  "notes-imported-by-other-means-may-not-have-embedded-vectors": "通过其他方式导入的票据可能没有嵌入向量"
+  "notes-imported-by-other-means-may-not-have-embedded-vectors": "通过其他方式导入的票据可能没有嵌入向量",
+  "order-by-create-time": "按创建时间排序",
+  "time-format": "时间格式"
 }

@@ -127,5 +127,7 @@
   "import-done": "Importation effectuée",
   "rebuilding-embedding-progress": "Reconstruire Intégrer le progrès",
   "rebuild-embedding-index": "Reconstruire l'index d'intégration",
-  "rebuild": "Reconstruction"
+  "rebuild": "Reconstruction",
+  "order-by-create-time": "Ordre par temps de création",
+  "time-format": "Format de l'heure"
 }
