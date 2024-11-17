@@ -56,7 +56,7 @@ const ImageRender = observer((props: IProps) => {
   const imageHeight = useMemo(() => {
     const imageLength = files?.filter(i => i.previewType == 'image')?.length
     if (imageLength == 1) {
-      return `h-auto`
+      return `h-auto max-h-[300px]`
     }
     if (imageLength > 1 && imageLength <= 5) {
       return `md:h-[180px] h-[160px]`
@@ -76,10 +76,9 @@ const ImageRender = observer((props: IProps) => {
           </div>}
           <div className='w-full'>
             <PhotoView src={file.preview}>
-              {/* <Image src={file.preview}></Image> */}
-             <div>
-             <ImageThumbnailRender file={file} className={`rounded-xl mb-4 ${imageHeight} object-cover w-[1000px]`} />
-             </div>
+              <div>
+                <ImageThumbnailRender file={file} className={`rounded-xl mb-4 ${imageHeight} object-cover w-[1000px]`} />
+              </div>
             </PhotoView>
           </div>
           {!file.uploadPromise?.loading?.value && !preview &&

@@ -88,7 +88,7 @@ const LinkPreview = ({ href }) => {
   return (
     <>
       <a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
-      {store.previewData.value && <Card className='p-2 my-1 bg-sencondbackground rounded-xl select-none ' radius='none' shadow='none'>
+      {store.previewData?.value?.title && <Card className='p-2 my-1 bg-sencondbackground rounded-xl select-none ' radius='none' shadow='none'>
         <div className='flex items-center gap-2 w-full'>
           <div className='font-bold truncate text-sm'>{store.previewData.value?.title}</div>
           {store.previewData.value?.favicon && <Image fallbackSrc="/fallback.png" className='flex-1 rounded-full ml-auto min-w-[16px]' src={store.previewData.value.favicon} width={16} height={16}></Image>}
