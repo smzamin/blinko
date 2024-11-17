@@ -2,7 +2,7 @@
   "branches": [
     "main"
   ],
-  "repositoryUrl": "git@github.com:blinko-space/blinko.git",
+  "repositoryUrl": "https://github.com/blinko-space/blinko.git",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
