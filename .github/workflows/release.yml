@@ -19,10 +19,13 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install semantic-release
+        run: pnpm add -D semantic-release @semantic-release/github @semantic-release/git @semantic-release/changelog
 
       - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx semantic-release
+        run: pnpm exec semantic-release
