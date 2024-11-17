@@ -9,6 +9,7 @@ import path from 'path';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
 import { attachmentsSchema, notesSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
+import { getGlobalConfig } from './config';
 
 const extractHashtags = (input: string): string[] => {
   const hashtagRegex = /(?<!:\/\/)(?<=\s|^)#[^\s#]+(?=\s|$)/g;
@@ -66,10 +67,12 @@ export const noteRouter = router({
           { content: { contains: 'https://', mode: 'insensitive' } }
         ];
       }
+      const config = await getGlobalConfig()
+      let timeOrderBy = config?.isOrderByCreateTime ? { createdAt: orderBy } : { updatedAt: orderBy }
       if (type != -1) { where.type = type }
       return await prisma.notes.findMany({
         where,
-        orderBy: [{ isTop: "desc" }, { updatedAt: orderBy }],
+        orderBy: [{ isTop: "desc" }, timeOrderBy],
         skip: (page - 1) * size,
         take: size,
         include: { tags: true, attachments: true }

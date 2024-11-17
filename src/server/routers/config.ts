@@ -20,7 +20,6 @@ export const configRouter = router({
     .input(z.void())
     .output(ZConfigSchema)
     .query(async function () {
-      console.log(await getGlobalConfig())
       return await getGlobalConfig()
     }),
   update: authProcedure.use(superAdminAuthMiddleware)

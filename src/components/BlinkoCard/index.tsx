@@ -49,13 +49,17 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: { blink
                   }} />
                 </Tooltip>
               }
-              <div className='text-xs text-desc'>{dayjs(blinkoItem.updatedAt).fromNow()}</div>
+              <div className='text-xs text-desc'>{
+                blinko.config.value?.timeFormat == 'relative' ?
+                  dayjs(blinko.config.value?.isOrderByCreateTime ? blinkoItem.createdAt : blinkoItem.updatedAt).fromNow() :
+                  dayjs(blinko.config.value?.isOrderByCreateTime ? blinkoItem.createdAt : blinkoItem.updatedAt).format(blinko.config.value?.timeFormat ?? 'YYYY-MM-DD HH:mm:ss')
+              }</div>
               <Copy size={16} className="ml-auto opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 " content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`} />
               <Tooltip content={blinkoItem.isShare ? 'Copy share link' : 'Share and copy link'}>
                 <Icon icon="tabler:share-2" width="16" height="16" className="cursor-pointer text-desc ml-2 opacity-0 group-hover/card:opacity-100  group-hover/card:translate-x-0 translate-x-1 "
                   onClick={async () => {
-                    if(!blinkoItem.isShare) {
-                      await blinko.upsertNote.call({ id: blinkoItem.id, isShare: true ,showToast: false})
+                    if (!blinkoItem.isShare) {
+                      await blinko.upsertNote.call({ id: blinkoItem.id, isShare: true, showToast: false })
                     }
                     copy(`${window.location.origin}/share/${blinkoItem.id}`)
                     RootStore.Get(ToastPlugin).success('Copied successfully~ Go to share!')
