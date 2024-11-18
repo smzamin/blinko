@@ -1,3 +1,10 @@
+## [0.3.11](https://github.com/blinko-space/blinko/compare/v0.3.10...v0.3.11) (2024-11-18)
+
+
+### Bug Fixes
+
+* test bot ([eca3417](https://github.com/blinko-space/blinko/commit/eca34176bf5f41203d19315520dfb9a19c99bfd1))
+
 ## [0.3.10](https://github.com/blinko-space/blinko/compare/v0.3.9...v0.3.10) (2024-11-18)
 
 
