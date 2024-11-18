@@ -1,3 +1,10 @@
+## [0.4.2](https://github.com/blinko-space/blinko/compare/v0.4.1...v0.4.2) (2024-11-18)
+
+
+### Bug Fixes
+
+* s3 cache ([3b3c6eb](https://github.com/blinko-space/blinko/commit/3b3c6eb0219bff6b54cebf6098a5dde8ad55edf7))
+
 ## [0.4.1](https://github.com/blinko-space/blinko/compare/v0.4.0...v0.4.1) (2024-11-18)
 
 
