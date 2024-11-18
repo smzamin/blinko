@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 import { BaseStore } from "@/store/baseStore";
 import { BlinkoAi } from "../BlinkoAi";
 import { ScrollArea } from "../Common/ScrollArea";
-import { BlinkoNewVersion } from "../BlinkoNewVersion";
 import { BlinkoRightClickMenu } from '@/components/BlinkoRightClickMenu';
 import { useMediaQuery } from "usehooks-ts";
 import { push as Menu } from 'react-burger-menu';
@@ -72,7 +71,6 @@ export const CommonLayout = observer(({
         {
           theme == 'dark' ? <Image src="/logo-dark.svg" width={100} /> : <Image src="/logo.svg" width={100} />
         }
-        <BlinkoNewVersion />
       </div>
       <ScrollShadow className="-mr-[16px] mt-[-5px] h-full max-h-full pr-6 ">
         <div>
@@ -90,7 +88,6 @@ export const CommonLayout = observer(({
                 </Link>
               })
             }
-
             <div>
               {blinkoStore.tagList.value?.listTags.length != 0 && blinkoStore.tagList.value?.listTags && <>
                 <TagListPanel />

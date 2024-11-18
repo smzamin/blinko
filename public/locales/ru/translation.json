@@ -130,5 +130,7 @@
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "Ноты, импортированные другими способами, могут не иметь встроенных векторов",
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Если у вас много заметок, вы можете израсходовать определенное количество жетонов.",
   "order-by-create-time": "Заказать по времени создания",
-  "time-format": "Формат времени"
+  "time-format": "Формат времени",
+  "version": "Версия",
+  "new-version-available": "Доступна новая версия"
 }

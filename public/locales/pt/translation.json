@@ -128,5 +128,7 @@
   "rebuild-embedding-index": "Reconstruir o índice de incorporação",
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "As notas importadas por outros meios podem não ter vectores incorporados",
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Se tiver muitas notas, pode consumir um determinado número de fichas",
-  "time-format": "Formato da hora"
+  "time-format": "Formato da hora",
+  "version": "Versão",
+  "new-version-available": "Nova versão disponível"
 }

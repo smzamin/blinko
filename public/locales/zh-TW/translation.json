@@ -129,5 +129,7 @@
   "rebuild": "重建",
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "通过其他方式导入的票据可能没有嵌入向量",
   "order-by-create-time": "按创建时间排序",
-  "time-format": "时间格式"
+  "time-format": "时间格式",
+  "version": "版本",
+  "new-version-available": "新版本可用"
 }

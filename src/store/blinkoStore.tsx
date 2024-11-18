@@ -108,12 +108,7 @@ export class BlinkoStore implements Store {
     }
   })
 
-  public = new PromiseState({
-    function: async () => {
-      const version = await api.public.version.query()
-      return { version }
-    }
-  })
+
 
   get showAi() {
     return this.config.value?.isUseAI && this.config.value?.aiApiKey
@@ -187,7 +182,6 @@ export class BlinkoStore implements Store {
     this.tagList.call()
     this.config.call()
     this.dailyReviewNoteList.call()
-    this.public.call()
     this.task.call()
   }
 
