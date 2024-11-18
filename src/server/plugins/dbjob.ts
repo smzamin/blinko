@@ -62,7 +62,7 @@ export class DBJob {
       zip.addLocalFolder(ROOT_PATH);
       zip.writeZip(targetFile);
 
-      return { apiPath: `/api/file/blinko_export.bko`, filePath: targetFile };
+      return { filePath: `/api/file/blinko_export.bko` };
     } catch (error) {
       throw new Error(error)
     }
@@ -70,7 +70,7 @@ export class DBJob {
 
   static async *RestoreDB(filePath: string): AsyncGenerator<RestoreResult & { progress: { current: number; total: number } }, void, unknown> {
     try {
-      const zip = new AdmZip(UPLOAD_FILE_PATH + '/' + filePath);
+      const zip = new AdmZip(filePath);
       zip.extractAllTo(ROOT_PATH, true);
 
       const backupData = JSON.parse(
