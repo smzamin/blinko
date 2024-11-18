@@ -10,6 +10,7 @@ import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
 import { attachmentsSchema, notesSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
 import { getGlobalConfig } from './config';
+import { FileService } from '../plugins/utils';
 
 const extractHashtags = (input: string): string[] => {
   const hashtagRegex = /(?<!:\/\/)(?<=\s|^)#[^\s#]+(?=\s|$)/g;
@@ -307,8 +308,7 @@ export const noteRouter = router({
           if (note.attachments) {
             for (const attachment of note.attachments) {
               try {
-                const filepath = path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + attachment.path.replace('/api/file/', ""))
-                await unlink(filepath)
+                await FileService.deleteFile(attachment.path)
               } catch (error) {
                 console.log(error)
               }

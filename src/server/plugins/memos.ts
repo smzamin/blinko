@@ -3,6 +3,7 @@ import sqlite3 from 'sqlite3';
 import { prisma } from '../prisma';
 import { adminCaller } from '../routers/_app';
 import fs from 'fs/promises'
+import { FileService } from './utils';
 type Memo = {
   id: string,
   created_ts: number,
@@ -14,14 +15,18 @@ export type ProgressResult = {
   content?: string;
   error?: unknown;
 }
+
+
 export class Memos {
   private db: sqlite3.Database
-  initDB(filePath: string) {
-    this.db = new sqlite3.Database(UPLOAD_FILE_PATH + '/' + filePath, (err) => {
+  async initDB(filePath: string) {
+    const dbPath = await FileService.getFile(filePath);
+    this.db = new sqlite3.Database(dbPath, (err) => {
       if (err) {
         console.error('can not connect to memos db', err.message);
       }
     });
+    return dbPath;
   }
   closeDB() {
     this.db.close()
