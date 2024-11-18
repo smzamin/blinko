@@ -1,3 +1,10 @@
+## [0.4.3](https://github.com/blinko-space/blinko/compare/v0.4.2...v0.4.3) (2024-11-18)
+
+
+### Bug Fixes
+
+* s3 delete file & import file ([b8e0d05](https://github.com/blinko-space/blinko/commit/b8e0d0594ad2999f35e8c81c235eb30271e848a5))
+
 ## [0.4.2](https://github.com/blinko-space/blinko/compare/v0.4.1...v0.4.2) (2024-11-18)
 
 
