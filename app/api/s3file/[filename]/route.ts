@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGlobalConfig } from "@/server/routers/config";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { cache } from "@/lib/cache";
 
-let s3ClientInstance: S3Client | null = null;
 async function getS3Client() {
   const config = await getGlobalConfig();
-  if (s3ClientInstance) return { s3ClientInstance, config };
-  s3ClientInstance = new S3Client({
-    endpoint: config.s3Endpoint,
-    region: config.s3Region,
-    credentials: {
-      accessKeyId: config.s3AccessKeyId,
-      secretAccessKey: config.s3AccessKeySecret,
-    },
-    forcePathStyle: true,
-  });
-  return { s3ClientInstance, config };
+  return cache.wrap(`${config.s3Endpoint}-${config.s3Region}-${config.s3Bucket}-${config.s3AccessKeyId}-${config.s3AccessKeySecret}`, async () => {
+    const s3ClientInstance = new S3Client({
+      endpoint: config.s3Endpoint,
+      region: config.s3Region,
+      credentials: {
+        accessKeyId: config.s3AccessKeyId,
+        secretAccessKey: config.s3AccessKeySecret,
+      },
+      forcePathStyle: true,
+    });
+    return { s3ClientInstance, config };
+  }, { ttl: 60 * 60 * 86400 * 1000 })
 }
-
 
 export const GET = async (req: Request, { params }: any) => {
   const { s3ClientInstance, config } = await getS3Client();
