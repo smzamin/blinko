@@ -25,6 +25,7 @@ export const codeBlockLanguages = {
 export const ProcessCodeBlocks = (content: string): string => {
   if (!content) return '';
   const codeBlockRegex = /```(?:(\w*)\n)?([\s\S]*?)```/g;
+  
   const htmlRegex = /(<[^>]+>)/gi;
   try {
     return content.replace(codeBlockRegex, (match, language, code) => {
