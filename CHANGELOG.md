@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/blinko-space/blinko/compare/v0.3.11...v0.4.0) (2024-11-18)
+
+
+### Features
+
+* support s3 object storage [#34](https://github.com/blinko-space/blinko/issues/34) ([62bb85b](https://github.com/blinko-space/blinko/commit/62bb85bf689035d8ad52e226239ebfd296516801))
+
 ## [0.3.11](https://github.com/blinko-space/blinko/compare/v0.3.10...v0.3.11) (2024-11-18)
 
 
