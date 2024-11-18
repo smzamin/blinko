@@ -3,7 +3,7 @@ name: Build and Push Release Docker Image
 on:
   push:
     tags:
-      - "v*.*.*"
+      - "v*"
 jobs:
   build:
     runs-on: ubuntu-latest
