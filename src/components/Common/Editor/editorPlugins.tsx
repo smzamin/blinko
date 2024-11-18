@@ -25,12 +25,18 @@ export const codeBlockLanguages = {
 export const ProcessCodeBlocks = (content: string): string => {
   if (!content) return '';
   const codeBlockRegex = /```(?:(\w*)\n)?([\s\S]*?)```/g;
-  return content.replace(codeBlockRegex, (match, language, code) => {
-    if (!language || !(language in codeBlockLanguages)) {
-      return '```plain\n' + code.trim() + '\n```';
-    }
-    return '```' + language + '\n' + code.trim() + '\n```';
-  });
+  const htmlRegex = /(<[^>]+>)/gi;
+  try {
+    return content.replace(codeBlockRegex, (match, language, code) => {
+      if (!language || !(language in codeBlockLanguages)) {
+        return '```plain\n' + code.trim() + '\n```';
+      }
+      return '```' + language + '\n' + code.trim() + '\n```';
+    }).replace(htmlRegex, '\\$1');
+  } catch (error) {
+    
+    return content
+  }
 };
 
 export const MyPlugins = [
