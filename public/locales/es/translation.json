@@ -130,5 +130,8 @@
   "order-by-create-time": "Ordenar por hora de creación",
   "time-format": "Formato de hora",
   "version": "Versión",
-  "new-version-available": "Nueva versión disponible"
+  "new-version-available": "Nueva versión disponible",
+  "storage": "Almacenamiento",
+  "local-file-system": "Sistema de archivos local",
+  "object-storage": "Almacenamiento de objetos"
 }

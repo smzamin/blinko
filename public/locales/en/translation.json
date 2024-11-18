@@ -136,5 +136,8 @@
   "order-by-create-time": "Order by create time",
   "time-format": "Time Format",
   "version": "Version",
-  "new-version-available": "New version available"
+  "new-version-available": "New version available",
+  "storage": "Storage",
+  "local-file-system": "Local File System",
+  "object-storage": "Object storage"
 }

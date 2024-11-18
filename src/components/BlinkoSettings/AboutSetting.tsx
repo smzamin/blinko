@@ -41,7 +41,6 @@ export const AboutSetting = observer(() => {
       rightContent={
         <div className="flex items-center" onClick={() => { }}>
           <div>v{store.version.value}</div>
-          {store.latestVersion.value}
           {
             store.latestVersion.value != '' && store.latestVersion.value != store.version.value && <Tooltip content={t('new-version-available')}>
               <Icon onClick={() => {

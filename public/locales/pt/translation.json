@@ -130,5 +130,8 @@
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Se tiver muitas notas, pode consumir um determinado número de fichas",
   "time-format": "Formato da hora",
   "version": "Versão",
-  "new-version-available": "Nova versão disponível"
+  "new-version-available": "Nova versão disponível",
+  "storage": "Armazenamento",
+  "local-file-system": "Sistema de ficheiros local",
+  "object-storage": "Armazenamento de objectos"
 }

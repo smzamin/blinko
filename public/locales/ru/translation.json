@@ -132,5 +132,8 @@
   "order-by-create-time": "Заказать по времени создания",
   "time-format": "Формат времени",
   "version": "Версия",
-  "new-version-available": "Доступна новая версия"
+  "new-version-available": "Доступна новая версия",
+  "storage": "Хранение",
+  "local-file-system": "Локальная файловая система",
+  "object-storage": "Хранение объектов"
 }
