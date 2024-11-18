@@ -1,3 +1,10 @@
+## [0.4.1](https://github.com/blinko-space/blinko/compare/v0.4.0...v0.4.1) (2024-11-18)
+
+
+### Bug Fixes
+
+* perf s3 client ([e26a66d](https://github.com/blinko-space/blinko/commit/e26a66dde9e40b193a125500514fc1be751d2008))
+
 # [0.4.0](https://github.com/blinko-space/blinko/compare/v0.3.11...v0.4.0) (2024-11-18)
 
 
