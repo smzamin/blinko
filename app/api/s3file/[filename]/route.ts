@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import { readFile } from "fs/promises";
-import { stat } from "fs/promises";
-import mime from "mime-types";
-import { UPLOAD_FILE_PATH } from "@/lib/constant";
 import { getGlobalConfig } from "@/server/routers/config";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
-export const GET = async (req: Request, { params }: any) => {
+let s3ClientInstance: S3Client | null = null;
+async function getS3Client() {
   const config = await getGlobalConfig();
-  const s3Client = new S3Client({
+  if (s3ClientInstance) return { s3ClientInstance, config };
+  s3ClientInstance = new S3Client({
     endpoint: config.s3Endpoint,
     region: config.s3Region,
     credentials: {
@@ -18,13 +15,18 @@ export const GET = async (req: Request, { params }: any) => {
     },
     forcePathStyle: true,
   });
+  return { s3ClientInstance, config };
+}
 
+
+export const GET = async (req: Request, { params }: any) => {
+  const { s3ClientInstance, config } = await getS3Client();
   try {
     const command = new GetObjectCommand({
       Bucket: config.s3Bucket,
       Key: params.filename,
     });
-    const response = await s3Client.send(command);
+    const response = await s3ClientInstance.send(command);
     const headers = new Headers();
     headers.set('Content-Type', response.ContentType || 'application/octet-stream');
     return new NextResponse(response.Body?.transformToWebStream(), {
