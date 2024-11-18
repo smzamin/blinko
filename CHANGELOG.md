@@ -1,3 +1,10 @@
+## [0.3.10](https://github.com/blinko-space/blinko/compare/v0.3.9...v0.3.10) (2024-11-18)
+
+
+### Bug Fixes
+
+* code block empty [#119](https://github.com/blinko-space/blinko/issues/119) ([c3c2b0f](https://github.com/blinko-space/blinko/commit/c3c2b0f57552bbc32014661c4f5ea2aa880e296b))
+
 ## [0.3.9](https://github.com/blinko-space/blinko/compare/v0.3.8...v0.3.9) (2024-11-18)
 
 
