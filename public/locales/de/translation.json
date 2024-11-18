@@ -131,5 +131,8 @@
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Wenn Sie viele Scheine haben, können Sie eine bestimmte Anzahl von Token verbrauchen.",
   "time-format": "Zeitformat",
   "version": "Version",
-  "new-version-available": "Neue Version verfügbar"
+  "new-version-available": "Neue Version verfügbar",
+  "storage": "Lagerung",
+  "local-file-system": "Lokales Dateisystem",
+  "object-storage": "Speicherung von Objekten"
 }

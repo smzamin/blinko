@@ -132,5 +132,8 @@
   "order-by-create-time": "按创建时间排序",
   "time-format": "时间格式",
   "version": "版本",
-  "new-version-available": "新版本可用"
+  "new-version-available": "新版本可用",
+  "storage": "存储",
+  "local-file-system": "本地文件系统",
+  "object-storage": "对象存储"
 }

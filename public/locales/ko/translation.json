@@ -131,5 +131,8 @@
   "order-by-create-time": "생성 시간별 주문",
   "time-format": "시간 형식",
   "version": "버전",
-  "new-version-available": "새 버전 사용 가능"
+  "new-version-available": "새 버전 사용 가능",
+  "storage": "스토리지",
+  "local-file-system": "로컬 파일 시스템",
+  "object-storage": "개체 스토리지"
 }

@@ -23,6 +23,12 @@ export const ZConfigKey = z.union([
   z.literal('isAllowRegister'),
   z.literal('isOrderByCreateTime'),
   z.literal('timeFormat'),
+  z.literal('objectStorage'),
+  z.literal('s3AccessKeyId'),
+  z.literal('s3AccessKeySecret'),
+  z.literal('s3Endpoint'),
+  z.literal('s3Bucket'),
+  z.literal('s3Region'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -39,6 +45,12 @@ export const ZConfigSchema = z.object({
   isAllowRegister: z.any().optional(),
   isOrderByCreateTime: z.any().optional(),
   timeFormat: z.any().optional(),
+  objectStorage: z.any().optional(),
+  s3AccessKeyId: z.any().optional(),
+  s3AccessKeySecret: z.any().optional(),
+  s3Endpoint: z.any().optional(),
+  s3Bucket: z.any().optional(),
+  s3Region: z.any().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;
