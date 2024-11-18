@@ -128,5 +128,7 @@
   "rebuild": "Reconstruir",
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "Los billetes importados por otros medios pueden no tener vectores incrustados",
   "order-by-create-time": "Ordenar por hora de creación",
-  "time-format": "Formato de hora"
+  "time-format": "Formato de hora",
+  "version": "Versión",
+  "new-version-available": "Nueva versión disponible"
 }

@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/Common/ScrollArea";
 import { UserStore } from "@/store/user";
 import { RootStore } from "@/store";
 import { UserSetting } from "@/components/BlinkoSettings/UserSetting";
+import { AboutSetting } from "@/components/BlinkoSettings/AboutSetting";
 
 const Page = observer(() => {
   const user = RootStore.Get(UserStore)
@@ -19,6 +20,7 @@ const Page = observer(() => {
       {user.isSuperAdmin && <AiSetting />}
       {user.isSuperAdmin && <TaskSetting />}
       {user.isSuperAdmin && <ImportSetting />}
+      <AboutSetting />
     </ScrollArea >
   </div>
 });

@@ -129,5 +129,7 @@
   "rebuild-embedding-index": "Reconstruire l'index d'intégration",
   "rebuild": "Reconstruction",
   "order-by-create-time": "Ordre par temps de création",
-  "time-format": "Format de l'heure"
+  "time-format": "Format de l'heure",
+  "version": "Version",
+  "new-version-available": "Nouvelle version disponible"
 }

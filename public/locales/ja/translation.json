@@ -127,5 +127,7 @@
   "rebuild": "再構築",
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "多くのノートをお持ちの場合、一定数のトークンを消費する可能性があります。",
   "order-by-create-time": "作成時間順",
-  "time-format": "時間形式"
+  "time-format": "時間形式",
+  "version": "バージョン",
+  "new-version-available": "新バージョン"
 }

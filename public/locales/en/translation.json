@@ -134,5 +134,7 @@
   "notes-imported-by-other-means-may-not-have-embedded-vectors": "Notes imported by other means may not have embedded vectors",
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "If you have a lot of notes you may consume a certain number of tokens",
   "order-by-create-time": "Order by create time",
-  "time-format": "Time Format"
+  "time-format": "Time Format",
+  "version": "Version",
+  "new-version-available": "New version available"
 }
