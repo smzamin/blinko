@@ -1,3 +1,10 @@
+## [0.4.4](https://github.com/blinko-space/blinko/compare/v0.4.3...v0.4.4) (2024-11-19)
+
+
+### Bug Fixes
+
+* vercel build ([c5445d8](https://github.com/blinko-space/blinko/commit/c5445d873315be7d97082d65c43e1ff2581d521b))
+
 ## [0.4.3](https://github.com/blinko-space/blinko/compare/v0.4.2...v0.4.3) (2024-11-18)
 
 
