@@ -34,6 +34,7 @@ export class FileService {
     } catch (error) {
       await writeFile(
         path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + filename),
+        //@ts-ignore
         buffer
       );
       await this.createThumbnail(filename, extension);
@@ -114,6 +115,7 @@ export class FileService {
       for await (const chunk of response.Body as any) {
         chunks.push(chunk);
       }
+      //@ts-ignore
       await fs.writeFile(tempPath, Buffer.concat(chunks));
       return tempPath;
     }
