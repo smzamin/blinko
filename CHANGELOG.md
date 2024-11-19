@@ -1,3 +1,10 @@
+## [0.4.5](https://github.com/blinko-space/blinko/compare/v0.4.4...v0.4.5) (2024-11-19)
+
+
+### Bug Fixes
+
+* file upload issue ([e39a089](https://github.com/blinko-space/blinko/commit/e39a089e6840c7f47ff46348987798e503638da6))
+
 ## [0.4.4](https://github.com/blinko-space/blinko/compare/v0.4.3...v0.4.4) (2024-11-19)
 
 
