@@ -174,7 +174,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     onRecordingComplete(blob) {
       const mp3File = new File([blob], Date.now() + '.webm', {
         type: "audio/webm",
-        lastModified: Date.now(), // 可以指定最后修改时间为当前时间
+        lastModified: Date.now(), 
       });
       store.uploadFiles([mp3File])
     },

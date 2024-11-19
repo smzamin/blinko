@@ -54,14 +54,10 @@ export class FileService {
     }
   }
 
-  static async uploadFile(file: File) {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const originalName = file.name.replaceAll(" ", "_");
+  static async uploadFile(buffer: Buffer, originalName: string) {
     const extension = path.extname(originalName);
     const baseName = path.basename(originalName, extension);
-
     const config = await getGlobalConfig();
-
     if (config.objectStorage === 's3') {
       const { s3ClientInstance } = await this.getS3Client();
       const command = new PutObjectCommand({
