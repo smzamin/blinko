@@ -1,3 +1,10 @@
+## [0.5.2](https://github.com/blinko-space/blinko/compare/v0.5.1...v0.5.2) (2024-11-20)
+
+
+### Bug Fixes
+
+* delete file not delete attachments ([05f47cb](https://github.com/blinko-space/blinko/commit/05f47cb0ccf4936b483593b9c57f57e1223a21fa))
+
 ## [0.5.1](https://github.com/blinko-space/blinko/compare/v0.5.0...v0.5.1) (2024-11-20)
 
 
