@@ -40,6 +40,7 @@ export class BaseStore implements Store {
   ];
   currentRouter = this.routerList[0]
   currentTitle = ''
+  documentHeight = 0
 
   locale = new StorageState({ key: 'language', default: 'en' });
   locales = [
@@ -67,8 +68,9 @@ export class BaseStore implements Store {
     const isPc = useMediaQuery('(min-width: 768px)')
     const documentHeight = () => {
       const doc = document.documentElement
+      this.documentHeight = window.innerHeight
       doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
-      if(isPc) return
+      if (isPc) return
       const editor = document.getElementsByClassName('_contentEditable_uazmk_379')
       try {
         for (let i = 0; i < editor?.length; i++) {

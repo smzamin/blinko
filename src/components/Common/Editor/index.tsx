@@ -174,7 +174,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     onRecordingComplete(blob) {
       const mp3File = new File([blob], Date.now() + '.webm', {
         type: "audio/webm",
-        lastModified: Date.now(), 
+        lastModified: Date.now(),
       });
       store.uploadFiles([mp3File])
     },
@@ -204,7 +204,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       }
     },
     handleEditorHeight() {
-    
+
     }
   }))
 
@@ -243,7 +243,25 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
   return <Card
     shadow='none' {...getRootProps()}
     className={`p-2 relative border-2 border-border transition-all ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''}`}>
-    <div ref={cardRef}>
+    <div ref={cardRef}
+      onKeyDown={e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}
+      onKeyUp={async event => {
+        event.preventDefault();
+        if (event.key === 'Enter' && event.ctrlKey) {
+          await onSend?.({
+            content,
+            files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value } })
+          })
+          onChange?.('')
+          store.files = []
+        } else if (event.key === 'Enter') {
+          
+        }
+      }}>
       <MDXEditor
         translation={(key, defaultValue) => {
           if (key == 'toolbar.bulletedList') return t('bulleted-list');
@@ -266,6 +284,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         autoFocus={{
           defaultSelection: 'rootEnd'
         }}
+
         markdown={content}
         plugins={[
           toolbarPlugin({
