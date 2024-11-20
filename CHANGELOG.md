@@ -1,3 +1,10 @@
+## [0.5.4](https://github.com/blinko-space/blinko/compare/v0.5.3...v0.5.4) (2024-11-20)
+
+
+### Bug Fixes
+
+* api isShare not working ([0cd9668](https://github.com/blinko-space/blinko/commit/0cd9668774279dab78615f83cdbfcae0e3c6695a))
+
 ## [0.5.3](https://github.com/blinko-space/blinko/compare/v0.5.2...v0.5.3) (2024-11-20)
 
 
