@@ -253,7 +253,7 @@ export const noteRouter = router({
         return note
       } else {
         try {
-          const note = await prisma.notes.create({ data: { content: content ?? '', type, accountId: Number(ctx.id) } })
+          const note = await prisma.notes.create({ data: { content: content ?? '', type, accountId: Number(ctx.id), isShare: isShare ? true : false, isTop: isTop ? true : false } })
           await handleAddTags(tagTree, undefined, note.id)
           await prisma.attachments.createMany({
             data: attachments.map(i => { return { noteId: note.id, ...i } })
