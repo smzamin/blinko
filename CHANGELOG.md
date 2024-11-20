@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/blinko-space/blinko/compare/v0.5.0...v0.5.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* compatible with chrome 108 devices above height calculation issue [#111](https://github.com/blinko-space/blinko/issues/111) ([78d1af0](https://github.com/blinko-space/blinko/commit/78d1af0c1c9a48f8f8007a2eee3eb4713dc1aba0))
+
 # [0.5.0](https://github.com/blinko-space/blinko/compare/v0.4.5...v0.5.0) (2024-11-19)
 
 
