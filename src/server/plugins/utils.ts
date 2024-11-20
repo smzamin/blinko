@@ -5,6 +5,7 @@ import fs, { unlink, stat, writeFile } from 'fs/promises';
 import path from 'path';
 import { cache } from "@/lib/cache";
 import sharp from "sharp";
+import { prisma } from "../prisma";
 
 export class FileService {
   public static async getS3Client() {
@@ -86,6 +87,10 @@ export class FileService {
       await s3ClientInstance.send(command);
     } else {
       const filepath = path.join(process.cwd(), `${UPLOAD_FILE_PATH}/` + api_attachment_path.replace('/api/file/', ""));
+      const attachmentPath = await prisma.attachments.findFirst({ where: { path: api_attachment_path } })
+      if (attachmentPath) {
+        await prisma.attachments.delete({ where: { id: attachmentPath.id } })
+      }
       if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(api_attachment_path.split('.')[1]?.replace('.', '')?.toLowerCase() ?? '')) {
         try {
           await unlink(path.join(process.cwd(), `${UPLOAD_FILE_PATH}/thumbnail_` + api_attachment_path.replace('/api/file/', "")));
