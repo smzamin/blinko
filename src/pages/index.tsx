@@ -10,10 +10,12 @@ import { BlinkoEditor } from '@/components/BlinkoEditor';
 import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoCard } from '@/components/BlinkoCard';
+import { BaseStore } from '@/store/baseStore';
 
 const Home = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
+  const base = RootStore.Get(BaseStore)
   blinko.useQuery(useRouter())
 
   const store = RootStore.Local(() => ({
