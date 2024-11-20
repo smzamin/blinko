@@ -35,7 +35,7 @@ export const DeleteIcon = observer(({ className, file, files, size = 20 }: { cla
         store.deleteFile.call(file)
       }}>
       <div className={`opacity-70 hover:opacity-100 !bg-foreground cursor-pointer rounded-sm transition-al ${className}`}>
-        <Icon className='white' icon="basil:cross-solid" width={size} height={size} />
+        <Icon className='text-background' icon="basil:cross-solid" width={size} height={size} />
       </div>
 
     </TipsPopover >

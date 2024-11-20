@@ -1,4 +1,5 @@
 import { _ } from '@/lib/lodash';
+import "pdf-parse";
 import { ChatOpenAI, ClientOptions, OpenAIEmbeddings, } from "@langchain/openai";
 import path from 'path';
 import type { Document } from "@langchain/core/documents";
@@ -7,9 +8,17 @@ import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { OpenAIWhisperAudio } from "@langchain/community/document_loaders/fs/openai_whisper_audio";
 import { prisma } from '../prisma';
-import { FAISS_PATH } from '@/lib/constant';
+import { FAISS_PATH, UPLOAD_FILE_PATH } from '@/lib/constant';
 import { AiModelFactory } from './ai/aiModelFactory';
 import { ProgressResult } from './memos';
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
+import { CSVLoader } from "@langchain/community/document_loaders/fs/csv";
+import { TextLoader } from "langchain/document_loaders/fs/text";
+import { UnstructuredLoader } from "@langchain/community/document_loaders/fs/unstructured";
+import { FaissStore } from '@langchain/community/vectorstores/faiss';
+import { BaseDocumentLoader } from '@langchain/core/document_loaders/base';
+import { FileService } from './utils';
 
 //https://js.langchain.com/docs/introduction/
 //https://smith.langchain.com/onboarding
@@ -17,18 +26,69 @@ import { ProgressResult } from './memos';
 const FaissStorePath = path.join(process.cwd(), FAISS_PATH);
 
 export class AiService {
+  static async loadFileContent(filePath: string): Promise<string> {
+    try {
+      let loader: BaseDocumentLoader;
+      switch (true) {
+        case filePath.endsWith('.pdf'):
+          console.log('load pdf')
+          loader = new PDFLoader(filePath);
+          break;
+        case filePath.endsWith('.docx') || filePath.endsWith('.doc'):
+          console.log('load docx')
+          loader = new DocxLoader(filePath);
+          break;
+        case filePath.endsWith('.txt'):
+          console.log('load txt')
+          loader = new TextLoader(filePath);
+          break;
+        // case filePath.endsWith('.csv'):
+        //   console.log('load csv')
+        //   loader = new CSVLoader(filePath);
+        //   break;
+        default:
+          loader = new UnstructuredLoader(filePath);
+      }
+      const docs = await loader.load();
+      return docs.map(doc => doc.pageContent).join('\n');
+    } catch (error) {
+      console.error('File loading error:', error);
+      throw new Error(`can not load file: ${filePath}`);
+    }
+  }
+
+  static async embeddingDeleteAll(id: number, VectorStore: FaissStore) {
+    for (const index of new Array(9999).keys()) {
+      console.log('delete', `${id}-${index}`)
+      try {
+        await VectorStore.delete({ ids: [`${id}-${index}`] })
+        await VectorStore.save(FaissStorePath)
+      } catch (error) {
+        break;
+      }
+    }
+  }
+
+  static async embeddingDeleteAllAttachments(filePath: string, VectorStore: FaissStore) {
+    for (const index of new Array(9999).keys()) {
+      try {
+        await VectorStore.delete({ ids: [`${filePath}-${index}`] })
+        await VectorStore.save(FaissStorePath)
+      } catch (error) {
+        break;
+      }
+    }
+  }
+
   static async embeddingUpsert({ id, content, type }: { id: number, content: string, type: 'update' | 'insert' }) {
     try {
-      const { VectorStore, Splitter } = await AiModelFactory.GetProvider()
-      const chunks = await Splitter.splitText(content);
-      console.log('3. 分割完成', { chunks })
+      const { VectorStore, MarkdownSplitter } = await AiModelFactory.GetProvider()
+      const chunks = await MarkdownSplitter.splitText(content);
 
       if (type == 'update') {
-        console.log('4. 执行更新操作')
-        // ... existing delete logic ...
+        await AiService.embeddingDeleteAll(id, VectorStore)
       }
 
-      console.log('5. 准备创建文档')
       const documents: Document[] = chunks.map((chunk, index) => {
         return {
           pageContent: chunk,
@@ -60,15 +120,66 @@ export class AiService {
     }
   }
 
-  static async embeddingDelete({ id }: { id: number }) {
-    const { VectorStore } = await AiModelFactory.GetProvider()
-    for (const index of new Array(999).keys()) {
+  //api/file/123.pdf
+  static async embeddingInsertAttachments({ id, filePath }: { id: number, filePath: string }) {
+    try {
+      const note = await prisma.notes.findUnique({ where: { id } })
+      //@ts-ignore
+      if (note?.metadata?.isAttachmentsIndexed) {
+        return { ok: true, msg: 'already indexed' }
+      }
+      const absolutePath = await FileService.getFile(filePath)
+      const content = await AiService.loadFileContent(absolutePath);
+      console.log('content', content)
+      const { VectorStore, TokenTextSplitter } = await AiModelFactory.GetProvider()
+      const chunks = await TokenTextSplitter.splitText(content);
+      console.log('chunks', chunks)
+      const documents: Document[] = chunks.map((chunk, index) => {
+        return {
+          pageContent: chunk,
+          metadata: {
+            noteId: id,
+            uniqDocId: `${filePath}-${index}`
+          },
+        }
+      })
+
       try {
-        await VectorStore.delete({ ids: [`${id}-${index}`] })
+        await prisma.notes.update({
+          where: { id },
+          data: {
+            metadata: {
+              isAttachmentsIndexed: true
+            }
+          }
+        })
       } catch (error) {
         console.log(error)
-        break;
       }
+
+      const BATCH_SIZE = 5;
+      for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+        const batch = documents.slice(i, i + BATCH_SIZE);
+        const batchIds = batch.map(doc => doc.metadata.uniqDocId);
+        await VectorStore.addDocuments(batch, { ids: batchIds });
+      }
+
+      await VectorStore.save(FaissStorePath)
+      return { ok: true }
+    } catch (error) {
+      return { ok: false, error }
+    }
+  }
+
+
+
+  static async embeddingDelete({ id }: { id: number }) {
+    const { VectorStore } = await AiModelFactory.GetProvider()
+    await AiService.embeddingDeleteAll(id, VectorStore)
+    const attachments = await prisma.attachments.findMany({ where: { noteId: id } })
+    for (const attachment of attachments) {
+      console.log({ deletPath: attachment.path })
+      await AiService.embeddingDeleteAllAttachments(attachment.path, VectorStore)
     }
     return { ok: true }
   }
@@ -102,12 +213,21 @@ export class AiService {
             };
             continue;
           }
-
           await AiService.embeddingUpsert({
             id: note?.id,
             content: note?.content,
             type: 'insert' as const
           });
+          //@ts-ignore
+          if (!note.metadata?.isAttachmentsIndexed) {
+            //@ts-ignore
+            for (const attachment of note.attachments) {
+              await AiService.embeddingInsertAttachments({
+                id: note?.id,
+                filePath: attachment.path
+              });
+            }
+          }
           yield {
             type: 'success' as const,
             content: note?.content.slice(0, 30) ?? '',
@@ -128,17 +248,17 @@ export class AiService {
 
   static getQAPrompt() {
     const systemPrompt =
-    "You are a versatile AI assistant who can: \n" +
-    "1. Answer questions and explain concepts\n" +
-    "2. Provide suggestions and analysis\n" +
-    "3. Help with planning and organizing ideas\n" +
-    "4. Assist with content creation and editing\n" +
-    "5. Perform basic calculations and reasoning\n\n" +
-    "Use the following context to assist with your responses: \n" +
-    "{context}\n\n" +
-    "If a request is beyond your capabilities, please be honest about it.\n" +
-    "Always respond in the user's language.\n" +
-    "Maintain a friendly and professional conversational tone.";
+      "You are a versatile AI assistant who can: \n" +
+      "1. Answer questions and explain concepts\n" +
+      "2. Provide suggestions and analysis\n" +
+      "3. Help with planning and organizing ideas\n" +
+      "4. Assist with content creation and editing\n" +
+      "5. Perform basic calculations and reasoning\n\n" +
+      "Use the following context to assist with your responses: \n" +
+      "{context}\n\n" +
+      "If a request is beyond your capabilities, please be honest about it.\n" +
+      "Always respond in the user's language.\n" +
+      "Maintain a friendly and professional conversational tone.";
 
     const qaPrompt = ChatPromptTemplate.fromMessages(
       [
@@ -166,6 +286,7 @@ export class AiService {
     try {
       const { LLM } = await AiModelFactory.GetProvider()
       let searchRes = await AiService.similaritySearch({ question })
+      console.log('searchRes', searchRes)
       let notes: any[] = []
       if (searchRes && searchRes.length != 0) {
         notes = await prisma.notes.findMany({
@@ -173,6 +294,9 @@ export class AiService {
             id: {
               in: _.uniqWith(searchRes.map(i => i.metadata?.noteId)).filter(i => !!i) as number[]
             }
+          },
+          include: {
+            attachments: true
           }
         })
       }
@@ -185,7 +309,7 @@ export class AiService {
       const result = await qaChain.stream({
         chat_history,
         input: question,
-        context: notes?.map(i => i.content)
+        context: searchRes[0]?.pageContent
       })
       return { result, notes }
     } catch (error) {
