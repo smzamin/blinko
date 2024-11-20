@@ -1,5 +1,5 @@
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
-import { MarkdownTextSplitter } from "@langchain/textsplitters"
+import { MarkdownTextSplitter, TokenTextSplitter } from "@langchain/textsplitters"
 import { FaissStore } from "@langchain/community/vectorstores/faiss"
 import path from "path"
 import { FAISS_PATH } from "@/lib/constant"
@@ -19,12 +19,20 @@ export abstract class AiBaseModelPrivider {
   abstract LLM(): BaseChatModel;
   abstract Embeddings(): Embeddings
 
-  public Splitter(): MarkdownTextSplitter {
+  public MarkdownSplitter(): MarkdownTextSplitter {
     return new MarkdownTextSplitter({
-      chunkSize: 100,
-      chunkOverlap: 50,
+      chunkSize: 2000,
+      chunkOverlap: 200,
     });
   }
+
+  public TokenTextSplitter(): TokenTextSplitter {
+    return new TokenTextSplitter({
+      chunkSize: 2000,
+      chunkOverlap: 200,
+    });
+  }
+
 
   public async VectorStore(): Promise<FaissStore> {
     const FaissStorePath = path.join(process.cwd(), FAISS_PATH)

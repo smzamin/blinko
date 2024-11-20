@@ -19,6 +19,20 @@ export const aiRouter = router({
         return { ok: false, msg: error?.message }
       }
     }),
+  embeddingInsertAttachments: authProcedure
+    .input(z.object({
+      id: z.number(),
+      filePath: z.string() //api/file/text.pdf
+    }))
+    .mutation(async ({ input }) => {
+      const { id, filePath } = input
+      try {
+        const res = await AiService.embeddingInsertAttachments({ id, filePath })
+        return res
+      } catch (error) {
+        return { ok: false, msg: error?.message }
+      }
+    }),
   embeddingDelete: authProcedure
     .input(z.object({
       id: z.number()

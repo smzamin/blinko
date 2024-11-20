@@ -1,5 +1,5 @@
 import { cache } from "@/lib/cache"
-import { MarkdownTextSplitter } from "@langchain/textsplitters"
+import { MarkdownTextSplitter, TokenTextSplitter } from "@langchain/textsplitters"
 import { FaissStore } from "@langchain/community/vectorstores/faiss"
 import { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { Embeddings } from "@langchain/core/embeddings"
@@ -7,11 +7,13 @@ import { OpenAIModelProvider } from "./openAIModelProvider"
 import { getGlobalConfig } from "@/server/routers/config"
 
 export class AiModelFactory {
+  
   static async globalConfig() {
     return cache.wrap('globalConfig', async () => {
       return await getGlobalConfig()
     }, { ttl: 1000 })
   }
+
   static async ValidConfig() {
     const globalConfig = await AiModelFactory.globalConfig()
     if (!globalConfig.aiModelProvider || !globalConfig.aiApiKey || !globalConfig.isUseAI) {
@@ -28,14 +30,16 @@ export class AiModelFactory {
         LLM: provider.LLM(),
         VectorStore: await provider.VectorStore(),
         Embeddings: provider.Embeddings(),
-        Splitter: provider.Splitter()
+        MarkdownSplitter: provider.MarkdownSplitter(),
+        TokenTextSplitter: provider.TokenTextSplitter()
       }
     }
     return {
       LLM: null as unknown as BaseChatModel,
       VectorStore: null as unknown as FaissStore,
       Embeddings: null as unknown as Embeddings,
-      Splitter: null as unknown as MarkdownTextSplitter
+      MarkdownSplitter: null as unknown as MarkdownTextSplitter,
+      TokenTextSplitter: null as unknown as TokenTextSplitter
     }
   }
 

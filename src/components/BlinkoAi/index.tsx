@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react"
 import { observer } from "mobx-react-lite"
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
-import {  Image, Textarea } from "@nextui-org/react";
+import { Image, Textarea } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { motion } from "framer-motion"
@@ -15,6 +15,7 @@ import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
 import Link from "next/link";
 import DraggableDiv from "../Common/DragContainer";
 import dayjs from "@/lib/dayjs";
+import { FilesAttachmentRender } from "../Common/AttachmentRender";
 
 export const BlinkoAiChat = observer(() => {
   const ai = RootStore.Get(AiStore)
@@ -60,9 +61,14 @@ export const BlinkoAiChat = observer(() => {
               {
                 (ai.chatHistory.list?.length == index + 1) && <div className="flex flex-col gap-1">
                   {ai.relationNotes?.list?.map(note => {
-                    return <Link href={`/detail?id=${note.id}`} className="w-[90%] flex gap-1 items-center blinko-tag cursor-pointer" style={{ fontSize: '11px' }}>
-                      <Icon className="min-w-[15px]" icon="uim:arrow-up-left" width="15" height="15" />
-                      <div className="truncate">{note.content}</div>
+                    return <Link href={`/detail?id=${note.id}`} className="w-[90%] flex flex-col gap-1 justify-center cursor-pointer blinko-tag" style={{ fontSize: '11px' }}>
+                      <div className="flex items-center gap-1">
+                        <Icon className="min-w-[15px]" icon="uim:arrow-up-left" width="15" height="15" />
+                        {note.content && <div className="truncate  ">{note.content}</div>}
+                      </div>
+                      <div className="-mt-3 text-foreground">
+                        <FilesAttachmentRender files={note.attachments ?? []} />
+                      </div>
                     </Link>
                   })}
                 </div>
@@ -100,7 +106,7 @@ export const BlinkoAiChat = observer(() => {
         />
 
         <div className="flex gap-3 absolute bottom-[22px] md:bottom-[7px] right-[5px] ">
-        <div onClick={e => {
+          <div onClick={e => {
             ai.aiSearchText = ''
             ai.chatHistory.clear()
           }} className="cursor-pointer hover:opacity-80 transition-all rounded-full">
@@ -141,9 +147,7 @@ export const BlinkoAiButton = () => {
 export const BlinkoAi = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const isPc = useMediaQuery('(min-width: 768px)')
-
   return <>
-
     {
       isPc ? <Popover placement="top">
         <PopoverTrigger>

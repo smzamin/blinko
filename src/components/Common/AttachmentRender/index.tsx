@@ -55,11 +55,11 @@ const AttachmentsRender = observer((props: IProps) => {
           if (preview) {
             helper.download.downloadByLink(file.uploadPromise.value)
           }
-        }} className='relative flex p-2 w-full items-center gap-2 cursor-pointer bg-sencondbackground hover:bg-hover tansition-all rounded-md '>
+        }} className='relative flex p-2 w-full items-center gap-2 cursor-pointer bg-sencondbackground hover:bg-hover tansition-all rounded-md group'>
           <FileIcons path={file.name} isLoading={file.uploadPromise?.loading?.value} />
           <div className='truncate text-sm font-bold'>{file.name}</div>
           {!file.uploadPromise?.loading?.value && !preview &&
-            <DeleteIcon className='ml-auto w-[35px]' files={files} file={file} />}
+            <DeleteIcon className='ml-auto group-hover:opacity-100 opacity-0' files={files} file={file} />}
         </div>
       ))}
     </div >
