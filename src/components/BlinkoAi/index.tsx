@@ -66,8 +66,8 @@ export const BlinkoAiChat = observer(() => {
                         <Icon className="min-w-[15px]" icon="uim:arrow-up-left" width="15" height="15" />
                         {note.content && <div className="truncate  ">{note.content}</div>}
                       </div>
-                      <div className="-mt-3 text-foreground">
-                        <FilesAttachmentRender files={note.attachments ?? []} />
+                      <div className="text-foreground">
+                        <FilesAttachmentRender preview files={note.attachments ?? []} />
                       </div>
                     </Link>
                   })}

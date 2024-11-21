@@ -6,13 +6,13 @@ import { RootStore } from "@/store/root";
 import TagSelectPop from "@/components/Common/TagSelectPop";
 const Dialog = observer(() => {
   const modal = RootStore.Get(DialogStore);
-  const { className, classNames, isOpen, placement, title, size, content, isDismissable, onlyContent = false } = modal;
+  const { className, classNames, isOpen, placement, title, size, content, isDismissable, onlyContent = false, noPadding = false, transparent = false } = modal;
   const Content = typeof content === 'function' ? content : () => content;
   return (
     <Modal
       style={{ zIndex: 2000 }}
       onClose={() => {
-        // isOpen=true
+        modal.close();
       }}
       // portalContainer={document.querySelector("#layout")!}
       backdrop='blur'
@@ -29,7 +29,8 @@ const Dialog = observer(() => {
           }
         }
       }}
-      className={className}
+      hideCloseButton={size === 'full' ? true : false}
+      className={`${className} ${transparent ? 'bg-transparent' : ''}`}
       classNames={classNames}
       isDismissable={isDismissable}
       motionProps={{
@@ -52,7 +53,7 @@ const Dialog = observer(() => {
           {() => (
             <>
               {title && <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>}
-              <ModalBody className="p-2 md:p-4">
+              <ModalBody className={`${noPadding ? '' : 'p-2 md:p-4 '}`}>
                 <Content />
               </ModalBody>
             </>

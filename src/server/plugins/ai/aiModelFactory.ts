@@ -7,7 +7,7 @@ import { OpenAIModelProvider } from "./openAIModelProvider"
 import { getGlobalConfig } from "@/server/routers/config"
 
 export class AiModelFactory {
-  
+
   static async globalConfig() {
     return cache.wrap('globalConfig', async () => {
       return await getGlobalConfig()
@@ -48,7 +48,7 @@ export class AiModelFactory {
     if (globalConfig.aiModelProvider == 'OpenAI') {
       const provider = new OpenAIModelProvider({ globalConfig })
       return provider.AudioLoader(audioPath)
-    }else{
+    } else {
       throw new Error('not support other loader')
     }
   }

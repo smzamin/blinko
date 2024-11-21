@@ -132,5 +132,7 @@
   "new-version-available": "新バージョン",
   "storage": "ストレージ",
   "local-file-system": "ローカルファイルシステム",
-  "object-storage": "オブジェクトストレージ"
+  "object-storage": "オブジェクトストレージ",
+  "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "GPTモデルに加えて、次のようなことが可能であることを保証する必要がある。",
+  "speech-recognition-requires-the-use-of": "音声認識には"
 }

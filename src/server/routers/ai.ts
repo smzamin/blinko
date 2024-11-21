@@ -2,6 +2,7 @@ import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { AiService } from '../plugins/ai';
 import { prisma } from '../prisma';
+import { FileService } from '../plugins/utils';
 
 export const aiRouter = router({
   embeddingUpsert: authProcedure
@@ -70,7 +71,8 @@ export const aiRouter = router({
     .mutation(async function ({ input }) {
       const { filePath } = input
       try {
-        const doc = await AiService.speechToText(filePath)
+        const localFilePath = await FileService.getFile(filePath)
+        const doc = await AiService.speechToText(localFilePath)
         return doc
       } catch (error) {
         throw new Error(error)

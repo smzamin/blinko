@@ -134,5 +134,7 @@
   "new-version-available": "新版本可用",
   "storage": "存储",
   "local-file-system": "本地文件系统",
-  "object-storage": "对象存储"
+  "object-storage": "对象存储",
+  "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "除 GPT 模型外，还需要确保可以调用",
+  "speech-recognition-requires-the-use-of": "语音识别需要使用"
 }

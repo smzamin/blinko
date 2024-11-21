@@ -112,8 +112,15 @@ export const helper = {
     }
     return null
   },
-  getFileType(filename: string): FileType['previewType'] {
+  getFileType(mimeType: string, filename: string): FileType['previewType'] {
     const extension = helper.getFileExtension(filename) ?? ''
+
+    if (mimeType != '') {
+      if (mimeType.startsWith('audio')) return 'audio'
+      if (mimeType.startsWith('video')) return 'video'
+      if (mimeType.startsWith('image')) return 'image'
+    }
+
     if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension?.toLowerCase() ?? null)) {
       return 'image'
     }
