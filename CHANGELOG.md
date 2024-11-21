@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/blinko-space/blinko/compare/v0.5.4...v0.6.0) (2024-11-21)
+
+
+### Features
+
+* mobile support camera ([0d0e786](https://github.com/blinko-space/blinko/commit/0d0e7865ef2716d8e6f556fc3dd8dfcc2933dee8))
+
 ## [0.5.4](https://github.com/blinko-space/blinko/compare/v0.5.3...v0.5.4) (2024-11-20)
 
 
