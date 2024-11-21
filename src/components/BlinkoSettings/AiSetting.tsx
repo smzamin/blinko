@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Button, Card, Input, Select, SelectItem, Switch } from "@nextui-org/react";
+import { Button, Card, Code, Input, Select, SelectItem, Switch, Tooltip } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
@@ -30,7 +30,15 @@ export const AiSetting = observer(() => {
   return <Card shadow="none" className="flex flex-col p-4 bg-background pb-6">
     <div className='text-desc text-sm'>AI</div>
     <Item
-      leftContent={<>{t('use-ai')}</>}
+      leftContent={<div className="flex items-center gap-2">
+        {t('use-ai')}
+        <Tooltip content={<div className="w-[300px] flex flex-col gap-2">
+          <div>{t('in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the')}<Code color="primary">text-embedding</Code></div>
+          <div>{t('speech-recognition-requires-the-use-of')}<Code color="primary">whisper</Code></div>
+        </div>}>
+          <Icon icon="proicons:info" width="18" height="18" />
+        </Tooltip>
+      </div>}
       rightContent={<Switch
         isSelected={blinko.config.value?.isUseAI}
         onChange={e => {
@@ -150,7 +158,7 @@ export const AiSetting = observer(() => {
       rightContent={<Button color='primary' startContent={<Icon icon="mingcute:refresh-4-ai-line" width="20" height="20" />} onClick={() => {
         showTipsDialog({
           title: t('rebuild-embedding-index'),
-          content:t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
+          content: t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
           onConfirm: () => {
             ShowRebuildEmbeddingProgressDialog()
           }

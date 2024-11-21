@@ -40,7 +40,7 @@ const AttachmentsRender = observer((props: IProps) => {
         <div className='group relative flex p-2 items-center gap-2 cursor-pointer tansition-all rounded-2xl'>
           <audio src={file.preview} id="player" playsInline controls className='rounded-2xl w-full' />
           {!file.uploadPromise?.loading?.value && !preview &&
-            <DeleteIcon files={files} className='absolute z-10 right-[5px] top-[5px]' file={file} />
+            <DeleteIcon files={files} className='absolute z-10 right-[5px] top-[5px] group-hover:opacity-100 opacity-0' file={file} />
           }
           {preview && <DownloadIcon className='top-[8px] right-[8px]' file={file} />}
         </div>

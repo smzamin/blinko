@@ -11,6 +11,7 @@ import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoCard } from '@/components/BlinkoCard';
 import { BaseStore } from '@/store/baseStore';
+import Webcam from "react-webcam";
 
 const Home = observer(() => {
   const { t } = useTranslation();
@@ -30,6 +31,7 @@ const Home = observer(() => {
 
   return (
     <div className="md:p-0 relative h-full flex flex-col-reverse md:flex-col">
+    
       {store.showEditor && <div className='px-2 md:px-6' >
         <BlinkoEditor mode='create' key='create-key' onHeightChange={height => store.editorHeight = height} />
       </div>}
@@ -64,7 +66,7 @@ const Home = observer(() => {
           {store.showLoadAll && <div className='select-none w-full text-center text-sm font-bold text-ignore my-4'>{t('all-notes-have-been-loaded', { items: blinko.noteList.value?.length })}</div>}
         </ScrollArea>
       }
-    
+
       <BlinkoMultiSelectPop />
     </div>
   );

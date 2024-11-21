@@ -135,5 +135,7 @@
   "new-version-available": "Доступна новая версия",
   "storage": "Хранение",
   "local-file-system": "Локальная файловая система",
-  "object-storage": "Хранение объектов"
+  "object-storage": "Хранение объектов",
+  "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "В дополнение к модели GPT необходимо обеспечить возможность вызова",
+  "speech-recognition-requires-the-use-of": "Распознавание речи требует использования"
 }

@@ -134,5 +134,7 @@
   "new-version-available": "Nouvelle version disponible",
   "storage": "Stockage",
   "local-file-system": "Système de fichiers local",
-  "object-storage": "Stockage d'objets"
+  "object-storage": "Stockage d'objets",
+  "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "En plus du modèle GPT, il est nécessaire de s'assurer qu'il est possible d'invoquer le modèle",
+  "speech-recognition-requires-the-use-of": "La reconnaissance vocale nécessite l'utilisation de"
 }

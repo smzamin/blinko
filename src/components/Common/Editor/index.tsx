@@ -13,7 +13,7 @@ import { MyPlugins, ProcessCodeBlocks } from './editorPlugins';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
-import { CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon } from '../Icons';
+import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
 import usePasteFile from '@/lib/hooks';
 import useAudioRecorder from '../AudioRecorder/hook';
@@ -25,6 +25,10 @@ import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { showTagSelectPop } from '../TagSelectPop';
 import { DialogStore } from '@/store/module/Dialog';
 import { AttachmentsRender } from '../AttachmentRender';
+
+import { ShowCamera } from '../CameraDialog';
+import { ShowAudioDialog } from '../AudioDialog';
+
 const { MDXEditor } = await import('@mdxeditor/editor')
 
 // https://mdxeditor.dev/editor/docs/theming
@@ -43,15 +47,17 @@ type IProps = {
 export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
   if (originFiles?.length == 0) return []
   const res = originFiles?.map(file => {
+    console.log("file:", file)
     const extension = helper.getFileExtension(file.name)
-    const previewType = helper.getFileType(file.name)
+    const previewType = helper.getFileType(file.type, file.name)
     return {
       name: file.name,
       size: file.size,
       previewType,
       extension: extension ?? '',
       preview: file.path,
-      uploadPromise: new PromiseState({ function: async () => file.path })
+      uploadPromise: new PromiseState({ function: async () => file.path }),
+      type: file.type
     }
   })
   res?.map(i => i.uploadPromise.call())
@@ -144,7 +150,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     uploadFiles(acceptedFiles) {
       const _acceptedFiles = acceptedFiles.map(file => {
         const extension = helper.getFileExtension(file.name)
-        const previewType = helper.getFileType(file.name)
+        const previewType = helper.getFileType(file.type, file.name)
         return {
           name: file.name,
           size: file.size,
@@ -160,23 +166,17 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                 body: formData,
               });
               const data = await response.json();
-              store.speechToText(UPLOAD_FILE_PATH + '/' + data.fileName)
+              store.speechToText(data.filePath)
               if (data.filePath) {
                 return data.filePath
               }
             }
-          })
+          }),
+          type: file.type
         }
       })
       store.files.push(..._acceptedFiles)
       _acceptedFiles.map(i => i.uploadPromise.call())
-    },
-    onRecordingComplete(blob) {
-      const mp3File = new File([blob], Date.now() + '.webm', {
-        type: "audio/webm",
-        lastModified: Date.now(),
-      });
-      store.uploadFiles([mp3File])
     },
     handlePopTag() {
       const selection = window.getSelection();
@@ -203,9 +203,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         }
       }
     },
-    handleEditorHeight() {
-
-    }
   }))
 
   //fix ui not render
@@ -254,12 +251,12 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         if (event.key === 'Enter' && event.ctrlKey) {
           await onSend?.({
             content,
-            files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value } })
+            files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value, type: i.type } })
           })
           onChange?.('')
           store.files = []
         } else if (event.key === 'Enter') {
-          
+
         }
       }}>
       <MDXEditor
@@ -279,7 +276,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         onChange={v => {
           onChange?.(v)
           store.handlePopTag()
-          store.handleEditorHeight()
         }}
         autoFocus={{
           defaultSelection: 'rootEnd'
@@ -326,7 +322,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                       {
                         fallback: () => (<>
                           <InsertCodeBlock />
-                          <InsertSandpack />
+                          {isPc && <InsertSandpack />}
                         </>)
                       }
                     ]}
@@ -340,22 +336,34 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     <FileUploadIcon className='hover:opacity-80 transition-all' />
                   </ButtonWithTooltip>
 
+              
                   {
                     blinko.showAi && <ButtonWithTooltip className='!w-[24px] !h-[24px] mr-2' title={t('recording')} onClick={e => {
+                      ShowAudioDialog((file) => {
+                        store.uploadFiles([file])
+                      })
                     }}>
-                      <AudioRecorder
-                        onRecordingComplete={(blob) => store.onRecordingComplete(blob)}
-                        recorderControls={recorderControls}
-                        showVisualizer={true}
-                      />
+                      <VoiceIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
                     </ButtonWithTooltip>
                   }
+
+
+                  <ButtonWithTooltip title={t('upload-file')} className='!w-[24px] !h-[24px] mr-2' onClick={e => {
+                    ShowCamera((file) => {
+                      console.log(file)
+                      store.uploadFiles([file])
+                    })
+                  }}>
+                    <CameraIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
+                  </ButtonWithTooltip>
+
 
                   <Button size='sm' radius='md' onClick={() => {
                     RootStore.Get(DialogStore).close()
                   }} className={`${mode == 'create' ? 'hidden' : 'group ml-auto mr-2'}`} isIconOnly>
                     <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
                   </Button>
+
 
                   <Button isDisabled={!store.canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={async e => {
                     await onSend?.({

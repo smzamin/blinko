@@ -51,7 +51,7 @@ export const publicRouter = router({
       return cache.wrap(input.url, async () => {
         try {
           const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Timeout')), 3000);
+            setTimeout(() => reject(new Error('Timeout')), 5000);
           });
           const fetchPromise = limit(async () => {
             const result: Metadata = await unfurl(input.url);

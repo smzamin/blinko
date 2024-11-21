@@ -134,5 +134,7 @@
   "new-version-available": "새 버전 사용 가능",
   "storage": "스토리지",
   "local-file-system": "로컬 파일 시스템",
-  "object-storage": "개체 스토리지"
+  "object-storage": "개체 스토리지",
+  "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "GPT 모델 외에도 다음과 같이",
+  "speech-recognition-requires-the-use-of": "음성 인식은 다음을 사용해야 합니다."
 }

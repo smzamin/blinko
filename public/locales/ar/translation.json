@@ -126,29 +126,23 @@
   "edit-user": "تعديل المستخدم",
   "import-from-memos-memos_prod-db": "استيراد من قاعدة البيانات(memos_prod.db)",
   "when-exporting-memos_prod-db-please-close-the-memos-container-to-avoid-partial-loss-of-data": "عند تصدير memos_prod.db، يرجى إغلاق الحاوية لتجنب فقدان البيانات جزئيًا.",
-
-
   "allow-register": "السماح بالتسجيل",
   "access-token": "رمز الوصول",
   "superadmin": "مدير النظام",
   "user": "مستخدم",
-  
   "select-model-provider": "اختيار مزود النموذج",
   "select-model": "اختيار النموذج",
   "api-key": "مفتاح API",
   "enter-your-api-key": "أدخل مفتاح API الخاص بك",
-  
-
   "delete-only-tag": "حذف العلامة فقط",
   "update-name": "تحديث الاسم",
   "delete-tag-with-note": "حذف العلامة مع الملاحظة",
-  
-
-  "minutes-ago": "منذ {{count}} دقيقة",      
-  "hours-ago": "منذ {{count}} ساعة",          
-  "days-ago": "منذ {{count}} يوم",           
-  "weeks-ago": "منذ {{count}} أسبوع",         
-  "months-ago": "منذ {{count}} شهر",          
-  "years-ago": "منذ {{count}} سنة"            
-  
+  "minutes-ago": "منذ {{count}} دقيقة",
+  "hours-ago": "منذ {{count}} ساعة",
+  "days-ago": "منذ {{count}} يوم",
+  "weeks-ago": "منذ {{count}} أسبوع",
+  "months-ago": "منذ {{count}} شهر",
+  "years-ago": "منذ {{count}} سنة",
+  "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "بالإضافة إلى نموذج GPT، هناك حاجة إلى التأكد من إمكانية استدعاء",
+  "speech-recognition-requires-the-use-of": "يتطلب التعرف على الكلام استخدام"
 }

@@ -38,7 +38,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       onSend={async ({ files }) => {
         if (isCreateMode) {
           //@ts-ignore
-          await blinko.upsertNote.call({ refresh: false, content: blinko.noteContent, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } }) })
+          await blinko.upsertNote.call({ refresh: false, content: blinko.noteContent, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } }) })
           if (blinko.noteTypeDefault == NoteType.NOTE && router.pathname != '/notes') {
             await router.push('/notes')
             blinko.forceQuery++
@@ -55,7 +55,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
             //@ts-ignore
             content: blinko.curSelectedNote.content,
             //@ts-ignore
-            attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size } })
+            attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } })
           })
         }
         onSended?.()
