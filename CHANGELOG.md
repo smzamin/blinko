@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/blinko-space/blinko/compare/v0.7.0...v0.7.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* build error ([4dc03ea](https://github.com/blinko-space/blinko/commit/4dc03eabd45ffee5c0b9ee31e8a32fe581d8e2aa))
+
 # [0.7.0](https://github.com/blinko-space/blinko/compare/v0.6.1...v0.7.0) (2024-11-22)
 
 
