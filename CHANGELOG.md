@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/blinko-space/blinko/compare/v0.6.1...v0.7.0) (2024-11-22)
+
+
+### Features
+
+* support ai write assisant ([fc233a5](https://github.com/blinko-space/blinko/commit/fc233a5867ed9c61935cadeb715fd4578c7002e9))
+
 ## [0.6.1](https://github.com/blinko-space/blinko/compare/v0.6.0...v0.6.1) (2024-11-22)
 
 
