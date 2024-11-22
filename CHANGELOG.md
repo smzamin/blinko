@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/blinko-space/blinko/compare/v0.6.0...v0.6.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* ui [#152](https://github.com/blinko-space/blinko/issues/152) [#149](https://github.com/blinko-space/blinko/issues/149) [#148](https://github.com/blinko-space/blinko/issues/148) ([a6127d3](https://github.com/blinko-space/blinko/commit/a6127d3bad3b994bba2883e6b719d698e62414dd))
+
 # [0.6.0](https://github.com/blinko-space/blinko/compare/v0.5.4...v0.6.0) (2024-11-21)
 
 
