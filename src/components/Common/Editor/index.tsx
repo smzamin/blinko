@@ -4,9 +4,9 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertImage, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
 import { Button, Card, Divider, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
 import { FileType, OnSendContentType } from './type';
 import { MyPlugins, ProcessCodeBlocks } from './editorPlugins';
@@ -67,6 +67,7 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
 
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
   content = ProcessCodeBlocks(content)
+  const [canSend, setCanSend] = useState(false)
   const { t } = useTranslation()
   const isPc = useMediaQuery('(min-width: 768px)')
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
@@ -81,21 +82,21 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     }
   }, [pastedFiles])
 
-  const recorderControls = useAudioRecorder(
-    {
-      noiseSuppression: true,
-      echoCancellation: true,
-    },
-    (err) => console.table(err)
-  );
-
-  const store = RootStore.Local(() => ({
+  const store = useLocalObservable(() => ({
     files: [] as FileType[],
     lastRange: null as Range | null,
     lastRangeText: '',
-    get canSend() {
-      if (store.files?.length == 0) return true
-      return store.files?.every(i => !i?.uploadPromise?.loading?.value)
+    updateSendStatus() {
+      console.log('updateSendStatus', store.files?.length, content)
+      if (store.files?.length == 0 && mdxEditorRef.current?.getMarkdown() == '') {
+        return setCanSend(false)
+      }
+      if (store.files?.every(i => !i?.uploadPromise?.loading?.value) && store.files?.length != 0) {
+        return setCanSend(true)
+      }
+      if (mdxEditorRef.current?.getMarkdown() != '') {
+        return setCanSend(true)
+      }
     },
     replaceMarkdownTag(text) {
       if (mdxEditorRef.current) {
@@ -170,12 +171,14 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
               if (data.filePath) {
                 return data.filePath
               }
+              store.updateSendStatus()
             }
           }),
           type: file.type
         }
       })
       store.files.push(..._acceptedFiles)
+      store.updateSendStatus()
       _acceptedFiles.map(i => i.uploadPromise.call())
     },
     handlePopTag() {
@@ -204,10 +207,10 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       }
     },
   }))
-
   //fix ui not render
   useEffect(() => {
-  }, [store.canSend, blinko.noteTypeDefault])
+    store.updateSendStatus()
+  }, [blinko.noteTypeDefault, content])
 
   useEffect(() => {
     eventBus.on('editor:replace', store.replaceMarkdownTag)
@@ -336,7 +339,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     <FileUploadIcon className='hover:opacity-80 transition-all' />
                   </ButtonWithTooltip>
 
-              
+
                   {
                     blinko.showAi && <ButtonWithTooltip className='!w-[24px] !h-[24px] mr-2' title={t('recording')} onClick={e => {
                       ShowAudioDialog((file) => {
@@ -365,7 +368,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                   </Button>
 
 
-                  <Button isDisabled={!store.canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={async e => {
+                  <Button isDisabled={!canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={async e => {
                     await onSend?.({
                       content,
                       files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value } })
