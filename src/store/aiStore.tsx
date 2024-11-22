@@ -7,12 +7,17 @@ import { streamApi } from '@/lib/trpc';
 import { StorageListState } from './standard/StorageListState';
 import { GlobalConfig, Note } from '@/server/types';
 import { makeAutoObservable } from 'mobx';
+import { BlinkoStore } from './blinkoStore';
+import { eventBus } from '@/lib/event';
+import { showAiWriteSuggestions } from '@/components/Common/PopoverFloat/aiWritePop';
 
 type Chat = {
   content: string
   role: 'user' | 'system' | 'assistant',
   createAt: number
 }
+
+type WriteType = 'expand' | 'polish' | 'custom'
 
 export class AiStore implements Store {
   sid = 'AiStore';
@@ -54,6 +59,12 @@ export class AiStore implements Store {
   chatHistory = new StorageListState<Chat>({ key: 'chatHistory' })
   private abortController = new AbortController()
 
+  writingResponse = ''
+  isWriting = false
+  writeQuestion = ''
+  originalContent = ''
+  isLoading = false
+
   async completionsStream() {
     try {
       this.relationNotes.clear()
@@ -85,8 +96,47 @@ export class AiStore implements Store {
       RootStore.Get(ToastPlugin).error(error.message)
     }
   }
+  get blinko() {
+    return RootStore.Get(BlinkoStore)
+  }
 
-  abortCompletions() {
+  async writeStream(writeType: "expand" | "polish" | "custom" | undefined, content: string | undefined) {
+    try {
+      this.isLoading = true
+      // console.log('writeStream', writeType, content)
+      this.originalContent = content ?? ' '
+      this.scrollTicker++
+      this.isWriting = true
+      eventBus.emit('editor:deleteLastChar')
+      if (writeType == 'polish') {
+        eventBus.emit('editor:clear')
+      }
+      let testContent = ''
+      // eventBus.emit('editor:setMarkdownLoading', true)
+      const res = await streamApi.ai.writing.mutate({
+        question: this.writeQuestion,
+        type: writeType,
+        content
+      }, { signal: this.abortController.signal })
+      // eventBus.emit('editor:setMarkdownLoading', false)
+      for await (const item of res) {
+        eventBus.emit('editor:insert', item.content)
+        testContent += item.content
+        this.scrollTicker++
+      }
+      console.log('writeStream end', testContent)
+      this.writeQuestion = ''
+      eventBus.emit('editor:focus')
+      this.isLoading = false
+    } catch (error) {
+      console.log('writeStream error', error)
+      this.isLoading = false
+    }
+  }
+
+  abort() {
     this.abortController.abort()
+    this.abortController = new AbortController()
+    this.isLoading = false
   }
 }

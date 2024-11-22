@@ -3,7 +3,7 @@ import Editor from "../Common/Editor"
 import { RootStore } from "@/store"
 import { BlinkoStore } from "@/store/blinkoStore"
 import dayjs from "@/lib/dayjs"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { NoteType } from "@/server/types"
 import { useRouter } from "next/router"
 
@@ -17,12 +17,18 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const blinko = RootStore.Get(BlinkoStore)
   const editorRef = useRef<any>(null)
   const router = useRouter()
-  return <div ref={editorRef} id='global-editor' >
+  useEffect(() => {
+    blinko.isCreateMode = mode == 'create'
+  }, [mode])
+  return <div ref={editorRef} id='global-editor' onClick={() => {
+    blinko.isCreateMode = mode == 'create'
+  }}>
     <Editor
       mode={mode}
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {
+        // console.log(v, 'onchange', editorRef.current?.clientHeight)
         if (v == '') {
           onHeightChange?.(editorRef.current?.clientHeight < 90 ? editorRef.current?.clientHeight : 90)
         } else {
@@ -35,6 +41,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
         isCreateMode ? <div className='text-xs text-ignore ml-2'>Drop to upload files</div> :
           <div className='text-xs text-desc'>{dayjs(blinko.curSelectedNote!.createdAt).format("YYYY-MM-DD hh:mm:ss")}</div>
       }
+
       onSend={async ({ files }) => {
         if (isCreateMode) {
           //@ts-ignore

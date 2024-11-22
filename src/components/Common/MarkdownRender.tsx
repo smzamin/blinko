@@ -24,7 +24,7 @@ const highlightTags = (text) => {
   try {
     const parts = text?.split(" ");
     return parts.map((part, index) => {
-      if (part.match(helper.regex.isContainHashTag)) {
+      if (part.match(helper.regex.isContainHashTag) && !part.match(/^#+$/) && index !== 0) {
         return (
           <span key={index} className='select-none blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' >
             {part + " "}

@@ -24,6 +24,7 @@ type filterType = {
 export class BlinkoStore implements Store {
   sid = 'BlinkoStore';
   noteContent = '';
+  isCreateMode: boolean = true
   curSelectedNote: Note | null = null;
   curMultiSelectIds: number[] = [];
   isMultiSelectMode: boolean = false;

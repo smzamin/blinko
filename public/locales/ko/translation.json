@@ -136,5 +136,10 @@
   "local-file-system": "로컬 파일 시스템",
   "object-storage": "개체 스토리지",
   "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "GPT 모델 외에도 다음과 같이",
-  "speech-recognition-requires-the-use-of": "음성 인식은 다음을 사용해야 합니다."
+  "speech-recognition-requires-the-use-of": "음성 인식은 다음을 사용해야 합니다.",
+  "ai-expand": "AI 확장",
+  "ai-polish": "AI 폴란드어",
+  "accept": "수락",
+  "reject": "거부",
+  "stop": "중지"
 }

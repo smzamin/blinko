@@ -163,7 +163,8 @@ export const noteRouter = router({
     .mutation(async function ({ input, ctx }) {
       let { id, isArchived, type, attachments, content, isTop, isShare } = input
       if (content != null) {
-        content = content?.replace(/&#x20;/g, ' ')
+        content = content?.replace(/&#x20;/g, ' ')?.replace(/&#x20;\\/g, '')?.replace(/\\([#<>{}[\]|`*-_.])/g, '$1');
+        // console.log({ content })
       }
       const tagTree = helper.buildHashTagTreeFromHashString(extractHashtags(content?.replace(/\\/g, '') + ' '))
       let newTags: Prisma.tagCreateManyInput[] = []

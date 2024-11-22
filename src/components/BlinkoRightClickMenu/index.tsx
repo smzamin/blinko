@@ -14,12 +14,16 @@ import { useEffect, useState } from "react";
 import { NoteType } from "@/server/types";
 
 export const ShowEditBlinkoModel = () => {
+  const blinko = RootStore.Get(BlinkoStore)
   RootStore.Get(DialogStore).setData({
     size: '2xl',
     isOpen: true,
     onlyContent: true,
     isDismissable: false,
-    content: <BlinkoEditor mode='edit' key='create-key' onSended={() => RootStore.Get(DialogStore).close()} />
+    content: <BlinkoEditor mode='edit' key='create-key' onSended={() => {
+      RootStore.Get(DialogStore).close()
+      blinko.isCreateMode = false
+    }} />
   })
 }
 export const EditItem = observer(() => {

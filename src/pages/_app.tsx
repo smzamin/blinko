@@ -7,7 +7,6 @@ import 'react-photo-view/dist/react-photo-view.css';
 import '@/lib/i18n'
 import NProgress from 'nprogress';
 import React from 'react';
-import TagSelectPop from '@/components/Common/TagSelectPop';
 import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import { NextUIProvider } from '@nextui-org/react';
@@ -17,6 +16,8 @@ import { initStore } from '@/store/init';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
+import TagSelectPop from '@/components/Common/PopoverFloat/tagSelectPop';
+import AiWritePop from '@/components/Common/PopoverFloat/aiWritePop';
 
 const MyApp = ({ Component, pageProps }) => {
   initStore();
@@ -36,7 +37,6 @@ const MyApp = ({ Component, pageProps }) => {
         <AppProvider />
         <NextUIProvider>
           <ThemeProvider attribute="class" enableSystem={false} >
-            <TagSelectPop />
             <CommonLayout>
               <Component {...pageProps} />
             </CommonLayout>

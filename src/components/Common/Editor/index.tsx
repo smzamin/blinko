@@ -16,18 +16,18 @@ import { _ } from '@/lib/lodash';
 import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
 import usePasteFile from '@/lib/hooks';
-import useAudioRecorder from '../AudioRecorder/hook';
-import AudioRecorder from '../AudioRecorder';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
-import { UPLOAD_FILE_PATH } from '@/lib/constant';
-import { showTagSelectPop } from '../TagSelectPop';
 import { DialogStore } from '@/store/module/Dialog';
 import { AttachmentsRender } from '../AttachmentRender';
 
 import { ShowCamera } from '../CameraDialog';
 import { ShowAudioDialog } from '../AudioDialog';
+import { showTagSelectPop } from '../PopoverFloat/tagSelectPop';
+import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
+import { AiStore } from '@/store/aiStore';
+import { Icon } from '@iconify/react';
 
 const { MDXEditor } = await import('@mdxeditor/editor')
 
@@ -68,11 +68,13 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
+  const [isWriting, setIsWriting] = useState(false)
   const { t } = useTranslation()
   const isPc = useMediaQuery('(min-width: 768px)')
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
   const cardRef = React.useRef(null)
   const blinko = RootStore.Get(BlinkoStore)
+  const ai = RootStore.Get(AiStore)
   const { theme } = useTheme();
 
   const pastedFiles = usePasteFile(cardRef);
@@ -87,7 +89,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     lastRange: null as Range | null,
     lastRangeText: '',
     updateSendStatus() {
-      console.log('updateSendStatus', store.files?.length, content)
       if (store.files?.length == 0 && mdxEditorRef.current?.getMarkdown() == '') {
         return setCanSend(false)
       }
@@ -123,13 +124,34 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         defaultSelection: 'rootEnd'
       })
     },
+    insertMarkdownByEvent(text) {
+      const processedText = text
+        .replace(/\#/g, '\\#')
+        .replace(/ /g, '&#x20;')
+        .replace(/```/g, '\\`\\`\\`')
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]')
+        .replace(/</g, '\\<')
+        .replace(/>/g, '\\>')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
+        .replace(/\-/g, '\\-')
+        .replace(/\*/g, '\\*')
+        .replace(/(\r\n|\r|\n|↵|\\n)/g, '&#x20;\n\n&#x20;') //|\u2028|\u2029|\x0B|\x0C|\u0085 &#x20;
+      mdxEditorRef.current!.insertMarkdown(processedText)
+      store.focus()
+    },
+    focus() {
+      mdxEditorRef.current!.focus(() => {
+        onChange?.(mdxEditorRef.current!.getMarkdown())
+      }, {
+        defaultSelection: 'rootEnd'
+      })
+    },
     clearMarkdown() {
       if (mdxEditorRef.current) {
         mdxEditorRef.current.setMarkdown("")
-        if (!isPc) return
-        mdxEditorRef.current.focus(() => {
-          onChange?.("")
-        })
+        store.focus()
       }
     },
     inertHash() {
@@ -193,7 +215,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         const isEndsWithBank = endsWithBankRegex.test(currentText)
         const isEndsWithHashTag = helper.regex.isEndsWithHashTag.test(currentText)
         if (currentText == '' || !isEndsWithHashTag) {
-          setTimeout(() => eventBus.emit('hashpop:hidden'))
+          setTimeout(() => eventBus.emit('tagselect:hidden'))
           return
         }
         if (isEndsWithHashTag && currentText != '' && !isEndsWithBank) {
@@ -206,18 +228,60 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         }
       }
     },
+    handlePopAiWrite() {
+      if (!blinko.showAi) {
+        return
+      }
+      const selection = window.getSelection();
+      if (selection!.rangeCount > 0) {
+        const lastRange = selection!.getRangeAt(0);
+        const currentText = lastRange.startContainer.textContent?.slice(0, lastRange.endOffset) ?? '';
+        const isEndsWithSlash = /[^\s]?\/$/.test(currentText);
+        if (currentText === '' || !isEndsWithSlash) {
+          setTimeout(() => eventBus.emit('aiwrite:hidden'));
+          return;
+        }
+        if (isEndsWithSlash) {
+          showAiWriteSuggestions();
+        }
+      }
+    },
+    deleteLastChar() {
+      const content = mdxEditorRef.current!.getMarkdown()
+      mdxEditorRef.current!.setMarkdown(content.slice(0, -1))
+    },
+    setMarkdownLoading(loading: boolean) {
+      if (loading) {
+        mdxEditorRef.current!.insertMarkdown("Thinking...")
+        store.focus()
+      } else {
+        const content = mdxEditorRef.current!.getMarkdown()
+        const newContent = content.replace(/Thinking.../g, '')
+        mdxEditorRef.current!.setMarkdown(newContent)
+        store.focus()
+      }
+    }
   }))
   //fix ui not render
   useEffect(() => {
     store.updateSendStatus()
-  }, [blinko.noteTypeDefault, content])
+    setIsWriting(ai.isWriting)
+  }, [blinko.noteTypeDefault, content, ai.isWriting])
 
   useEffect(() => {
     eventBus.on('editor:replace', store.replaceMarkdownTag)
     eventBus.on('editor:clear', store.clearMarkdown)
+    eventBus.on('editor:insert', store.insertMarkdownByEvent)
+    eventBus.on('editor:deleteLastChar', store.deleteLastChar)
+    eventBus.on('editor:focus', store.focus)
+    eventBus.on('editor:setMarkdownLoading', store.setMarkdownLoading)
     return () => {
       eventBus.off('editor:replace', store.replaceMarkdownTag)
       eventBus.off('editor:clear', store.clearMarkdown)
+      eventBus.off('editor:insert', store.insertMarkdownByEvent)
+      eventBus.off('editor:deleteLastChar', store.deleteLastChar)
+      eventBus.off('editor:focus', store.focus)
+      eventBus.off('editor:setMarkdownLoading', store.setMarkdownLoading)
     }
   }, [])
 
@@ -279,6 +343,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         onChange={v => {
           onChange?.(v)
           store.handlePopTag()
+          store.handlePopAiWrite()
         }}
         autoFocus={{
           defaultSelection: 'rootEnd'
@@ -292,6 +357,22 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                 <div className='w-full'>
                   <AttachmentsRender files={store.files} />
                 </div>
+                {
+                  isWriting &&
+                  <div id='ai-write-suggestions' className='flex gap-2 items-center'>
+                    <Button onClick={e => {
+                      ai.isWriting = false
+                    }} startContent={<Icon icon="ic:sharp-check" className='green' />} size='sm' variant='light' color='success'>{t('accept')}</Button>
+                    <Button onClick={e => {
+                      mdxEditorRef.current!.setMarkdown(ai.originalContent)
+                      store.focus()
+                      ai.isWriting = false
+                    }} startContent={<Icon icon="ic:sharp-close" className='red' />} size='sm' variant='light' color='danger'>{t('reject')}</Button>
+                    <Button onClick={e => {
+                      ai.abort()
+                    }} startContent={<Icon icon="mynaui:stop" className='blinko' />} size='sm' variant='light' color='warning'>{t('stop')} </Button>
+                  </div>
+                }
                 <div className='flex w-full items-center'>
                   <ButtonWithTooltip className='!w-[24px] !h-[24px]' title={
                     blinko.noteTypeDefault == NoteType.BLINKO ? t('blinko') : t('note')
@@ -375,6 +456,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     })
                     onChange?.('')
                     store.files = []
+                    ai.isWriting = false
                   }} className={`${mode == 'create' ? 'ml-auto' : ''} w-[60px] group`} isIconOnly color='primary' >
                     <SendIcon className='primary-foreground group-hover:rotate-[-35deg] transition-all' />
                   </Button>

@@ -318,6 +318,92 @@ export class AiService {
     }
   }
 
+
+  static getWritingPrompt(type: 'expand' | 'polish' | 'custom', content?: string) {
+   const systemPrompts = {
+      expand: `You are a professional writing assistant. Your task is to expand and enrich the given text content:
+      1. Detect and use the same language as the input content
+      2. Add more details and descriptions
+      3. Expand arguments and examples
+      4. Include relevant background information
+      5. Maintain consistency with the original tone and style
+      
+      Original content:
+      {content}
+      
+      Important:
+      - Respond in the SAME LANGUAGE as the input content
+      - Use Markdown format
+      - Replace all spaces with &#x20;
+      - Use two line breaks between paragraphs
+      - Ensure line breaks between list items`,
+      
+      polish: `You are a professional text editor. Your task is to polish and optimize the given text:
+      1. Detect and use the same language as the input content
+      2. Improve word choice and expressions
+      3. Optimize sentence structure
+      4. Maintain the original core meaning
+      5. Ensure the text flows naturally
+      
+      Original content:
+      {content}
+      
+      Important:
+      - Respond in the SAME LANGUAGE as the input content
+      - Use Markdown format
+      - Replace all spaces with &#x20;
+      - Use two line breaks between paragraphs
+      - Ensure line breaks between list items`,
+  
+      custom: `You are a professional writing assistant. Your task is to:
+      1. Detect and use the same language as the input content
+      2. Create content according to user requirements
+      3. Maintain professional writing standards
+      4. Follow technical documentation best practices when needed
+      
+      Important:
+      - Respond in the SAME LANGUAGE as the input content
+      - Use Markdown format
+      - Replace all spaces with &#x20;
+      - Use two line breaks between paragraphs
+      - Ensure line breaks between list items
+      - Use appropriate Markdown elements (code blocks, tables, lists, etc.)`
+    };
+  
+    const writingPrompt = ChatPromptTemplate.fromMessages([
+      ["system", systemPrompts[type]],
+      ["human", "{question}"]
+    ]);
+  
+    return writingPrompt;
+  }
+  
+  static async writing({ 
+    question, 
+    type = 'custom', 
+    content 
+  }: { 
+    question: string, 
+    type?: 'expand' | 'polish' | 'custom',
+    content?: string 
+  }) {
+    try {
+      const { LLM } = await AiModelFactory.GetProvider();
+      const writingPrompt = AiService.getWritingPrompt(type, content);
+      const writingChain = writingPrompt.pipe(LLM).pipe(new StringOutputParser());
+      
+      const result = await writingChain.stream({
+        question,
+        content: content || ''
+      });
+      
+      return { result };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   static async speechToText(audioPath: string) {
     const loader = await AiModelFactory.GetAudioLoader(audioPath)
     const docs = await loader.load();

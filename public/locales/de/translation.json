@@ -136,5 +136,10 @@
   "local-file-system": "Lokales Dateisystem",
   "object-storage": "Speicherung von Objekten",
   "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "Zusätzlich zum GPT-Modell muss sichergestellt werden, dass es möglich ist, die",
-  "speech-recognition-requires-the-use-of": "Die Spracherkennung erfordert die Verwendung von"
+  "speech-recognition-requires-the-use-of": "Die Spracherkennung erfordert die Verwendung von",
+  "ai-expand": "AI Erweitern",
+  "ai-polish": "AI Polnisch",
+  "accept": "Akzeptieren",
+  "reject": "Ablehnen",
+  "stop": "Stopp"
 }

@@ -88,5 +88,27 @@ export const aiRouter = router({
       } catch (error) {
         throw new Error(error)
       }
+    }),
+  writing: authProcedure
+    .input(z.object({
+      question: z.string(),
+      type: z.enum(['expand', 'polish', 'custom']).optional(),
+      content: z.string().optional()
+    }))
+    .mutation(async function* ({ input }) {
+      const { question, type = 'custom', content } = input
+      try {
+        const { result: responseStream } = await AiService.writing({
+          question,
+          type,
+          content
+        })
+
+        for await (const chunk of responseStream) {
+          yield { content: chunk }
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
     })
 })

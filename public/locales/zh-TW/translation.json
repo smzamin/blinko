@@ -136,5 +136,10 @@
   "local-file-system": "本地文件系统",
   "object-storage": "对象存储",
   "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "除 GPT 模型外，还需要确保可以调用",
-  "speech-recognition-requires-the-use-of": "语音识别需要使用"
+  "speech-recognition-requires-the-use-of": "语音识别需要使用",
+  "ai-expand": "AI扩写",
+  "ai-polish": "AI润色",
+  "accept": "接受",
+  "reject": "拒绝",
+  "stop": "停止"
 }

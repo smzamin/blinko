@@ -144,5 +144,10 @@
   "months-ago": "منذ {{count}} شهر",
   "years-ago": "منذ {{count}} سنة",
   "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "بالإضافة إلى نموذج GPT، هناك حاجة إلى التأكد من إمكانية استدعاء",
-  "speech-recognition-requires-the-use-of": "يتطلب التعرف على الكلام استخدام"
+  "speech-recognition-requires-the-use-of": "يتطلب التعرف على الكلام استخدام",
+  "ai-expand": "توسيع نطاق الذكاء الاصطناعي",
+  "ai-polish": "الذكاء الاصطناعي البولندي",
+  "accept": "قبول",
+  "reject": "رفض",
+  "stop": "توقف"
 }

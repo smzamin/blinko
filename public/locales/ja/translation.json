@@ -134,5 +134,10 @@
   "local-file-system": "ローカルファイルシステム",
   "object-storage": "オブジェクトストレージ",
   "in-addition-to-the-gpt-model-there-is-a-need-to-ensure-that-it-is-possible-to-invoke-the": "GPTモデルに加えて、次のようなことが可能であることを保証する必要がある。",
-  "speech-recognition-requires-the-use-of": "音声認識には"
+  "speech-recognition-requires-the-use-of": "音声認識には",
+  "ai-expand": "AI拡大",
+  "ai-polish": "AIポーランド語",
+  "accept": "受け入れる",
+  "reject": "却下",
+  "stop": "ストップ"
 }

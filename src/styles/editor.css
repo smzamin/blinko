@@ -83,7 +83,7 @@
 }
 
 ._textInput_uazmk_1186 {
-  border: none!important;
+  border: none !important;
   background-color: var(--sencondbackground) !important;
   border-radius: 12px !important;
 }
@@ -185,9 +185,23 @@
   color: white !important;
 }
 
-.mdxeditor-toolbar .primary-foreground {
-  color: var(--primary-foreground) !important;
+.mdxeditor-toolbar .green {
+  color: var(--green-500) !important;
 }
+
+.mdxeditor-toolbar .red {
+  color: var(--red-500) !important;
+}
+
+._toolbarToggleItem_uazmk_206[data-state=on],
+._toolbarButton_uazmk_237[data-state=on],
+._toolbarToggleItem_uazmk_206:active,
+._toolbarButton_uazmk_237:active {
+  background-color: var(--sencondbackground) !important;
+
+}
+
+
 
 .mdxeditor-toolbar .custom-svg {
   width: 18px !important;
@@ -201,8 +215,6 @@
   padding-left: 7px !important;
   padding-right: 5px !important;
 }
-
-
 
 ._popupContainer_uazmk_1220 {
   position: relative;
