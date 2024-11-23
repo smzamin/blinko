@@ -1,3 +1,10 @@
+## [0.8.6](https://github.com/blinko-space/blinko/compare/v0.8.5...v0.8.6) (2024-11-23)
+
+
+### Bug Fixes
+
+* ui add user table max height ([779c88c](https://github.com/blinko-space/blinko/commit/779c88cae631b1b616c7edec96c42f4c76fc112f))
+
 ## [0.8.5](https://github.com/blinko-space/blinko/compare/v0.8.4...v0.8.5) (2024-11-23)
 
 
