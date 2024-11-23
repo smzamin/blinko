@@ -16,7 +16,6 @@ import Webcam from "react-webcam";
 const Home = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
-  const base = RootStore.Get(BaseStore)
   blinko.useQuery(useRouter())
 
   const store = RootStore.Local(() => ({

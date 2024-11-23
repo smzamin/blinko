@@ -77,11 +77,12 @@ body {
 .blinko-tag {
   margin-right: 4px;
   margin-left: 4px;
-  color: var(--tag);
-  background: var(--tag-foreground);
+  color: var(--tag)!important;
+  background: var(--tag-foreground)!important;
   border-radius: 7px;
   font-size: 13px;
   padding: 3px;
+  text-decoration: none!important;
 }
 
 

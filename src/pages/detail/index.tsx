@@ -13,7 +13,7 @@ const Detail = observer(() => {
     if (router.query.id) {
       blinko.noteDetail.call({ id: Number(router.query.id) })
     }
-  }, [router.isReady])
+  }, [router.isReady,router.query?.id])
 
   return <ScrollArea onBottom={() => { }} className='p-6'>{
     blinko.noteDetail.value && <BlinkoCard blinkoItem={blinko.noteDetail.value} />

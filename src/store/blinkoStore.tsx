@@ -57,7 +57,7 @@ export class BlinkoStore implements Store {
       if (res?.id) {
         api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
       }
-      
+
       for (const attachment of attachments) {
         api.ai.embeddingInsertAttachments.mutate({ id: res!.id, filePath: attachment.path }, { context: { skipBatch: true } })
       }
@@ -209,7 +209,7 @@ export class BlinkoStore implements Store {
   }
 
   useQuery(router) {
-    const { tagId, withoutTag, withFile, withLink } = router.query;
+    const { tagId, withoutTag, withFile, withLink, searchText } = router.query;
     useEffect(() => {
       if (!router.isReady) return
       this.noteListFilterConfig.type = NoteType.BLINKO
@@ -219,6 +219,7 @@ export class BlinkoStore implements Store {
       this.noteListFilterConfig.withoutTag = false
       this.noteListFilterConfig.withLink = false
       this.noteListFilterConfig.withFile = false
+      this.noteListFilterConfig.searchText = searchText ?? ''
 
       if (router.pathname == '/notes') {
         this.noteListFilterConfig.type = NoteType.NOTE
@@ -236,6 +237,7 @@ export class BlinkoStore implements Store {
       if (withFile) {
         this.noteListFilterConfig.withFile = true
       }
+
       if (router.pathname == '/all') {
         this.noteListFilterConfig.type = -1
       }

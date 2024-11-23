@@ -61,14 +61,18 @@ export const BlinkoAiChat = observer(() => {
               {
                 (ai.chatHistory.list?.length == index + 1) && <div className="flex flex-col gap-1">
                   {ai.relationNotes?.list?.map(note => {
-                    return <Link href={`/detail?id=${note.id}`} className="w-[90%] flex flex-col gap-1 justify-center cursor-pointer blinko-tag" style={{ fontSize: '11px' }}>
+                    return <Link onClick={e => {
+                      e.stopPropagation()
+                    }} href={`/detail?id=${note.id}`} className="w-[90%] flex flex-col gap-1 justify-center cursor-pointer blinko-tag" style={{ fontSize: '11px' }}>
                       <div className="flex items-center gap-1">
                         <Icon className="min-w-[15px]" icon="uim:arrow-up-left" width="15" height="15" />
                         {note.content && <div className="truncate  ">{note.content}</div>}
                       </div>
-                      <div className="text-foreground">
-                        <FilesAttachmentRender preview files={note.attachments ?? []} />
-                      </div>
+                      {
+                        note.attachments && note.attachments.length > 0 && <div className="text-foreground">
+                          <FilesAttachmentRender preview files={note.attachments ?? []} />
+                        </div>
+                      }
                     </Link>
                   })}
                 </div>

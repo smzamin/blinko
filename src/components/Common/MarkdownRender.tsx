@@ -18,17 +18,21 @@ import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
+import Link from 'next/link';
+import { BlinkoStore } from '@/store/blinkoStore';
 
 const highlightTags = (text) => {
   if (!text) return text
   try {
     const parts = text?.split(" ");
     return parts.map((part, index) => {
-      if (part.match(helper.regex.isContainHashTag) && !part.match(/^#+$/) && index !== 0) {
+      if (part.startsWith('#') && part.length > 1 && part.match(helper.regex.isContainHashTag)) {
         return (
-          <span key={index} className='select-none blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' >
+          <Link key={index} className='select-none blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' onClick={() => {
+            RootStore.Get(BlinkoStore).forceQuery++
+          }} href={`/all?searchText=${part}`}>
             {part + " "}
-          </span>
+          </Link>
         );
       } else {
         return part + " ";
