@@ -1,3 +1,10 @@
+# [0.8.0](https://github.com/blinko-space/blinko/compare/v0.7.1...v0.8.0) (2024-11-23)
+
+
+### Features
+
+* postgres data persisting ([ba01284](https://github.com/blinko-space/blinko/commit/ba012844f70df1980e56a0d7060379cd4d0fe99c)), closes [#20](https://github.com/blinko-space/blinko/issues/20)
+
 ## [0.7.1](https://github.com/blinko-space/blinko/compare/v0.7.0...v0.7.1) (2024-11-22)
 
 
