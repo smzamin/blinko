@@ -1,3 +1,10 @@
+## [0.8.7](https://github.com/blinko-space/blinko/compare/v0.8.6...v0.8.7) (2024-11-23)
+
+
+### Bug Fixes
+
+* ui send button color ([1da3e76](https://github.com/blinko-space/blinko/commit/1da3e7607f469d2c7b8301e28dce9974e4940b43))
+
 ## [0.8.6](https://github.com/blinko-space/blinko/compare/v0.8.5...v0.8.6) (2024-11-23)
 
 
