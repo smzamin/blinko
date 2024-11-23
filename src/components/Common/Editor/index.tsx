@@ -458,7 +458,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     store.files = []
                     ai.isWriting = false
                   }} className={`${mode == 'create' ? 'ml-auto' : ''} w-[60px] group`} isIconOnly color='primary' >
-                    <SendIcon className='primary-foreground group-hover:rotate-[-35deg] transition-all' />
+                    <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
                   </Button>
                 </div>
               </div>

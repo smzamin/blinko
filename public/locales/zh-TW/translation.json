@@ -147,6 +147,6 @@
   "width-less-than-1024px": "宽度小于 1024px",
   "width-less-than": "宽度小于",
   "small-device-card-columns": "小型设备卡列",
-  "medium-device-card-columns": "介质设备卡列",
-  "large-device-card-columns": "大型设备卡列"
+  "medium-device-card-columns": "中尺寸设备卡列",
+  "large-device-card-columns": "大尺寸设备卡列"
 }
