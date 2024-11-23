@@ -87,8 +87,8 @@ export const TagListPanel = observer(() => {
                   <div className="flex items-center justify-center h-[24px]">
                     <div className="flex items-center justify-center group-hover:opacity-100 opacity-0 w-0 h-0 group-hover:w-[24px] group-hover:h-[24px] transition-all" >
                       {isExpanded ?
-                        <Icon icon="gravity-ui:caret-down" className="hover:text-primary transition-all" width="20" height="20" />
-                        : <Icon icon="gravity-ui:caret-right" className="hover:text-primary transition-all" width="20" height="20" />
+                        <Icon icon="gravity-ui:caret-down" className="transition-all" width="20" height="20" />
+                        : <Icon icon="gravity-ui:caret-right" className="transition-all" width="20" height="20" />
                       }
                     </div>
                     <div className="group-hover:opacity-0 opacity-100 w-[24px] group-hover:w-0 transition-all">
