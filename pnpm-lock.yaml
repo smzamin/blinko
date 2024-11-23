@@ -42,8 +42,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(@langchain/core@0.3.13(openai@4.68.0(encoding@0.1.13)(zod@3.23.8)))
       '@mdxeditor/editor':
-        specifier: ^3.14.0
-        version: 3.14.0(@codemirror/language@6.10.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.1)(@types/react@18.2.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
+        specifier: ^3.19.2
+        version: 3.19.2(@codemirror/language@6.10.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.1)(@types/react@18.2.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
       '@next/bundle-analyzer':
         specifier: ^14.1.4
         version: 14.2.15
@@ -2097,8 +2097,8 @@ packages:
     peerDependencies:
       react: ^18.2.0
 
-  '@mdxeditor/editor@3.14.0':
-    resolution: {integrity: sha512-5upWjI89i+UWhIMf6zu4jiiw1KvjAINVsXQcE4RbJ/zYDj/F2bamAAt35wW5Xrd9nMM8ogrwUS9OKnpFR2AeOA==}
+  '@mdxeditor/editor@3.19.2':
+    resolution: {integrity: sha512-9p7qSXPmVa3TjQOHjMqmzlhVclhZjGIJzpOApB0FWwbxtuAVTdqyD0rvUzyTV7cdyOCNYnO5TyMLQcq9zbYxwg==}
     engines: {node: '>=16'}
     peerDependencies:
       react: '>= 18 || >= 19'
@@ -12108,7 +12108,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@mdxeditor/editor@3.14.0(@codemirror/language@6.10.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.1)(@types/react@18.2.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)':
+  '@mdxeditor/editor@3.19.2(@codemirror/language@6.10.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.1)(@types/react@18.2.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)':
     dependencies:
       '@codemirror/lang-markdown': 6.3.0
       '@codemirror/language-data': 6.5.1(@codemirror/view@6.34.1)

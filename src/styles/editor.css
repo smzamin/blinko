@@ -21,7 +21,7 @@
   overflow-y: scroll;
   color: var(--foreground);
   padding: 0;
-  padding-left: 7px;
+  padding-left: 5px;
 }
 
 .prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)),
@@ -52,6 +52,10 @@
 }
 ._selectWithLabel_uazmk_1002 label {
   display: none;
+}
+
+._placeholder_uazmk_1084 p {
+  margin-left: 5px;
 }
 
 .ͼo {
@@ -228,7 +232,7 @@ div[id^="radix-"][role="dialog"] {
 
 .mdxeditor-root-contenteditable>div:first-of-type {
   padding: 0;
-  padding-left: 7px;
+  padding-left: 5px;
   padding-right: 5px;
 }
 

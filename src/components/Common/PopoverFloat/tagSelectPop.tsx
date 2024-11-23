@@ -22,23 +22,25 @@ export const showTagSelectPop = (text: string = '') => {
 const TagSelect = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const { t } = useTranslation()
-  
+
   const store = RootStore.Local(() => ({
     rect: null as DOMRect | null,
     show: false,
     searchText: '',
-    
+    selectedIndex: 0,
+
     get tagList() {
       if (!store.searchText) {
         return blinko.tagList?.value?.pathTags
       }
-      return blinko.tagList?.value?.pathTags.filter(i => 
+      return blinko.tagList?.value?.pathTags.filter(i =>
         i.toLowerCase().includes(store.searchText.toLowerCase().replace("#", ''))
       )
     },
-    
+
     hidden() {
       store.show = false
+      store.selectedIndex = 0
       RootStore.Get(DialogStore).preventClose = false
     },
 
@@ -46,7 +48,33 @@ const TagSelect = observer(() => {
       store.rect = args.rect
       store.show = true
       store.searchText = args.text
+      store.selectedIndex = 0
       RootStore.Get(DialogStore).preventClose = true
+    },
+
+    handleKeyDown(e: KeyboardEvent) {
+      if (!store.show || !store.tagList?.length) return
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          e.stopPropagation()
+          store.selectedIndex = (store.selectedIndex + 1) % store.tagList.length
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          e.stopPropagation()
+          store.selectedIndex = (store.selectedIndex - 1 + store.tagList.length) % store.tagList.length
+          break
+        case 'Enter':
+          e.preventDefault()
+          e.stopPropagation()
+          const selectedTag = store.tagList[store.selectedIndex]
+          if (selectedTag) {
+            store.hidden()
+            eventBus.emit('editor:replace', selectedTag, true)
+          }
+          break
+      }
     }
   }))
 
@@ -59,12 +87,29 @@ const TagSelect = observer(() => {
   useEffect(() => {
     eventBus.on('tagselect:update', store.setData)
     eventBus.on('tagselect:hidden', store.hidden)
-    
+
     return () => {
       eventBus.off('tagselect:update', store.setData)
       eventBus.off('tagselect:hidden', store.hidden)
     }
   }, [])
+
+  useEffect(() => {
+    window.addEventListener('keydown', store.handleKeyDown)
+    return () => window.removeEventListener('keydown', store.handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const selectedElement = document.querySelector(`[data-index="${store.selectedIndex}"]`);
+      selectedElement?.scrollIntoView({ block: 'nearest' });
+    };
+
+    if (store.show) {
+      // 使用 requestAnimationFrame 确保在 DOM 更新后执行滚动
+      requestAnimationFrame(handleScroll);
+    }
+  }, [store.selectedIndex, store.show]);
 
   return (
     <PopoverFloat
@@ -72,10 +117,12 @@ const TagSelect = observer(() => {
       onHide={store.hidden}
       anchorRect={store.rect}
     >
-      {store.tagList?.map(i => (
-        <div 
-          key={i} 
-          className='cursor-pointer hover:bg-hover transition-all px-2 py-1 rounded-lg'
+      {store.tagList?.map((i, index) => (
+        <div
+          key={i}
+          data-index={index}
+          className={`cursor-pointer hover:bg-hover transition-all px-2 py-1 rounded-lg
+            ${index === store.selectedIndex ? 'bg-hover' : ''}`}
           onClick={e => {
             store.hidden()
             eventBus.emit('editor:replace', i)

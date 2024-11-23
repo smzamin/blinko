@@ -100,19 +100,15 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         return setCanSend(true)
       }
     },
-    replaceMarkdownTag(text) {
+    replaceMarkdownTag(text: string, forceFocus = false) {
       if (mdxEditorRef.current) {
         if (store.lastRange) {
-          // const selection = window.getSelection();
           const currentTextBeforeRange = store.lastRangeText.replace(/&#x20;/g, " ") ?? ''
           const currentText = mdxEditorRef.current!.getMarkdown().replace(/\\/g, '').replace(/&#x20;/g, " ")
           const tag = currentTextBeforeRange.replace(helper.regex.isEndsWithHashTag, "#" + text + '&#x20;')
           const MyContent = currentText.replace(currentTextBeforeRange, tag)
           mdxEditorRef.current.setMarkdown(MyContent)
-          onChange?.(MyContent)
-          mdxEditorRef.current!.focus()
-          // selection!.removeAllRanges();
-          // selection!.addRange(store.lastRange);
+          store.focus(forceFocus)
         }
       }
     },
@@ -142,12 +138,40 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       mdxEditorRef.current!.insertMarkdown(processedText)
       store.focus()
     },
-    focus() {
-      mdxEditorRef.current!.focus(() => {
+    focus(force = false) {
+      console.log(mdxEditorRef.current)
+      if (force && store.lastRange) {
         onChange?.(mdxEditorRef.current!.getMarkdown())
-      }, {
-        defaultSelection: 'rootEnd'
-      })
+        const editorElement = document.querySelector('._contentEditable_uazmk_379') as HTMLElement
+        if (editorElement) {
+          requestAnimationFrame(() => {
+            const range = document.createRange()
+            const selection = window.getSelection()
+            const walker = document.createTreeWalker(
+              editorElement,
+              NodeFilter.SHOW_TEXT,
+              null
+            )
+            let lastNode: any = null
+            while (walker.nextNode()) {
+              lastNode = walker.currentNode
+            }
+            if (lastNode) {
+              range.setStart(lastNode, lastNode?.length)
+              range.setEnd(lastNode, lastNode?.length)
+              selection?.removeAllRanges()
+              selection?.addRange(range)
+              editorElement.focus()
+            }
+          })
+        }
+      } else {
+        mdxEditorRef.current!.focus(() => {
+          onChange?.(mdxEditorRef.current!.getMarkdown())
+        }, {
+          defaultSelection: 'rootEnd'
+        })
+      }
     },
     clearMarkdown() {
       if (mdxEditorRef.current) {
