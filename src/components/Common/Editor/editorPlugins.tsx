@@ -26,18 +26,28 @@ export const ProcessCodeBlocks = (content: string): string => {
   if (!content) return '';
   const codeBlockRegex = /```(?:(\w*)\n)?([\s\S]*?)```/g;
   
-  const htmlRegex = /(<[^>]+>)/gi;
-  try {
-    return content.replace(codeBlockRegex, (match, language, code) => {
-      if (!language || !(language in codeBlockLanguages)) {
-        return '```plain\n' + code.trim() + '\n```';
-      }
-      return '```' + language + '\n' + code.trim() + '\n```';
-    }).replace(htmlRegex, '\\$1');
-  } catch (error) {
-    
-    return content
+  let lastIndex = 0;
+  let result = '';
+  let match;
+
+  while ((match = codeBlockRegex.exec(content)) !== null) {
+    const beforeCode = content.slice(lastIndex, match.index);
+    result += beforeCode.replace(/(<[^>]+>)/gi, '\\$1');
+
+    const [_, language, code] = match;
+    if (!language || !(language in codeBlockLanguages)) {
+      result += '```plain\n' + code.trim() + '\n```';
+    } else {
+      result += '```' + language + '\n' + code.trim() + '\n```';
+    }
+
+    lastIndex = codeBlockRegex.lastIndex;
   }
+
+  const afterLastCode = content.slice(lastIndex);
+  result += afterLastCode.replace(/(<[^>]+>)/gi, '\\$1');
+
+  return result;
 };
 
 export const MyPlugins = [
