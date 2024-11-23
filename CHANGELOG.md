@@ -1,3 +1,10 @@
+## [0.8.1](https://github.com/blinko-space/blinko/compare/v0.8.0...v0.8.1) (2024-11-23)
+
+
+### Bug Fixes
+
+* add tag link [#156](https://github.com/blinko-space/blinko/issues/156) ([3249615](https://github.com/blinko-space/blinko/commit/32496153400c66c3804ce84b87839f3570209ecf))
+
 # [0.8.0](https://github.com/blinko-space/blinko/compare/v0.7.1...v0.8.0) (2024-11-23)
 
 
