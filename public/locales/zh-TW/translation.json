@@ -142,5 +142,11 @@
   "accept": "接受",
   "reject": "拒绝",
   "stop": "停止",
-  "card-columns": "卡片列"
+  "card-columns": "卡片列",
+  "select-a-columns": "选择列",
+  "width-less-than-1024px": "宽度小于 1024px",
+  "width-less-than": "宽度小于",
+  "small-device-card-columns": "小型设备卡列",
+  "medium-device-card-columns": "介质设备卡列",
+  "large-device-card-columns": "大型设备卡列"
 }

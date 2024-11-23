@@ -141,5 +141,11 @@
   "accept": "Acepte",
   "reject": "Rechazar",
   "stop": "Stop",
-  "card-columns": "Columnas de tarjetas"
+  "card-columns": "Columnas de tarjetas",
+  "select-a-columns": "Seleccione una columna",
+  "width-less-than-1024px": "Anchura inferior a 1024px",
+  "width-less-than": "Anchura inferior a",
+  "small-device-card-columns": "Columnas de la tarjeta de dispositivo pequeño",
+  "medium-device-card-columns": "Columnas de la tarjeta de dispositivo medio",
+  "large-device-card-columns": "Columnas grandes de la tarjeta de dispositivo"
 }

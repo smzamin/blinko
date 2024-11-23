@@ -150,5 +150,11 @@
   "accept": "قبول",
   "reject": "رفض",
   "stop": "توقف",
-  "card-columns": "أعمدة البطاقة"
+  "card-columns": "أعمدة البطاقة",
+  "select-a-columns": "حدد أعمدة",
+  "width-less-than-1024px": "العرض أقل من 1024 بكسل",
+  "width-less-than": "عرض أقل من",
+  "small-device-card-columns": "أعمدة بطاقة الجهاز الصغيرة",
+  "medium-device-card-columns": "أعمدة بطاقة الجهاز المتوسطة",
+  "large-device-card-columns": "أعمدة بطاقة الجهاز الكبيرة"
 }

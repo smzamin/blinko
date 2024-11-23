@@ -29,7 +29,9 @@ export const ZConfigKey = z.union([
   z.literal('s3Endpoint'),
   z.literal('s3Bucket'),
   z.literal('s3Region'),
-  z.literal('cardColumns'),
+  z.literal('smallDeviceCardColumns'),
+  z.literal('mediumDeviceCardColumns'),
+  z.literal('largeDeviceCardColumns'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -46,7 +48,9 @@ export const ZConfigSchema = z.object({
   isAllowRegister: z.any().optional(),
   isOrderByCreateTime: z.any().optional(),
   timeFormat: z.any().optional(),
-  cardColumns: z.any().optional(),
+  smallDeviceCardColumns: z.any().optional(),
+  mediumDeviceCardColumns: z.any().optional(),
+  largeDeviceCardColumns: z.any().optional(),
   objectStorage: z.any().optional(),
   s3AccessKeyId: z.any().optional(),
   s3AccessKeySecret: z.any().optional(),

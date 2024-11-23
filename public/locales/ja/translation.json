@@ -140,5 +140,11 @@
   "accept": "受け入れる",
   "reject": "却下",
   "stop": "ストップ",
-  "card-columns": "カード・コラム"
+  "card-columns": "カード・コラム",
+  "select-a-columns": "列を選択する",
+  "width-less-than-1024px": "横幅が1024px未満",
+  "width-less-than": "幅",
+  "small-device-card-columns": "小型デバイスカードのコラム",
+  "medium-device-card-columns": "ミディアムデバイスカードのコラム",
+  "large-device-card-columns": "大型デバイスカードのコラム"
 }

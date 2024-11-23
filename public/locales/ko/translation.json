@@ -142,5 +142,11 @@
   "accept": "수락",
   "reject": "거부",
   "stop": "중지",
-  "card-columns": "카드 열"
+  "card-columns": "카드 열",
+  "select-a-columns": "열 선택",
+  "width-less-than-1024px": "너비 1024px 미만",
+  "width-less-than": "너비 미만",
+  "small-device-card-columns": "소형 장치 카드 열",
+  "medium-device-card-columns": "중간 장치 카드 열",
+  "large-device-card-columns": "대형 장치 카드 열"
 }

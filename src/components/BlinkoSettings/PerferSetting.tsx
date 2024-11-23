@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Card, DropdownItem, DropdownMenu, DropdownTrigger, Dropdown, Select, SelectItem, Switch, Button } from "@nextui-org/react";
 import { useTranslation } from "react-i18next";
-import { Item } from "./Item";
+import { Item, ItemWithTooltip, SelectDropdown } from "./Item";
 import ThemeSwitcher from "../Common/ThemeSwitcher";
 import LanguageSwitcher from "../Common/LanguageSwitcher";
 import { RootStore } from "@/store";
@@ -45,71 +45,102 @@ export const PerferSetting = observer(() => {
         }}
       />} />
     <Item
-      leftContent={<>{t('card-columns')}</>}
+      leftContent={<ItemWithTooltip content={t('small-device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+        <div>{t('width-less-than')} 768px</div>
+      </div>} />
+      }
       rightContent={
-        <div>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                startContent={<Icon icon="fluent:layout-column-one-third-right-16-regular" width="20" height="20" />}
-              >
-                {blinko.config.value?.cardColumns ?? 'Select a card columns'}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Time format selection"
-              onAction={async (key) => {
-                console.log(key)
-                await PromiseCall(api.config.update.mutate({
-                  key: 'cardColumns',
-                  value: key.toString()
-                }))
-              }}
-              selectedKeys={[blinko.config.value?.cardColumns || '']}
-            >
-              <DropdownItem key="1">1</DropdownItem>
-              <DropdownItem key="2">2</DropdownItem>
-              <DropdownItem key="3">3</DropdownItem>
-              <DropdownItem key="4">4</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
+        <SelectDropdown
+          value={blinko.config.value?.smallDeviceCardColumns}
+          placeholder={t('select-a-columns')}
+          icon="proicons:phone"
+          options={[
+            { key: "1", label: "1" },
+            { key: "2", label: "2" }
+          ]}
+          onChange={async (value) => {
+            await PromiseCall(api.config.update.mutate({
+              key: 'smallDeviceCardColumns',
+              value: value
+            }))
+          }}
+        />
       } />
+
+    <Item
+      leftContent={<ItemWithTooltip content={t('medium-device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+        <div>{t('width-less-than-1024px')}</div>
+      </div>} />
+      }
+      rightContent={
+        <SelectDropdown
+          value={blinko.config.value?.mediumDeviceCardColumns}
+          placeholder={t('select-a-columns')}
+          icon="tabler:device-ipad"
+          options={[
+            { key: "1", label: "1" },
+            { key: "2", label: "2" },
+            { key: "3", label: "3" },
+            { key: "4", label: "4" },
+          ]}
+          onChange={async (value) => {
+            await PromiseCall(api.config.update.mutate({
+              key: 'mediumDeviceCardColumns',
+              value: value
+            }))
+          }}
+        />
+      } />
+
+    <Item
+      leftContent={<ItemWithTooltip content={t('large-device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+        <div>{t('width-less-than')}1280px</div>
+      </div>} />
+      }
+      rightContent={
+        <SelectDropdown
+          value={blinko.config.value?.largeDeviceCardColumns}
+          placeholder={t('select-a-columns')}
+          icon="ic:outline-tv"
+          options={[
+            { key: "1", label: "1" },
+            { key: "2", label: "2" },
+            { key: "3", label: "3" },
+            { key: "4", label: "4" },
+          ]}
+          onChange={async (value) => {
+            await PromiseCall(api.config.update.mutate({
+              key: 'largeDeviceCardColumns',
+              value: value
+            }))
+          }}
+        />
+      } />
+
     <Item
       leftContent={<>{t('time-format')}</>}
       rightContent={
-        <div>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                startContent={<Icon icon="mingcute:time-line" width="20" height="20" />}
-              >
-                {blinko.config.value?.timeFormat ?? 'Select a time format'}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Time format selection"
-              onAction={async (key) => {
-                console.log(key)
-                await PromiseCall(api.config.update.mutate({
-                  key: 'timeFormat',
-                  value: key.toString()
-                }))
-              }}
-              selectedKeys={[blinko.config.value?.timeFormat || '']}
-            >
-              <DropdownItem key="relative">1 seconds ago</DropdownItem>
-              <DropdownItem key="YYYY-MM-DD">2024-01-01</DropdownItem>
-              <DropdownItem key="YYYY-MM-DD HH:mm">2024-01-01 15:30</DropdownItem>
-              <DropdownItem key="HH:mm">15:30</DropdownItem>
-              <DropdownItem key="YYYY-MM-DD HH:mm:ss">2024-01-01 15:30:45</DropdownItem>
-              <DropdownItem key="MM-DD HH:mm">03-20 15:30</DropdownItem>
-              <DropdownItem key="MMM DD, YYYY">Mar 20, 2024</DropdownItem>
-              <DropdownItem key="MMM DD, YYYY HH:mm">Mar 20, 2024 15:30</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
+        <SelectDropdown
+          value={blinko.config.value?.timeFormat}
+          placeholder="Select a time format"
+          icon="mingcute:time-line"
+          options={[
+            { key: "relative", label: "1 seconds ago" },
+            { key: "YYYY-MM-DD", label: "2024-01-01" },
+            { key: "YYYY-MM-DD HH:mm", label: "2024-01-01 15:30" },
+            { key: "HH:mm", label: "15:30" },
+            { key: "YYYY-MM-DD HH:mm:ss", label: "2024-01-01 15:30:45" },
+            { key: "MM-DD HH:mm", label: "03-20 15:30" },
+            { key: "MMM DD, YYYY", label: "Mar 20, 2024" },
+            { key: "MMM DD, YYYY HH:mm", label: "Mar 20, 2024 15:30" },
+          ]}
+          onChange={async (value) => {
+            await PromiseCall(api.config.update.mutate({
+              key: 'timeFormat',
+              value: value
+            }))
+          }}
+        />
       } />
   </Card>
-
 })

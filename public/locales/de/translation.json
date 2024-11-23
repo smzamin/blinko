@@ -142,5 +142,11 @@
   "accept": "Akzeptieren",
   "reject": "Ablehnen",
   "stop": "Stopp",
-  "card-columns": "Kartenspalten"
+  "card-columns": "Kartenspalten",
+  "select-a-columns": "Wählen Sie eine Spalte",
+  "width-less-than-1024px": "Breite weniger als 1024px",
+  "width-less-than": "Breite weniger als",
+  "small-device-card-columns": "Spalten für kleine Gerätekarten",
+  "medium-device-card-columns": "Medium-Gerätekarten-Spalten",
+  "large-device-card-columns": "Große Gerätekartenspalten"
 }

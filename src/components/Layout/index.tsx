@@ -125,9 +125,9 @@ export const CommonLayout = observer(({
               style={{ "clipPath": "circle(50% at 50% 50%)" }} />
           </div>
           <div className="flex max-w-full items-center gap-2 md:p-2 w-full z-[1]">
-            <Button
+            {!isPc && <Button
               isIconOnly
-              className="flex sm:hidden"
+              className="flex"
               size="sm"
               variant="light"
               onClick={() => setisOpen(!isOpen)}
@@ -138,7 +138,7 @@ export const CommonLayout = observer(({
                 icon="solar:hamburger-menu-outline"
                 width={24}
               />
-            </Button>
+            </Button>}
             <div className="w-full truncate text-xl font-normal md:font-bold text-default-700 flex gap-2 items-center justify-center">
               <div className="w-[4px] h-[16px] bg-primary rounded-xl" />
               {/* @ts-ignore */}
