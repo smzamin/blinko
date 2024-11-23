@@ -1,3 +1,10 @@
+## [0.8.9](https://github.com/blinko-space/blinko/compare/v0.8.8...v0.8.9) (2024-11-23)
+
+
+### Bug Fixes
+
+* tag support keyboard event [#161](https://github.com/blinko-space/blinko/issues/161) ([cc8d03e](https://github.com/blinko-space/blinko/commit/cc8d03ea46571038d71a74ee8c9691728d1f8eb1))
+
 ## [0.8.8](https://github.com/blinko-space/blinko/compare/v0.8.7...v0.8.8) (2024-11-23)
 
 
