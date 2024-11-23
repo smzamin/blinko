@@ -1,3 +1,10 @@
+## [0.8.3](https://github.com/blinko-space/blinko/compare/v0.8.2...v0.8.3) (2024-11-23)
+
+
+### Bug Fixes
+
+* add card columns option [#155](https://github.com/blinko-space/blinko/issues/155) ([0c5858c](https://github.com/blinko-space/blinko/commit/0c5858cf356791e0f407ad2ef6f8802447707024))
+
 ## [0.8.2](https://github.com/blinko-space/blinko/compare/v0.8.1...v0.8.2) (2024-11-23)
 
 
