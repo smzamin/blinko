@@ -1,3 +1,10 @@
+## [0.8.4](https://github.com/blinko-space/blinko/compare/v0.8.3...v0.8.4) (2024-11-23)
+
+
+### Bug Fixes
+
+* code render issue ([9ecef4e](https://github.com/blinko-space/blinko/commit/9ecef4e28164f00e58d679bcb59735b270f2c6da))
+
 ## [0.8.3](https://github.com/blinko-space/blinko/compare/v0.8.2...v0.8.3) (2024-11-23)
 
 
