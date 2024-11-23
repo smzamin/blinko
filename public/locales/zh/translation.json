@@ -142,5 +142,6 @@
   "ai-polish": "AI润色",
   "accept": "接受",
   "reject": "拒绝",
-  "stop": "停止"
+  "stop": "停止",
+  "card-columns": "卡片列"
 }

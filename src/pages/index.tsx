@@ -30,7 +30,7 @@ const Home = observer(() => {
 
   return (
     <div className="md:p-0 relative h-full flex flex-col-reverse md:flex-col">
-    
+
       {store.showEditor && <div className='px-2 md:px-6' >
         <BlinkoEditor mode='create' key='create-key' onHeightChange={height => store.editorHeight = height} />
       </div>}
@@ -51,7 +51,7 @@ const Home = observer(() => {
           className={`px-2 mt-0 md:mt-6 md:px-6 w-full h-full transition-all scroll-area`}>
           <Masonry
             breakpointCols={{
-              default: 2,
+              default: blinko.config?.value?.cardColumns ? Number(blinko.config?.value?.cardColumns) : 2,
               500: 1
             }}
             className="my-masonry-grid"

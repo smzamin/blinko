@@ -141,5 +141,6 @@
   "ai-polish": "AI 폴란드어",
   "accept": "수락",
   "reject": "거부",
-  "stop": "중지"
+  "stop": "중지",
+  "card-columns": "카드 열"
 }

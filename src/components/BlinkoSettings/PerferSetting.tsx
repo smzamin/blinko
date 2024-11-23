@@ -45,6 +45,37 @@ export const PerferSetting = observer(() => {
         }}
       />} />
     <Item
+      leftContent={<>{t('card-columns')}</>}
+      rightContent={
+        <div>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                startContent={<Icon icon="fluent:layout-column-one-third-right-16-regular" width="20" height="20" />}
+              >
+                {blinko.config.value?.cardColumns ?? 'Select a card columns'}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Time format selection"
+              onAction={async (key) => {
+                console.log(key)
+                await PromiseCall(api.config.update.mutate({
+                  key: 'cardColumns',
+                  value: key.toString()
+                }))
+              }}
+              selectedKeys={[blinko.config.value?.cardColumns || '']}
+            >
+              <DropdownItem key="1">1</DropdownItem>
+              <DropdownItem key="2">2</DropdownItem>
+              <DropdownItem key="3">3</DropdownItem>
+              <DropdownItem key="4">4</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      } />
+    <Item
       leftContent={<>{t('time-format')}</>}
       rightContent={
         <div>
@@ -52,11 +83,10 @@ export const PerferSetting = observer(() => {
             <DropdownTrigger>
               <Button
                 startContent={<Icon icon="mingcute:time-line" width="20" height="20" />}
-                color="primary"
               >
                 {blinko.config.value?.timeFormat ?? 'Select a time format'}
               </Button>
-            </DropdownTrigger>  
+            </DropdownTrigger>
             <DropdownMenu
               aria-label="Time format selection"
               onAction={async (key) => {

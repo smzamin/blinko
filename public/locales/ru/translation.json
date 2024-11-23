@@ -142,5 +142,6 @@
   "ai-polish": "AI Polish",
   "accept": "Принять",
   "reject": "Отклонить",
-  "stop": "Остановите"
+  "stop": "Остановите",
+  "card-columns": "Колонки карты"
 }
