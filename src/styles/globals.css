@@ -85,6 +85,25 @@ body {
   text-decoration: none!important;
 }
 
+.contextmenu {
+  padding: 2px!important;;
+  padding-top: 6px!important;;
+  padding-bottom: 6px!important;;
+  box-shadow: var(--shadow)!important;;
+  border-radius: 17px!important;;
+  border: 2px solid var(--desc)!important;;
+  background-color: var(--background)!important;
+}
+
+.contextmenu .contextmenu__item {
+  border-radius: 12px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.contextmenu .contextmenu__item:hover {
+  background-color: var(--sencondbackground)!important;
+}
 
 #__next {
   display: flex;

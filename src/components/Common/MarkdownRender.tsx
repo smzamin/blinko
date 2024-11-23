@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism'
+import { vscDarkPlus, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { api } from '@/lib/trpc';
 import { LinkInfo } from '@/server/types';
-import { Card, Image } from '@nextui-org/react';
+import { Card, Image, Button } from '@nextui-org/react';
 import { RootStore } from '@/store';
 import { StorageState } from '@/store/standard/StorageState';
 import { Icon } from '@iconify/react';
@@ -20,6 +20,7 @@ import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
 import Link from 'next/link';
 import { BlinkoStore } from '@/store/blinkoStore';
+import { Copy } from './Copy';
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -46,14 +47,34 @@ const highlightTags = (text) => {
 const Code = ({ className, children, ...props }) => {
   const { theme } = useTheme()
   const match = /language-(\w+)/.exec(className || '');
+
+  const handleCopy = () => {
+    const code = String(children).replace(/\n$/, '');
+    navigator.clipboard.writeText(code);
+  };
+
   return match ? (
-    <SyntaxHighlighter
-      {...props}
-      PreTag="div"
-      children={String(children).replace(/\n$/, '')}
-      language={match[1]}
-      style={theme == 'light' ? oneLight : oneDark}
-    />
+    <div className="relative group">
+      <Copy content={String(children).replace(/\n$/, '')} size={16} className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <SyntaxHighlighter
+        {...props}
+        PreTag="div"
+        // showLineNumbers={true}
+        children={String(children).replace(/\n$/, '')}
+        language={match[1]}
+        customStyle={{
+          borderRadius: '16px',
+        }}
+        // lineNumberStyle={{
+        //   minWidth: '2em',
+        //   paddingRight: '1em',
+        //   textAlign: 'right',
+        //   userSelect: 'none',
+        //   color: '#fff'
+        // }}
+        style={theme == 'light' ? oneLight : vscDarkPlus}
+      />
+    </div>
   ) : (
     <code className={className} {...props}>
       {children}

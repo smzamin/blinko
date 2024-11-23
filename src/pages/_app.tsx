@@ -1,6 +1,5 @@
 import '../styles/globals.css';
 import '../styles/nprogress.css';
-import '../styles/editor.css';
 import '../styles/github-markdown.css';
 import "swagger-ui-react/swagger-ui.css";
 import 'react-photo-view/dist/react-photo-view.css';
@@ -16,9 +15,6 @@ import { initStore } from '@/store/init';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
-import TagSelectPop from '@/components/Common/PopoverFloat/tagSelectPop';
-import AiWritePop from '@/components/Common/PopoverFloat/aiWritePop';
-
 const MyApp = ({ Component, pageProps }) => {
   initStore();
   useProgressBar();

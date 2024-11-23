@@ -1,4 +1,5 @@
 import '@mdxeditor/editor/style.css';
+import '@/styles/editor.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertImage, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
@@ -348,7 +349,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         autoFocus={{
           defaultSelection: 'rootEnd'
         }}
-
         markdown={content}
         plugins={[
           toolbarPlugin({
