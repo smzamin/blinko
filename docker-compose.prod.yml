@@ -45,6 +45,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
       TZ: Asia/Shanghai
+    # Persisting container data
+    # Make sure you have enough permissions.
+    # volumes:
+      # - ~/your-name/.db:/var/lib/postgresql/data
     healthcheck:
       test:
         ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
