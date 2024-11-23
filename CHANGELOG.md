@@ -1,3 +1,10 @@
+## [0.8.5](https://github.com/blinko-space/blinko/compare/v0.8.4...v0.8.5) (2024-11-23)
+
+
+### Bug Fixes
+
+* improve more device card setting ([7dae5e8](https://github.com/blinko-space/blinko/commit/7dae5e88f8a2ad8b0d7c63183227106f0eea45bd))
+
 ## [0.8.4](https://github.com/blinko-space/blinko/compare/v0.8.3...v0.8.4) (2024-11-23)
 
 
