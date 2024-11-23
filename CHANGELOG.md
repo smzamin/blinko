@@ -1,3 +1,10 @@
+## [0.8.8](https://github.com/blinko-space/blinko/compare/v0.8.7...v0.8.8) (2024-11-23)
+
+
+### Bug Fixes
+
+* ui issue hashtag not visible [#162](https://github.com/blinko-space/blinko/issues/162) ([6c27942](https://github.com/blinko-space/blinko/commit/6c27942397b229b0c5a43801366001930f41bd55))
+
 ## [0.8.7](https://github.com/blinko-space/blinko/compare/v0.8.6...v0.8.7) (2024-11-23)
 
 
