@@ -422,14 +422,14 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
 
                   <ListsToggle />
                   {isPc && <InsertTable />}
-                  <InsertImage />
+                  {isPc && <InsertImage />}
                   <ConditionalContents
                     options={[
                       { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
                       { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
                       {
                         fallback: () => (<>
-                          <InsertCodeBlock />
+                          {isPc && <InsertCodeBlock />}
                           {isPc && <InsertSandpack />}
                         </>)
                       }
