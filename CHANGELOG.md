@@ -1,3 +1,10 @@
+## [0.8.13](https://github.com/blinko-space/blinko/compare/v0.8.12...v0.8.13) (2024-11-24)
+
+
+### Bug Fixes
+
+* ios can not line break ([50b42ea](https://github.com/blinko-space/blinko/commit/50b42eae776da6aa679eba2a1744f5100abd965b))
+
 ## [0.8.12](https://github.com/blinko-space/blinko/compare/v0.8.11...v0.8.12) (2024-11-24)
 
 
