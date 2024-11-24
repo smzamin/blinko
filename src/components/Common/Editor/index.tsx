@@ -333,11 +333,13 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     shadow='none' {...getRootProps()}
     className={`p-2 relative border-2 border-border transition-all ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''}`}>
     <div ref={cardRef}
-      onKeyDown={e => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-        }
-      }}
+      // onKeyDown={e => {
+      //   if (e.key === 'Enter') {
+      //     if (isPc) {
+      //       e.preventDefault();
+      //     }
+      //   }
+      // }}
       onKeyUp={async event => {
         event.preventDefault();
         if (event.key === 'Enter' && event.ctrlKey) {
@@ -347,8 +349,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           })
           onChange?.('')
           store.files = []
-        } else if (event.key === 'Enter') {
-
         }
       }}>
       <MDXEditor
