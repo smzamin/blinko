@@ -1,3 +1,10 @@
+## [0.8.12](https://github.com/blinko-space/blinko/compare/v0.8.11...v0.8.12) (2024-11-24)
+
+
+### Bug Fixes
+
+* remove mobile toolbar icon [#171](https://github.com/blinko-space/blinko/issues/171) ([c66df56](https://github.com/blinko-space/blinko/commit/c66df569b1113a7adcf3c98eac8cc6387afe9636))
+
 ## [0.8.11](https://github.com/blinko-space/blinko/compare/v0.8.10...v0.8.11) (2024-11-24)
 
 
