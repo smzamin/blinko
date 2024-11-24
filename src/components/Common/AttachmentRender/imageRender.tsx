@@ -30,7 +30,7 @@ const ImageThumbnailRender = ({ file, className }: { file: FileType, className?:
       }
       setCurrentSrc(file.preview)
     }}
-    style={{ borderRadius: '13px' }}
+    // style={{ borderRadius: '13px' }}
     className={className}
   />
 }
@@ -77,7 +77,7 @@ const ImageRender = observer((props: IProps) => {
           <div className='w-full'>
             <PhotoView src={file.preview}>
               <div>
-                <ImageThumbnailRender file={file} className={`rounded-xl mb-4 ${imageHeight} object-cover w-[1000px]`} />
+                <ImageThumbnailRender file={file} className={`mb-4 ${imageHeight} object-cover w-[1000px]`} />
               </div>
             </PhotoView>
           </div>

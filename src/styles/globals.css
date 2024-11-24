@@ -49,10 +49,6 @@
   margin-bottom: 10px;
 }
 
-.PhotoView__PhotoBox img {
-  border-radius: 30px;
-}
-
 html,
 body {
   scroll-behavior: smooth;
