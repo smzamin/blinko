@@ -1,3 +1,10 @@
+## [0.8.11](https://github.com/blinko-space/blinko/compare/v0.8.10...v0.8.11) (2024-11-24)
+
+
+### Bug Fixes
+
+* remove preview image raduis ([14b7fdf](https://github.com/blinko-space/blinko/commit/14b7fdf76b8da79d24e264e1d5bf49d3ebcd21dd))
+
 ## [0.8.10](https://github.com/blinko-space/blinko/compare/v0.8.9...v0.8.10) (2024-11-24)
 
 
