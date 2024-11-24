@@ -32,7 +32,7 @@ export const ProcessCodeBlocks = (content: string): string => {
 
   while ((match = codeBlockRegex.exec(content)) !== null) {
     const beforeCode = content.slice(lastIndex, match.index);
-    result += beforeCode.replace(/(<[^>]+>)/gi, '\\$1');
+    result += beforeCode.replace(/(<[^>]+>)/gi, '\\$1').replace(/^---$/gm, '\\---').replace(/<>/gm, '\\<>');
 
     const [_, language, code] = match;
     if (!language || !(language in codeBlockLanguages)) {
@@ -45,7 +45,7 @@ export const ProcessCodeBlocks = (content: string): string => {
   }
 
   const afterLastCode = content.slice(lastIndex);
-  result += afterLastCode.replace(/(<[^>]+>)/gi, '\\$1');
+  result += afterLastCode.replace(/(<[^>]+>)/gi, '\\$1').replace(/^---$/gm, '\\---').replace(/<>/gm, '\\<>');
 
   return result;
 };
