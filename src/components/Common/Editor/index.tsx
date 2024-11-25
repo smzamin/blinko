@@ -400,7 +400,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           toolbarPlugin({
             toolbarContents: () => (
               <div className='flex flex-col  w-full'>
-                <div className='w-full'>
+                <div className='w-full my-2'>
                   <AttachmentsRender files={store.files} />
                 </div>
                 {

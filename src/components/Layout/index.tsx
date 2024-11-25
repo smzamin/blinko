@@ -98,7 +98,7 @@ export const CommonLayout = observer(({
           </div>
         </div>
       </ScrollShadow>
-      <div className="absolute inset-0 h-[250px] w-[250px] overflow-hidden blur-3xl z-[0] pointer-events-none">
+      <div className="halation absolute inset-0 h-[250px] w-[250px] overflow-hidden blur-3xl z-[0] pointer-events-none">
         <div className="w-full h-[100%] bg-[#ffc65c] opacity-20"
           style={{ "clipPath": "circle(35% at 50% 50%)" }} />
       </div>

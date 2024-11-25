@@ -20,7 +20,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   useEffect(() => {
     blinko.isCreateMode = mode == 'create'
   }, [mode])
-  return <div ref={editorRef} id='global-editor' onClick={() => {
+  return <div className="max-h-[100vh]" ref={editorRef} id='global-editor' onClick={() => {
     blinko.isCreateMode = mode == 'create'
   }}>
     <Editor
