@@ -25,7 +25,7 @@ import { AttachmentsRender } from '../AttachmentRender';
 
 import { ShowCamera } from '../CameraDialog';
 import { ShowAudioDialog } from '../AudioDialog';
-import { showTagSelectPop } from '../PopoverFloat/tagSelectPop';
+import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectPop';
 import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
 import { Icon } from '@iconify/react';
@@ -65,6 +65,27 @@ export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
   return res
 }
 
+export const getEditorElements = () => {
+  const editorElements = document.querySelectorAll('._contentEditable_uazmk_379') as NodeListOf<HTMLElement>
+  return editorElements
+}
+
+
+export const handleEditorKeyEvents = () => {
+  const editorElements = getEditorElements()
+  editorElements.forEach(element => {
+    element.addEventListener('keydown', (e) => {
+      const isTagSelectVisible = IsTagSelectVisible()
+      if (e.key === 'Enter' && isTagSelectVisible) {
+        e.preventDefault()
+        return false
+      }
+    }, true)
+  })
+}
+
+
+
 
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
   content = ProcessCodeBlocks(content)
@@ -89,6 +110,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     files: [] as FileType[],
     lastRange: null as Range | null,
     lastRangeText: '',
+    lastSelection: null as Selection | null,
     updateSendStatus() {
       if (store.files?.length == 0 && mdxEditorRef.current?.getMarkdown() == '') {
         return setCanSend(false)
@@ -103,6 +125,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     replaceMarkdownTag(text: string, forceFocus = false) {
       if (mdxEditorRef.current) {
         if (store.lastRange) {
+          console.log('replaceMarkdownTag', store.lastRangeText)
           const currentTextBeforeRange = store.lastRangeText.replace(/&#x20;/g, " ") ?? ''
           const currentText = mdxEditorRef.current!.getMarkdown().replace(/\\/g, '').replace(/&#x20;/g, " ")
           const tag = currentTextBeforeRange.replace(helper.regex.isEndsWithHashTag, "#" + text + '&#x20;')
@@ -141,30 +164,32 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     focus(force = false) {
       console.log(mdxEditorRef.current)
       if (force && store.lastRange) {
-        onChange?.(mdxEditorRef.current!.getMarkdown())
-        const editorElement = document.querySelector('._contentEditable_uazmk_379') as HTMLElement
-        if (editorElement) {
-          requestAnimationFrame(() => {
-            const range = document.createRange()
-            const selection = window.getSelection()
-            const walker = document.createTreeWalker(
-              editorElement,
-              NodeFilter.SHOW_TEXT,
-              null
-            )
-            let lastNode: any = null
-            while (walker.nextNode()) {
-              lastNode = walker.currentNode
-            }
-            if (lastNode) {
-              range.setStart(lastNode, lastNode?.length)
-              range.setEnd(lastNode, lastNode?.length)
-              selection?.removeAllRanges()
-              selection?.addRange(range)
-              editorElement.focus()
-            }
+        const editorElements = getEditorElements()
+        if (editorElements.length > 0) {
+          editorElements.forEach(editorElement => {
+            requestAnimationFrame(() => {
+              const range = document.createRange()
+              const selection = window.getSelection()
+              const walker = document.createTreeWalker(
+                editorElement,
+                NodeFilter.SHOW_TEXT,
+                null
+              )
+              let lastNode: any = null
+              while (walker.nextNode()) {
+                lastNode = walker.currentNode
+              }
+              if (lastNode) {
+                range.setStart(lastNode, lastNode?.length)
+                range.setEnd(lastNode, lastNode?.length)
+                selection?.removeAllRanges()
+                selection?.addRange(range)
+                editorElement.focus()
+              }
+            })
           })
         }
+        onChange?.(mdxEditorRef.current!.getMarkdown())
       } else {
         mdxEditorRef.current!.focus(() => {
           onChange?.(mdxEditorRef.current!.getMarkdown())
@@ -231,16 +256,19 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     handlePopTag() {
       const selection = window.getSelection();
       if (selection!.rangeCount > 0) {
-        let lastRange = selection!.getRangeAt(0);
-        store.lastRange = lastRange
-        store.lastRangeText = lastRange.endContainer.textContent?.slice(0, lastRange.endOffset) ?? ''
+        if (!IsTagSelectVisible()) {
+          let lastRange = selection!.getRangeAt(0);
+          store.lastRange = lastRange
+          store.lastRangeText = lastRange.endContainer.textContent?.slice(0, lastRange.endOffset) ?? ''
+          store.lastSelection = selection
+        }
         const hasHashTagRegex = /#[^\s#]+/g
         const endsWithBankRegex = /\s$/g
-        const currentText = store.lastRange.startContainer.textContent?.slice(0, store.lastRange.endOffset) ?? ''
+        const currentText = store.lastRange?.startContainer.textContent?.slice(0, store.lastRange?.endOffset) ?? ''
         const isEndsWithBank = endsWithBankRegex.test(currentText)
         const isEndsWithHashTag = helper.regex.isEndsWithHashTag.test(currentText)
         if (currentText == '' || !isEndsWithHashTag) {
-          setTimeout(() => eventBus.emit('tagselect:hidden'))
+          setTimeout(() => eventBus.emit('tagselect:hidden')) 
           return
         }
         if (isEndsWithHashTag && currentText != '' && !isEndsWithBank) {
@@ -300,6 +328,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     eventBus.on('editor:deleteLastChar', store.deleteLastChar)
     eventBus.on('editor:focus', store.focus)
     eventBus.on('editor:setMarkdownLoading', store.setMarkdownLoading)
+    handleEditorKeyEvents()
     return () => {
       eventBus.off('editor:replace', store.replaceMarkdownTag)
       eventBus.off('editor:clear', store.clearMarkdown)
@@ -333,13 +362,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     shadow='none' {...getRootProps()}
     className={`p-2 relative border-2 border-border transition-all ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''}`}>
     <div ref={cardRef}
-      // onKeyDown={e => {
-      //   if (e.key === 'Enter') {
-      //     if (isPc) {
-      //       e.preventDefault();
-      //     }
-      //   }
-      // }}
       onKeyUp={async event => {
         event.preventDefault();
         if (event.key === 'Enter' && event.ctrlKey) {

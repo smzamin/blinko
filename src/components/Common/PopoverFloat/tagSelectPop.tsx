@@ -8,6 +8,12 @@ import { RootStore } from '@/store';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { DialogStore } from '@/store/module/Dialog';
 
+export const IsTagSelectVisible = () => {
+  const tagSelectPopup = document.getElementById('tag-select-popup')
+  const isTagSelectVisible = tagSelectPopup && window.getComputedStyle(tagSelectPopup).opacity !== '0'
+  return isTagSelectVisible
+}
+
 export const showTagSelectPop = (text: string = '') => {
   setTimeout(() => {
     const selection = window.getSelection();
@@ -57,20 +63,19 @@ const TagSelect = observer(() => {
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault()
-          e.stopPropagation()
           store.selectedIndex = (store.selectedIndex + 1) % store.tagList.length
           break
         case 'ArrowUp':
           e.preventDefault()
-          e.stopPropagation()
           store.selectedIndex = (store.selectedIndex - 1 + store.tagList.length) % store.tagList.length
           break
         case 'Enter':
-          e.preventDefault()
           e.stopPropagation()
+          e.preventDefault()
           const selectedTag = store.tagList[store.selectedIndex]
           if (selectedTag) {
             store.hidden()
+            console.log('selectedTag', selectedTag)
             eventBus.emit('editor:replace', selectedTag, true)
           }
           break

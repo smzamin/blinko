@@ -25,7 +25,7 @@ const PopoverFloat = observer(({
 }: PopoverFloatProps) => {
   const isPc = useMediaQuery('(min-width: 768px)')
   const popRef: any = useRef(null)
-  
+
   const getPosition = () => {
     if (!anchorRect || typeof window === 'undefined') return { top: 0, left: 0 }
     let top = anchorRect.bottom || anchorRect.top
@@ -35,7 +35,7 @@ const PopoverFloat = observer(({
     const popWidth = popRef.current?.clientWidth ?? maxWidth
     const viewportHeight = window.innerHeight
     const viewportWidth = window.innerWidth
-    
+
     if (top + popHeight > viewportHeight) {
       top = Math.max(10, anchorRect.top - popHeight)
     } else {
@@ -55,19 +55,20 @@ const PopoverFloat = observer(({
 
   useEffect(() => {
     if (!show || !closeOnClickOutside) return
-    
+
     const handleClickOutside = (event: MouseEvent) => {
       if (popRef.current && !popRef.current.contains(event.target as Node)) {
         onHide()
       }
     }
-    
+
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [show, onHide, closeOnClickOutside])
 
   return (
     <motion.div
+      id='tag-select-popup'
       ref={popRef}
       animate={show ? 'enter' : 'exit'}
       variants={{
@@ -75,7 +76,7 @@ const PopoverFloat = observer(({
           opacity: 1,
           transition: { type: 'spring', bounce: 0.5, duration: 0.4 },
           zIndex: 99,
-          y: 5, 
+          y: 5,
           x: 0
         },
         exit: {
@@ -94,14 +95,14 @@ const PopoverFloat = observer(({
         left: position.left,
         zIndex: -99
       }}>
-      <Card 
-        shadow='lg' 
-        radius='md' 
-        style={{ 
-          maxHeight: maxHeight + 'px', 
+      <Card
+        shadow='lg'
+        radius='md'
+        style={{
+          maxHeight: maxHeight + 'px',
           maxWidth: maxWidth + 'px',
           minWidth: '150px'
-        }} 
+        }}
         className={`p-2 rounded-md overflow-y-scroll overflow-x-hidden`}
       >
         {children}
