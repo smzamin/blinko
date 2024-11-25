@@ -1,3 +1,10 @@
+## [0.8.15](https://github.com/blinko-space/blinko/compare/v0.8.14...v0.8.15) (2024-11-25)
+
+
+### Bug Fixes
+
+* remove imort check logic [#178](https://github.com/blinko-space/blinko/issues/178) ([28f4c94](https://github.com/blinko-space/blinko/commit/28f4c9438e93b24f1b979abf0f012d530d301773))
+
 ## [0.8.14](https://github.com/blinko-space/blinko/compare/v0.8.13...v0.8.14) (2024-11-25)
 
 
