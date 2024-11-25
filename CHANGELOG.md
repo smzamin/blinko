@@ -1,3 +1,10 @@
+## [0.8.14](https://github.com/blinko-space/blinko/compare/v0.8.13...v0.8.14) (2024-11-25)
+
+
+### Bug Fixes
+
+* editor render issue [#175](https://github.com/blinko-space/blinko/issues/175) [#177](https://github.com/blinko-space/blinko/issues/177) [#176](https://github.com/blinko-space/blinko/issues/176) ([3a51b33](https://github.com/blinko-space/blinko/commit/3a51b33ba4b6d7b409a7bdc67b657c799d004468))
+
 ## [0.8.13](https://github.com/blinko-space/blinko/compare/v0.8.12...v0.8.13) (2024-11-24)
 
 
