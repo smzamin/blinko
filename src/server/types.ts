@@ -32,6 +32,7 @@ export const ZConfigKey = z.union([
   z.literal('smallDeviceCardColumns'),
   z.literal('mediumDeviceCardColumns'),
   z.literal('largeDeviceCardColumns'),
+  z.literal('textFoldLength'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -51,6 +52,7 @@ export const ZConfigSchema = z.object({
   smallDeviceCardColumns: z.any().optional(),
   mediumDeviceCardColumns: z.any().optional(),
   largeDeviceCardColumns: z.any().optional(),
+  textFoldLength: z.number().optional(),
   objectStorage: z.any().optional(),
   s3AccessKeyId: z.any().optional(),
   s3AccessKeySecret: z.any().optional(),

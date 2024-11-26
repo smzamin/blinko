@@ -39,4 +39,36 @@ const usePasteFile = (targetRef) => {
   return pastedFiles;
 };
 
-export default usePasteFile;
+
+interface HistoryBackProps<T extends string> {
+  state: boolean;  
+  onStateChange: () => void; 
+  historyState: T;
+}
+
+export const useHistoryBack = <T extends string>({ 
+  state, 
+  onStateChange, 
+  historyState 
+}: HistoryBackProps<T>) => {
+  useEffect(() => {
+    if (state) {
+      history.pushState({ [historyState]: true }, '');
+    }
+    
+    const handlePopState = () => {
+      if (state) {
+        onStateChange();
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [state, onStateChange, historyState]);
+};
+
+export  {usePasteFile};
+
+

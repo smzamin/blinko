@@ -14,6 +14,8 @@ import { NoteContent } from "./noteContent";
 import { helper } from "@/lib/helper";
 import { CardHeader } from "./cardHeader";
 import { CardFooter } from "./cardFooter";
+import { useHistoryBack } from "@/lib/hooks";
+import { useRouter } from "next/router";
 
 interface BlinkoCardProps {
   blinkoItem: Note & {
@@ -29,24 +31,15 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: BlinkoC
   const isPc = useMediaQuery('(min-width: 768px)');
   const blinko = RootStore.Get(BlinkoStore);
   const [isExpanded, setIsExpanded] = useState(false);
+  const { query, pathname } = useRouter();
 
-  useEffect(() => {
-    if (isExpanded) {
-      history.pushState({ expanded: true }, '');
-    }
+  useHistoryBack({
+    state: isExpanded,
+    onStateChange: () => setIsExpanded(false),
+    historyState: 'expanded'
+  });
 
-    const handlePopState = () => {
-      if (isExpanded) {
-        setIsExpanded(false);
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [isExpanded]);
-
-  blinkoItem.isBlog = (blinkoItem.content?.length ?? 0) > 1000;
+  blinkoItem.isBlog = ((blinkoItem.content?.length ?? 0) > (blinko.config.value?.textFoldLength ?? 1000)) && !pathname.includes('/share');
   blinkoItem.title = blinkoItem.content?.split('\n')[0];
   blinkoItem.blogCover = blinkoItem.attachments?.find(i =>
     i.type.includes('image') || helper.getFileType(i.type, i.path) == 'image'
@@ -54,7 +47,7 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: BlinkoC
 
   const handleExpand = () => {
     if (blinkoItem.isBlog) {
-      setIsExpanded(!isExpanded);
+      setIsExpanded(true);
     }
   };
 
@@ -89,7 +82,7 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: BlinkoC
             className={`
               flex flex-col p-4 bg-background transition-all   group/card 
               ${isExpanded ? 'h-screen overflow-y-scroll rounded-none' : ''} 
-              ${isPc ? 'hover:translate-y-1' : ''} 
+              ${isPc && !isExpanded && !blinkoItem.isShare ? 'hover:translate-y-1' : ''} 
               ${blinkoItem.isBlog ? 'cursor-pointer' : ''} 
               ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}
             `}

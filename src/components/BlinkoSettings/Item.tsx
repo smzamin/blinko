@@ -61,6 +61,7 @@ export const SelectDropdown = ({
     <Dropdown>
       <DropdownTrigger>
         <Button
+          variant='flat'
           startContent={icon && <Icon icon={icon} width="20" height="20" />}
         >
           {value ?? placeholder}

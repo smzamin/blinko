@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Card, DropdownItem, DropdownMenu, DropdownTrigger, Dropdown, Select, SelectItem, Switch, Button } from "@nextui-org/react";
+import { Card, DropdownItem, DropdownMenu, DropdownTrigger, Dropdown, Select, SelectItem, Switch, Button, Input } from "@nextui-org/react";
 import { useTranslation } from "react-i18next";
 import { Item, ItemWithTooltip, SelectDropdown } from "./Item";
 import ThemeSwitcher from "../Common/ThemeSwitcher";
@@ -8,11 +8,17 @@ import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
 import { api } from "@/lib/trpc";
-import { Icon } from "@iconify/react";
+import { useState, useEffect } from "react";
 
 export const PerferSetting = observer(() => {
   const { t } = useTranslation()
   const blinko = RootStore.Get(BlinkoStore)
+  const [textLength, setTextLength] = useState(blinko.config.value?.textFoldLength?.toString() || '500');
+
+  useEffect(() => {
+    setTextLength(blinko.config.value?.textFoldLength?.toString() || '500');
+  }, [blinko.config.value?.textFoldLength]);
+
   return <Card shadow="none" className="flex flex-col p-4 bg-background">
     <div className='text-desc text-sm'>{t('preference')}</div>
     <Item
@@ -44,15 +50,50 @@ export const PerferSetting = observer(() => {
           }))
         }}
       />} />
+
     <Item
-      leftContent={<ItemWithTooltip content={t('small-device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
-        <div>{t('width-less-than')} 768px</div>
-      </div>} />
-      }
+      leftContent={<ItemWithTooltip
+        content={t('text-fold-length')}
+        toolTipContent={<div className="w-[300px] flex gap-2 py-4 px-2">
+          <div className="min-w-[80px] min-h-[80px] bg-default-100 rounded-lg"></div>
+          <div className="flex flex-col gap-2 flex-1">
+            <div className="text-md font-medium">{t('title-first-line-of-the-text')}</div>
+            <div className="text-sm text-default-400 line-clamp-2">{t('content-rest-of-the-text-if-the-text-is-longer-than-the-length')}</div>
+          </div>
+        </div>}
+      />}
       rightContent={
+        <div className="flex items-center gap-2">
+          <Input
+            type="number"
+            size='sm'
+            className='w-20'
+            value={textLength}
+            onChange={e => setTextLength(e.target.value)}
+            onBlur={e => {
+              const value = parseInt(e.target.value);
+              if (!isNaN(value)) {
+                PromiseCall(api.config.update.mutate({
+                  key: 'textFoldLength',
+                  value: value
+                }));
+              }
+            }}
+            min={0}
+          />
+          <span className="text-sm text-default-400">{t('chars')}</span>
+        </div>
+      }
+    />
+
+    <Item
+      leftContent={<ItemWithTooltip content={t('device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+        <div>{t('columns-for-different-devices')}</div>
+      </div>} />}
+      rightContent={<div className="flex gap-2">
         <SelectDropdown
           value={blinko.config.value?.smallDeviceCardColumns}
-          placeholder={t('select-a-columns')}
+          placeholder={t('mobile')}
           icon="proicons:phone"
           options={[
             { key: "1", label: "1" },
@@ -65,17 +106,9 @@ export const PerferSetting = observer(() => {
             }))
           }}
         />
-      } />
-
-    <Item
-      leftContent={<ItemWithTooltip content={t('medium-device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
-        <div>{t('width-less-than-1024px')}</div>
-      </div>} />
-      }
-      rightContent={
         <SelectDropdown
           value={blinko.config.value?.mediumDeviceCardColumns}
-          placeholder={t('select-a-columns')}
+          placeholder={t('tablet')}
           icon="tabler:device-ipad"
           options={[
             { key: "1", label: "1" },
@@ -90,17 +123,9 @@ export const PerferSetting = observer(() => {
             }))
           }}
         />
-      } />
-
-    <Item
-      leftContent={<ItemWithTooltip content={t('large-device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
-        <div>{t('width-less-than')}1280px</div>
-      </div>} />
-      }
-      rightContent={
         <SelectDropdown
           value={blinko.config.value?.largeDeviceCardColumns}
-          placeholder={t('select-a-columns')}
+          placeholder={t('desktop')}
           icon="ic:outline-tv"
           options={[
             { key: "1", label: "1" },
@@ -115,7 +140,8 @@ export const PerferSetting = observer(() => {
             }))
           }}
         />
-      } />
+      </div>}
+    />
 
     <Item
       leftContent={<>{t('time-format')}</>}

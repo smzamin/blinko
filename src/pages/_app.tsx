@@ -15,6 +15,7 @@ import { initStore } from '@/store/init';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
+
 const MyApp = ({ Component, pageProps }) => {
   initStore();
   useProgressBar();

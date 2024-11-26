@@ -149,5 +149,14 @@
   "width-less-than": "Ширина менее",
   "small-device-card-columns": "Колонки карты малого устройства",
   "medium-device-card-columns": "Колонки карты среднего устройства",
-  "large-device-card-columns": "Большие колонки карты устройства"
+  "large-device-card-columns": "Большие колонки карты устройства",
+  "device-card-columns": "Колонки карты устройства",
+  "columns-for-different-devices": "Колонки для разных устройств",
+  "mobile": "Мобильный",
+  "tablet": "Планшет",
+  "desktop": "Настольный компьютер",
+  "chars": "Chars",
+  "text-fold-length": "Длина текстового сгиба",
+  "title-first-line-of-the-text": "Заголовок (первая строка текста)",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Содержание (остальная часть текста, если текст длиннее указанной длины)"
 }

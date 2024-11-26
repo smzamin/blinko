@@ -3,26 +3,18 @@ import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import { observer } from "mobx-react-lite";
 import { DialogStore } from ".";
 import { RootStore } from "@/store/root";
+import { useHistoryBack } from "@/lib/hooks";
 
 const Dialog = observer(() => {
   const modal = RootStore.Get(DialogStore);
   const { className, classNames, isOpen, placement, title, size, content, isDismissable, onlyContent = false, noPadding = false, transparent = false } = modal;
   const Content = typeof content === 'function' ? content : () => content;
 
-  useEffect(() => {
-    if (isOpen) {
-      history.pushState({ modal: true }, '');
-    }
-    const handlePopState = () => {
-      if (isOpen) {
-        modal.close();
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [isOpen, modal]);
+  useHistoryBack({
+    state: isOpen,
+    onStateChange: () => modal.close(),
+    historyState: 'modal'
+  });
 
   return (
     <Modal

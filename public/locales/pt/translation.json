@@ -147,5 +147,14 @@
   "width-less-than": "Largura inferior a",
   "small-device-card-columns": "Colunas do cartão de dispositivo pequeno",
   "medium-device-card-columns": "Colunas do cartão de dispositivo médio",
-  "large-device-card-columns": "Colunas grandes do cartão de dispositivo"
+  "large-device-card-columns": "Colunas grandes do cartão de dispositivo",
+  "device-card-columns": "Colunas do cartão de dispositivo",
+  "columns-for-different-devices": "Colunas para diferentes dispositivos",
+  "mobile": "Telemóvel",
+  "tablet": "Tablet",
+  "desktop": "Ambiente de trabalho",
+  "chars": "Caracteres",
+  "text-fold-length": "Comprimento da dobra do texto",
+  "title-first-line-of-the-text": "Título (primeira linha do texto)",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Conteúdo (resto do texto, se o texto for mais longo do que o comprimento)"
 }

@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Tooltip } from '@nextui-org/react';
+import { Button, Tooltip } from '@nextui-org/react';
 import { Copy } from "../Common/Copy";
 import { LeftCickMenu } from "../BlinkoRightClickMenu";
 import { BlinkoStore } from '@/store/blinkoStore';
@@ -20,53 +20,67 @@ interface CardHeaderProps {
 
 export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded }: CardHeaderProps) => {
   const { t } = useTranslation();
-
+  const iconSize = isExpanded ? '20' : '16';
   return (
     <div className={`flex items-center select-none ${isExpanded ? 'mb-4' : 'mb-2'}`}>
       <div className={`flex items-center w-full gap-1 ${isExpanded ? 'text-base' : 'text-xs'}`}>
+        {isExpanded && (
+          <Button
+            isIconOnly
+            variant='flat'
+            size='sm'
+            className='mr-2'
+            onClick={() => {
+              window.history.back();
+            }}
+          >
+            <Icon icon="tabler:arrow-left" width={iconSize} height={iconSize} />
+          </Button>
+        )}
+
         {blinkoItem.isShare && !isShareMode && (
           <Tooltip content={t('go-to-share-page')}>
-            <Icon 
-              className="cursor-pointer text-[#8600EF]" 
-              icon="prime:eye" 
-              width="16" 
-              height="16" 
+            <Icon
+              className="cursor-pointer text-[#8600EF]"
+              icon="prime:eye"
+              width={iconSize}
+              height={iconSize}
               onClick={(e) => {
                 e.stopPropagation();
                 window.open(`/share`);
-              }} 
+              }}
             />
           </Tooltip>
         )}
-        
-        <div className='text-xs text-desc'>
-          {blinko.config.value?.timeFormat == 'relative' 
+
+        <div className={`${isExpanded ? 'text-sm' : 'text-xs'} text-desc`}>
+          {blinko.config.value?.timeFormat == 'relative'
             ? dayjs(blinko.config.value?.isOrderByCreateTime ? blinkoItem.createdAt : blinkoItem.updatedAt).fromNow()
             : dayjs(blinko.config.value?.isOrderByCreateTime ? blinkoItem.createdAt : blinkoItem.updatedAt).format(blinko.config.value?.timeFormat ?? 'YYYY-MM-DD HH:mm:ss')
           }
         </div>
 
-        <Copy 
-          size={16} 
-          className="ml-auto opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1" 
-          content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`} 
+        <Copy
+          size={16}
+          className="ml-auto opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1"
+          content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`}
         />
 
         <ShareButton blinkoItem={blinkoItem} blinko={blinko} />
-        
+
         {blinkoItem.isTop && (
-          <Icon 
-            className="ml-auto group-hover/card:ml-2 text-[#EFC646]" 
-            icon="solar:bookmark-bold" 
-            width="16" 
-            height="16" 
+          <Icon
+            className="ml-auto group-hover/card:ml-2 text-[#EFC646]"
+            icon="solar:bookmark-bold"
+            width={iconSize}
+            height={iconSize}
           />
         )}
-        
+
         {!isShareMode && (
-          <LeftCickMenu 
-            className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2'} 
-            onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }} 
+          <LeftCickMenu
+            className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2'}
+            onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }}
           />
         )}
       </div>
@@ -77,10 +91,10 @@ export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded }: Card
 const ShareButton = ({ blinkoItem, blinko }: { blinkoItem: Note, blinko: BlinkoStore }) => {
   return (
     <Tooltip content={blinkoItem.isShare ? 'Copy share link' : 'Share and copy link'}>
-      <Icon 
-        icon="tabler:share-2" 
-        width="16" 
-        height="16" 
+      <Icon
+        icon="tabler:share-2"
+        width="16"
+        height="16"
         className="cursor-pointer text-desc ml-2 opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1"
         onClick={async (e) => {
           e.stopPropagation();
@@ -89,7 +103,7 @@ const ShareButton = ({ blinkoItem, blinko }: { blinkoItem: Note, blinko: BlinkoS
           }
           copy(`${window.location.origin}/share/${blinkoItem.id}`);
           RootStore.Get(ToastPlugin).success('Copied successfully~ Go to share!');
-        }} 
+        }}
       />
     </Tooltip>
   );
