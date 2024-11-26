@@ -153,5 +153,14 @@
   "width-less-than": "Width less than",
   "small-device-card-columns": "Small Device Card Columns",
   "medium-device-card-columns": "Medium Device Card Columns",
-  "large-device-card-columns": "Large Device Card Columns"
+  "large-device-card-columns": "Large Device Card Columns",
+  "device-card-columns": "Device Card Columns",
+  "columns-for-different-devices": "Columns for different devices",
+  "mobile": "Mobile",
+  "tablet": "Tablet",
+  "desktop": "Desktop",
+  "chars": "Chars",
+  "text-fold-length": "Text Fold Length",
+  "title-first-line-of-the-text": "Title(first line of the text)",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Content(rest of the text,if the text is longer than the length)"
 }

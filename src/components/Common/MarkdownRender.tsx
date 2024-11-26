@@ -113,7 +113,9 @@ const LinkPreview = ({ href }) => {
   return (
     <>
       <a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
-      {store.previewData?.value?.title && <Card className='p-2 my-1 bg-sencondbackground rounded-xl select-none ' radius='none' shadow='none'>
+      {store.previewData?.value?.title && <Card onClick={() => {
+        window.open(href, '_blank')
+      }} className='p-2 my-1 bg-sencondbackground rounded-xl select-none cursor-pointer' radius='none' shadow='none'>
         <div className='flex items-center gap-2 w-full'>
           <div className='font-bold truncate text-sm'>{store.previewData.value?.title}</div>
           {store.previewData.value?.favicon && <Image fallbackSrc="/fallback.png" className='flex-1 rounded-full ml-auto min-w-[16px]' src={store.previewData.value.favicon} width={16} height={16}></Image>}
@@ -137,10 +139,10 @@ const ImageWrapper = ({ src, width, height }) => {
 
 
 
-export const MarkdownRender = observer(({ content = '', onChange }: { content?: string, onChange?: (newContent: string) => void }) => {
+export const MarkdownRender = observer(({ content = '', onChange, disableOverflowing = false }: { content?: string, onChange?: (newContent: string) => void, disableOverflowing?: boolean }) => {
   const { theme } = useTheme()
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(disableOverflowing ?? false);
   const contentRef = useRef(null);
   const { t } = useTranslation()
   useEffect(() => {
@@ -149,7 +151,9 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
       const isContentOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
       //@ts-ignore
       const isSingleLine = contentRef.current.clientHeight === parseFloat(getComputedStyle(contentRef.current).lineHeight);
-      setIsOverflowing(isContentOverflowing && !isSingleLine);
+      if (!disableOverflowing) {
+        setIsOverflowing(isContentOverflowing && !isSingleLine);
+      }
     }
   }, []);
 
@@ -159,7 +163,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
 
   return (
     <div className={`markdown-body`}>
-      <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content ${isExpanded ? "expanded" : "collapsed"}`}>
+      <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content ${isExpanded ? "expanded" : "collapsed"}  ${disableOverflowing ? 'expanded' : ''}`}>
         <ReactMarkdown
           remarkPlugins={[
             remarkGfm,
@@ -238,7 +242,7 @@ export const MarkdownRender = observer(({ content = '', onChange }: { content?: 
           {content}
         </ReactMarkdown>
       </div>
-      {isOverflowing && content && (
+      {!disableOverflowing && isOverflowing && content && (
         <div className='mt-2 cursor-pointer font-bold select-none hover:opacity-70 transition-all  tex-sm' onClick={toggleExpand}>{isExpanded ? t('show-less') : t('show-more')}</div>
       )}
     </div>

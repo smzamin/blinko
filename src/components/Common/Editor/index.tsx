@@ -16,7 +16,7 @@ import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
 import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
-import usePasteFile from '@/lib/hooks';
+import { usePasteFile } from '@/lib/hooks';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
@@ -268,7 +268,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         const isEndsWithBank = endsWithBankRegex.test(currentText)
         const isEndsWithHashTag = helper.regex.isEndsWithHashTag.test(currentText)
         if (currentText == '' || !isEndsWithHashTag) {
-          setTimeout(() => eventBus.emit('tagselect:hidden')) 
+          setTimeout(() => eventBus.emit('tagselect:hidden'))
           return
         }
         if (isEndsWithHashTag && currentText != '' && !isEndsWithBank) {
@@ -400,7 +400,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           toolbarPlugin({
             toolbarContents: () => (
               <div className='flex flex-col  w-full'>
-                <div className='w-full'>
+                <div className='w-full my-2'>
                   <AttachmentsRender files={store.files} />
                 </div>
                 {

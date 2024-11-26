@@ -156,5 +156,14 @@
   "width-less-than": "عرض أقل من",
   "small-device-card-columns": "أعمدة بطاقة الجهاز الصغيرة",
   "medium-device-card-columns": "أعمدة بطاقة الجهاز المتوسطة",
-  "large-device-card-columns": "أعمدة بطاقة الجهاز الكبيرة"
+  "large-device-card-columns": "أعمدة بطاقة الجهاز الكبيرة",
+  "device-card-columns": "أعمدة بطاقة الجهاز",
+  "columns-for-different-devices": "أعمدة للأجهزة المختلفة",
+  "mobile": "الهاتف المحمول",
+  "tablet": "جهاز لوحي",
+  "desktop": "سطح المكتب",
+  "chars": "الأحرف",
+  "text-fold-length": "طول طية النص",
+  "title-first-line-of-the-text": "العنوان (السطر الأول من النص)",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "المحتوى(بقية النص، إذا كان النص أطول من الطول)"
 }

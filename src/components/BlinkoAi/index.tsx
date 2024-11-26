@@ -156,7 +156,7 @@ export const BlinkoAi = observer(() => {
       isPc ? <Popover placement="top">
         <PopoverTrigger>
           <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
-            className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-10 opacity-70 text-primary-foreground">
+            className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-[100] opacity-70 text-primary-foreground">
             <Icon icon="mingcute:ai-line" width="20" height="20" />
           </motion.div>
         </PopoverTrigger>

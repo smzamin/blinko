@@ -148,5 +148,14 @@
   "width-less-than": "宽度小于",
   "small-device-card-columns": "小型设备卡列",
   "medium-device-card-columns": "中尺寸设备卡列",
-  "large-device-card-columns": "大尺寸设备卡列"
+  "large-device-card-columns": "大尺寸设备卡列",
+  "device-card-columns": "设备卡列",
+  "columns-for-different-devices": "适用于不同设备的栏目",
+  "mobile": "移动电话",
+  "tablet": "平板电脑",
+  "desktop": "台式机",
+  "chars": "字符数",
+  "text-fold-length": "文本折叠长度",
+  "title-first-line-of-the-text": "标题（文本第一行）",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "内容（文本的其余部分，如果文本长度超过规定长度）"
 }

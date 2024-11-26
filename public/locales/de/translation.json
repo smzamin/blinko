@@ -148,5 +148,14 @@
   "width-less-than": "Breite weniger als",
   "small-device-card-columns": "Spalten für kleine Gerätekarten",
   "medium-device-card-columns": "Medium-Gerätekarten-Spalten",
-  "large-device-card-columns": "Große Gerätekartenspalten"
+  "large-device-card-columns": "Große Gerätekartenspalten",
+  "device-card-columns": "Spalten der Gerätekarte",
+  "columns-for-different-devices": "Säulen für verschiedene Geräte",
+  "mobile": "Mobil",
+  "tablet": "Tablette",
+  "desktop": "Schreibtisch",
+  "chars": "Zeichen",
+  "text-fold-length": "Text Falzlänge",
+  "title-first-line-of-the-text": "Titel (erste Zeile des Textes)",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Inhalt (Rest des Textes, wenn der Text länger als die Länge ist)"
 }

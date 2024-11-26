@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import { observer } from "mobx-react-lite";
 import { DialogStore } from ".";
 import { RootStore } from "@/store/root";
+import { useHistoryBack } from "@/lib/hooks";
 
 const Dialog = observer(() => {
   const modal = RootStore.Get(DialogStore);
   const { className, classNames, isOpen, placement, title, size, content, isDismissable, onlyContent = false, noPadding = false, transparent = false } = modal;
   const Content = typeof content === 'function' ? content : () => content;
+
+  useHistoryBack({
+    state: isOpen,
+    onStateChange: () => modal.close(),
+    historyState: 'modal'
+  });
+
   return (
     <Modal
       style={{ zIndex: 2000 }}
       onClose={() => {
         modal.close();
       }}
-      // portalContainer={document.querySelector("#layout")!}
       backdrop='blur'
       isOpen={isOpen}
       size={size}
@@ -49,19 +56,22 @@ const Dialog = observer(() => {
       }}
     >
       {
-        onlyContent ? <ModalContent className="max-h-screen overflow-auto">< Content /></ModalContent > : <ModalContent className="max-h-screen overflow-auto">
-          {() => (
-            <>
-              {title && <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>}
-              <ModalBody className={`${noPadding ? '' : 'p-2 md:p-4 '}`}>
-                <Content />
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
+        onlyContent ? 
+          <ModalContent className="max-h-screen overflow-auto">
+            <Content />
+          </ModalContent> : 
+          <ModalContent className="max-h-screen overflow-auto">
+            {() => (
+              <>
+                {title && <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>}
+                <ModalBody className={`${noPadding ? '' : 'p-2 md:p-4 '}`}>
+                  <Content />
+                </ModalBody>
+              </>
+            )}
+          </ModalContent>
       }
-
-    </Modal >
+    </Modal>
   );
 });
 

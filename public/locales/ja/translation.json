@@ -146,5 +146,14 @@
   "width-less-than": "幅",
   "small-device-card-columns": "小型デバイスカードのコラム",
   "medium-device-card-columns": "ミディアムデバイスカードのコラム",
-  "large-device-card-columns": "大型デバイスカードのコラム"
+  "large-device-card-columns": "大型デバイスカードのコラム",
+  "device-card-columns": "デバイスカードのコラム",
+  "columns-for-different-devices": "デバイス別コラム",
+  "mobile": "モバイル",
+  "tablet": "タブレット",
+  "desktop": "デスクトップ",
+  "chars": "文字",
+  "text-fold-length": "テキストの折りの長さ",
+  "title-first-line-of-the-text": "タイトル（本文の1行目）",
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "コンテンツ(テキストが長さを超える場合、残りの部分)"
 }
