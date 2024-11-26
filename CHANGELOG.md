@@ -1,3 +1,11 @@
+# [0.9.0](https://github.com/blinko-space/blinko/compare/v0.8.15...v0.9.0) (2024-11-26)
+
+
+### Features
+
+* support blog view ([070be9b](https://github.com/blinko-space/blinko/commit/070be9b7ecad2b77e81237748f163f861155b329))
+* support blog view mode ([83bf9cd](https://github.com/blinko-space/blinko/commit/83bf9cdec58f3af0c5ea77d5a246a85dc00ca82d))
+
 ## [0.8.15](https://github.com/blinko-space/blinko/compare/v0.8.14...v0.8.15) (2024-11-25)
 
 
