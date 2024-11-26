@@ -8,7 +8,11 @@ import dayjs from '@/lib/dayjs';
 import { _ } from '@/lib/lodash';
 
 interface CardFooterProps {
-  blinkoItem: Note;
+  blinkoItem: Note & {
+    isBlog?: boolean;
+    blogCover?: string;
+    title?: string;
+  };
   blinko: BlinkoStore;
 }
 
@@ -16,7 +20,7 @@ export const CardFooter = ({ blinkoItem, blinko }: CardFooterProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center mt-2">
       <ConvertTypeButton blinkoItem={blinkoItem} blinko={blinko} t={t} />
       <CreatedTimeInfo blinkoItem={blinkoItem} t={t} />
     </div>
@@ -33,9 +37,9 @@ const ConvertTypeButton = ({ blinkoItem, blinko, t }) => {
   if (blinkoItem.type === NoteType.BLINKO) {
     return (
       <Tooltip content={t('convert-to') + ' Note'} delay={1000}>
-        <div className='flex items-center justify-start mt-2 cursor-pointer' onClick={handleClick}>
+        <div className='flex items-center justify-start cursor-pointer' onClick={handleClick}>
           <Icon className='text-yellow-500' icon="basil:lightning-solid" width="12" height="12" />
-          <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')}</div>
+          <div className='text-desc text-xs font-bold ml-1 select-none'>{t('blinko')} {blinkoItem.isBlog ? ` · ${t('article')}` : ''}</div>
         </div>
       </Tooltip>
     );
@@ -43,22 +47,23 @@ const ConvertTypeButton = ({ blinkoItem, blinko, t }) => {
 
   return (
     <Tooltip content={t('convert-to') + ' Blinko'} delay={1000}>
-      <div className='flex items-center justify-start mt-2 cursor-pointer' onClick={handleClick}>
+      <div className='flex items-center justify-start cursor-pointer' onClick={handleClick}>
         <Icon className='text-blue-500' icon="solar:notes-minimalistic-bold-duotone" width="12" height="12" />
-        <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')}</div>
+        <div className='text-desc text-xs font-bold ml-1 select-none'>{t('note')} {blinkoItem.isBlog ? ` · ${t('article')}` : ''}</div>
       </div>
     </Tooltip>
   );
 };
 
 const CreatedTimeInfo = ({ blinkoItem, t }) => {
-  if (dayjs(blinkoItem.createdAt).fromNow() === dayjs(blinkoItem.updatedAt).fromNow()) {
+  if (!blinkoItem?.metadata?.isIndexed) {
     return null;
   }
-
   return (
-    <div className='ml-auto text-xs text-desc'>
-      {t('created-in')} {dayjs(blinkoItem.createdAt).fromNow()}
+    <div className='ml-auto flex items-center'>
+      <Tooltip content={"Indexed"} delay={1000}>
+        <Icon className='text-ignore opacity-50' icon="mingcute:ai-line" width="16" height="16" />
+      </Tooltip>
     </div>
   );
 };

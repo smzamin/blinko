@@ -158,5 +158,7 @@
   "chars": "Chars",
   "text-fold-length": "Длина текстового сгиба",
   "title-first-line-of-the-text": "Заголовок (первая строка текста)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Содержание (остальная часть текста, если текст длиннее указанной длины)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Содержание (остальная часть текста, если текст длиннее указанной длины)",
+  "ai-tag": "Метка AI",
+  "article": "Статья"
 }

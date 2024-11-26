@@ -157,5 +157,7 @@
   "chars": "Zeichen",
   "text-fold-length": "Text Falzlänge",
   "title-first-line-of-the-text": "Titel (erste Zeile des Textes)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Inhalt (Rest des Textes, wenn der Text länger als die Länge ist)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Inhalt (Rest des Textes, wenn der Text länger als die Länge ist)",
+  "ai-tag": "AI-Tag",
+  "article": "Artikel"
 }

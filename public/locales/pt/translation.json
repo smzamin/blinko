@@ -156,5 +156,7 @@
   "chars": "Caracteres",
   "text-fold-length": "Comprimento da dobra do texto",
   "title-first-line-of-the-text": "Título (primeira linha do texto)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Conteúdo (resto do texto, se o texto for mais longo do que o comprimento)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Conteúdo (resto do texto, se o texto for mais longo do que o comprimento)",
+  "ai-tag": "Etiqueta AI",
+  "article": "Artigo"
 }

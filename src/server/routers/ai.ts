@@ -110,5 +110,15 @@ export const aiRouter = router({
       } catch (error) {
         throw new Error(error)
       }
+    }),
+  autoTag: authProcedure
+    .input(z.object({
+      content: z.string(),
+      tags: z.array(z.string())
+    }))
+    .mutation(async function ({ input }) {
+      const { content, tags } = input
+      const res = await AiService.autoTag({ content, tags })
+      return res
     })
 })

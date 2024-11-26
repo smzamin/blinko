@@ -162,5 +162,7 @@
   "chars": "Chars",
   "text-fold-length": "Text Fold Length",
   "title-first-line-of-the-text": "Title(first line of the text)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Content(rest of the text,if the text is longer than the length)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Content(rest of the text,if the text is longer than the length)",
+  "ai-tag": "AI Tag",
+  "article": "Article"
 }

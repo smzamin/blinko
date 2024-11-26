@@ -13,6 +13,7 @@ import { BlinkoEditor } from "../BlinkoEditor";
 import { useEffect, useState } from "react";
 import { NoteType } from "@/server/types";
 import { useRouter } from "next/router";
+import { AiStore } from "@/store/aiStore";
 
 export const ShowEditBlinkoModel = (size: string = '2xl') => {
   const blinko = RootStore.Get(BlinkoStore)
@@ -110,6 +111,19 @@ export const ArchivedItem = observer(() => {
   </div>
 })
 
+export const AITagItem = observer(() => {
+  const { t } = useTranslation();
+  const blinko = RootStore.Get(BlinkoStore)
+  const aiStore = RootStore.Get(AiStore)
+  return (
+    <div className="flex items-start gap-2" onClick={e => {
+      aiStore.autoTag.call(blinko.curSelectedNote?.id!, blinko.curSelectedNote?.content!)
+    }}>
+      <Icon icon="carbon:ai-status" width="20" height="20" />
+      <div>{t('ai-tag')}</div>
+    </div>
+  );
+});
 
 export const DeleteItem = observer(() => {
   const { t } = useTranslation();
@@ -126,9 +140,12 @@ export const DeleteItem = observer(() => {
 export const BlinkoRightClickMenu = observer(() => {
   const [isDetailPage, setIsDetailPage] = useState(false)
   const router = useRouter()
+  const blinko = RootStore.Get(BlinkoStore)
+
   useEffect(() => {
     setIsDetailPage(router.pathname.includes('/detail'))
   }, [router.pathname])
+
   return <ContextMenu className='font-bold' id="blink-item-context-menu" hideOnLeave={false} animation="zoom">
     <ContextMenuItem >
       <EditItem />
@@ -154,6 +171,11 @@ export const BlinkoRightClickMenu = observer(() => {
       <ArchivedItem />
     </ContextMenuItem>
 
+    {blinko.config.value?.isUseAI ? (
+      <ContextMenuItem>
+        <AITagItem />
+      </ContextMenuItem>
+    ) : <></>}
 
     <ContextMenuItem className='select-none divider hover:!bg-none'>
       <Divider orientation="horizontal" />
@@ -168,6 +190,8 @@ export const BlinkoRightClickMenu = observer(() => {
 export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () => void, className: string }) => {
   const [isDetailPage, setIsDetailPage] = useState(false)
   const router = useRouter()
+  const blinko = RootStore.Get(BlinkoStore)
+
   useEffect(() => {
     setIsDetailPage(router.pathname.includes('/detail'))
   }, [router.pathname])
@@ -185,6 +209,13 @@ export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () 
       <DropdownItem key="ArchivedItem" >
         <ArchivedItem />
       </DropdownItem>
+
+      {blinko.config.value?.isUseAI ? (
+        <DropdownItem key="AITagItem">
+          <AITagItem />
+        </DropdownItem>
+      ) : <></>}
+
       <DropdownItem key="DeleteItem" className="text-danger" >
         <DeleteItem />
       </DropdownItem>

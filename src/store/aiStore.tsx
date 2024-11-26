@@ -3,13 +3,18 @@ import { _ } from '@/lib/lodash';
 import { Store } from './standard/base';
 import { ToastPlugin } from './module/Toast/Toast';
 import { RootStore } from './root';
-import { streamApi } from '@/lib/trpc';
+import { api, streamApi } from '@/lib/trpc';
 import { StorageListState } from './standard/StorageListState';
 import { GlobalConfig, Note } from '@/server/types';
 import { makeAutoObservable } from 'mobx';
 import { BlinkoStore } from './blinkoStore';
 import { eventBus } from '@/lib/event';
 import { showAiWriteSuggestions } from '@/components/Common/PopoverFloat/aiWritePop';
+import { PromiseCall, PromiseState } from './standard/PromiseState';
+import { DialogStore } from './module/Dialog';
+import { CheckboxGroup } from '@nextui-org/react';
+import { AiTag } from '@/components/BlinkoAi/aiTag';
+import i18n from '@/lib/i18n';
 
 type Chat = {
   content: string
@@ -96,6 +101,7 @@ export class AiStore implements Store {
       RootStore.Get(ToastPlugin).error(error.message)
     }
   }
+
   get blinko() {
     return RootStore.Get(BlinkoStore)
   }
@@ -133,6 +139,39 @@ export class AiStore implements Store {
       this.isLoading = false
     }
   }
+
+  autoTag = new PromiseState({
+    function: async (id: number, content: string) => {
+      try {
+        RootStore.Get(ToastPlugin).loading(i18n.t('thinking...'))
+        const res = await api.ai.autoTag.mutate({ content, tags: this.blinko.tagList?.value?.pathTags ?? [] })
+        RootStore.Get(ToastPlugin).remove()
+        console.log(res)
+        RootStore.Get(DialogStore).setData({
+          isOpen: true,
+          title: i18n.t('ai-tag'),
+          content: <AiTag tags={res} onSelect={async e => {
+            let newContent
+            if (this.blinko.config.value?.textFoldLength) {
+              if (content.length > this.blinko.config.value?.textFoldLength) {
+                newContent = content + '\n\n' + e.join(' ')
+              } else {
+                newContent = e.join(' ') + ' \n\n' + content
+              }
+            } else {
+              newContent = e.join(' ') + ' \n\n' + content
+            }
+            await PromiseCall(this.blinko.upsertNote.call({ id, content: newContent }))
+            RootStore.Get(DialogStore).close()
+          }} />
+        })
+        return res
+      } catch (error) {
+        RootStore.Get(ToastPlugin).remove()
+        RootStore.Get(ToastPlugin).error(error.message)
+      }
+    }
+  })
 
   abort() {
     this.abortController.abort()

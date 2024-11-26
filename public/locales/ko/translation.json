@@ -157,5 +157,7 @@
   "chars": "문자",
   "text-fold-length": "텍스트 접기 길이",
   "title-first-line-of-the-text": "제목(텍스트의 첫 줄)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "콘텐츠(텍스트가 길이보다 긴 경우 나머지 텍스트)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "콘텐츠(텍스트가 길이보다 긴 경우 나머지 텍스트)",
+  "ai-tag": "AI 태그",
+  "article": "기사"
 }

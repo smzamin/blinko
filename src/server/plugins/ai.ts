@@ -19,6 +19,7 @@ import { UnstructuredLoader } from "@langchain/community/document_loaders/fs/uns
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { BaseDocumentLoader } from '@langchain/core/document_loaders/base';
 import { FileService } from './utils';
+import { AiPrompt } from './ai/aiPrompt';
 
 //https://js.langchain.com/docs/introduction/
 //https://smith.langchain.com/onboarding
@@ -246,30 +247,6 @@ export class AiService {
     }
   }
 
-  static getQAPrompt() {
-    const systemPrompt =
-      "You are a versatile AI assistant who can: \n" +
-      "1. Answer questions and explain concepts\n" +
-      "2. Provide suggestions and analysis\n" +
-      "3. Help with planning and organizing ideas\n" +
-      "4. Assist with content creation and editing\n" +
-      "5. Perform basic calculations and reasoning\n\n" +
-      "Use the following context to assist with your responses: \n" +
-      "{context}\n\n" +
-      "If a request is beyond your capabilities, please be honest about it.\n" +
-      "Always respond in the user's language.\n" +
-      "Maintain a friendly and professional conversational tone.";
-
-    const qaPrompt = ChatPromptTemplate.fromMessages(
-      [
-        ["system", systemPrompt],
-        new MessagesPlaceholder("chat_history"),
-        ["human", "{input}"]
-      ]
-    )
-
-    return qaPrompt
-  }
 
   static getChatHistory({ conversations }: { conversations: { role: string, content: string }[] }) {
     const conversationMessage = conversations.map(i => {
@@ -304,7 +281,7 @@ export class AiService {
       //@ts-ignore
       notes.sort((a, b) => a.index! - b.index!)
       const chat_history = AiService.getChatHistory({ conversations })
-      const qaPrompt = AiService.getQAPrompt()
+      const qaPrompt = AiPrompt.QAPrompt()
       const qaChain = qaPrompt.pipe(LLM).pipe(new StringOutputParser())
       const result = await qaChain.stream({
         chat_history,
@@ -318,64 +295,22 @@ export class AiService {
     }
   }
 
-
-  static getWritingPrompt(type: 'expand' | 'polish' | 'custom', content?: string) {
-   const systemPrompts = {
-      expand: `You are a professional writing assistant. Your task is to expand and enrich the given text content:
-      1. Detect and use the same language as the input content
-      2. Add more details and descriptions
-      3. Expand arguments and examples
-      4. Include relevant background information
-      5. Maintain consistency with the original tone and style
+  static async autoTag({ content, tags }: { content: string, tags: string[] }) {
+    try {
+      const { LLM } = await AiModelFactory.GetProvider();
+      const autoTagPrompt = AiPrompt.AutoTagPrompt(tags);
+      const autoTagChain = autoTagPrompt.pipe(LLM).pipe(new StringOutputParser());
       
-      Original content:
-      {content}
+      const result = await autoTagChain.invoke({
+        question: "Please select and suggest appropriate tags for the above content",
+        context: content
+      });
       
-      Important:
-      - Respond in the SAME LANGUAGE as the input content
-      - Use Markdown format
-      - Replace all spaces with &#x20;
-      - Use two line breaks between paragraphs
-      - Ensure line breaks between list items`,
-      
-      polish: `You are a professional text editor. Your task is to polish and optimize the given text:
-      1. Detect and use the same language as the input content
-      2. Improve word choice and expressions
-      3. Optimize sentence structure
-      4. Maintain the original core meaning
-      5. Ensure the text flows naturally
-      
-      Original content:
-      {content}
-      
-      Important:
-      - Respond in the SAME LANGUAGE as the input content
-      - Use Markdown format
-      - Replace all spaces with &#x20;
-      - Use two line breaks between paragraphs
-      - Ensure line breaks between list items`,
-  
-      custom: `You are a professional writing assistant. Your task is to:
-      1. Detect and use the same language as the input content
-      2. Create content according to user requirements
-      3. Maintain professional writing standards
-      4. Follow technical documentation best practices when needed
-      
-      Important:
-      - Respond in the SAME LANGUAGE as the input content
-      - Use Markdown format
-      - Replace all spaces with &#x20;
-      - Use two line breaks between paragraphs
-      - Ensure line breaks between list items
-      - Use appropriate Markdown elements (code blocks, tables, lists, etc.)`
-    };
-  
-    const writingPrompt = ChatPromptTemplate.fromMessages([
-      ["system", systemPrompts[type]],
-      ["human", "{question}"]
-    ]);
-  
-    return writingPrompt;
+      return result.trim().split(',').map(tag => tag.trim()).filter(Boolean);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
   
   static async writing({ 
@@ -389,7 +324,7 @@ export class AiService {
   }) {
     try {
       const { LLM } = await AiModelFactory.GetProvider();
-      const writingPrompt = AiService.getWritingPrompt(type, content);
+      const writingPrompt = AiPrompt.WritingPrompt(type, content);
       const writingChain = writingPrompt.pipe(LLM).pipe(new StringOutputParser());
       
       const result = await writingChain.stream({

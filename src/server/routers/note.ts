@@ -8,7 +8,7 @@ import { NoteType } from '../types';
 import path from 'path';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
-import { attachmentsSchema, notesSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
+import { attachmentsSchema, notesSchema, tagSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
 import { getGlobalConfig } from './config';
 import { FileService } from '../plugins/utils';
 
@@ -37,7 +37,11 @@ export const noteRouter = router({
     .output(z.array(notesSchema.merge(
       z.object({
         attachments: z.array(attachmentsSchema),
-        tags: z.array(tagsToNoteSchema)
+        tags: z.array(tagsToNoteSchema.merge(
+          z.object({
+            tag: tagSchema
+          }))
+        )
       }))
     ))
     .mutation(async function ({ input, ctx }) {
@@ -76,7 +80,7 @@ export const noteRouter = router({
         orderBy: [{ isTop: "desc" }, timeOrderBy],
         skip: (page - 1) * size,
         take: size,
-        include: { tags: true, attachments: true }
+        include: { tags: { include: { tag: true } }, attachments: true }
       })
     }),
   publicList: publicProcedure

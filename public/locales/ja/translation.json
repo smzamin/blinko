@@ -155,5 +155,7 @@
   "chars": "文字",
   "text-fold-length": "テキストの折りの長さ",
   "title-first-line-of-the-text": "タイトル（本文の1行目）",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "コンテンツ(テキストが長さを超える場合、残りの部分)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "コンテンツ(テキストが長さを超える場合、残りの部分)",
+  "ai-tag": "AIタグ",
+  "article": "記事"
 }

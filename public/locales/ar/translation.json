@@ -165,5 +165,7 @@
   "chars": "الأحرف",
   "text-fold-length": "طول طية النص",
   "title-first-line-of-the-text": "العنوان (السطر الأول من النص)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "المحتوى(بقية النص، إذا كان النص أطول من الطول)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "المحتوى(بقية النص، إذا كان النص أطول من الطول)",
+  "ai-tag": "علامة الذكاء الاصطناعي",
+  "article": "المادة"
 }

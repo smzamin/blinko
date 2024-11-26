@@ -157,5 +157,7 @@
   "chars": "Chars",
   "text-fold-length": "Longueur du pli du texte",
   "title-first-line-of-the-text": "Titre (première ligne du texte)",
-  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Contenu (reste du texte, si le texte est plus long que la longueur)"
+  "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Contenu (reste du texte, si le texte est plus long que la longueur)",
+  "ai-tag": "Étiquette AI",
+  "article": "Article"
 }
