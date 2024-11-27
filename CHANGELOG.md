@@ -1,3 +1,10 @@
+## [0.10.2](https://github.com/blinko-space/blinko/compare/v0.10.1...v0.10.2) (2024-11-27)
+
+
+### Bug Fixes
+
+* AttachmentsRender ui ([71ef715](https://github.com/blinko-space/blinko/commit/71ef715fa821e3bafbbedf5e08e3d92da0335811))
+
 ## [0.10.1](https://github.com/blinko-space/blinko/compare/v0.10.0...v0.10.1) (2024-11-27)
 
 
