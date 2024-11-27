@@ -84,9 +84,6 @@ export const handleEditorKeyEvents = () => {
   })
 }
 
-
-
-
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
@@ -113,15 +110,12 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     lastSelection: null as Selection | null,
     updateSendStatus() {
       if (store.files?.length == 0 && mdxEditorRef.current?.getMarkdown() == '') {
-        console.log('1111')
         return setCanSend(false)
       }
       if (store.files?.some(i => i.uploadPromise?.loading?.value === true)) {
-        console.log('222')
         return setCanSend(false)
       }
       if (store.files?.every(i => !i?.uploadPromise?.loading?.value) && store.files?.length != 0) {
-        console.log('333')
         return setCanSend(true)
       }
       if (mdxEditorRef.current?.getMarkdown() != '') {
@@ -409,9 +403,11 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           toolbarPlugin({
             toolbarContents: () => (
               <div className='flex flex-col  w-full'>
-                <div className='w-full my-2'>
-                  <AttachmentsRender files={store.files} />
-                </div>
+                {
+                  store.files.length > 0 && <div className='w-full my-2'>
+                    <AttachmentsRender files={store.files} />
+                  </div>
+                }
                 {
                   isWriting &&
                   <div id='ai-write-suggestions' className='flex gap-2 items-center'>
@@ -515,7 +511,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                   }} className={`${mode == 'create' ? 'ml-auto' : ''} w-[60px] group`} isIconOnly color='primary' >
                     {
                       store.files?.some(i => i.uploadPromise?.loading?.value) ?
-                        <Icon icon="line-md:uploading-loop" width="24" height="24"/> :
+                        <Icon icon="line-md:uploading-loop" width="24" height="24" /> :
                         <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
                     }
                   </Button>
