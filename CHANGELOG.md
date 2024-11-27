@@ -1,3 +1,10 @@
+## [0.9.4](https://github.com/blinko-space/blinko/compare/v0.9.3...v0.9.4) (2024-11-27)
+
+
+### Bug Fixes
+
+* User ID and password not cleared [#101](https://github.com/blinko-space/blinko/issues/101) ([d6e5d35](https://github.com/blinko-space/blinko/commit/d6e5d35af2758764658ff807ef2eccea3952cec4))
+
 ## [0.9.3](https://github.com/blinko-space/blinko/compare/v0.9.2...v0.9.3) (2024-11-27)
 
 
