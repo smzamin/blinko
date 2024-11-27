@@ -1,3 +1,10 @@
+## [0.9.2](https://github.com/blinko-space/blinko/compare/v0.9.1...v0.9.2) (2024-11-27)
+
+
+### Bug Fixes
+
+* article view tag issue [#186](https://github.com/blinko-space/blinko/issues/186) ([16503a3](https://github.com/blinko-space/blinko/commit/16503a389d96c925d12e1a7f8f24a67ca60d4d48))
+
 ## [0.9.1](https://github.com/blinko-space/blinko/compare/v0.9.0...v0.9.1) (2024-11-26)
 
 
