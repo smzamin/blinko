@@ -159,5 +159,9 @@
   "title-first-line-of-the-text": "Titel (erste Zeile des Textes)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Inhalt (Rest des Textes, wenn der Text länger als die Länge ist)",
   "ai-tag": "AI-Tag",
-  "article": "Artikel"
+  "article": "Artikel",
+  "embedding-model": "Einbettungsmodell",
+  "force-rebuild": "Force Rebuild",
+  "force-rebuild-embedding-index": "Erzwungener Neuaufbau stellt alle Daten wieder her, die vollständig indiziert wurden.",
+  "embedding-model-description": "Der Index muss nach einem Wechsel des eingebetteten Modells neu aufgebaut werden"
 }

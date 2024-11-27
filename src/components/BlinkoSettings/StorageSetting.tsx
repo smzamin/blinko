@@ -36,7 +36,6 @@ export const StorageSetting = observer(() => {
   return <Card shadow="none" className="flex flex-col p-4 bg-background">
     <div className='text-desc text-sm'>{t('storage')}</div>
     <Item
-      type={isPc ? 'row' : 'col'}
       leftContent={<div className="flex flex-col  gap-2">
         <div>{t('object-storage')}</div>
       </div>}

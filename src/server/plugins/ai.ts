@@ -124,17 +124,15 @@ export class AiService {
   //api/file/123.pdf
   static async embeddingInsertAttachments({ id, filePath }: { id: number, filePath: string }) {
     try {
-      const note = await prisma.notes.findUnique({ where: { id } })
-      //@ts-ignore
-      if (note?.metadata?.isAttachmentsIndexed) {
-        return { ok: true, msg: 'already indexed' }
-      }
+      // const note = await prisma.notes.findUnique({ where: { id } })
+      // //@ts-ignore
+      // if (note?.metadata?.isAttachmentsIndexed) {
+      //   return { ok: true, msg: 'already indexed' }
+      // }
       const absolutePath = await FileService.getFile(filePath)
       const content = await AiService.loadFileContent(absolutePath);
-      console.log('content', content)
       const { VectorStore, TokenTextSplitter } = await AiModelFactory.GetProvider()
       const chunks = await TokenTextSplitter.splitText(content);
-      console.log('chunks', chunks)
       const documents: Document[] = chunks.map((chunk, index) => {
         return {
           pageContent: chunk,
@@ -150,6 +148,7 @@ export class AiService {
           where: { id },
           data: {
             metadata: {
+              isIndexed: true,
               isAttachmentsIndexed: true
             }
           }
@@ -191,8 +190,12 @@ export class AiService {
     return result
   }
 
-  static async *rebuildEmbeddingIndex(): AsyncGenerator<ProgressResult & { progress?: { current: number, total: number } }, void, unknown> {
-    const notes = await prisma.notes.findMany();
+  static async *rebuildEmbeddingIndex({ force = false }: { force?: boolean }): AsyncGenerator<ProgressResult & { progress?: { current: number, total: number } }, void, unknown> {
+    const notes = await prisma.notes.findMany({
+      include: {
+        attachments: true
+      }
+    });
     const total = notes.length;
     const BATCH_SIZE = 5;
 
@@ -205,8 +208,7 @@ export class AiService {
         current++;
         try {
           //@ts-ignore
-          if (note.metadata?.isIndexed) {
-            console.log('skip note:', note.id);
+          if (note.metadata?.isIndexed && !force) {
             yield {
               type: 'skip' as const,
               content: note.content.slice(0, 30),
@@ -214,26 +216,44 @@ export class AiService {
             };
             continue;
           }
-          await AiService.embeddingUpsert({
-            id: note?.id,
-            content: note?.content,
-            type: 'insert' as const
-          });
+          if (note?.content != '') {
+            await AiService.embeddingUpsert({
+              id: note?.id,
+              content: note?.content,
+              type: 'update' as const
+            });
+          }
           //@ts-ignore
-          if (!note.metadata?.isAttachmentsIndexed) {
+          if (note?.attachments) {
             //@ts-ignore
-            for (const attachment of note.attachments) {
-              await AiService.embeddingInsertAttachments({
+            for (const attachment of note?.attachments) {
+              const { ok, error } = await AiService.embeddingInsertAttachments({
                 id: note?.id,
-                filePath: attachment.path
+                filePath: attachment?.path
               });
+              if (ok) {
+                yield {
+                  type: 'success' as const,
+                  content: decodeURIComponent(attachment?.path),
+                  progress: { current, total }
+                };
+              } else {
+                yield {
+                  type: 'error' as const,
+                  content: decodeURIComponent(attachment?.path),
+                  error,
+                  progress: { current, total }
+                };
+              }
             }
           }
-          yield {
-            type: 'success' as const,
-            content: note?.content.slice(0, 30) ?? '',
-            progress: { current, total }
-          };
+          if (note?.content != '') {
+            yield {
+              type: 'success' as const,
+              content: note?.content.slice(0, 30) ?? '',
+              progress: { current, total }
+            };
+          }
         } catch (error) {
           console.error('rebuild index error->', error);
           yield {
@@ -300,38 +320,38 @@ export class AiService {
       const { LLM } = await AiModelFactory.GetProvider();
       const autoTagPrompt = AiPrompt.AutoTagPrompt(tags);
       const autoTagChain = autoTagPrompt.pipe(LLM).pipe(new StringOutputParser());
-      
+
       const result = await autoTagChain.invoke({
         question: "Please select and suggest appropriate tags for the above content",
         context: content
       });
-      
+
       return result.trim().split(',').map(tag => tag.trim()).filter(Boolean);
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
-  
-  static async writing({ 
-    question, 
-    type = 'custom', 
-    content 
-  }: { 
-    question: string, 
+
+  static async writing({
+    question,
+    type = 'custom',
+    content
+  }: {
+    question: string,
     type?: 'expand' | 'polish' | 'custom',
-    content?: string 
+    content?: string
   }) {
     try {
       const { LLM } = await AiModelFactory.GetProvider();
       const writingPrompt = AiPrompt.WritingPrompt(type, content);
       const writingChain = writingPrompt.pipe(LLM).pipe(new StringOutputParser());
-      
+
       const result = await writingChain.stream({
         question,
         content: content || ''
       });
-      
+
       return { result };
     } catch (error) {
       console.log(error);

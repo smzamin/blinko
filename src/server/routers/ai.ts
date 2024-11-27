@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { AiService } from '../plugins/ai';
 import { prisma } from '../prisma';
 import { FileService } from '../plugins/utils';
+import { TRPCError } from '@trpc/server';
 
 export const aiRouter = router({
   embeddingUpsert: authProcedure
@@ -53,15 +54,18 @@ export const aiRouter = router({
       conversations: z.array(z.object({ role: z.string(), content: z.string() }))
     }))
     .mutation(async function* ({ input }) {
-      const { question, conversations } = input
       try {
+        const { question, conversations } = input
         const { result: responseStream, notes } = await AiService.completions({ question, conversations })
         yield { notes }
         for await (const chunk of responseStream) {
           yield { context: chunk }
         }
       } catch (error) {
-        throw new Error(error)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error?.message
+        })
       }
     }),
   speechToText: authProcedure
@@ -79,14 +83,20 @@ export const aiRouter = router({
       }
     }),
   rebuildingEmbeddings: authProcedure
-    .input(z.void())
-    .mutation(async function* () {
+    .input(z.object({
+      force: z.boolean().optional()
+    }))
+    .mutation(async function* ({ input }) {
+      const { force } = input
       try {
-        for await (const result of AiService.rebuildEmbeddingIndex()) {
+        for await (const result of AiService.rebuildEmbeddingIndex({ force })) {
           yield result;
         }
       } catch (error) {
-        throw new Error(error)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error?.message
+        })
       }
     }),
   writing: authProcedure
@@ -108,7 +118,10 @@ export const aiRouter = router({
           yield { content: chunk }
         }
       } catch (error) {
-        throw new Error(error)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error?.message
+        })
       }
     }),
   autoTag: authProcedure

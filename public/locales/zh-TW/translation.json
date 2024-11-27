@@ -159,5 +159,10 @@
   "title-first-line-of-the-text": "标题（文本第一行）",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "内容（文本的其余部分，如果文本长度超过规定长度）",
   "ai-tag": "AI标签",
-  "article": "文章"
+  "article": "文章",
+  "embedding-model": "嵌入模式",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "如果您有大量笔记，您可能会消耗一定数量的代币",
+  "force-rebuild": "强制重建",
+  "force-rebuild-embedding-index": "强制重建将完全重建已编制索引的所有数据",
+  "embedding-model-description": "切换嵌入式模型后必须重建索引"
 }

@@ -158,5 +158,10 @@
   "title-first-line-of-the-text": "Título(primera línea del texto)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Contenido(resto del texto,si el texto supera la longitud)",
   "ai-tag": "Etiqueta AI",
-  "article": "Artículo"
+  "article": "Artículo",
+  "embedding-model": "Modelo de incrustación",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Si tienes muchos billetes puedes consumir un número determinado de fichas",
+  "force-rebuild": "Reconstrucción forzosa",
+  "force-rebuild-embedding-index": "La reconstrucción forzada reconstruirá por completo todos los datos indexados.",
+  "embedding-model-description": "El índice debe reconstruirse después de cambiar de modelo integrado."
 }

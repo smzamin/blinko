@@ -157,5 +157,9 @@
   "title-first-line-of-the-text": "タイトル（本文の1行目）",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "コンテンツ(テキストが長さを超える場合、残りの部分)",
   "ai-tag": "AIタグ",
-  "article": "記事"
+  "article": "記事",
+  "embedding-model": "埋め込みモデル",
+  "force-rebuild": "フォース・リビルド",
+  "force-rebuild-embedding-index": "強制再構築は、インデックスが作成されたすべてのデータを完全に再構築します。",
+  "embedding-model-description": "組み込みモデルを切り替えた後は、インデックスを再構築する必要があります。"
 }

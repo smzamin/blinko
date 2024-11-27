@@ -41,24 +41,45 @@ export class AiStore implements Store {
       value: "OpenAI"
     }
   ]
-  modelSelect = [
-    {
-      label: "gpt-3.5-turbo",
-      value: "gpt-3.5-turbo"
-    },
-    {
-      label: "gpt-4",
-      value: "gpt-4"
-    },
-    {
-      label: "gpt-4o",
-      value: "gpt-4o"
-    },
-    {
-      label: "gpt-4o-mini",
-      value: "gpt-4o-mini"
-    }
-  ]
+
+  modelSelect: Record<GlobalConfig['aiModelProvider'], Array<{ label: string, value: string }>> = {
+    OpenAI: [
+      {
+        label: "gpt-3.5-turbo",
+        value: "gpt-3.5-turbo"
+      },
+      {
+        label: "gpt-4",
+        value: "gpt-4"
+      },
+      {
+        label: "gpt-4o",
+        value: "gpt-4o"
+      },
+      {
+        label: "gpt-4o-mini",
+        value: "gpt-4o-mini"
+      }
+    ]
+  }
+
+  embeddingSelect: Record<string, Array<{label: string, value: string}>> = {
+    OpenAI: [
+      {
+        label: "text-embedding-3-small",
+        value: "text-embedding-3-small"
+      },
+      {
+        label: "text-embedding-3-large",
+        value: "text-embedding-3-large"
+      },
+      {
+        label: "text-embedding-ada-002",
+        value: "text-embedding-ada-002"
+      }
+    ]
+  }
+
   scrollTicker = 0
   relationNotes = new StorageListState<Note>({ key: 'relationNotes' })
   chatHistory = new StorageListState<Chat>({ key: 'chatHistory' })

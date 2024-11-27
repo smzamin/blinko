@@ -158,5 +158,9 @@
   "title-first-line-of-the-text": "Título (primeira linha do texto)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Conteúdo (resto do texto, se o texto for mais longo do que o comprimento)",
   "ai-tag": "Etiqueta AI",
-  "article": "Artigo"
+  "article": "Artigo",
+  "embedding-model": "Modelo de incorporação",
+  "force-rebuild": "Reconstrução da força",
+  "force-rebuild-embedding-index": "A reconstrução forçada irá reconstruir completamente todos os dados que foram indexados",
+  "embedding-model-description": "O índice deve ser reconstruído após a mudança de modelos incorporados"
 }

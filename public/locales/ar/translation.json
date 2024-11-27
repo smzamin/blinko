@@ -167,5 +167,10 @@
   "title-first-line-of-the-text": "العنوان (السطر الأول من النص)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "المحتوى(بقية النص، إذا كان النص أطول من الطول)",
   "ai-tag": "علامة الذكاء الاصطناعي",
-  "article": "المادة"
+  "article": "المادة",
+  "embedding-model": "نموذج التضمين",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "إذا كان لديك الكثير من الملاحظات فقد تستهلك عددًا معينًا من الرموز المميزة",
+  "force-rebuild": "إعادة بناء القوة",
+  "force-rebuild-embedding-index": "ستؤدي إعادة البناء القسري إلى إعادة بناء جميع البيانات التي تمت فهرستها بالكامل",
+  "embedding-model-description": "يجب إعادة بناء الفهرس بعد تبديل النماذج المدمجة"
 }

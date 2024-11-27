@@ -160,5 +160,9 @@
   "title-first-line-of-the-text": "Заголовок (первая строка текста)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Содержание (остальная часть текста, если текст длиннее указанной длины)",
   "ai-tag": "Метка AI",
-  "article": "Статья"
+  "article": "Статья",
+  "embedding-model": "Модель встраивания",
+  "force-rebuild": "Восстановление сил",
+  "force-rebuild-embedding-index": "Принудительная перестройка полностью перестроит все данные, которые были проиндексированы.",
+  "embedding-model-description": "Индекс должен быть перестроен после переключения встроенных моделей"
 }

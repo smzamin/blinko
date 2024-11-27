@@ -164,5 +164,9 @@
   "title-first-line-of-the-text": "Title(first line of the text)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Content(rest of the text,if the text is longer than the length)",
   "ai-tag": "AI Tag",
-  "article": "Article"
+  "article": "Article",
+  "embedding-model": "Embedding Model",
+  "force-rebuild": "Force Rebuild",
+  "force-rebuild-embedding-index": "Forced rebuild will rebuild all data that has been indexed completely",
+  "embedding-model-description": "The index must be rebuilt after switching embedded models"
 }

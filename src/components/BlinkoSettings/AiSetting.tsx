@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import { api } from "@/lib/trpc";
 import { AiStore } from "@/store/aiStore";
 import { useTranslation } from "react-i18next";
-import { Item } from "./Item";
+import { Item, ItemWithTooltip } from "./Item";
 import { useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { ShowRebuildEmbeddingProgressDialog } from "../Common/RebuildEmbeddingProgress";
@@ -52,6 +52,7 @@ export const AiSetting = observer(() => {
       leftContent={<>{t('model-provider')}</>}
       rightContent={
         <Select
+          radius="lg"
           selectedKeys={[blinko.config.value?.aiModelProvider!]}
           onChange={e => {
             blinko.config.value!.aiModelProvider = e.target.value as any
@@ -71,28 +72,64 @@ export const AiSetting = observer(() => {
           ))}
         </Select>} />
 
-    <Item
-      leftContent={<>{t('ai-model')}</>}
-      rightContent={
-        <Select
-          selectedKeys={[blinko.config.value?.aiModel!]}
-          onChange={e => {
-            blinko.config.value!.aiModel = e.target.value
-            PromiseCall(api.config.update.mutate({
-              key: 'aiModel',
-              value: e.target.value
-            }))
-          }}
-          size="sm"
-          className="w-[200px]"
-          label="Select Model"
-        >
-          {ai.modelSelect.map((item) => (
-            <SelectItem key={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </Select>} />
+    {
+      ai.modelSelect[blinko.config.value?.aiModelProvider!] && <Item
+        leftContent={<>{t('ai-model')}</>}
+        rightContent={
+          <Select
+            radius="lg"
+            selectedKeys={[blinko.config.value?.aiModel!]}
+            onChange={e => {
+              blinko.config.value!.aiModel = e.target.value
+              PromiseCall(api.config.update.mutate({
+                key: 'aiModel',
+                value: e.target.value
+              }))
+            }}
+            size="sm"
+            className="w-[200px]"
+            label="Select Model"
+          >
+            {ai.modelSelect[blinko.config.value?.aiModelProvider!]!.map((item) => (
+              <SelectItem key={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </Select>} />
+    }
+
+    {ai.embeddingSelect[blinko.config.value?.aiModelProvider!] && (
+      <Item
+        type={isPc ? 'row' : 'col'}
+        leftContent={<ItemWithTooltip
+          content={<>{t('embedding-model')}</>} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+            <div>{t('embedding-model-description')}</div>
+          </div>} />}
+        rightContent={
+          <div className="flex w-full ml-auto justify-start">
+            <Select
+              radius="lg"
+              selectedKeys={[blinko.config.value?.embeddingModel!]}
+              onChange={e => {
+                blinko.config.value!.embeddingModel = e.target.value
+                PromiseCall(api.config.update.mutate({
+                  key: 'embeddingModel',
+                  value: e.target.value
+                }))
+              }}
+              size="sm"
+              className={`${isPc ? 'w-[250px]' : 'w-full'}`}
+              label="Embedding Model"
+            >
+              {ai.embeddingSelect[blinko.config.value?.aiModelProvider!]!.map((item) => (
+                <SelectItem key={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+        } />
+    )}
 
     <Item
       type={isPc ? 'row' : 'col'}
@@ -155,15 +192,28 @@ export const AiSetting = observer(() => {
         <div>{t('rebuild-embedding-index')}</div>
         <div className="text-desc text-xs">{t('notes-imported-by-other-means-may-not-have-embedded-vectors')}</div>
       </div>}
-      rightContent={<Button color='primary' startContent={<Icon icon="mingcute:refresh-4-ai-line" width="20" height="20" />} onClick={() => {
-        showTipsDialog({
-          title: t('rebuild-embedding-index'),
-          content: t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
-          onConfirm: () => {
-            ShowRebuildEmbeddingProgressDialog()
-          }
-        })
-      }}>{t('rebuild')}</Button>} />
+      rightContent={
+        <div className="flex w-full ml-auto justify-end gap-2">
+          <Button color='danger' startContent={<Icon icon="mingcute:refresh-4-ai-line" width="20" height="20" />} onClick={() => {
+            showTipsDialog({
+              title: t('force-rebuild-embedding-index'),
+              content: t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
+              onConfirm: () => {
+                ShowRebuildEmbeddingProgressDialog(true)
+              }
+            })
+          }}>{t('force-rebuild')}</Button>
+          <Button color='primary' startContent={<Icon icon="mingcute:refresh-4-ai-line" width="20" height="20" />} onClick={() => {
+            showTipsDialog({
+              title: t('rebuild-embedding-index'),
+              content: t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
+              onConfirm: () => {
+                ShowRebuildEmbeddingProgressDialog()
+              }
+            })
+          }}>{t('rebuild')}</Button>
+        </div>
+      } />
 
   </Card>
 })

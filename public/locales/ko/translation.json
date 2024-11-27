@@ -159,5 +159,9 @@
   "title-first-line-of-the-text": "제목(텍스트의 첫 줄)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "콘텐츠(텍스트가 길이보다 긴 경우 나머지 텍스트)",
   "ai-tag": "AI 태그",
-  "article": "기사"
+  "article": "기사",
+  "embedding-model": "임베딩 모델",
+  "force-rebuild": "강제 재구축",
+  "force-rebuild-embedding-index": "강제 재구축은 인덱싱된 모든 데이터를 완전히 재구축합니다.",
+  "embedding-model-description": "임베디드 모델을 전환한 후 인덱스를 다시 작성해야 합니다."
 }

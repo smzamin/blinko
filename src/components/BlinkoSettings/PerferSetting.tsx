@@ -9,9 +9,11 @@ import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
 import { api } from "@/lib/trpc";
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "usehooks-ts";
 
 export const PerferSetting = observer(() => {
   const { t } = useTranslation()
+  const isPc = useMediaQuery('(min-width: 768px)')
   const blinko = RootStore.Get(BlinkoStore)
   const [textLength, setTextLength] = useState(blinko.config.value?.textFoldLength?.toString() || '500');
 
@@ -87,10 +89,11 @@ export const PerferSetting = observer(() => {
     />
 
     <Item
+      type={isPc ? 'row' : 'col'}
       leftContent={<ItemWithTooltip content={t('device-card-columns')} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
         <div>{t('columns-for-different-devices')}</div>
       </div>} />}
-      rightContent={<div className="flex gap-2">
+      rightContent={<div className="flex gap-2 w-full justify-end">
         <SelectDropdown
           value={blinko.config.value?.smallDeviceCardColumns}
           placeholder={t('mobile')}

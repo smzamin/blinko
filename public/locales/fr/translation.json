@@ -159,5 +159,10 @@
   "title-first-line-of-the-text": "Titre (première ligne du texte)",
   "content-rest-of-the-text-if-the-text-is-longer-than-the-length": "Contenu (reste du texte, si le texte est plus long que la longueur)",
   "ai-tag": "Étiquette AI",
-  "article": "Article"
+  "article": "Article",
+  "embedding-model": "Modèle d'intégration",
+  "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Si vous avez beaucoup de notes, vous pouvez consommer un certain nombre de jetons.",
+  "force-rebuild": "Reconstruction des forces",
+  "force-rebuild-embedding-index": "La reconstruction forcée reconstruit toutes les données qui ont été complètement indexées.",
+  "embedding-model-description": "L'index doit être reconstruit après avoir changé de modèle intégré."
 }
