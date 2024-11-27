@@ -1,3 +1,10 @@
+# [0.10.0](https://github.com/blinko-space/blinko/compare/v0.9.6...v0.10.0) (2024-11-27)
+
+
+### Features
+
+* support select embedding model [#184](https://github.com/blinko-space/blinko/issues/184) [#180](https://github.com/blinko-space/blinko/issues/180) ([018cb9c](https://github.com/blinko-space/blinko/commit/018cb9c0c34b7208b81f63f31c80fc0645956fb3))
+
 ## [0.9.6](https://github.com/blinko-space/blinko/compare/v0.9.5...v0.9.6) (2024-11-27)
 
 
