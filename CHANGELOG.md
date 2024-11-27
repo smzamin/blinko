@@ -1,3 +1,10 @@
+## [0.9.3](https://github.com/blinko-space/blinko/compare/v0.9.2...v0.9.3) (2024-11-27)
+
+
+### Bug Fixes
+
+* s3 api key password input [#187](https://github.com/blinko-space/blinko/issues/187) ([da19e89](https://github.com/blinko-space/blinko/commit/da19e893be6a1aab8611b908faf5ca760bdb60f6))
+
 ## [0.9.2](https://github.com/blinko-space/blinko/compare/v0.9.1...v0.9.2) (2024-11-27)
 
 
