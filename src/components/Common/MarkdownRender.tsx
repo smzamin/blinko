@@ -25,19 +25,23 @@ import { Copy } from './Copy';
 const highlightTags = (text) => {
   if (!text) return text
   try {
-    const parts = text?.split(" ");
-    return parts.map((part, index) => {
-      if (part.startsWith('#') && part.length > 1 && part.match(helper.regex.isContainHashTag)) {
-        return (
-          <Link key={index} className='select-none blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' onClick={() => {
-            RootStore.Get(BlinkoStore).forceQuery++
-          }} href={`/all?searchText=${part}`}>
-            {part + " "}
-          </Link>
-        );
-      } else {
-        return part + " ";
-      }
+    const lines = text?.split("\n");
+    return lines.map((line, lineIndex) => {
+      const parts = line.split(" ");
+      const processedParts = parts.map((part, index) => {
+        if (part.startsWith('#') && part.length > 1 && part.match(helper.regex.isContainHashTag)) {
+          return (
+            <Link key={`${lineIndex}-${index}`} className='select-none blinko-tag px-11 font-bold cursor-pointer hover:opacity-80 transition-all' onClick={() => {
+              RootStore.Get(BlinkoStore).forceQuery++
+            }} href={`/all?searchText=${part}`}>
+              {part + " "}
+            </Link>
+          );
+        } else {
+          return part + " ";
+        }
+      });
+      return [...processedParts, <br key={`br-${lineIndex}`} />];
     });
   } catch (e) {
     return text
