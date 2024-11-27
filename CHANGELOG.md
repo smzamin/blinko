@@ -1,3 +1,10 @@
+## [0.10.1](https://github.com/blinko-space/blinko/compare/v0.10.0...v0.10.1) (2024-11-27)
+
+
+### Bug Fixes
+
+* ol decimal render issue [#189](https://github.com/blinko-space/blinko/issues/189) ([cd7107f](https://github.com/blinko-space/blinko/commit/cd7107f1531ffd235be15ead5d39bf82d29d1296))
+
 # [0.10.0](https://github.com/blinko-space/blinko/compare/v0.9.6...v0.10.0) (2024-11-27)
 
 
