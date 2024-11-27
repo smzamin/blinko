@@ -9,6 +9,7 @@ import { Item } from "./Item";
 import { useTranslation } from "react-i18next";
 import { useMediaQuery } from "usehooks-ts";
 import { useEffect } from "react";
+import { PasswordInput } from "@/components/Common/PasswordInput";
 
 
 export const StorageSetting = observer(() => {
@@ -62,20 +63,28 @@ export const StorageSetting = observer(() => {
       blinko.config.value?.objectStorage === 's3' && <>
         <Item
           leftContent={<>Access key id</>}
-          rightContent={<Input value={store.s3AccessKeyId} onChange={e => store.s3AccessKeyId = e.target.value} placeholder="Access key id" onBlur={async (e) => {
-            await PromiseCall(api.config.update.mutate({
-              key: 's3AccessKeyId',
-              value: e.target.value
-            }))
-          }} />} />
+          rightContent={<PasswordInput 
+            value={store.s3AccessKeyId} 
+            onChange={e => store.s3AccessKeyId = e.target.value} 
+            placeholder="Access key id" 
+            onBlur={async (e) => {
+              await PromiseCall(api.config.update.mutate({
+                key: 's3AccessKeyId',
+                value: e.target.value
+              }))
+            }} />} />
         <Item
           leftContent={<>Access key secret</>}
-          rightContent={<Input value={store.s3AccessKeySecret} onChange={e => store.s3AccessKeySecret = e.target.value} placeholder="Access key secret" onBlur={async (e) => {
-            await PromiseCall(api.config.update.mutate({
-              key: 's3AccessKeySecret',
-              value: e.target.value
-            }))
-          }} />} />
+          rightContent={<PasswordInput 
+            value={store.s3AccessKeySecret} 
+            onChange={e => store.s3AccessKeySecret = e.target.value} 
+            placeholder="Access key secret" 
+            onBlur={async (e) => {
+              await PromiseCall(api.config.update.mutate({
+                key: 's3AccessKeySecret',
+                value: e.target.value
+              }))
+            }} />} />
         <Item
           leftContent={<>Endpoint</>}
           rightContent={<Input value={store.s3Endpoint} onChange={e => store.s3Endpoint = e.target.value} placeholder="Endpoint" onBlur={async (e) => {
