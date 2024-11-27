@@ -1,3 +1,10 @@
+## [0.9.6](https://github.com/blinko-space/blinko/compare/v0.9.5...v0.9.6) (2024-11-27)
+
+
+### Bug Fixes
+
+* send button loading status ([712f542](https://github.com/blinko-space/blinko/commit/712f542be2c5fc8bd714f50d10a3079cac6b981a))
+
 ## [0.9.5](https://github.com/blinko-space/blinko/compare/v0.9.4...v0.9.5) (2024-11-27)
 
 
