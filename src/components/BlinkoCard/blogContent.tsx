@@ -1,5 +1,6 @@
 import { Image } from '@nextui-org/react';
 import { Note } from '@/server/types';
+import { helper } from '@/lib/helper';
 
 interface BlogContentProps {
   blinkoItem: Note & {
@@ -30,11 +31,20 @@ export const BlogContent = ({ blinkoItem, isExpanded }: BlogContentProps) => {
         {
           !!blinkoItem?.tags?.length && blinkoItem?.tags?.length > 0 && (
             <div className='flex flex-nowrap gap-1 overflow-x-scroll mt-1 hide-scrollbar'>
-              {blinkoItem?.tags?.map((tag) => (
-                <div key={tag.tagId} className='text-desc text-xs blinko-tag whitespace-nowrap'>
-                  #{tag.tag.name}
-                </div>
-              ))}
+              {(() => {
+                const tagTree = helper.buildHashTagTreeFromDb(blinkoItem.tags.map(t => t.tag));
+                const tagPaths = tagTree.flatMap(node => helper.generateTagPaths(node));
+                const uniquePaths = tagPaths.filter(path => {
+                  return !tagPaths.some(otherPath => 
+                    otherPath !== path && otherPath.startsWith(path + '/')
+                  );
+                });
+                return uniquePaths.map((path) => (
+                  <div key={path} className='text-desc text-xs blinko-tag whitespace-nowrap'>
+                    #{path}
+                  </div>
+                ));
+              })()}
             </div>
           )}
       </div>
