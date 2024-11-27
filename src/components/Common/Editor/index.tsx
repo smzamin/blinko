@@ -113,9 +113,15 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     lastSelection: null as Selection | null,
     updateSendStatus() {
       if (store.files?.length == 0 && mdxEditorRef.current?.getMarkdown() == '') {
+        console.log('1111')
+        return setCanSend(false)
+      }
+      if (store.files?.some(i => i.uploadPromise?.loading?.value === true)) {
+        console.log('222')
         return setCanSend(false)
       }
       if (store.files?.every(i => !i?.uploadPromise?.loading?.value) && store.files?.length != 0) {
+        console.log('333')
         return setCanSend(true)
       }
       if (mdxEditorRef.current?.getMarkdown() != '') {
@@ -232,6 +238,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           preview: URL.createObjectURL(file),
           uploadPromise: new PromiseState({
             function: async () => {
+              store.updateSendStatus()
               const formData = new FormData();
               formData.append('file', file)
               const response = await fetch('/api/file/upload', {
@@ -243,15 +250,17 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
               if (data.filePath) {
                 return data.filePath
               }
-              store.updateSendStatus()
             }
           }),
           type: file.type
         }
       })
       store.files.push(..._acceptedFiles)
-      store.updateSendStatus()
-      _acceptedFiles.map(i => i.uploadPromise.call())
+      Promise.all(_acceptedFiles.map(i => i.uploadPromise.call())).then(() => {
+        store.updateSendStatus()
+      }).finally(() => {
+        store.updateSendStatus()
+      })
     },
     handlePopTag() {
       const selection = window.getSelection();
@@ -319,7 +328,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
   useEffect(() => {
     store.updateSendStatus()
     setIsWriting(ai.isWriting)
-  }, [blinko.noteTypeDefault, content, ai.isWriting])
+  }, [blinko.noteTypeDefault, content, ai.isWriting, store.files?.length])
 
   useEffect(() => {
     eventBus.on('editor:replace', store.replaceMarkdownTag)
@@ -504,7 +513,11 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                     store.files = []
                     ai.isWriting = false
                   }} className={`${mode == 'create' ? 'ml-auto' : ''} w-[60px] group`} isIconOnly color='primary' >
-                    <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
+                    {
+                      store.files?.some(i => i.uploadPromise?.loading?.value) ?
+                        <Icon icon="line-md:uploading-loop" width="24" height="24"/> :
+                        <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
+                    }
                   </Button>
                 </div>
               </div>
