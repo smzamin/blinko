@@ -1,3 +1,10 @@
+## [0.11.2](https://github.com/blinko-space/blinko/compare/v0.11.1...v0.11.2) (2024-11-28)
+
+
+### Bug Fixes
+
+* autocomplate issue ([62274dd](https://github.com/blinko-space/blinko/commit/62274dd79984b4df5ef52321793b0275c4755007))
+
 ## [0.11.1](https://github.com/blinko-space/blinko/compare/v0.11.0...v0.11.1) (2024-11-28)
 
 
