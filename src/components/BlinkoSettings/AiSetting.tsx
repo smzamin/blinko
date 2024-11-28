@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Button, Card, Code, Input, Select, SelectItem, Switch, Tooltip } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Button, Card, Code, Input, Select, SelectItem, Switch, Tooltip } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
@@ -54,11 +54,12 @@ export const AiSetting = observer(() => {
         <Select
           radius="lg"
           selectedKeys={[blinko.config.value?.aiModelProvider!]}
-          onChange={e => {
-            blinko.config.value!.aiModelProvider = e.target.value as any
+          onSelectionChange={key => {
+            const value = Array.from(key)[0] as string
+            blinko.config.value!.aiModelProvider = value as any
             PromiseCall(api.config.update.mutate({
               key: 'aiModelProvider',
-              value: e.target.value
+              value: value
             }))
           }}
           size="sm"
@@ -66,8 +67,8 @@ export const AiSetting = observer(() => {
           label="Select Model Provider"
         >
           {ai.modelProviderSelect.map((item) => (
-            <SelectItem key={item.value ?? ''}>
-              {item.label}
+            <SelectItem key={item.value ?? ''} value={item.value} startContent={item.icon}>
+                {item.label}
             </SelectItem>
           ))}
         </Select>} />
@@ -76,14 +77,15 @@ export const AiSetting = observer(() => {
       ai.modelSelect[blinko.config.value?.aiModelProvider!] && <Item
         leftContent={<>{t('ai-model')}</>}
         rightContent={
-          <Select
+          <Autocomplete
             radius="lg"
-            selectedKeys={[blinko.config.value?.aiModel!]}
-            onChange={e => {
-              blinko.config.value!.aiModel = e.target.value
+            allowsCustomValue={true}
+            defaultSelectedKey={blinko.config.value?.aiModel!}
+            onSelectionChange={(key) => {
+              blinko.config.value!.aiModel = key as string
               PromiseCall(api.config.update.mutate({
                 key: 'aiModel',
-                value: e.target.value
+                value: key
               }))
             }}
             size="sm"
@@ -91,11 +93,12 @@ export const AiSetting = observer(() => {
             label="Select Model"
           >
             {ai.modelSelect[blinko.config.value?.aiModelProvider!]!.map((item) => (
-              <SelectItem key={item.value}>
+              <AutocompleteItem key={item.value} value={item.value}>
                 {item.label}
-              </SelectItem>
+              </AutocompleteItem>
             ))}
-          </Select>} />
+          </Autocomplete>
+        } />
     }
 
     {ai.embeddingSelect[blinko.config.value?.aiModelProvider!] && (
@@ -107,14 +110,15 @@ export const AiSetting = observer(() => {
           </div>} />}
         rightContent={
           <div className="flex w-full ml-auto justify-start">
-            <Select
+            <Autocomplete
               radius="lg"
-              selectedKeys={[blinko.config.value?.embeddingModel!]}
-              onChange={e => {
-                blinko.config.value!.embeddingModel = e.target.value
+              allowsCustomValue={true}
+              defaultSelectedKey={blinko.config.value?.embeddingModel!}
+              onSelectionChange={(key) => {
+                blinko.config.value!.embeddingModel = key as string
                 PromiseCall(api.config.update.mutate({
                   key: 'embeddingModel',
-                  value: e.target.value
+                  value: key
                 }))
               }}
               size="sm"
@@ -122,48 +126,52 @@ export const AiSetting = observer(() => {
               label="Embedding Model"
             >
               {ai.embeddingSelect[blinko.config.value?.aiModelProvider!]!.map((item) => (
-                <SelectItem key={item.value}>
+                <AutocompleteItem key={item.value} value={item.value}>
                   {item.label}
-                </SelectItem>
+                </AutocompleteItem>
               ))}
-            </Select>
+            </Autocomplete>
           </div>
         } />
     )}
 
-    <Item
-      type={isPc ? 'row' : 'col'}
-      leftContent={<div className="flex flex-col ga-1">
-        <div>API Key</div>
-        <div className="text-desc text-xs">{t('user-custom-openai-api-key')}</div>
-      </div>}
-      rightContent={
-        <Input
-          size='sm'
-          label="API key"
-          variant="bordered"
-          className="w-full md:w-[300px]"
-          placeholder="Enter your api key"
-          value={store.apiKey}
-          onChange={e => { store.apiKey = e.target.value }}
-          onBlur={e => {
-            PromiseCall(api.config.update.mutate({
-              key: 'aiApiKey',
-              value: store.apiKey
-            }))
-          }}
-          endContent={
-            <button className="focus:outline-none" type="button" onClick={e => store.isVisible = !store.isVisible} aria-label="toggle password visibility">
-              {store.isVisible ? (
-                <Icon icon="mdi:eye-off" width="20" height="20" />
-              ) : (
-                <Icon icon="mdi:eye" width="20" height="20" />
-              )}
-            </button>
-          }
-          type={store.isVisible ? "text" : "password"}
-        />
-      } />
+    {
+      blinko.config.value?.aiModelProvider != 'Ollama' &&
+      <Item
+        type={isPc ? 'row' : 'col'}
+        leftContent={<div className="flex flex-col ga-1">
+          <div>API Key</div>
+          <div className="text-desc text-xs">{t('user-custom-openai-api-key')}</div>
+        </div>}
+        rightContent={
+          <Input
+            size='sm'
+            label="API key"
+            variant="bordered"
+            className="w-full md:w-[300px]"
+            placeholder="Enter your api key"
+            value={store.apiKey}
+            onChange={e => { store.apiKey = e.target.value }}
+            onBlur={e => {
+              PromiseCall(api.config.update.mutate({
+                key: 'aiApiKey',
+                value: store.apiKey
+              }))
+            }}
+            endContent={
+              <button className="focus:outline-none" type="button" onClick={e => store.isVisible = !store.isVisible} aria-label="toggle password visibility">
+                {store.isVisible ? (
+                  <Icon icon="mdi:eye-off" width="20" height="20" />
+                ) : (
+                  <Icon icon="mdi:eye" width="20" height="20" />
+                )}
+              </button>
+            }
+            type={store.isVisible ? "text" : "password"}
+          />
+        } />
+    }
+
     <Item
       type={isPc ? 'row' : 'col'}
       leftContent={<div className="flex flex-col gap-1">

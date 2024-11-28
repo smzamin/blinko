@@ -42,14 +42,21 @@ export abstract class AiBaseModelPrivider {
         this.Embeddings()
       );
     } catch (error) {
-      const VectorStore = new FaissStore(this.Embeddings(), {});
-      const documents = [{
-        pageContent: "init faiss store",
-        metadata: { id: '0' },
-      }];
-      await VectorStore.addDocuments(documents, { ids: ["0"] });
-      await VectorStore.save(FaissStorePath)
-      return VectorStore
+      try {
+        console.log(this.globalConfig)
+        const VectorStore = new FaissStore(this.Embeddings(), {});
+        const documents = [{
+          pageContent: "init faiss store",
+          metadata: { id: '0' },
+        }];
+        console.log('init faiss store', documents)
+        await VectorStore.addDocuments(documents, { ids: ["0"] });
+        await VectorStore.save(FaissStorePath)
+        return VectorStore
+      } catch (error) {
+        console.log('VectorStore error', error)
+        throw error
+      }
     }
   }
 

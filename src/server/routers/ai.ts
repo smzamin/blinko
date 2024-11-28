@@ -14,12 +14,14 @@ export const aiRouter = router({
     }))
     .mutation(async ({ input }) => {
       const { id, content, type } = input
-      try {
-        const res = await AiService.embeddingUpsert({ id, content, type })
-        return res
-      } catch (error) {
-        return { ok: false, msg: error?.message }
+      const { ok, error } = await AiService.embeddingUpsert({ id, content, type })
+      if (!ok) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error
+        })
       }
+      return { ok }
     }),
   embeddingInsertAttachments: authProcedure
     .input(z.object({

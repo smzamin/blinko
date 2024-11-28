@@ -15,6 +15,7 @@ import { DialogStore } from './module/Dialog';
 import { CheckboxGroup } from '@nextui-org/react';
 import { AiTag } from '@/components/BlinkoAi/aiTag';
 import i18n from '@/lib/i18n';
+import { Icon } from '@iconify/react';
 
 type Chat = {
   content: string
@@ -35,10 +36,16 @@ export class AiStore implements Store {
     content: "",
     notes: [] as Note[]
   }
-  modelProviderSelect: { label: string, value: GlobalConfig['aiModelProvider'] }[] = [
+  modelProviderSelect: { label: string, value: GlobalConfig['aiModelProvider'], icon: React.ReactNode }[] = [
     {
       label: "OpenAI",
-      value: "OpenAI"
+      value: "OpenAI",
+      icon: <Icon icon="ri:openai-fill" width="20" height="20" />
+    },
+    {
+      label: "Ollama",
+      value: "Ollama",
+      icon: <Icon icon="simple-icons:ollama"  width="20" height="20" />
     }
   ]
 
@@ -60,10 +67,16 @@ export class AiStore implements Store {
         label: "gpt-4o-mini",
         value: "gpt-4o-mini"
       }
+    ],
+    Ollama: [
+      {
+        label: "llama3.2",
+        value: "llama3.2"
+      }
     ]
   }
 
-  embeddingSelect: Record<string, Array<{label: string, value: string}>> = {
+  embeddingSelect: Record<string, Array<{ label: string, value: string }>> = {
     OpenAI: [
       {
         label: "text-embedding-3-small",
@@ -76,6 +89,20 @@ export class AiStore implements Store {
       {
         label: "text-embedding-ada-002",
         value: "text-embedding-ada-002"
+      }
+    ],
+    Ollama: [
+      {
+        label: "mxbai-embed-large",
+        value: "mxbai-embed-large"
+      },
+      {
+        label: "nomic-embed-text",
+        value: "nomic-embed-text"
+      },
+      {
+        label: "bge-large-en",
+        value: "bge-large-en"
       }
     ]
   }

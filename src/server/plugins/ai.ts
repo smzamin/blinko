@@ -2,6 +2,7 @@ import { _ } from '@/lib/lodash';
 import "pdf-parse";
 import { ChatOpenAI, ClientOptions, OpenAIEmbeddings, } from "@langchain/openai";
 import path from 'path';
+import fs from 'fs';
 import type { Document } from "@langchain/core/documents";
 import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
@@ -65,6 +66,7 @@ export class AiService {
         await VectorStore.delete({ ids: [`${id}-${index}`] })
         await VectorStore.save(FaissStorePath)
       } catch (error) {
+        console.log('error', error)
         break;
       }
     }
@@ -85,11 +87,9 @@ export class AiService {
     try {
       const { VectorStore, MarkdownSplitter } = await AiModelFactory.GetProvider()
       const chunks = await MarkdownSplitter.splitText(content);
-
       if (type == 'update') {
         await AiService.embeddingDeleteAll(id, VectorStore)
       }
-
       const documents: Document[] = chunks.map((chunk, index) => {
         return {
           pageContent: chunk,
@@ -117,7 +117,7 @@ export class AiService {
       await VectorStore.save(FaissStorePath)
       return { ok: true }
     } catch (error) {
-      return { ok: false, error }
+      return { ok: false, error: error?.message }
     }
   }
 
@@ -186,11 +186,20 @@ export class AiService {
 
   static async similaritySearch({ question }: { question: string }) {
     const { VectorStore } = await AiModelFactory.GetProvider()
-    const result = await VectorStore.similaritySearch(question, 2);
-    return result
+    const results = await VectorStore.similaritySearchWithScore(question, 2);
+    // console.log('similaritySearch with scores:', results)
+    const DISTANCE_THRESHOLD = 1.5;
+    const filteredResults = results
+      .filter(([doc, distance]) => distance < DISTANCE_THRESHOLD)
+      .map(([doc]) => doc);
+    return filteredResults;
   }
 
   static async *rebuildEmbeddingIndex({ force = false }: { force?: boolean }): AsyncGenerator<ProgressResult & { progress?: { current: number, total: number } }, void, unknown> {
+    if(force){
+      const faissPath = path.join(process.cwd(), FAISS_PATH)
+      fs.rmSync(faissPath, { recursive: true, force: true })
+    }
     const notes = await prisma.notes.findMany({
       include: {
         attachments: true
@@ -217,11 +226,25 @@ export class AiService {
             continue;
           }
           if (note?.content != '') {
-            await AiService.embeddingUpsert({
+            const { ok, error } = await AiService.embeddingUpsert({
               id: note?.id,
               content: note?.content,
               type: 'update' as const
             });
+            if (ok) {
+              yield {
+                type: 'success' as const,
+                content: note?.content.slice(0, 30) ?? '',
+                progress: { current, total }
+              };
+            } else {
+              yield {
+                type: 'error' as const,
+                content: note?.content.slice(0, 30) ?? '',
+                error,
+                progress: { current, total }
+              };
+            }
           }
           //@ts-ignore
           if (note?.attachments) {
@@ -247,15 +270,8 @@ export class AiService {
               }
             }
           }
-          if (note?.content != '') {
-            yield {
-              type: 'success' as const,
-              content: note?.content.slice(0, 30) ?? '',
-              progress: { current, total }
-            };
-          }
+    
         } catch (error) {
-          console.error('rebuild index error->', error);
           yield {
             type: 'error' as const,
             content: note.content.slice(0, 30),

@@ -5,6 +5,7 @@ import { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { Embeddings } from "@langchain/core/embeddings"
 import { OpenAIModelProvider } from "./openAIModelProvider"
 import { getGlobalConfig } from "@/server/routers/config"
+import { OllamaModelProvider } from "./ollamaModelProvider"
 
 export class AiModelFactory {
 
@@ -23,9 +24,11 @@ export class AiModelFactory {
   }
 
   static async GetProvider() {
+    console.log('GetProvider', )
     const globalConfig = await AiModelFactory.ValidConfig()
     if (globalConfig.aiModelProvider == 'OpenAI') {
       const provider = new OpenAIModelProvider({ globalConfig })
+      console.log('provider', provider)
       return {
         LLM: provider.LLM(),
         VectorStore: await provider.VectorStore(),
@@ -34,13 +37,18 @@ export class AiModelFactory {
         TokenTextSplitter: provider.TokenTextSplitter()
       }
     }
-    return {
-      LLM: null as unknown as BaseChatModel,
-      VectorStore: null as unknown as FaissStore,
-      Embeddings: null as unknown as Embeddings,
-      MarkdownSplitter: null as unknown as MarkdownTextSplitter,
-      TokenTextSplitter: null as unknown as TokenTextSplitter
+    
+    if (globalConfig.aiModelProvider == 'Ollama') {
+      const provider = new OllamaModelProvider({ globalConfig })
+      return {
+        LLM: provider.LLM(),
+        VectorStore: await provider.VectorStore(),
+        Embeddings: provider.Embeddings(),
+        MarkdownSplitter: provider.MarkdownSplitter(),
+        TokenTextSplitter: provider.TokenTextSplitter()
+      }
     }
+    throw new Error('not support other loader')
   }
 
   static async GetAudioLoader(audioPath: string) {
