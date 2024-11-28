@@ -1,3 +1,10 @@
+# [0.11.0](https://github.com/blinko-space/blinko/compare/v0.10.2...v0.11.0) (2024-11-28)
+
+
+### Features
+
+* support ollama ([d70d42e](https://github.com/blinko-space/blinko/commit/d70d42e5fedbc20764843c7f9d426f87f53147be))
+
 ## [0.10.2](https://github.com/blinko-space/blinko/compare/v0.10.1...v0.10.2) (2024-11-27)
 
 
