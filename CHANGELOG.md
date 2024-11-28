@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/blinko-space/blinko/compare/v0.11.0...v0.11.1) (2024-11-28)
+
+
+### Bug Fixes
+
+* code block annotations are treated as tags [#192](https://github.com/blinko-space/blinko/issues/192) ([10a63ae](https://github.com/blinko-space/blinko/commit/10a63aec5634241be2c8d3c19664e665e546e985))
+
 # [0.11.0](https://github.com/blinko-space/blinko/compare/v0.10.2...v0.11.0) (2024-11-28)
 
 
