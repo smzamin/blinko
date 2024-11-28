@@ -13,8 +13,9 @@ import { getGlobalConfig } from './config';
 import { FileService } from '../plugins/utils';
 
 const extractHashtags = (input: string): string[] => {
+  const withoutCodeBlocks = input.replace(/```[\s\S]*?```/g, '');
   const hashtagRegex = /(?<!:\/\/)(?<=\s|^)#[^\s#]+(?=\s|$)/g;
-  const matches = input.match(hashtagRegex);
+  const matches = withoutCodeBlocks.match(hashtagRegex);
   return matches ? matches : [];
 }
 
