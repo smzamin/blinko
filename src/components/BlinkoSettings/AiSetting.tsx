@@ -22,10 +22,14 @@ export const AiSetting = observer(() => {
     isVisible: false,
     apiKey: '',
     apiEndPoint: '',
+    aiModel: '',
+    embeddingModel: ''
   }))
   useEffect(() => {
     store.apiEndPoint = blinko.config.value?.aiApiEndpoint!
     store.apiKey = blinko.config.value?.aiApiKey!
+    store.aiModel = blinko.config.value?.aiModel!
+    store.embeddingModel = blinko.config.value?.embeddingModel!
   }, [blinko.config.value])
   return <Card shadow="none" className="flex flex-col p-4 bg-background pb-6">
     <div className='text-desc text-sm'>AI</div>
@@ -68,7 +72,7 @@ export const AiSetting = observer(() => {
         >
           {ai.modelProviderSelect.map((item) => (
             <SelectItem key={item.value ?? ''} value={item.value} startContent={item.icon}>
-                {item.label}
+              {item.label}
             </SelectItem>
           ))}
         </Select>} />
@@ -80,13 +84,19 @@ export const AiSetting = observer(() => {
           <Autocomplete
             radius="lg"
             allowsCustomValue={true}
-            defaultSelectedKey={blinko.config.value?.aiModel!}
-            onSelectionChange={(key) => {
-              blinko.config.value!.aiModel = key as string
+            selectedKey={store.aiModel ?? ''}
+            inputValue={store.aiModel ?? ''}
+            onInputChange={e => {
+              store.aiModel = e
+            }}
+            onBlur={e => {
               PromiseCall(api.config.update.mutate({
                 key: 'aiModel',
-                value: key
+                value: store.aiModel
               }))
+            }}
+            onSelectionChange={(key) => {
+              store.aiModel = key as string
             }}
             size="sm"
             className="w-[200px]"
@@ -113,13 +123,19 @@ export const AiSetting = observer(() => {
             <Autocomplete
               radius="lg"
               allowsCustomValue={true}
-              defaultSelectedKey={blinko.config.value?.embeddingModel!}
-              onSelectionChange={(key) => {
-                blinko.config.value!.embeddingModel = key as string
+              inputValue={store.embeddingModel ?? ''}
+              selectedKey={store.embeddingModel ?? ''}
+              onInputChange={e => {
+                store.embeddingModel = e
+              }}
+              onBlur={e => {
                 PromiseCall(api.config.update.mutate({
                   key: 'embeddingModel',
-                  value: key
+                  value: store.embeddingModel
                 }))
+              }}
+              onSelectionChange={(key) => {
+                store.embeddingModel = key as string
               }}
               size="sm"
               className={`${isPc ? 'w-[250px]' : 'w-full'}`}
