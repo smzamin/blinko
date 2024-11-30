@@ -1,3 +1,10 @@
+## [0.11.3](https://github.com/blinko-space/blinko/compare/v0.11.2...v0.11.3) (2024-11-30)
+
+
+### Bug Fixes
+
+* RAG date support [#208](https://github.com/blinko-space/blinko/issues/208) ([f28731f](https://github.com/blinko-space/blinko/commit/f28731f82a82171d5a1b24442f88e23308f3fcbb))
+
 ## [0.11.2](https://github.com/blinko-space/blinko/compare/v0.11.1...v0.11.2) (2024-11-28)
 
 
