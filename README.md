@@ -20,7 +20,6 @@
 
 <div align="center">
 
-[Home Page](https://blinko.mintlify.app/introduction) •
 [Live Demo](https://blinko-demo.vercel.app/) •
 [Docs](https://blinko.mintlify.app/introduction) •
 [Telegram Chinese](https://t.me/blinkoChinese) •
