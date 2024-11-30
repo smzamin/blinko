@@ -2,19 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.bm-burger-button
- {
+.bm-burger-button {
   display: none;
 }
 
 .bm-menu-wrap {
   width: fit-content;
   height: 100%;
-  overflow: hidden!important;
+  overflow: hidden !important;
 }
 
 .bm-menu {
-  overflow: hidden!important;
+  overflow: hidden !important;
 }
 
 ::selection {
@@ -49,6 +48,11 @@
   margin-bottom: 10px;
 }
 
+/* Fix card height  */
+.layout-container>div {
+  height: 100%;
+}
+
 html,
 body {
   scroll-behavior: smooth;
@@ -73,22 +77,28 @@ body {
 .blinko-tag {
   margin-right: 4px;
   margin-left: 4px;
-  color: var(--tag)!important;
-  background: var(--tag-foreground)!important;
+  color: var(--tag) !important;
+  background: var(--tag-foreground) !important;
   border-radius: 7px;
   font-size: 13px;
   padding: 3px;
-  text-decoration: none!important;
+  text-decoration: none !important;
 }
 
 .contextmenu {
-  padding: 2px!important;;
-  padding-top: 6px!important;;
-  padding-bottom: 6px!important;;
-  box-shadow: var(--shadow)!important;;
-  border-radius: 17px!important;;
-  border: 2px solid var(--desc)!important;;
-  background-color: var(--background)!important;
+  padding: 2px !important;
+  ;
+  padding-top: 6px !important;
+  ;
+  padding-bottom: 6px !important;
+  ;
+  box-shadow: var(--shadow) !important;
+  ;
+  border-radius: 17px !important;
+  ;
+  border: 2px solid var(--desc) !important;
+  ;
+  background-color: var(--background) !important;
 }
 
 .contextmenu .contextmenu__item {
@@ -98,7 +108,7 @@ body {
 }
 
 .contextmenu .contextmenu__item:hover {
-  background-color: var(--sencondbackground)!important;
+  background-color: var(--sencondbackground) !important;
 }
 
 #__next {
@@ -111,14 +121,14 @@ body {
   }
 }
 
-.swiper-3d .swiper-slide-shadow{
-  background: var(--swiper-3d-shadow)!important;
+.swiper-3d .swiper-slide-shadow {
+  background: var(--swiper-3d-shadow) !important;
 }
 
 
 @layer base {
   :root {
-    --swiper-3d-shadow: rgba(0,0,0,.15);
+    --swiper-3d-shadow: rgba(0, 0, 0, .15);
     --background: hsl(0 0% 100%);
     --foreground: hsl(222.2 47.4% 11.2%);
     --sencondbackground: #f8f8f8;
@@ -253,10 +263,10 @@ body {
 }
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  
-  scrollbar-width: none;  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;   
+  display: none;
 }

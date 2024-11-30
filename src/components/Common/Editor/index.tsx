@@ -39,6 +39,7 @@ type IProps = {
   mode: 'create' | 'edit',
   content: string,
   onChange?: (content: string) => void,
+  onHeightChange?: () => void,
   onSend?: (args: OnSendContentType) => Promise<any>,
   isSendLoading?: boolean,
   bottomSlot?: ReactElement<any, any>,
@@ -84,7 +85,7 @@ export const handleEditorKeyEvents = () => {
   })
 }
 
-const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode }: IProps) => {
+const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
   const [isWriting, setIsWriting] = useState(false)
@@ -375,6 +376,9 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           onChange?.('')
           store.files = []
         }
+      }}
+      onKeyDown={e => {
+        onHeightChange?.()
       }}>
       <MDXEditor
         translation={(key, defaultValue) => {

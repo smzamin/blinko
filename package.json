@@ -20,7 +20,7 @@
     "db-seed": "prisma db seed",
     "build-seed": "tsc -p tsconfig.seed.json",
     "db-reset": "prisma migrate dev reset",
-    "dev": "next dev -p 1112",
+    "dev": "next dev -p 1111",
     "dev:https": "ngrok http 1111",
     "build": "set NODE_ENV=production & next build",
     "vercel-build": "prisma generate && prisma migrate deploy && prisma db seed && next build",

@@ -28,12 +28,11 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {
-        if (v == '') {
-          onHeightChange?.(editorRef.current?.clientHeight < 90 ? editorRef.current?.clientHeight : 90)
-        } else {
-          onHeightChange?.(editorRef.current?.clientHeight ?? 90)
-        }
+        onHeightChange?.(editorRef.current?.clientHeight ?? 75)
         isCreateMode ? (blinko.noteContent = v) : (blinko.curSelectedNote!.content = v)
+      }}
+      onHeightChange={() => {
+        onHeightChange?.(editorRef.current?.clientHeight ?? 75)
       }}
       isSendLoading={blinko.upsertNote.loading.value}
       bottomSlot={

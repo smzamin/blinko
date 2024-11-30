@@ -12,14 +12,15 @@ import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoCard } from '@/components/BlinkoCard';
 import { BaseStore } from '@/store/baseStore';
 import Webcam from "react-webcam";
+import { useMediaQuery } from 'usehooks-ts';
 
 const Home = observer(() => {
   const { t } = useTranslation();
+  const isPc = useMediaQuery('(min-width: 768px)')
   const blinko = RootStore.Get(BlinkoStore)
   blinko.useQuery(useRouter())
-
   const store = RootStore.Local(() => ({
-    editorHeight: 75,
+    editorHeight: 65,
     get showEditor() {
       return !blinko.noteListFilterConfig.isArchived
     },
@@ -30,9 +31,10 @@ const Home = observer(() => {
 
   return (
     <div className="md:p-0 relative h-full flex flex-col-reverse md:flex-col">
-
       {store.showEditor && <div className='px-2 md:px-6' >
-        <BlinkoEditor mode='create' key='create-key' onHeightChange={height => store.editorHeight = height} />
+        <BlinkoEditor mode='create' key='create-key' onHeightChange={height => {
+          store.editorHeight = height
+        }} />
       </div>}
       <div className='text-ignore flex items-center justify-center gap-1 w-full '>
         <Icon className={`text-ignore mt-2 mb-[-5px] transition-all ${blinko.noteList.isLoading ? 'h-[30px]' : 'h-0'}`} icon="eos-icons:three-dots-loading" width="40" height="40" />
@@ -47,7 +49,7 @@ const Home = observer(() => {
       {
         !blinko.noteList.isEmpty && <ScrollArea
           onBottom={() => blinko.onBottom()}
-          style={{ height: store.showEditor ? `calc(100vh - ${100 + store.editorHeight}px)` : '100vh' }}
+          style={{ height: store.showEditor ? `calc(100% - ${(isPc ? 60 : 0) + store.editorHeight}px)` : '100%' }}
           className={`px-2 mt-0 md:mt-6 md:px-6 w-full h-full transition-all scroll-area`}>
           <Masonry
             breakpointCols={{

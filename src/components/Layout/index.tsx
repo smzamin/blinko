@@ -209,8 +209,8 @@ export const CommonLayout = observer(({
         </header>
         {/* backdrop  */}
 
-        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
-          <div className="relative flex h-full w-full flex-col rounded-medium " >
+        <ScrollArea onBottom={() => {}} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
+          <div className="relative flex h-full w-full flex-col rounded-medium layout-container" >
             {children}
           </div>
         </ScrollArea>
