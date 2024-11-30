@@ -14,7 +14,8 @@ export const aiRouter = router({
     }))
     .mutation(async ({ input }) => {
       const { id, content, type } = input
-      const { ok, error } = await AiService.embeddingUpsert({ id, content, type })
+      const createTime = await prisma.notes.findUnique({ where: { id } }).then(i => i?.createdAt)
+      const { ok, error } = await AiService.embeddingUpsert({ id, content, type, createTime: createTime! })
       if (!ok) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',

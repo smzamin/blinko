@@ -83,7 +83,7 @@ export class AiService {
     }
   }
 
-  static async embeddingUpsert({ id, content, type }: { id: number, content: string, type: 'update' | 'insert' }) {
+  static async embeddingUpsert({ id, content, type, createTime }: { id: number, content: string, type: 'update' | 'insert', createTime: Date }) {
     try {
       const { VectorStore, MarkdownSplitter } = await AiModelFactory.GetProvider()
       const chunks = await MarkdownSplitter.splitText(content);
@@ -92,7 +92,7 @@ export class AiService {
       }
       const documents: Document[] = chunks.map((chunk, index) => {
         return {
-          pageContent: chunk,
+          pageContent: chunk + `\n\nCreated at: ${createTime.toISOString()}`,
           metadata: { noteId: id, uniqDocId: `${id}-${index}` },
         }
       })
@@ -196,7 +196,7 @@ export class AiService {
   }
 
   static async *rebuildEmbeddingIndex({ force = false }: { force?: boolean }): AsyncGenerator<ProgressResult & { progress?: { current: number, total: number } }, void, unknown> {
-    if(force){
+    if (force) {
       const faissPath = path.join(process.cwd(), FAISS_PATH)
       fs.rmSync(faissPath, { recursive: true, force: true })
     }
@@ -227,6 +227,7 @@ export class AiService {
           }
           if (note?.content != '') {
             const { ok, error } = await AiService.embeddingUpsert({
+              createTime: note.createdAt,
               id: note?.id,
               content: note?.content,
               type: 'update' as const
@@ -270,7 +271,7 @@ export class AiService {
               }
             }
           }
-    
+
         } catch (error) {
           yield {
             type: 'error' as const,

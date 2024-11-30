@@ -17,7 +17,7 @@ export class AiModelFactory {
 
   static async ValidConfig() {
     const globalConfig = await AiModelFactory.globalConfig()
-    if (!globalConfig.aiModelProvider || !globalConfig.aiApiKey || !globalConfig.isUseAI) {
+    if (!globalConfig.aiModelProvider || !globalConfig.isUseAI) {
       throw new Error('model provider or apikey not configure!')
     }
     return await AiModelFactory.globalConfig()

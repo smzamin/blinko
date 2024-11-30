@@ -116,7 +116,7 @@ export class BlinkoStore implements Store {
 
 
   get showAi() {
-    return this.config.value?.isUseAI && this.config.value?.aiApiKey
+    return this.config.value?.isUseAI
   }
 
   config = new PromiseState({
