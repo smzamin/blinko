@@ -171,5 +171,9 @@
   "embedding-model-description": "The index must be rebuilt after switching embedded models",
   "top-k-description": "Maximum number of documents eventually returned",
   "embedding-score-description": "The similarity threshold for queries is generally the Euclidean sum distance",
-  "embedding-lambda-description": "Query Result Diversity Weighting Parameter"
+  "embedding-lambda-description": "Query Result Diversity Weighting Parameter",
+  "update-tag-icon": "Update tag icon",
+  "delete-only-tag": "Delete Only Tag",
+  "delete-tag-with-note": "Delete tag with note",
+  "update-name": "Update Name"
 }

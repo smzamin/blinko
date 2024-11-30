@@ -168,5 +168,8 @@
   "embedding-model-description": "切换嵌入式模型后必须重建索引",
   "top-k-description": "最终返回文件的最大数量",
   "embedding-score-description": "查询的相似性阈值通常是欧氏总和距离",
-  "embedding-lambda-description": "查询结果多样性加权参数"
+  "embedding-lambda-description": "查询结果多样性加权参数",
+  "update-tag-icon": "更新标签图标",
+  "delete-only-tag": "只删除标签",
+  "delete-tag-with-note": "删除带注释的标签"
 }

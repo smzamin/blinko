@@ -166,5 +166,8 @@
   "embedding-model-description": "임베디드 모델을 전환한 후 인덱스를 다시 작성해야 합니다.",
   "top-k-description": "최종적으로 반환되는 최대 문서 수",
   "embedding-score-description": "쿼리의 유사성 임계값은 일반적으로 유클리드 합 거리입니다.",
-  "embedding-lambda-description": "쿼리 결과 다양성 가중치 매개변수"
+  "embedding-lambda-description": "쿼리 결과 다양성 가중치 매개변수",
+  "update-tag-icon": "태그 업데이트 아이콘",
+  "delete-only-tag": "태그만 삭제",
+  "delete-tag-with-note": "메모와 함께 태그 삭제"
 }

@@ -35,6 +35,8 @@ export const AiSetting = observer(() => {
     store.aiModel = blinko.config.value?.aiModel!
     store.embeddingModel = blinko.config.value?.embeddingModel!
     store.embeddingTopK = blinko.config.value?.embeddingTopK!
+    store.embeddingScore = blinko.config.value?.embeddingScore!
+    store.embeddingLambda = blinko.config.value?.embeddingLambda!
   }, [blinko.config.value])
   return <Card shadow="none" className="flex flex-col p-4 bg-background pb-6">
     <div className='text-desc text-sm'>AI</div>

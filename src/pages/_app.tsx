@@ -15,6 +15,7 @@ import { initStore } from '@/store/init';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
+import { motion } from 'framer-motion';
 
 const MyApp = ({ Component, pageProps }) => {
   initStore();
@@ -35,7 +36,14 @@ const MyApp = ({ Component, pageProps }) => {
         <NextUIProvider>
           <ThemeProvider attribute="class" enableSystem={false} >
             <CommonLayout>
-              <Component {...pageProps} />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Component {...pageProps} />
+              </motion.div>
             </CommonLayout>
           </ThemeProvider>
         </NextUIProvider>
@@ -47,18 +55,12 @@ const MyApp = ({ Component, pageProps }) => {
 export default MyApp;
 
 const useProgressBar = () => {
-  let timer: NodeJS.Timeout | null = null;
-  const stopDelayMs = 200;
-
   const routeChangeStart = () => {
     NProgress.start();
   };
 
   const routeChangeEnd = () => {
-    timer && clearTimeout(timer);
-    timer = setTimeout(() => {
-      NProgress.done(true);
-    }, stopDelayMs);
+    NProgress.done(true);
   };
 
   useEffect(() => {

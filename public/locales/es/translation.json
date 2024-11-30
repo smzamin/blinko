@@ -166,5 +166,8 @@
   "embedding-model-description": "El índice debe reconstruirse después de cambiar de modelo integrado.",
   "top-k-description": "Número máximo de documentos devueltos",
   "embedding-score-description": "El umbral de similitud de las consultas suele ser la distancia de la suma euclídea",
-  "embedding-lambda-description": "Resultado de la consulta Parámetro de ponderación de la diversidad"
+  "embedding-lambda-description": "Resultado de la consulta Parámetro de ponderación de la diversidad",
+  "update-tag-icon": "Actualizar icono de etiqueta",
+  "delete-only-tag": "Borrar sólo etiqueta",
+  "delete-tag-with-note": "Eliminar etiqueta con nota"
 }

@@ -167,5 +167,8 @@
   "embedding-model-description": "L'index doit être reconstruit après avoir changé de modèle intégré.",
   "top-k-description": "Nombre maximum de documents éventuellement renvoyés",
   "embedding-score-description": "Le seuil de similarité pour les requêtes est généralement la distance de la somme euclidienne",
-  "embedding-lambda-description": "Résultat de la requête Paramètre de pondération de la diversité"
+  "embedding-lambda-description": "Résultat de la requête Paramètre de pondération de la diversité",
+  "update-tag-icon": "Mise à jour de l'icône de la balise",
+  "delete-only-tag": "Supprimer uniquement l'étiquette",
+  "delete-tag-with-note": "Supprimer une étiquette avec une note"
 }

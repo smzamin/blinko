@@ -166,5 +166,8 @@
   "embedding-model-description": "Der Index muss nach einem Wechsel des eingebetteten Modells neu aufgebaut werden",
   "top-k-description": "Maximale Anzahl von Dokumenten, die zurückgegeben werden",
   "embedding-score-description": "Die Ähnlichkeitsschwelle für Abfragen ist im Allgemeinen der euklidische Summenabstand",
-  "embedding-lambda-description": "Abfrageergebnis Diversität Gewichtungsparameter"
+  "embedding-lambda-description": "Abfrageergebnis Diversität Gewichtungsparameter",
+  "update-tag-icon": "Tag-Symbol aktualisieren",
+  "delete-only-tag": "Nur Tag löschen",
+  "delete-tag-with-note": "Tag mit Notiz löschen"
 }

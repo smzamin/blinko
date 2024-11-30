@@ -164,5 +164,8 @@
   "force-rebuild-embedding-index": "A reconstrução forçada irá reconstruir completamente todos os dados que foram indexados",
   "embedding-model-description": "O índice deve ser reconstruído após a mudança de modelos incorporados",
   "top-k-description": "Número máximo de documentos eventualmente devolvidos",
-  "embedding-lambda-description": "Resultado da consulta Parâmetro de ponderação da diversidade"
+  "embedding-lambda-description": "Resultado da consulta Parâmetro de ponderação da diversidade",
+  "update-tag-icon": "Atualizar o ícone da etiqueta",
+  "delete-only-tag": "Eliminar apenas a etiqueta",
+  "delete-tag-with-note": "Eliminar etiqueta com nota"
 }
