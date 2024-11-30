@@ -1,3 +1,10 @@
+## [0.12.1](https://github.com/blinko-space/blinko/compare/v0.12.0...v0.12.1) (2024-11-30)
+
+
+### Bug Fixes
+
+* remove progress bar delay & improve ux [#207](https://github.com/blinko-space/blinko/issues/207) ([6ade446](https://github.com/blinko-space/blinko/commit/6ade4464c6aac8fcdc9d0d51f8dcbba9d4a4669c))
+
 # [0.12.0](https://github.com/blinko-space/blinko/compare/v0.11.3...v0.12.0) (2024-11-30)
 
 
