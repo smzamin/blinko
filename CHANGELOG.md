@@ -1,3 +1,10 @@
+## [0.12.2](https://github.com/blinko-space/blinko/compare/v0.12.1...v0.12.2) (2024-11-30)
+
+
+### Bug Fixes
+
+* imporve virtual card [#206](https://github.com/blinko-space/blinko/issues/206) ([61f9e5c](https://github.com/blinko-space/blinko/commit/61f9e5c873f975fd5588256015e6e9d1ba548b0d))
+
 ## [0.12.1](https://github.com/blinko-space/blinko/compare/v0.12.0...v0.12.1) (2024-11-30)
 
 
