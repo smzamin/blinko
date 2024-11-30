@@ -1,3 +1,10 @@
+## [0.12.3](https://github.com/blinko-space/blinko/compare/v0.12.2...v0.12.3) (2024-11-30)
+
+
+### Bug Fixes
+
+* layout height style ([c10a5ee](https://github.com/blinko-space/blinko/commit/c10a5eeaca83c2e3c1130739fe65d9d51691fb69))
+
 ## [0.12.2](https://github.com/blinko-space/blinko/compare/v0.12.1...v0.12.2) (2024-11-30)
 
 
