@@ -1,3 +1,10 @@
+# [0.12.0](https://github.com/blinko-space/blinko/compare/v0.11.3...v0.12.0) (2024-11-30)
+
+
+### Features
+
+* add advanced setting & ai markdown support [#198](https://github.com/blinko-space/blinko/issues/198) [#202](https://github.com/blinko-space/blinko/issues/202) ([d6cac1e](https://github.com/blinko-space/blinko/commit/d6cac1ec9104fdab9cea55728c5336ca45e1f982))
+
 ## [0.11.3](https://github.com/blinko-space/blinko/compare/v0.11.2...v0.11.3) (2024-11-30)
 
 
