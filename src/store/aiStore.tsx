@@ -1,4 +1,3 @@
-
 import { _ } from '@/lib/lodash';
 import { Store } from './standard/base';
 import { ToastPlugin } from './module/Toast/Toast';
@@ -21,6 +20,7 @@ type Chat = {
   content: string
   role: 'user' | 'system' | 'assistant',
   createAt: number
+  relationNotes?: Note[]
 }
 
 type WriteType = 'expand' | 'polish' | 'custom'
@@ -45,7 +45,7 @@ export class AiStore implements Store {
     {
       label: "Ollama",
       value: "Ollama",
-      icon: <Icon icon="simple-icons:ollama"  width="20" height="20" />
+      icon: <Icon icon="simple-icons:ollama" width="20" height="20" />
     }
   ]
 
@@ -108,19 +108,19 @@ export class AiStore implements Store {
   }
 
   scrollTicker = 0
-  relationNotes = new StorageListState<Note>({ key: 'relationNotes' })
   chatHistory = new StorageListState<Chat>({ key: 'chatHistory' })
   private abortController = new AbortController()
 
   writingResponse = ''
   isWriting = false
+  isAnswering = false
   writeQuestion = ''
   originalContent = ''
   isLoading = false
 
   async completionsStream() {
     try {
-      this.relationNotes.clear()
+      this.isAnswering = true
       this.chatHistory.push({
         content: this.aiSearchText,
         role: 'user',
@@ -131,22 +131,25 @@ export class AiStore implements Store {
       this.chatHistory.push({
         content: '',
         role: 'assistant',
-        createAt: new Date().getTime()
+        createAt: new Date().getTime(),
+        relationNotes: []
       })
       const res = await streamApi.ai.completions.mutate({ question: this.aiSearchText, conversations }, { signal: this.abortController.signal })
       for await (const item of res) {
         if (item.notes) {
-          this.relationNotes.list = item.notes
-          this.relationNotes.save()
+          this.chatHistory.list[this.chatHistory.list.length - 1]!.relationNotes = item.notes
         } else {
           this.chatHistory.list[this.chatHistory.list.length - 1]!.content += item.context
           this.scrollTicker++
         }
       }
       this.chatHistory.save()
+      this.isAnswering = false
     } catch (error) {
-      this.chatHistory.clear()
-      RootStore.Get(ToastPlugin).error(error.message)
+      this.isAnswering = false
+      if (!error.message.includes('interrupted')) {
+        RootStore.Get(ToastPlugin).error(error.message)
+      }
     }
   }
 
@@ -225,5 +228,6 @@ export class AiStore implements Store {
     this.abortController.abort()
     this.abortController = new AbortController()
     this.isLoading = false
+    this.isAnswering = false
   }
 }

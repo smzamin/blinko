@@ -163,5 +163,8 @@
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Si tienes muchos billetes puedes consumir un número determinado de fichas",
   "force-rebuild": "Reconstrucción forzosa",
   "force-rebuild-embedding-index": "La reconstrucción forzada reconstruirá por completo todos los datos indexados.",
-  "embedding-model-description": "El índice debe reconstruirse después de cambiar de modelo integrado."
+  "embedding-model-description": "El índice debe reconstruirse después de cambiar de modelo integrado.",
+  "top-k-description": "Número máximo de documentos devueltos",
+  "embedding-score-description": "El umbral de similitud de las consultas suele ser la distancia de la suma euclídea",
+  "embedding-lambda-description": "Resultado de la consulta Parámetro de ponderación de la diversidad"
 }

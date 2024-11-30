@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Autocomplete, AutocompleteItem, Button, Card, Code, Input, Select, SelectItem, Switch, Tooltip } from "@nextui-org/react";
+import { AccordionItem, Accordion, Autocomplete, AutocompleteItem, Button, Card, Code, Input, Select, SelectItem, Switch, Tooltip, Chip, Slider } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
@@ -23,13 +23,18 @@ export const AiSetting = observer(() => {
     apiKey: '',
     apiEndPoint: '',
     aiModel: '',
-    embeddingModel: ''
+    embeddingModel: '',
+    embeddingTopK: 2,
+    embeddingScore: 1.5,
+    embeddingLambda: 0.5,
+    showEmeddingAdvancedSetting: false
   }))
   useEffect(() => {
     store.apiEndPoint = blinko.config.value?.aiApiEndpoint!
     store.apiKey = blinko.config.value?.aiApiKey!
     store.aiModel = blinko.config.value?.aiModel!
     store.embeddingModel = blinko.config.value?.embeddingModel!
+    store.embeddingTopK = blinko.config.value?.embeddingTopK!
   }, [blinko.config.value])
   return <Card shadow="none" className="flex flex-col p-4 bg-background pb-6">
     <div className='text-desc text-sm'>AI</div>
@@ -114,10 +119,10 @@ export const AiSetting = observer(() => {
     {ai.embeddingSelect[blinko.config.value?.aiModelProvider!] && (
       <Item
         type={isPc ? 'row' : 'col'}
-        leftContent={<ItemWithTooltip
+        leftContent={<div className="flex items-center gap-2"> <ItemWithTooltip
           content={<>{t('embedding-model')}</>} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
             <div>{t('embedding-model-description')}</div>
-          </div>} />}
+          </div>} /> <Chip size="sm" color="warning" className="text-white cursor-pointer" onClick={() => store.showEmeddingAdvancedSetting = !store.showEmeddingAdvancedSetting}>Advanced</Chip></div>}
         rightContent={
           <div className="flex w-full ml-auto justify-start">
             <Autocomplete
@@ -150,6 +155,109 @@ export const AiSetting = observer(() => {
           </div>
         } />
     )}
+
+    {
+      store.showEmeddingAdvancedSetting && <Item
+        type={isPc ? 'row' : 'col'}
+        leftContent={<ItemWithTooltip
+          content={<>Top K</>} toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+            <div>{t('top-k-description')}</div>
+          </div>} />}
+        rightContent={
+          <div className="flex w-[300px] ml-auto justify-start">
+            <Slider
+              onChangeEnd={e => {
+                PromiseCall(api.config.update.mutate({
+                  key: 'embeddingTopK',
+                  value: store.embeddingTopK
+                }))
+              }}
+              onChange={e => {
+                store.embeddingTopK = Number(e)
+              }}
+              value={store.embeddingTopK}
+              size="md"
+              step={1}
+              color="foreground"
+              label={'value'}
+              showSteps={true}
+              maxValue={10}
+              minValue={1}
+              defaultValue={2}
+              className="w-full"
+            />
+          </div>
+        } />
+    }
+
+    {
+      store.showEmeddingAdvancedSetting && <Item
+        type={isPc ? 'row' : 'col'}
+        leftContent={<ItemWithTooltip
+          content={<>Score</>}
+          toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+            <div>{t('embedding-score-description')}</div>
+          </div>} />}
+        rightContent={
+          <div className="flex w-[300px] ml-auto justify-start">
+            <Slider
+              onChangeEnd={e => {
+                PromiseCall(api.config.update.mutate({
+                  key: 'embeddingScore',
+                  value: store.embeddingScore
+                }))
+              }}
+              onChange={e => {
+                store.embeddingScore = Number(e)
+              }}
+              value={store.embeddingScore}
+              size="md"
+              step={0.1}
+              color="foreground"
+              label={'value'}
+              showSteps={true}
+              maxValue={2.0}
+              minValue={0.1}
+              defaultValue={0.8}
+              className="w-full"
+            />
+          </div>
+        } />
+    }
+    {
+      store.showEmeddingAdvancedSetting && <Item
+        type={isPc ? 'row' : 'col'}
+        leftContent={<ItemWithTooltip
+          content={<>Embedding Lambda</>}
+          toolTipContent={<div className="w-[300px] flex flex-col gap-2">
+            <div>{t('embedding-lambda-description')}</div>
+          </div>} />}
+        rightContent={
+          <div className="flex w-[300px] ml-auto justify-start">
+            <Slider
+              onChangeEnd={e => {
+                PromiseCall(api.config.update.mutate({
+                  key: 'embeddingLambda',
+                  value: store.embeddingLambda
+                }))
+              }}
+              onChange={e => {
+                store.embeddingLambda = Number(e)
+              }}
+              value={store.embeddingLambda}
+              size="md"
+              step={0.1}
+              color="foreground"
+              label={'value'}
+              showSteps={true}
+              maxValue={1.0}
+              minValue={0.1}
+              defaultValue={0.3}
+              className="w-full"
+            />
+          </div>
+        } />
+    }
 
     {
       blinko.config.value?.aiModelProvider != 'Ollama' &&
@@ -188,13 +296,13 @@ export const AiSetting = observer(() => {
         } />
     }
 
-    <Item
+    < Item
       type={isPc ? 'row' : 'col'}
-      leftContent={<div className="flex flex-col gap-1">
+      leftContent={< div className="flex flex-col gap-1" >
         <>{t('api-endpoint')}</>
         <div className="text-desc text-xs">{t('must-start-with-http-s-or-use-api-openai-as-default')}</div>
-      </div>}
-      rightContent={<Input
+      </div >}
+      rightContent={< Input
         size='sm'
         label={t('api-endpoint')}
         variant="bordered"
@@ -239,5 +347,5 @@ export const AiSetting = observer(() => {
         </div>
       } />
 
-  </Card>
+  </Card >
 })

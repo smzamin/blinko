@@ -185,10 +185,17 @@ export class AiService {
   }
 
   static async similaritySearch({ question }: { question: string }) {
-    const { VectorStore } = await AiModelFactory.GetProvider()
-    const results = await VectorStore.similaritySearchWithScore(question, 2);
-    // console.log('similaritySearch with scores:', results)
-    const DISTANCE_THRESHOLD = 1.5;
+    const { VectorStore, } = await AiModelFactory.GetProvider()
+    const config = await AiModelFactory.globalConfig()
+    const topK = config.embeddingTopK ?? 2
+    const lambda = config.embeddingLambda ?? 0.5
+    const score = config.embeddingScore ?? 1.5
+    const results = await VectorStore.similaritySearchWithScore(question, topK, {
+      fetchK: topK * 3,
+      lambda: lambda
+    });
+    console.log('similaritySearch with scores:', results)
+    const DISTANCE_THRESHOLD = score;
     const filteredResults = results
       .filter(([doc, distance]) => distance < DISTANCE_THRESHOLD)
       .map(([doc]) => doc);

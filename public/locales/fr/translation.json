@@ -164,5 +164,8 @@
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "Si vous avez beaucoup de notes, vous pouvez consommer un certain nombre de jetons.",
   "force-rebuild": "Reconstruction des forces",
   "force-rebuild-embedding-index": "La reconstruction forcée reconstruit toutes les données qui ont été complètement indexées.",
-  "embedding-model-description": "L'index doit être reconstruit après avoir changé de modèle intégré."
+  "embedding-model-description": "L'index doit être reconstruit après avoir changé de modèle intégré.",
+  "top-k-description": "Nombre maximum de documents éventuellement renvoyés",
+  "embedding-score-description": "Le seuil de similarité pour les requêtes est généralement la distance de la somme euclidienne",
+  "embedding-lambda-description": "Résultat de la requête Paramètre de pondération de la diversité"
 }

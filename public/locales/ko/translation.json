@@ -163,5 +163,8 @@
   "embedding-model": "임베딩 모델",
   "force-rebuild": "강제 재구축",
   "force-rebuild-embedding-index": "강제 재구축은 인덱싱된 모든 데이터를 완전히 재구축합니다.",
-  "embedding-model-description": "임베디드 모델을 전환한 후 인덱스를 다시 작성해야 합니다."
+  "embedding-model-description": "임베디드 모델을 전환한 후 인덱스를 다시 작성해야 합니다.",
+  "top-k-description": "최종적으로 반환되는 최대 문서 수",
+  "embedding-score-description": "쿼리의 유사성 임계값은 일반적으로 유클리드 합 거리입니다.",
+  "embedding-lambda-description": "쿼리 결과 다양성 가중치 매개변수"
 }

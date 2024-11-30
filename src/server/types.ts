@@ -34,6 +34,9 @@ export const ZConfigKey = z.union([
   z.literal('largeDeviceCardColumns'),
   z.literal('textFoldLength'),
   z.literal('embeddingModel'),
+  z.literal('embeddingTopK'),
+  z.literal('embeddingLambda'),
+  z.literal('embeddingScore'),
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -61,6 +64,9 @@ export const ZConfigSchema = z.object({
   s3Bucket: z.any().optional(),
   s3Region: z.any().optional(),
   embeddingModel: z.any().optional(),
+  embeddingTopK: z.number().optional(),
+  embeddingLambda: z.number().optional(),
+  embeddingScore: z.number().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

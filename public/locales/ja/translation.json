@@ -161,5 +161,8 @@
   "embedding-model": "埋め込みモデル",
   "force-rebuild": "フォース・リビルド",
   "force-rebuild-embedding-index": "強制再構築は、インデックスが作成されたすべてのデータを完全に再構築します。",
-  "embedding-model-description": "組み込みモデルを切り替えた後は、インデックスを再構築する必要があります。"
+  "embedding-model-description": "組み込みモデルを切り替えた後は、インデックスを再構築する必要があります。",
+  "top-k-description": "最終的に返される文書の最大数",
+  "embedding-score-description": "クエリの類似度閾値は一般的にユークリッド和距離である。",
+  "embedding-lambda-description": "クエリ結果の多様性重み付けパラメータ"
 }

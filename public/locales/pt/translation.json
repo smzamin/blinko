@@ -162,5 +162,7 @@
   "embedding-model": "Modelo de incorporação",
   "force-rebuild": "Reconstrução da força",
   "force-rebuild-embedding-index": "A reconstrução forçada irá reconstruir completamente todos os dados que foram indexados",
-  "embedding-model-description": "O índice deve ser reconstruído após a mudança de modelos incorporados"
+  "embedding-model-description": "O índice deve ser reconstruído após a mudança de modelos incorporados",
+  "top-k-description": "Número máximo de documentos eventualmente devolvidos",
+  "embedding-lambda-description": "Resultado da consulta Parâmetro de ponderação da diversidade"
 }

@@ -163,5 +163,8 @@
   "embedding-model": "Einbettungsmodell",
   "force-rebuild": "Force Rebuild",
   "force-rebuild-embedding-index": "Erzwungener Neuaufbau stellt alle Daten wieder her, die vollständig indiziert wurden.",
-  "embedding-model-description": "Der Index muss nach einem Wechsel des eingebetteten Modells neu aufgebaut werden"
+  "embedding-model-description": "Der Index muss nach einem Wechsel des eingebetteten Modells neu aufgebaut werden",
+  "top-k-description": "Maximale Anzahl von Dokumenten, die zurückgegeben werden",
+  "embedding-score-description": "Die Ähnlichkeitsschwelle für Abfragen ist im Allgemeinen der euklidische Summenabstand",
+  "embedding-lambda-description": "Abfrageergebnis Diversität Gewichtungsparameter"
 }

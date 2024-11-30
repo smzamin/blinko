@@ -168,5 +168,8 @@
   "embedding-model": "Embedding Model",
   "force-rebuild": "Force Rebuild",
   "force-rebuild-embedding-index": "Forced rebuild will rebuild all data that has been indexed completely",
-  "embedding-model-description": "The index must be rebuilt after switching embedded models"
+  "embedding-model-description": "The index must be rebuilt after switching embedded models",
+  "top-k-description": "Maximum number of documents eventually returned",
+  "embedding-score-description": "The similarity threshold for queries is generally the Euclidean sum distance",
+  "embedding-lambda-description": "Query Result Diversity Weighting Parameter"
 }

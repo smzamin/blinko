@@ -165,5 +165,8 @@
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "如果您有大量笔记，您可能会消耗一定数量的代币",
   "force-rebuild": "强制重建",
   "force-rebuild-embedding-index": "强制重建将完全重建已索引的所有数据",
-  "embedding-model-description": "切换嵌入式模型后必须重建索引"
+  "embedding-model-description": "切换嵌入式模型后必须重建索引",
+  "top-k-description": "最终返回文件的最大数量",
+  "embedding-score-description": "查询的相似性阈值通常是欧氏总和距离",
+  "embedding-lambda-description": "查询结果多样性加权参数"
 }

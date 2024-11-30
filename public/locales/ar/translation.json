@@ -172,5 +172,8 @@
   "if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens": "إذا كان لديك الكثير من الملاحظات فقد تستهلك عددًا معينًا من الرموز المميزة",
   "force-rebuild": "إعادة بناء القوة",
   "force-rebuild-embedding-index": "ستؤدي إعادة البناء القسري إلى إعادة بناء جميع البيانات التي تمت فهرستها بالكامل",
-  "embedding-model-description": "يجب إعادة بناء الفهرس بعد تبديل النماذج المدمجة"
+  "embedding-model-description": "يجب إعادة بناء الفهرس بعد تبديل النماذج المدمجة",
+  "top-k-description": "الحد الأقصى لعدد المستندات التي تم إرجاعها في النهاية",
+  "embedding-score-description": "عادة ما تكون عتبة التشابه للاستعلامات هي مجموع المسافة الإقليدية",
+  "embedding-lambda-description": "معلمة ترجيح تنوع نتائج الاستعلامات"
 }
