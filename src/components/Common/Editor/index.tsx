@@ -323,6 +323,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
   useEffect(() => {
     store.updateSendStatus()
     setIsWriting(ai.isWriting)
+    onHeightChange?.()
   }, [blinko.noteTypeDefault, content, ai.isWriting, store.files?.length])
 
   useEffect(() => {

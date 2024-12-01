@@ -28,7 +28,6 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {
-        onHeightChange?.(editorRef.current?.clientHeight ?? 75)
         isCreateMode ? (blinko.noteContent = v) : (blinko.curSelectedNote!.content = v)
       }}
       onHeightChange={() => {
@@ -39,7 +38,6 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
         isCreateMode ? <div className='text-xs text-ignore ml-2'>Drop to upload files</div> :
           <div className='text-xs text-desc'>{dayjs(blinko.curSelectedNote!.createdAt).format("YYYY-MM-DD hh:mm:ss")}</div>
       }
-
       onSend={async ({ files }) => {
         if (isCreateMode) {
           //@ts-ignore
