@@ -7,7 +7,6 @@ import { RootStore } from '@/store';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
 import { BlinkoEditor } from '@/components/BlinkoEditor';
-import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoCard } from '@/components/BlinkoCard';
 import { BaseStore } from '@/store/baseStore';
@@ -69,7 +68,7 @@ const Home = observer(() => {
         </ScrollArea>
       }
 
-      <BlinkoMultiSelectPop />
+
     </div>
   );
 });

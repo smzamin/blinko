@@ -16,6 +16,7 @@ import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
 import { motion } from 'framer-motion';
+import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 
 const MyApp = ({ Component, pageProps }) => {
   initStore();
@@ -43,6 +44,7 @@ const MyApp = ({ Component, pageProps }) => {
                 transition={{ duration: 0.3 }}
               >
                 <Component {...pageProps} />
+                <BlinkoMultiSelectPop />
               </motion.div>
             </CommonLayout>
           </ThemeProvider>
