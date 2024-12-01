@@ -1,3 +1,10 @@
+## [0.12.7](https://github.com/blinko-space/blinko/compare/v0.12.6...v0.12.7) (2024-12-01)
+
+
+### Bug Fixes
+
+* ai button ui issue [#218](https://github.com/blinko-space/blinko/issues/218) ([e1452cc](https://github.com/blinko-space/blinko/commit/e1452ccc40aebb091a26b1d10b53fef199cbcc14))
+
 ## [0.12.6](https://github.com/blinko-space/blinko/compare/v0.12.5...v0.12.6) (2024-12-01)
 
 
