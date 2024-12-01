@@ -1,3 +1,10 @@
+## [0.12.4](https://github.com/blinko-space/blinko/compare/v0.12.3...v0.12.4) (2024-12-01)
+
+
+### Bug Fixes
+
+* ui container ([c44e9c9](https://github.com/blinko-space/blinko/commit/c44e9c9625bc463eb03872bf0b2ea29594588595))
+
 ## [0.12.3](https://github.com/blinko-space/blinko/compare/v0.12.2...v0.12.3) (2024-11-30)
 
 
