@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { createPortal } from "react-dom";
 
 interface ExpandableContainerProps {
   isExpanded: boolean;
@@ -7,48 +6,28 @@ interface ExpandableContainerProps {
 }
 
 export const ExpandableContainer = ({ isExpanded, children }: ExpandableContainerProps) => {
-  if (isExpanded) {
-    return createPortal(
-      <motion.div
-        className='w-full expand-container fixed inset-0'
-        style={{
-          boxShadow: '0 0 15px -5px #5858581a',
-          backgroundColor: 'var(--background)',
-          zIndex: 9999,
-        }}
-        layout
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{
-          width: "100vw",
-          height: "100vh",
-          scale: 1,
-          opacity: 1
-        }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{
-          type: "spring",
-          damping: 20,
-          stiffness: 300,
-          mass: 0.6,
-        }}
-      >
-        {children}
-      </motion.div>,
-      document.body
-    );
-  }
-
   return (
     <motion.div
-      className='w-full expand-container'
+      className='w-full'
       style={{
         boxShadow: '0 0 15px -5px #5858581a',
-        position: 'relative',
+        position: isExpanded ? 'fixed' : 'relative',
+        top: isExpanded ? 0 : 'auto',
+        left: isExpanded ? 0 : 'auto',
+        zIndex: isExpanded ? 50 : 1,
       }}
       layout
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      animate={{
+        width: isExpanded ? "100vw" : "100%",
+        height: isExpanded ? "100vh" : "auto",
+        scale: isExpanded ? 1 : 1,
+      }}
+      transition={{
+        type: "spring",
+        damping: 20,
+        stiffness: 300,
+        mass: 0.6,
+      }}
     >
       {children}
     </motion.div>
