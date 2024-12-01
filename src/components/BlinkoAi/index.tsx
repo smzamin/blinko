@@ -164,6 +164,7 @@ export const BlinkoAiButton = () => {
         if (!isPc) {
           RootStore.Get(DialogStore).setData({
             isOpen: true,
+            title: 'Blinko AI',
             content: <BlinkoAiChat />,
             size: '5xl'
           })
@@ -183,8 +184,8 @@ export const BlinkoAi = observer(() => {
       isPc ? <Popover placement="top">
         <PopoverTrigger>
           <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
-            className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-[100] opacity-70 text-primary-foreground">
-            <Icon icon="mingcute:ai-line" width="20" height="20" />
+            className="fixed rounded-full p-2 cursor-pointer bg-primary bottom-[15%] right-[10%] md:bottom-10 md:right-20 z-[20] opacity-70 text-primary-foreground">
+            <Icon className="z-[20]" icon="mingcute:ai-line" width="20" height="20" />
           </motion.div>
         </PopoverTrigger>
         <PopoverContent className="p-0">

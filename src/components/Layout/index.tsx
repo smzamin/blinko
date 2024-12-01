@@ -20,6 +20,7 @@ import { push as Menu } from 'react-burger-menu';
 import { eventBus } from "@/lib/event";
 import TagSelectPop from "../Common/PopoverFloat/tagSelectPop";
 import AiWritePop from "../Common/PopoverFloat/aiWritePop";
+import { createPortal } from "react-dom";
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
 export const CommonLayout = observer(({
@@ -108,7 +109,7 @@ export const CommonLayout = observer(({
   return (
     <div className="flex w-full h-mobile-full overflow-x-hidden" id="outer-container">
       {
-        blinkoStore.showAi && <BlinkoAi />
+        blinkoStore.showAi && createPortal(<BlinkoAi />, document.body)
       }
       <TagSelectPop />
       <AiWritePop />
