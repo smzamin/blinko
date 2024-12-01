@@ -48,6 +48,7 @@ export const TagListPanel = observer(() => {
     <>
       <div className="ml-2 my-2 text-xs font-bold text-[#a252e1]">{t('total-tags')}</div>
       <TreeView
+        className="mb-4"
         data={flattenTree({
           name: "",
           children: blinko.tagList.value?.listTags,
