@@ -1,3 +1,10 @@
+## [0.12.8](https://github.com/blinko-space/blinko/compare/v0.12.7...v0.12.8) (2024-12-01)
+
+
+### Bug Fixes
+
+* BlinkoMultiSelectPop style ([d2d146a](https://github.com/blinko-space/blinko/commit/d2d146a85d7e63e996afe64be5d14c67dc8851b6))
+
 ## [0.12.7](https://github.com/blinko-space/blinko/compare/v0.12.6...v0.12.7) (2024-12-01)
 
 
