@@ -1,3 +1,10 @@
+## [0.12.5](https://github.com/blinko-space/blinko/compare/v0.12.4...v0.12.5) (2024-12-01)
+
+
+### Bug Fixes
+
+* card style ([3e311e3](https://github.com/blinko-space/blinko/commit/3e311e30508889e947cc5ffed77cd165471a14c3))
+
 ## [0.12.4](https://github.com/blinko-space/blinko/compare/v0.12.3...v0.12.4) (2024-12-01)
 
 
