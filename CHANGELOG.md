@@ -1,3 +1,10 @@
+## [0.12.6](https://github.com/blinko-space/blinko/compare/v0.12.5...v0.12.6) (2024-12-01)
+
+
+### Bug Fixes
+
+* tag select ui style ([251a7f2](https://github.com/blinko-space/blinko/commit/251a7f207099c6c45ca4d9a794048b63c133f0a4))
+
 ## [0.12.5](https://github.com/blinko-space/blinko/compare/v0.12.4...v0.12.5) (2024-12-01)
 
 
