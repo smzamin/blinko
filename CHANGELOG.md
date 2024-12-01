@@ -1,3 +1,10 @@
+## [0.12.9](https://github.com/blinko-space/blinko/compare/v0.12.8...v0.12.9) (2024-12-01)
+
+
+### Bug Fixes
+
+* editor ui height ([6d206d4](https://github.com/blinko-space/blinko/commit/6d206d48749221b5e3cc5d7ca82dc833b05ccbf0))
+
 ## [0.12.8](https://github.com/blinko-space/blinko/compare/v0.12.7...v0.12.8) (2024-12-01)
 
 
