@@ -16,7 +16,6 @@ import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
 import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
-import { usePasteFile } from '@/lib/hooks';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
@@ -29,6 +28,7 @@ import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectP
 import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
 import { Icon } from '@iconify/react';
+import { usePasteFile } from '@/lib/hooks';
 
 const { MDXEditor } = await import('@mdxeditor/editor')
 
@@ -109,6 +109,13 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     lastRange: null as Range | null,
     lastRangeText: '',
     lastSelection: null as Selection | null,
+    handleIOSFocus() {
+      try {
+        if (helper.env.isIOS() && mode == 'edit') {
+          store.focus(true)
+        }
+      } catch (error) { }
+    },
     updateSendStatus() {
       if (store.files?.length == 0 && mdxEditorRef.current?.getMarkdown() == '') {
         return setCanSend(false)
@@ -334,6 +341,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     eventBus.on('editor:focus', store.focus)
     eventBus.on('editor:setMarkdownLoading', store.setMarkdownLoading)
     handleEditorKeyEvents()
+    store.handleIOSFocus()
     return () => {
       eventBus.off('editor:replace', store.replaceMarkdownTag)
       eventBus.off('editor:clear', store.clearMarkdown)

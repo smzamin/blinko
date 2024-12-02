@@ -10,6 +10,7 @@ import copy from "copy-to-clipboard";
 import dayjs from '@/lib/dayjs';
 import { useTranslation } from 'react-i18next';
 import { _ } from '@/lib/lodash';
+import { useIsIOS } from '@/lib/hooks';
 
 interface CardHeaderProps {
   blinkoItem: Note;
@@ -21,6 +22,8 @@ interface CardHeaderProps {
 export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded }: CardHeaderProps) => {
   const { t } = useTranslation();
   const iconSize = isExpanded ? '20' : '16';
+  const isIOSDevice = useIsIOS();
+  
   return (
     <div className={`flex items-center select-none ${isExpanded ? 'mb-4' : 'mb-2'}`}>
       <div className={`flex items-center w-full gap-1 ${isExpanded ? 'text-base' : 'text-xs'}`}>
@@ -62,15 +65,19 @@ export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded }: Card
 
         <Copy
           size={16}
-          className="ml-auto opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1"
+          className={`ml-auto ${
+            isIOSDevice 
+              ? 'opacity-100' 
+              : 'opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1'
+          }`}
           content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`}
         />
 
-        <ShareButton blinkoItem={blinkoItem} blinko={blinko} />
+        <ShareButton blinkoItem={blinkoItem} blinko={blinko} isIOSDevice={isIOSDevice} />
 
         {blinkoItem.isTop && (
           <Icon
-            className="ml-auto group-hover/card:ml-2 text-[#EFC646]"
+            className={isIOSDevice ? 'ml-[10px] text-[#EFC646]' : "ml-auto group-hover/card:ml-2 text-[#EFC646]"}
             icon="solar:bookmark-bold"
             width={iconSize}
             height={iconSize}
@@ -79,7 +86,7 @@ export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded }: Card
 
         {!isShareMode && (
           <LeftCickMenu
-            className={blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2'}
+            className={isIOSDevice ? 'ml-[10px]' : (blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2')}
             onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }}
           />
         )}
@@ -88,14 +95,18 @@ export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded }: Card
   );
 };
 
-const ShareButton = ({ blinkoItem, blinko }: { blinkoItem: Note, blinko: BlinkoStore }) => {
+const ShareButton = ({ blinkoItem, blinko, isIOSDevice }: { blinkoItem: Note, blinko: BlinkoStore, isIOSDevice: boolean }) => {
   return (
     <Tooltip content={blinkoItem.isShare ? 'Copy share link' : 'Share and copy link'}>
       <Icon
         icon="tabler:share-2"
         width="16"
         height="16"
-        className="cursor-pointer text-desc ml-2 opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1"
+        className={`cursor-pointer text-desc ml-2 ${
+          isIOSDevice 
+            ? 'opacity-100' 
+            : 'opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1'
+        }`}
         onClick={async (e) => {
           e.stopPropagation();
           if (!blinkoItem.isShare) {

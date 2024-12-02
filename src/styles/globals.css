@@ -59,6 +59,8 @@ body {
   scroll-behavior: smooth;
   overflow-y: hidden;
   height: var(--doc-height);
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .h-mobile-full {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { helper } from "./helper";
 
 const usePasteFile = (targetRef) => {
   const [pastedFiles, setPastedFiles] = useState([]);
@@ -67,6 +68,15 @@ export const useHistoryBack = <T extends string>({
       window.removeEventListener('popstate', handlePopState);
     };
   }, [state, onStateChange, historyState]);
+};
+
+export const useIsIOS = () => {
+  const [isIOS, setIsIOS] = useState(false);
+  useEffect(() => {
+    setIsIOS(helper.env.isIOS());
+  }, []);
+
+  return isIOS;
 };
 
 export  {usePasteFile};

@@ -219,7 +219,19 @@ export const helper = {
   },
   env: {
     //@ts-ignore
-    isBrowser: typeof window === 'undefined' ? false : true
+    isBrowser: typeof window === 'undefined' ? false : true,
+    isIOS: () => {
+      try {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const isIPad = /ipad/.test(userAgent);
+        const isIPhone = /iphone/.test(userAgent);
+        const isIPod = /ipod/.test(userAgent);
+        const isMacOS = /macintosh/.test(userAgent) && navigator.maxTouchPoints > 0;
+        return isIPad || isIPhone || isIPod || isMacOS;
+      } catch (error) {
+        return false
+      }
+    }
   },
   cron: {
     human(cronTime: string) {
