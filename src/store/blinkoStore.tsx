@@ -54,12 +54,13 @@ export class BlinkoStore implements Store {
         type = this.noteTypeDefault
       }
       const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop, isShare })
-      if (res?.id) {
-        api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
-      }
-
-      for (const attachment of attachments) {
-        api.ai.embeddingInsertAttachments.mutate({ id: res!.id, filePath: attachment.path }, { context: { skipBatch: true } })
+      if (this.config.value?.isUseAI) {
+        if (res?.id) {
+          api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
+        }
+        for (const attachment of attachments) {
+          api.ai.embeddingInsertAttachments.mutate({ id: res!.id, filePath: attachment.path }, { context: { skipBatch: true } })
+        }
       }
       eventBus.emit('editor:clear')
       showToast && RootStore.Get(ToastPlugin).success(id ? i18n.t("update-successfully") : i18n.t("create-successfully"))
