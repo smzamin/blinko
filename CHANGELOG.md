@@ -1,3 +1,10 @@
+## [0.12.10](https://github.com/blinko-space/blinko/compare/v0.12.9...v0.12.10) (2024-12-02)
+
+
+### Bug Fixes
+
+* improve ios ux ([a84f8a3](https://github.com/blinko-space/blinko/commit/a84f8a3842f9a6df9959b1585551996f6bec8187))
+
 ## [0.12.9](https://github.com/blinko-space/blinko/compare/v0.12.8...v0.12.9) (2024-12-01)
 
 
