@@ -1,3 +1,10 @@
+## [0.12.11](https://github.com/blinko-space/blinko/compare/v0.12.10...v0.12.11) (2024-12-02)
+
+
+### Bug Fixes
+
+* memos image import ([66973aa](https://github.com/blinko-space/blinko/commit/66973aa7cc48ce1467655609701cd6c6b2c3374a))
+
 ## [0.12.10](https://github.com/blinko-space/blinko/compare/v0.12.9...v0.12.10) (2024-12-02)
 
 
