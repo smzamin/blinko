@@ -132,13 +132,25 @@ export class Memos {
           continue;
         }
 
-        const fileName = row?.filename;
+        const fileName = row?.filename ?? '';
         const filePath = UPLOAD_FILE_PATH + '/' + fileName;
-        await fs.writeFile(filePath, row!.blob);
+        let newFileName = fileName.split('/').pop() || '';
+        const hasSameFile = await fs.access(filePath).then(() => true).catch(() => false);
+        if (row?.blob) {
+          if (hasSameFile) {
+            const extension = fileName.split('.').pop() || '';
+            const originalName = fileName.split('.').slice(0, -1).join('.');
+            newFileName = `${originalName}_${Date.now()}.${extension}`;
+            await fs.writeFile(UPLOAD_FILE_PATH + '/' + newFileName, row!.blob);
+          } else {
+            await fs.writeFile(filePath, row!.blob);
+          }
+        }
+
         await prisma.attachments.create({
           data: {
             name: row?.filename,
-            path: '/api/file/' + fileName,
+            path: '/api/file/' + newFileName,
             size: row?.size,
             noteId: node.id,
           }
