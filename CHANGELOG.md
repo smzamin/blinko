@@ -1,3 +1,10 @@
+## [0.12.12](https://github.com/blinko-space/blinko/compare/v0.12.11...v0.12.12) (2024-12-02)
+
+
+### Bug Fixes
+
+* embeddingUpsert logic ([e1163d2](https://github.com/blinko-space/blinko/commit/e1163d20103780d25dc78f13b48ce3a0dbb684ee))
+
 ## [0.12.11](https://github.com/blinko-space/blinko/compare/v0.12.10...v0.12.11) (2024-12-02)
 
 
