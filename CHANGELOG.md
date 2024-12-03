@@ -1,3 +1,10 @@
+# [0.13.0](https://github.com/blinko-space/blinko/compare/v0.12.12...v0.13.0) (2024-12-03)
+
+
+### Features
+
+* support user setting ([eed7fa5](https://github.com/blinko-space/blinko/commit/eed7fa5d181dd46124a7422e5625c0f309ddb7f6))
+
 ## [0.12.12](https://github.com/blinko-space/blinko/compare/v0.12.11...v0.12.12) (2024-12-02)
 
 
