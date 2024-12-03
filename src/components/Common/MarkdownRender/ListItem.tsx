@@ -20,7 +20,7 @@ const renderListItems = (children: any, onChange: (newContent: string) => void, 
       const isChecked = child.props?.checked ?? false;
       const iconType = isChecked ? "lets-icons:check-fill" : "ci:radio-unchecked";
       return (
-        <div key={index} className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
+        <div key={index} className='!ml-[-30px] flex items-center gap-1 cursor-pointer hover:opacity-80'
           onClick={() => {
             const newContent = isChecked
               ? content.replace(`* [x]${text}`, `* [ ]${text}`).replace(`- [x]${text}`, `- [ ]${text}`)
