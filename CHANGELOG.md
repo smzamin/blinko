@@ -1,3 +1,10 @@
+## [0.14.3](https://github.com/blinko-space/blinko/compare/v0.14.2...v0.14.3) (2024-12-03)
+
+
+### Bug Fixes
+
+* improve list item rendering and remove unnecessary console log ([ebe50a8](https://github.com/blinko-space/blinko/commit/ebe50a8c8408ffd6f86395539f607470b1d384ac))
+
 ## [0.14.2](https://github.com/blinko-space/blinko/compare/v0.14.1...v0.14.2) (2024-12-03)
 
 
