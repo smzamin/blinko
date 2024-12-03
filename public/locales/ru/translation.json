@@ -170,5 +170,6 @@
   "embedding-lambda-description": "Весовой параметр разнообразия результатов запросов",
   "update-tag-icon": "Обновить значок тега",
   "delete-only-tag": "Удалить только тег",
-  "delete-tag-with-note": "Удалить тег с примечанием"
+  "delete-tag-with-note": "Удалить тег с примечанием",
+  "update-tag-name": "Обновить имя бирки"
 }

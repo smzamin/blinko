@@ -6,6 +6,7 @@ import { RootStore } from '@/store';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { useEffect } from 'react';
 import { DialogStore } from '@/store/module/Dialog';
+import i18n from '@/lib/i18n';
 
 
 type IProps = {
@@ -49,7 +50,7 @@ export const UpdateTag = observer(({ onSave, defaultValue = '', type = 'input' }
 export const ShowUpdateTagDialog = ({ onSave, defaultValue, type }: IProps) => {
   RootStore.Get(DialogStore).setData({
     isOpen: true,
-    title: 'Update Tag Name',
+    title: i18n.t('update-tag-name'),
     content: <UpdateTag type={type} defaultValue={defaultValue} onSave={async (e) => { return await onSave?.(e) }} />
   })
 }

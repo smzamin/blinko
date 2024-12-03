@@ -167,5 +167,6 @@
   "embedding-lambda-description": "クエリ結果の多様性重み付けパラメータ",
   "update-tag-icon": "タグアイコンの更新",
   "delete-only-tag": "タグのみ削除",
-  "delete-tag-with-note": "メモ付きタグの削除"
+  "delete-tag-with-note": "メモ付きタグの削除",
+  "update-tag-name": "タグ名の更新"
 }

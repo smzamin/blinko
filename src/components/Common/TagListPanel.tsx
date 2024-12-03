@@ -112,6 +112,9 @@ export const TagListPanel = observer(() => {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
                   <DropdownItem key="updateIcon" onClick={async () => {
+                    if (!isPc) {
+                      eventBus.emit('close-sidebar')
+                    }
                     ShowEmojiPicker(element, theme)
                   }}>
                     <div className="flex items-center gap-2">

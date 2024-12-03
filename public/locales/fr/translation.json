@@ -170,5 +170,6 @@
   "embedding-lambda-description": "Résultat de la requête Paramètre de pondération de la diversité",
   "update-tag-icon": "Mise à jour de l'icône de la balise",
   "delete-only-tag": "Supprimer uniquement l'étiquette",
-  "delete-tag-with-note": "Supprimer une étiquette avec une note"
+  "delete-tag-with-note": "Supprimer une étiquette avec une note",
+  "update-tag-name": "Mise à jour du nom de l'étiquette"
 }

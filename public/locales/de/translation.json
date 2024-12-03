@@ -169,5 +169,6 @@
   "embedding-lambda-description": "Abfrageergebnis Diversität Gewichtungsparameter",
   "update-tag-icon": "Tag-Symbol aktualisieren",
   "delete-only-tag": "Nur Tag löschen",
-  "delete-tag-with-note": "Tag mit Notiz löschen"
+  "delete-tag-with-note": "Tag mit Notiz löschen",
+  "update-tag-name": "Tag-Name aktualisieren"
 }

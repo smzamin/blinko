@@ -175,5 +175,6 @@
   "update-tag-icon": "Update tag icon",
   "delete-only-tag": "Delete Only Tag",
   "delete-tag-with-note": "Delete tag with note",
-  "update-name": "Update Name"
+  "update-name": "Update Name",
+  "update-tag-name": "Update Tag Name"
 }

@@ -169,5 +169,6 @@
   "embedding-lambda-description": "Resultado de la consulta Parámetro de ponderación de la diversidad",
   "update-tag-icon": "Actualizar icono de etiqueta",
   "delete-only-tag": "Borrar sólo etiqueta",
-  "delete-tag-with-note": "Eliminar etiqueta con nota"
+  "delete-tag-with-note": "Eliminar etiqueta con nota",
+  "update-tag-name": "Actualizar nombre de etiqueta"
 }

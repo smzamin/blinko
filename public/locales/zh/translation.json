@@ -171,5 +171,6 @@
   "embedding-lambda-description": "查询结果多样性加权参数",
   "update-tag-icon": "更新标签图标",
   "delete-only-tag": "只删除标签",
-  "delete-tag-with-note": "删除带注释的标签"
+  "delete-tag-with-note": "删除带注释的标签",
+  "update-tag-name": "更新标签名称"
 }
