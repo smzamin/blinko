@@ -1,3 +1,10 @@
+# [0.16.0](https://github.com/blinko-space/blinko/compare/v0.15.0...v0.16.0) (2024-12-03)
+
+
+### Features
+
+* support ai enhance search ([1aaf6eb](https://github.com/blinko-space/blinko/commit/1aaf6eb5442c5cef751a252bfecfa84bc76f5439))
+
 # [0.15.0](https://github.com/blinko-space/blinko/compare/v0.14.6...v0.15.0) (2024-12-03)
 
 
