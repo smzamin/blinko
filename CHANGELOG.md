@@ -1,3 +1,10 @@
+## [0.14.2](https://github.com/blinko-space/blinko/compare/v0.14.1...v0.14.2) (2024-12-03)
+
+
+### Bug Fixes
+
+* list item render issue ([0d1b431](https://github.com/blinko-space/blinko/commit/0d1b4318ae2b5e25af287f8e9578deba1deac7c5))
+
 ## [0.14.1](https://github.com/blinko-space/blinko/compare/v0.14.0...v0.14.1) (2024-12-03)
 
 
