@@ -1,3 +1,10 @@
+## [0.14.1](https://github.com/blinko-space/blinko/compare/v0.14.0...v0.14.1) (2024-12-03)
+
+
+### Bug Fixes
+
+* build error ([a544e70](https://github.com/blinko-space/blinko/commit/a544e709557217522921162244049428d09fb509))
+
 # [0.14.0](https://github.com/blinko-space/blinko/compare/v0.13.2...v0.14.0) (2024-12-03)
 
 
