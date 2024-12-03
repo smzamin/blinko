@@ -48,18 +48,28 @@ export const noteRouter = router({
     .mutation(async function ({ input, ctx }) {
       const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink } = input
       let where: Prisma.notesWhereInput = {
-        isArchived, isRecycle,
+        isRecycle,
         OR: [
           { accountId: Number(ctx.id) },
           { accountId: null }
         ]
       }
+
+      if (searchText != '') {
+        where = {
+          ...where,
+          content: { contains: searchText, mode: 'insensitive' }
+        }
+      } else {
+        where.isArchived = isArchived
+        if (type != -1) { 
+          where.type = type 
+        }
+      }
+
       if (tagId) {
         const tags = await prisma.tagsToNote.findMany({ where: { tagId } })
         where.id = { in: tags?.map(i => i.noteId) }
-      }
-      if (searchText != '') {
-        where.content = { contains: searchText, mode: 'insensitive' }
       }
       if (withFile) {
         where.attachments = { some: {} }
@@ -75,7 +85,6 @@ export const noteRouter = router({
       }
       const config = await getGlobalConfig()
       let timeOrderBy = config?.isOrderByCreateTime ? { createdAt: orderBy } : { updatedAt: orderBy }
-      if (type != -1) { where.type = type }
       return await prisma.notes.findMany({
         where,
         orderBy: [{ isTop: "desc" }, timeOrderBy],
