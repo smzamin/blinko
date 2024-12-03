@@ -64,7 +64,7 @@ const ImageRender = observer((props: IProps) => {
       return `h-[80px] w-[80px] min-w-[80px]`
     }
     if (imageLength == 1) {
-      return `h-auto max-h-[200px]`
+      return `h-[200px] max-h-[200px] md:max-w-[200px]`
     }
     if (imageLength > 1 && imageLength <= 5) {
       return `md:h-[180px] h-[160px]`
@@ -85,7 +85,7 @@ const ImageRender = observer((props: IProps) => {
           <div className='w-full'>
             <PhotoView src={file.preview}>
               <div>
-                <ImageThumbnailRender file={file} className={`mb-4 ${imageHeight} w-[1000px]`} />
+                <ImageThumbnailRender file={file} className={`mb-4 ${imageHeight} object-cover md:w-[1000px]`} />
               </div>
             </PhotoView>
           </div>
