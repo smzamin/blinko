@@ -41,7 +41,8 @@ export class BlinkoStore implements Store {
     searchText: "",
     withoutTag: false,
     withFile: false,
-    withLink: false
+    withLink: false,
+    isUseAiQuery: false
   }
   noteTypeDefault: NoteType = NoteType.BLINKO
   currentCommonFilter: filterType | null = null
@@ -113,8 +114,6 @@ export class BlinkoStore implements Store {
       return { falttenTags, listTags, pathTags }
     }
   })
-
-
 
   get showAi() {
     return this.config.value?.isUseAI

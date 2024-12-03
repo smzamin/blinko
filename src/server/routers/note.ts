@@ -11,6 +11,7 @@ import { unlink } from 'fs/promises';
 import { attachmentsSchema, notesSchema, tagSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
 import { getGlobalConfig } from './config';
 import { FileService } from '../plugins/utils';
+import { AiService } from '../plugins/ai';
 
 const extractHashtags = (input: string): string[] => {
   const withoutCodeBlocks = input.replace(/```[\s\S]*?```/g, '');
@@ -34,6 +35,7 @@ export const noteRouter = router({
       withoutTag: z.boolean().default(false).optional(),
       withFile: z.boolean().default(false).optional(),
       withLink: z.boolean().default(false).optional(),
+      isUseAiQuery: z.boolean().default(false).optional(),
     }))
     .output(z.array(notesSchema.merge(
       z.object({
@@ -46,7 +48,14 @@ export const noteRouter = router({
       }))
     ))
     .mutation(async function ({ input, ctx }) {
-      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink } = input
+      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink, isUseAiQuery } = input
+      if (isUseAiQuery && searchText?.trim() != '') {
+        if (page == 1) {
+          return await AiService.enhanceQuery({ query: searchText! })
+        } else {
+          return []
+        }
+      }
       let where: Prisma.notesWhereInput = {
         isRecycle,
         OR: [
@@ -62,8 +71,8 @@ export const noteRouter = router({
         }
       } else {
         where.isArchived = isArchived
-        if (type != -1) { 
-          where.type = type 
+        if (type != -1) {
+          where.type = type
         }
       }
 

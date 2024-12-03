@@ -14,7 +14,6 @@ const renderListItems = (children: any, onChange: (newContent: string) => void, 
       let renderItem: React.ReactElement[] = [];
       const siblings = children.filter((_, i) => i !== index);
       const textContent = typeof siblings[0] === 'string' ? siblings[0] : '';
-      console.log(textContent)
       text = textContent;
       renderItem.push(<span key={index}>{textContent}</span>);
       const isChecked = child.props?.checked ?? false;

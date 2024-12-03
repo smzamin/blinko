@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, ScrollShadow, Image, Input, Popover, PopoverTrigger, PopoverContent, Card, Badge } from "@nextui-org/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, ScrollShadow, Image, Input, Popover, PopoverTrigger, PopoverContent, Card, Badge, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { UserStore } from "@/store/user";
 import Link from "next/link";
@@ -39,11 +39,10 @@ export const CommonLayout = observer(({
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
   const base = RootStore.Get(BaseStore)
-  const [isAiActive, setIsAiActive] = useState(false);
 
-  let debounceSearch = _.debounce(() => {
+  const throttleSearchRef = useRef(_.throttle(() => {
     blinkoStore.noteList.resetAndCall({})
-  })
+  }, 1000, { trailing: true, leading: false }));
 
   blinkoStore.use()
   user.use()
@@ -151,12 +150,11 @@ export const CommonLayout = observer(({
                 size={isPc ? 'md' : 'sm'}
                 variant="flat"
                 aria-label="search"
-                className={`ml-auto w-[200px] md:w-[300px] ${isAiActive ? 'input-highlight' : ''}`}
+                className={`ml-auto w-[200px] md:w-[300px] ${blinkoStore.noteListFilterConfig.isUseAiQuery ? 'input-highlight' : ''}`}
                 classNames={{
                   base: "px-1 mr-1 w-[full] md:w-[300px]",
-                  inputWrapper: `bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20 ${
-                    isAiActive ? 'border-2 border-primary' : ''
-                  }`,
+                  inputWrapper: `bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20 ${blinkoStore.noteListFilterConfig.isUseAiQuery ? 'border-2 border-primary' : ''
+                    }`,
                   input: "placeholder:text-default-600 group-data-[has-value=true]:text-foreground",
                 }}
                 disabled={router.pathname == '/resources'}
@@ -165,19 +163,26 @@ export const CommonLayout = observer(({
                 value={blinkoStore.noteListFilterConfig.searchText}
                 onChange={e => {
                   blinkoStore.noteListFilterConfig.searchText = e.target.value
-                  debounceSearch?.()
+                  throttleSearchRef.current()
                 }}
                 startContent={
                   <Icon className="text-default-600 [&>g]:stroke-[2px]" icon="lets-icons:search" width="24" height="24" />
                 }
                 endContent={
-                  <Icon 
+                 <Tooltip content={t('ai-enhanced-search')}>
+                   <Icon
                     className="text-default-600 [&>g]:stroke-[2px] cursor-pointer hover:text-primary transition-colors"
-                    icon="mingcute:ai-line" 
-                    width="24" 
+                    icon="mingcute:ai-line"
+                    width="24"
                     height="24"
-                    onClick={() => setIsAiActive(!isAiActive)}
+                    onClick={() => {
+                      blinkoStore.noteListFilterConfig.isUseAiQuery = !blinkoStore.noteListFilterConfig.isUseAiQuery
+                      if (blinkoStore.noteListFilterConfig.searchText != '') {
+                        throttleSearchRef.current()
+                      }
+                    }}
                   />
+                 </Tooltip>
                 }
               />
               <Popover placement="bottom-start">

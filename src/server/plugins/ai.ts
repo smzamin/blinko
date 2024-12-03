@@ -303,6 +303,34 @@ export class AiService {
     return conversationMessage
   }
 
+  static async enhanceQuery({ query }: { query: string }) {
+    const { VectorStore } = await AiModelFactory.GetProvider()
+    const config = await AiModelFactory.globalConfig()
+    const results = await VectorStore.similaritySearchWithScore(query, 20);
+    const DISTANCE_THRESHOLD = config.embeddingScore ?? 1.5
+    const filteredResultsWithScore = results
+      .filter(([doc, distance]) => distance < DISTANCE_THRESHOLD)
+      .sort(([, distanceA], [, distanceB]) => distanceA - distanceB)
+      .map(([doc, distance]) => ({
+        doc,
+        distance
+      }));
+    console.log(filteredResultsWithScore)
+    const notes = await prisma.notes.findMany({
+      where: {
+        id: { in: filteredResultsWithScore.map(i => i.doc.metadata?.noteId).filter(i => !!i) },
+      },
+      include: { tags: { include: { tag: true } }, attachments: true }
+    })
+    const sortedNotes = notes.sort((a, b) => {
+      const scoreA = filteredResultsWithScore.find(r => r.doc.metadata?.noteId === a.id)?.distance ?? Infinity;
+      const scoreB = filteredResultsWithScore.find(r => r.doc.metadata?.noteId === b.id)?.distance ?? Infinity;
+      return scoreA - scoreB;
+    });
+
+    return sortedNotes;
+  }
+
   static async completions({ question, conversations }: { question: string, conversations: { role: string, content: string }[] }) {
     try {
       const { LLM } = await AiModelFactory.GetProvider()

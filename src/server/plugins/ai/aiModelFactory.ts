@@ -23,11 +23,9 @@ export class AiModelFactory {
   }
 
   static async GetProvider() {
-    console.log('GetProvider', )
     const globalConfig = await AiModelFactory.ValidConfig()
     if (globalConfig.aiModelProvider == 'OpenAI') {
       const provider = new OpenAIModelProvider({ globalConfig })
-      console.log('provider', provider)
       return {
         LLM: provider.LLM(),
         VectorStore: await provider.VectorStore(),

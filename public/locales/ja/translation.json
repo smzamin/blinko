@@ -175,5 +175,6 @@
   "insert-after": "の後に挿入する。",
   "update-name": "更新名",
   "ai-emoji": "絵文字",
-  "custom-icon": "カスタムアイコン"
+  "custom-icon": "カスタムアイコン",
+  "ai-enhanced-search": "AIによる検索強化"
 }
