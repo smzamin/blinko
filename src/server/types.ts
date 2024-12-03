@@ -11,6 +11,18 @@ export enum NoteType {
   'NOTE'
 }
 
+export const ZUserPerferConfigKey = z.union([
+  z.literal('textFoldLength'),
+  z.literal('smallDeviceCardColumns'),
+  z.literal('mediumDeviceCardColumns'),
+  z.literal('largeDeviceCardColumns'),
+  z.literal('timeFormat'),
+  z.literal('isHiddenMobileBar'),
+  z.literal('isOrderByCreateTime'),
+  z.literal('language'),
+  z.literal('theme'),
+]);
+
 export const ZConfigKey = z.union([
   z.literal('isAutoArchived'),
   z.literal('autoArchivedDays'),
@@ -19,24 +31,18 @@ export const ZConfigKey = z.union([
   z.literal('aiApiKey'),
   z.literal('aiApiEndpoint'),
   z.literal('aiModel'),
-  z.literal('isHiddenMobileBar'),
   z.literal('isAllowRegister'),
-  z.literal('isOrderByCreateTime'),
-  z.literal('timeFormat'),
   z.literal('objectStorage'),
   z.literal('s3AccessKeyId'),
   z.literal('s3AccessKeySecret'),
   z.literal('s3Endpoint'),
   z.literal('s3Bucket'),
   z.literal('s3Region'),
-  z.literal('smallDeviceCardColumns'),
-  z.literal('mediumDeviceCardColumns'),
-  z.literal('largeDeviceCardColumns'),
-  z.literal('textFoldLength'),
   z.literal('embeddingModel'),
   z.literal('embeddingTopK'),
   z.literal('embeddingLambda'),
   z.literal('embeddingScore'),
+  ZUserPerferConfigKey
 ]);
 
 export type ConfigKey = z.infer<typeof ZConfigKey>;
@@ -67,6 +73,8 @@ export const ZConfigSchema = z.object({
   embeddingTopK: z.number().optional(),
   embeddingLambda: z.number().optional(),
   embeddingScore: z.number().optional(),
+  language: z.any().optional(),
+  theme: z.any().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

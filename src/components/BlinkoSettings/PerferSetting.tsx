@@ -25,10 +25,20 @@ export const PerferSetting = observer(() => {
     <div className='text-desc text-sm'>{t('preference')}</div>
     <Item
       leftContent={<>{t('theme')}</>}
-      rightContent={<ThemeSwitcher />} />
+      rightContent={<ThemeSwitcher onChange={async value => {
+        return await PromiseCall(api.config.update.mutate({
+          key: 'theme',
+          value: value
+        }))
+      }} />} />
     <Item
       leftContent={<>{t('language')}</>}
-      rightContent={<LanguageSwitcher />} />
+      rightContent={<LanguageSwitcher value={blinko.config.value?.language} onChange={value => {
+        PromiseCall(api.config.update.mutate({
+          key: 'language',
+          value: value
+        }))
+      }} />} />
     <Item
       leftContent={<>{t('show-navigation-bar-on-mobile')}</>}
       rightContent={<Switch

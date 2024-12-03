@@ -23,6 +23,7 @@ model accounts {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   notes     notes[]
+  configs   config[]
 }
 
 model attachments {
@@ -44,6 +45,8 @@ model config {
   id     Int    @id @default(autoincrement())
   key    String @default("") @db.VarChar
   config Json?  @db.Json
+  userId Int?  
+  user   accounts? @relation(fields: [userId], references: [id])
 }
 
 model notes {

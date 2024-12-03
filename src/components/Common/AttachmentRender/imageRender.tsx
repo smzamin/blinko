@@ -47,7 +47,7 @@ const ImageRender = observer((props: IProps) => {
       return `flex items-center overflow-x-scroll gap-2`
     }
     if (imageLength == 1) {
-      return `flex`
+      return `grid grid-cols-2 gap-2`
     }
     if (imageLength > 1 && imageLength <= 5) {
       return `grid grid-cols-2 gap-2`
@@ -85,7 +85,7 @@ const ImageRender = observer((props: IProps) => {
           <div className='w-full'>
             <PhotoView src={file.preview}>
               <div>
-                <ImageThumbnailRender file={file} className={`mb-4 ${imageHeight} object-cover w-[1000px]`} />
+                <ImageThumbnailRender file={file} className={`mb-4 ${imageHeight} w-[1000px]`} />
               </div>
             </PhotoView>
           </div>

@@ -18,7 +18,6 @@ import dayjs from "@/lib/dayjs";
 import { FilesAttachmentRender } from "../Common/AttachmentRender";
 import { MarkdownRender } from "../Common/MarkdownRender";
 import { ResizableWrapper } from "../Common/ResizableWrapper";
-import { router } from "@/server/trpc";
 import { useRouter } from "next/router";
 
 export const BlinkoAiChat = observer(() => {

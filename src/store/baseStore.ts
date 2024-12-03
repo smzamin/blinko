@@ -5,6 +5,8 @@ import { makeAutoObservable } from 'mobx';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
+import { BlinkoStore } from './blinkoStore';
+import { RootStore } from '.';
 
 export class BaseStore implements Store {
   sid = 'BaseStore';
@@ -90,7 +92,6 @@ export class BaseStore implements Store {
     }
     const { t, i18n } = useTranslation()
     useEffect(() => {
-      this.changeLanugage(i18n, this.locale.value)
       documentHeight()
       window.addEventListener('resize', documentHeight)
     }, [router.isReady])

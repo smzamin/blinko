@@ -39,6 +39,7 @@ export const CommonLayout = observer(({
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
   const base = RootStore.Get(BaseStore)
+  const [isAiActive, setIsAiActive] = useState(false);
 
   let debounceSearch = _.debounce(() => {
     blinkoStore.noteList.resetAndCall({})
@@ -150,11 +151,12 @@ export const CommonLayout = observer(({
                 size={isPc ? 'md' : 'sm'}
                 variant="flat"
                 aria-label="search"
-                className={`ml-auto w-[200px] md:w-[300px]`}
+                className={`ml-auto w-[200px] md:w-[300px] ${isAiActive ? 'input-highlight' : ''}`}
                 classNames={{
                   base: "px-1 mr-1 w-[full] md:w-[300px]",
-                  inputWrapper:
-                    "bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20",
+                  inputWrapper: `bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20 ${
+                    isAiActive ? 'border-2 border-primary' : ''
+                  }`,
                   input: "placeholder:text-default-600 group-data-[has-value=true]:text-foreground",
                 }}
                 disabled={router.pathname == '/resources'}
@@ -167,6 +169,15 @@ export const CommonLayout = observer(({
                 }}
                 startContent={
                   <Icon className="text-default-600 [&>g]:stroke-[2px]" icon="lets-icons:search" width="24" height="24" />
+                }
+                endContent={
+                  <Icon 
+                    className="text-default-600 [&>g]:stroke-[2px] cursor-pointer hover:text-primary transition-colors"
+                    icon="mingcute:ai-line" 
+                    width="24" 
+                    height="24"
+                    onClick={() => setIsAiActive(!isAiActive)}
+                  />
                 }
               />
               <Popover placement="bottom-start">
@@ -210,7 +221,7 @@ export const CommonLayout = observer(({
         </header>
         {/* backdrop  */}
 
-        <ScrollArea onBottom={() => {}} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
+        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll scroll-container">
           <div className="relative flex h-full w-full flex-col rounded-medium layout-container" >
             {children}
           </div>
