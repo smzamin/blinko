@@ -13,7 +13,8 @@ const renderListItems = (children: any, onChange: (newContent: string) => void, 
       let text = '';
       let renderItem: React.ReactElement[] = [];
       const siblings = children.filter((_, i) => i !== index);
-      const textContent = typeof siblings[0] === 'string' ? siblings[0].trim() : '';
+      const textContent = typeof siblings[0] === 'string' ? siblings[0] : '';
+      console.log(textContent)
       text = textContent;
       renderItem.push(<span key={index}>{textContent}</span>);
       const isChecked = child.props?.checked ?? false;
@@ -22,8 +23,8 @@ const renderListItems = (children: any, onChange: (newContent: string) => void, 
         <div key={index} className='!ml-[-18px] flex items-center gap-1 cursor-pointer hover:opacity-80'
           onClick={() => {
             const newContent = isChecked
-              ? content.replace(`* [x] ${text}`, `* [ ] ${text}`).replace(`- [x] ${text}`, `- [ ] ${text}`)
-              : content.replace(`* [ ] ${text}`, `* [x] ${text}`).replace(`- [ ] ${text}`, `- [x] ${text}`);
+              ? content.replace(`* [x]${text}`, `* [ ]${text}`).replace(`- [x]${text}`, `- [ ]${text}`)
+              : content.replace(`* [ ]${text}`, `* [x]${text}`).replace(`- [ ]${text}`, `- [x]${text}`);
             onChange(newContent)
           }}>
           <div className='w-[20px] h-[20px]'>
