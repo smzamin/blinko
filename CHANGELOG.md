@@ -1,3 +1,10 @@
+## [0.14.6](https://github.com/blinko-space/blinko/compare/v0.14.5...v0.14.6) (2024-12-03)
+
+
+### Bug Fixes
+
+* adjust margin for list item rendering in Markdown component ([87c7057](https://github.com/blinko-space/blinko/commit/87c7057767e0b7371f2bff9bc510c65493a2f392))
+
 ## [0.14.5](https://github.com/blinko-space/blinko/compare/v0.14.4...v0.14.5) (2024-12-03)
 
 
