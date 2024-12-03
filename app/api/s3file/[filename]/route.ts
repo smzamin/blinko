@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getGlobalConfig } from "@/server/routers/config";
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {  NextResponse } from "next/server";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { FileService } from "@/server/plugins/utils";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export const GET = async (req: Request, { params }: any) => {
   const { s3ClientInstance, config } = await FileService.getS3Client();
@@ -10,14 +10,9 @@ export const GET = async (req: Request, { params }: any) => {
       Bucket: config.s3Bucket,
       Key: params.filename,
     });
-    const response = await s3ClientInstance.send(command);
-    const headers = new Headers();
-    headers.set('Content-Type', response.ContentType || 'application/octet-stream');
-    return new NextResponse(response.Body?.transformToWebStream(), {
-      headers,
-    });
+    const signedUrl = await getSignedUrl(s3ClientInstance, command, { expiresIn: 3600 });
+    return NextResponse.redirect(signedUrl);
   } catch (error) {
-    console.error('Error fetching file:', error);
     return NextResponse.json({ error: 'File not found' }, { status: 404 });
   }
 };
