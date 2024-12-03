@@ -1,3 +1,10 @@
+## [0.13.1](https://github.com/blinko-space/blinko/compare/v0.13.0...v0.13.1) (2024-12-03)
+
+
+### Bug Fixes
+
+* emoji picker dialog issue ([759a4e4](https://github.com/blinko-space/blinko/commit/759a4e4bae95ec9811354777f00719601395675f))
+
 # [0.13.0](https://github.com/blinko-space/blinko/compare/v0.12.12...v0.13.0) (2024-12-03)
 
 
