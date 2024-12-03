@@ -62,4 +62,8 @@ If you find Blinko valuable, consider supporting us! Your contribution will enab
 
 [https://afdian.com/a/blinkospace/plan](https://afdian.com/a/blinkospace/plan)
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=blinko-space/blinko&type=Date)](https://star-history.com/#blinko-space/blinko&Date)
+
 
