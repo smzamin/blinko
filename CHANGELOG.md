@@ -1,3 +1,10 @@
+## [0.13.2](https://github.com/blinko-space/blinko/compare/v0.13.1...v0.13.2) (2024-12-03)
+
+
+### Bug Fixes
+
+* implement file streaming for large file downloads ([003c827](https://github.com/blinko-space/blinko/commit/003c827cfc41f1176bf61a5e3ab96ce42e22eaa6))
+
 ## [0.13.1](https://github.com/blinko-space/blinko/compare/v0.13.0...v0.13.1) (2024-12-03)
 
 
