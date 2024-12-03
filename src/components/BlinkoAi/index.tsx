@@ -16,9 +16,9 @@ import Link from "next/link";
 import DraggableDiv from "../Common/DragContainer";
 import dayjs from "@/lib/dayjs";
 import { FilesAttachmentRender } from "../Common/AttachmentRender";
-import { MarkdownRender } from "../Common/MarkdownRender";
 import { ResizableWrapper } from "../Common/ResizableWrapper";
 import { useRouter } from "next/router";
+import { MarkdownRender } from "../Common/MarkdownRender";
 
 export const BlinkoAiChat = observer(() => {
   const ai = RootStore.Get(AiStore)
