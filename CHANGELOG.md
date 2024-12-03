@@ -1,3 +1,10 @@
+# [0.14.0](https://github.com/blinko-space/blinko/compare/v0.13.2...v0.14.0) (2024-12-03)
+
+
+### Features
+
+* support ai emoji & custom icon  [#226](https://github.com/blinko-space/blinko/issues/226) [#234](https://github.com/blinko-space/blinko/issues/234) ([1eacd5e](https://github.com/blinko-space/blinko/commit/1eacd5ea17114de9ba75c673049683b44aad6c3f))
+
 ## [0.13.2](https://github.com/blinko-space/blinko/compare/v0.13.1...v0.13.2) (2024-12-03)
 
 
