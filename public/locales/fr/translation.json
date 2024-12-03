@@ -171,5 +171,12 @@
   "update-tag-icon": "Mise à jour de l'icône de la balise",
   "delete-only-tag": "Supprimer uniquement l'étiquette",
   "delete-tag-with-note": "Supprimer une étiquette avec une note",
-  "update-tag-name": "Mise à jour du nom de l'étiquette"
+  "update-tag-name": "Mise à jour du nom de l'étiquette",
+  "thinking": "Réflexion...",
+  "select-all": "Sélectionner tout",
+  "insert-before": "Insérer avant",
+  "insert-after": "Insérer après",
+  "update-name": "Nom de la mise à jour",
+  "ai-emoji": "Ai Emoji",
+  "custom-icon": "Icône personnalisée"
 }

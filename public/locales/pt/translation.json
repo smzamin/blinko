@@ -168,5 +168,12 @@
   "update-tag-icon": "Atualizar o ícone da etiqueta",
   "delete-only-tag": "Eliminar apenas a etiqueta",
   "delete-tag-with-note": "Eliminar etiqueta com nota",
-  "update-tag-name": "Atualizar o nome da etiqueta"
+  "update-tag-name": "Atualizar o nome da etiqueta",
+  "thinking": "A pensar...",
+  "select-all": "Selecionar tudo",
+  "insert-before": "Inserir antes de",
+  "insert-after": "Inserir após",
+  "update-name": "Atualizar nome",
+  "ai-emoji": "Ai Emoji",
+  "custom-icon": "Ícone personalizado"
 }

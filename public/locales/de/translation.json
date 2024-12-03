@@ -170,5 +170,12 @@
   "update-tag-icon": "Tag-Symbol aktualisieren",
   "delete-only-tag": "Nur Tag löschen",
   "delete-tag-with-note": "Tag mit Notiz löschen",
-  "update-tag-name": "Tag-Name aktualisieren"
+  "update-tag-name": "Tag-Name aktualisieren",
+  "thinking": "Ich denke...",
+  "select-all": "Alle auswählen",
+  "insert-before": "Einfügen vor",
+  "insert-after": "Einfügen nach",
+  "update-name": "Update Name",
+  "ai-emoji": "Ai-Emoji",
+  "custom-icon": "Benutzerdefinierte Ikone"
 }

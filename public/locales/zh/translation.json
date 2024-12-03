@@ -171,6 +171,15 @@
   "embedding-lambda-description": "查询结果多样性加权参数",
   "update-tag-icon": "更新标签图标",
   "delete-only-tag": "只删除标签",
-  "delete-tag-with-note": "删除带注释的标签",
-  "update-tag-name": "更新标签名称"
+  "delete-tag-with-note": "删除标签和笔记",
+  "update-tag-name": "更新标签名称",
+  "thinking": "思考中...",
+  "select-all": "全部选择",
+  "insert-before": "插入内容前",
+  "insert-after": "插入内容后",
+  "update-name": "更新名称",
+  "ai-emoji": "AI表情",
+  "ai-generate-emoji": "AI生成表情",
+  "ai-generating-emoji": "AI正在根据标签生成相关表情",
+  "custom-icon": "自定义图标"
 }

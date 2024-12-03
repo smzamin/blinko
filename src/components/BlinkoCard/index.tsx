@@ -40,7 +40,11 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: BlinkoC
   });
 
   blinkoItem.isBlog = ((blinkoItem.content?.length ?? 0) > (blinko.config.value?.textFoldLength ?? 1000)) && !pathname.includes('/share');
-  blinkoItem.title = blinkoItem.content?.split('\n')[0];
+  blinkoItem.title = blinkoItem.content?.split('\n').find(line => {
+    if (!line.trim()) return false;
+    if (helper.regex.isContainHashTag.test(line)) return false;
+    return true;
+  }) || '';
   blinkoItem.blogCover = blinkoItem.attachments?.find(i =>
     i.type.includes('image') || helper.getFileType(i.type, i.path) == 'image'
   )?.path ?? '';

@@ -168,5 +168,12 @@
   "update-tag-icon": "タグアイコンの更新",
   "delete-only-tag": "タグのみ削除",
   "delete-tag-with-note": "メモ付きタグの削除",
-  "update-tag-name": "タグ名の更新"
+  "update-tag-name": "タグ名の更新",
+  "thinking": "考える...",
+  "select-all": "すべて選択",
+  "insert-before": "前に挿入",
+  "insert-after": "の後に挿入する。",
+  "update-name": "更新名",
+  "ai-emoji": "絵文字",
+  "custom-icon": "カスタムアイコン"
 }

@@ -176,5 +176,11 @@
   "delete-only-tag": "Delete Only Tag",
   "delete-tag-with-note": "Delete tag with note",
   "update-name": "Update Name",
-  "update-tag-name": "Update Tag Name"
+  "update-tag-name": "Update Tag Name",
+  "thinking": "Thinking...",
+  "select-all": "Select All",
+  "insert-before": "Insert content before",
+  "insert-after": "Insert content after",
+  "ai-emoji": "Ai Emoji",
+  "custom-icon": "Custom Icon"
 }

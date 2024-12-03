@@ -357,6 +357,24 @@ export class AiService {
     }
   }
 
+  static async autoEmoji({ content }: { content: string }) {
+    try {
+      const { LLM } = await AiModelFactory.GetProvider();
+      const autoTagPrompt = AiPrompt.AutoEmojiPrompt();
+      const autoTagChain = autoTagPrompt.pipe(LLM).pipe(new StringOutputParser());
+
+      const result = await autoTagChain.invoke({
+        question: "Please select and suggest appropriate emojis for the above content",
+        context: content
+      });
+
+      return result.trim().split(',').map(tag => tag.trim()).filter(Boolean);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   static async writing({
     question,
     type = 'custom',

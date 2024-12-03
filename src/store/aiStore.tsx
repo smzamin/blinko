@@ -15,6 +15,7 @@ import { CheckboxGroup } from '@nextui-org/react';
 import { AiTag } from '@/components/BlinkoAi/aiTag';
 import i18n from '@/lib/i18n';
 import { Icon } from '@iconify/react';
+import { AiEmoji } from '@/components/BlinkoAi/aiEmoji';
 
 type Chat = {
   content: string
@@ -194,25 +195,46 @@ export class AiStore implements Store {
   autoTag = new PromiseState({
     function: async (id: number, content: string) => {
       try {
-        RootStore.Get(ToastPlugin).loading(i18n.t('thinking...'))
+        RootStore.Get(ToastPlugin).loading(i18n.t('thinking'))
         const res = await api.ai.autoTag.mutate({ content, tags: this.blinko.tagList?.value?.pathTags ?? [] })
         RootStore.Get(ToastPlugin).remove()
         console.log(res)
         RootStore.Get(DialogStore).setData({
           isOpen: true,
+          size: '2xl',
           title: i18n.t('ai-tag'),
-          content: <AiTag tags={res} onSelect={async e => {
+          content: <AiTag tags={res} onSelect={async (e, isInsertBefore) => {
             let newContent
-            if (this.blinko.config.value?.textFoldLength) {
-              if (content.length > this.blinko.config.value?.textFoldLength) {
-                newContent = content + '\n\n' + e.join(' ')
-              } else {
-                newContent = e.join(' ') + ' \n\n' + content
-              }
-            } else {
+            if (isInsertBefore) {
               newContent = e.join(' ') + ' \n\n' + content
+            } else {
+              newContent = content + ' \n\n' + e.join(' ')
             }
             await PromiseCall(this.blinko.upsertNote.call({ id, content: newContent }))
+            RootStore.Get(DialogStore).close()
+          }} />
+        })
+        return res
+      } catch (error) {
+        RootStore.Get(ToastPlugin).remove()
+        RootStore.Get(ToastPlugin).error(error.message)
+      }
+    }
+  })
+
+  autoEmoji = new PromiseState({
+    function: async (id: number, content: string) => {
+      try {
+        RootStore.Get(ToastPlugin).loading(i18n.t('thinking'))
+        const res = await api.ai.autoEmoji.mutate({ content })
+        RootStore.Get(ToastPlugin).remove()
+        console.log(res)
+        RootStore.Get(DialogStore).setData({
+          isOpen: true,
+          size: 'xl',
+          title: i18n.t('ai-emoji'),
+          content: <AiEmoji emojis={res} onSelect={async (e) => {
+            await PromiseCall(api.tags.updateTagIcon.mutate({ id, icon: e }))
             RootStore.Get(DialogStore).close()
           }} />
         })

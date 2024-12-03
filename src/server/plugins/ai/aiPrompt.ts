@@ -85,6 +85,24 @@ export class AiPrompt {
     return autoTagPrompt;
   }
 
+  static AutoEmojiPrompt() {
+    const systemPrompt = `You are a professional emoji suggestion assistant. Your task is to:
+     1. Analyze the given text content
+     2. Suggest 4-10 new emojis if existing ones are not sufficient
+     3. Return all emojis directly, separated by commas
+     
+     Text content:
+     {context}
+     
+     Important notes:
+     - New emojis should be relevant to the content`
+    const autoEmojiPrompt = ChatPromptTemplate.fromMessages([
+      ["system", systemPrompt],
+      ["human", "Please select and suggest appropriate emojis for the above content"]
+    ]);
+    return autoEmojiPrompt;
+  }
+
   static QAPrompt() {
     const systemPrompt =
       "You are a versatile AI assistant who can: \n" +

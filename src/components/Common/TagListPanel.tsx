@@ -5,7 +5,7 @@ import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { Icon } from "@iconify/react";
 import { SideBarItem } from "../Layout";
-import { Popover, PopoverTrigger, PopoverContent, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input, Chip, Button } from "@nextui-org/react";
 import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react';
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
@@ -18,6 +18,23 @@ import { useTranslation } from "react-i18next";
 import { useMediaQuery } from "usehooks-ts";
 import { eventBus } from "@/lib/event";
 import { DialogStore } from "@/store/module/Dialog";
+import { AiStore } from "@/store/aiStore";
+
+const Emoji = ({ icon }: { icon: string }) => {
+  return <>
+    {
+      icon ? <>
+        {
+          // @ts-ignore
+          icon?.includes(':') ?
+            // @ts-ignore
+            <Icon icon={icon} width="22" height="22" /> :
+            icon
+        }
+      </> : <Icon icon="mdi:hashtag" width="22" height="22" />
+    }
+  </>
+}
 
 const ShowEmojiPicker = (element, theme) => {
   RootStore.Get(DialogStore).setData({
@@ -32,6 +49,34 @@ const ShowEmojiPicker = (element, theme) => {
   })
 }
 
+const CustomIcon = observer(({ onSubmit }: { onSubmit: (icon: string) => void }) => {
+  const [icon, setIcon] = useState('')
+  return <div className='w-full flex flex-col gap-2'>
+    <Input
+      label='Custom Icon'
+      placeholder='Enter custom icon like "ri:star-smile-line"'
+      value={icon}
+      onValueChange={setIcon}
+      description={<>
+        Blinko use <a className="text-blue-500" href="https://icon-sets.iconify.design/" target="_blank">Iconify</a> for custom icon
+      </>}
+    />
+    <div className="flex justify-end">
+      <Button color="primary" onClick={() => { onSubmit(icon) }}>Submit</Button>
+    </div>
+  </div>
+})
+
+const ShowCustomIconPicker = (element, theme) => {
+  RootStore.Get(DialogStore).setData({
+    isOpen: true,
+    title: 'Custom Icon',
+    content: <CustomIcon onSubmit={async (icon) => {
+      await PromiseCall(api.tags.updateTagIcon.mutate({ id: element.id, icon }))
+      RootStore.Get(DialogStore).close()
+    }} />
+  })
+}
 
 export const TagListPanel = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
@@ -55,13 +100,8 @@ export const TagListPanel = observer(() => {
         })}
         aria-label="directory tree"
         togglableSelect
-        // selectedIds={[urpcStore.curSelectPath]}
         clickAction="EXCLUSIVE_SELECT"
         onNodeSelect={(e) => {
-          // urpcStore.onRenderFunctionAndVar(
-          //   e.element.metadata._path,
-          //   e.element.metadata
-          // );
         }}
         multiSelect={false}
         nodeRenderer={({
@@ -90,16 +130,14 @@ export const TagListPanel = observer(() => {
                   </div>
                   <div className="group-hover:opacity-0 opacity-100 w-[24px] group-hover:w-0 transition-all">
                     {
-                      element.metadata?.icon ? <div>{element.metadata?.icon}</div>
+                      element.metadata?.icon ? <Emoji icon={element.metadata?.icon  as string} />
                         : <Icon icon="mdi:hashtag" width="20" height="20" />
                     }
                   </div>
                 </div>
               ) : (
                 <div>
-                  {
-                    element.metadata?.icon ? element.metadata?.icon : <Icon icon="mdi:hashtag" width="20" height="20" />
-                  }
+                  <Emoji icon={element.metadata?.icon as string} />
                 </div>
               )}
 
@@ -111,6 +149,30 @@ export const TagListPanel = observer(() => {
                   <Icon className="ml-auto group-hover:opacity-100 opacity-0 transition-all group-hover:translate-x-0 translate-x-2" icon="ri:more-fill" width="20" height="20" />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
+                  {
+                    blinko.showAi ? <DropdownItem key="aiEmoji" onClick={async () => {
+                      if (!isPc) {
+                        eventBus.emit('close-sidebar')
+                      }
+                      await RootStore.Get(AiStore).autoEmoji.call(Number(element.id!), element.name)
+                    }}>
+                      <div className="flex items-center gap-2">
+                        <Icon icon="ri:robot-line" width="20" height="20" />
+                        {t('ai-emoji')}
+                      </div>
+                    </DropdownItem> : <></>
+                  }
+                  <DropdownItem key="aiEmoji" onClick={async () => {
+                    if (!isPc) {
+                      eventBus.emit('close-sidebar')
+                    }
+                    ShowCustomIconPicker(element, theme)
+                  }}>
+                    <div className="flex items-center gap-2">
+                      <Icon icon="ri:star-smile-line" width="20" height="20" />
+                      {t('custom-icon')}
+                    </div>
+                  </DropdownItem>
                   <DropdownItem key="updateIcon" onClick={async () => {
                     if (!isPc) {
                       eventBus.emit('close-sidebar')

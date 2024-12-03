@@ -136,5 +136,14 @@ export const aiRouter = router({
       const { content, tags } = input
       const res = await AiService.autoTag({ content, tags })
       return res
+    }),
+  autoEmoji: authProcedure
+    .input(z.object({
+      content: z.string()
+    }))
+    .mutation(async function ({ input }) {
+      const { content } = input
+      const res = await AiService.autoEmoji({ content })
+      return res
     })
 })

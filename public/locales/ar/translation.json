@@ -177,5 +177,11 @@
   "embedding-score-description": "عادة ما تكون عتبة التشابه للاستعلامات هي مجموع المسافة الإقليدية",
   "embedding-lambda-description": "معلمة ترجيح تنوع نتائج الاستعلامات",
   "update-tag-icon": "أيقونة تحديث العلامة",
-  "update-tag-name": "تحديث اسم العلامة"
+  "update-tag-name": "تحديث اسم العلامة",
+  "thinking": "التفكير...",
+  "select-all": "اختر الكل",
+  "insert-before": "إدراج قبل",
+  "insert-after": "إدراج بعد",
+  "ai-emoji": "الرموز التعبيرية Ai",
+  "custom-icon": "أيقونة مخصصة"
 }

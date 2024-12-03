@@ -171,5 +171,12 @@
   "update-tag-icon": "Обновить значок тега",
   "delete-only-tag": "Удалить только тег",
   "delete-tag-with-note": "Удалить тег с примечанием",
-  "update-tag-name": "Обновить имя бирки"
+  "update-tag-name": "Обновить имя бирки",
+  "thinking": "Думать...",
+  "select-all": "Выбрать все",
+  "insert-before": "Вставить перед",
+  "insert-after": "Вставить после",
+  "update-name": "Обновить имя",
+  "ai-emoji": "Ai Emoji",
+  "custom-icon": "Пользовательский значок"
 }
