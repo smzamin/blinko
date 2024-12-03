@@ -1,3 +1,10 @@
+# [0.15.0](https://github.com/blinko-space/blinko/compare/v0.14.6...v0.15.0) (2024-12-03)
+
+
+### Features
+
+* enhance BlinkoCard footer to display archived status and refine note query logic ([ebecedb](https://github.com/blinko-space/blinko/commit/ebecedba1bbdb4b2aa0b460ab6758e0e2c597817))
+
 ## [0.14.6](https://github.com/blinko-space/blinko/compare/v0.14.5...v0.14.6) (2024-12-03)
 
 
