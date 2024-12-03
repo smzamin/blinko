@@ -4,7 +4,7 @@ import { prisma } from '../prisma';
 import { GlobalConfig, ZConfigKey, ZConfigSchema, ZUserPerferConfigKey } from '../types';
 import { configSchema } from '@/lib/prismaZodType';
 
-export const getGlobalConfig = async (ctx: { id: string }) => {
+export const getGlobalConfig = async (ctx?: { id?: string }) => {
   const userId = Number(ctx?.id ?? 1);
   const configs = await prisma.config.findMany();
   

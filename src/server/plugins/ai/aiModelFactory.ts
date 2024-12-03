@@ -8,7 +8,6 @@ import { getGlobalConfig } from "@/server/routers/config"
 import { OllamaModelProvider } from "./ollamaModelProvider"
 
 export class AiModelFactory {
-
   static async globalConfig() {
     return cache.wrap('globalConfig', async () => {
       return await getGlobalConfig()
