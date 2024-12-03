@@ -1,3 +1,10 @@
+## [0.14.5](https://github.com/blinko-space/blinko/compare/v0.14.4...v0.14.5) (2024-12-03)
+
+
+### Bug Fixes
+
+* image width ([b45b1f8](https://github.com/blinko-space/blinko/commit/b45b1f82407254da034094fe115ba472c8c12331))
+
 ## [0.14.4](https://github.com/blinko-space/blinko/compare/v0.14.3...v0.14.4) (2024-12-03)
 
 
