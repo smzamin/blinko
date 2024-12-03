@@ -1,3 +1,10 @@
+## [0.14.4](https://github.com/blinko-space/blinko/compare/v0.14.3...v0.14.4) (2024-12-03)
+
+
+### Bug Fixes
+
+* update AWS SDK dependencies and refactor S3 file retrieval to use signed URLs [#216](https://github.com/blinko-space/blinko/issues/216) ([2867c3c](https://github.com/blinko-space/blinko/commit/2867c3c6fd8e20cc9f71a45dc62d2e3a51fdc611))
+
 ## [0.14.3](https://github.com/blinko-space/blinko/compare/v0.14.2...v0.14.3) (2024-12-03)
 
 
