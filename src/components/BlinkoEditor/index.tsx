@@ -10,9 +10,10 @@ import { useRouter } from "next/router"
 type IProps = {
   mode: 'create' | 'edit',
   onSended?: () => void,
-  onHeightChange?: (height: number) => void
+  onHeightChange?: (height: number) => void,
+  showCloseButton?: boolean
 }
-export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps) => {
+export const BlinkoEditor = observer(({ mode, onSended, onHeightChange, showCloseButton }: IProps) => {
   const isCreateMode = mode == 'create'
   const blinko = RootStore.Get(BlinkoStore)
   const editorRef = useRef<any>(null)
@@ -30,6 +31,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
       onChange={v => {
         isCreateMode ? (blinko.noteContent = v) : (blinko.curSelectedNote!.content = v)
       }}
+      showCloseButton={showCloseButton}
       onHeightChange={() => {
         onHeightChange?.(editorRef.current?.clientHeight ?? 75)
       }}

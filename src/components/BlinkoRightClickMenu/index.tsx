@@ -15,14 +15,14 @@ import { NoteType } from "@/server/types";
 import { useRouter } from "next/router";
 import { AiStore } from "@/store/aiStore";
 
-export const ShowEditBlinkoModel = (size: string = '2xl') => {
+export const ShowEditBlinkoModel = (size: string = '2xl', mode: 'create' | 'edit' = 'edit') => {
   const blinko = RootStore.Get(BlinkoStore)
   RootStore.Get(DialogStore).setData({
     size: size as any,
     isOpen: true,
     onlyContent: true,
     isDismissable: false,
-    content: <BlinkoEditor mode='edit' key='create-key' onSended={() => {
+    content: <BlinkoEditor showCloseButton mode={mode} key='edit-key' onSended={() => {
       RootStore.Get(DialogStore).close()
       blinko.isCreateMode = false
     }} />

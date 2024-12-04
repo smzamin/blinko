@@ -27,6 +27,7 @@ type ToolbarProps = {
   mdxEditorRef: React.RefObject<MDXEditorMethods>;
   onSend?: (args: any) => Promise<any>;
   onChange?: (content: string) => void;
+  showCloseButton?: boolean;
 }
 
 export const Toolbar = ({
@@ -41,7 +42,8 @@ export const Toolbar = ({
   onSend,
   onChange,
   openFileDialog,
-  getInputProps
+  getInputProps,
+  showCloseButton
 }: ToolbarProps) => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore);
@@ -55,7 +57,6 @@ export const Toolbar = ({
         </div>
       )}
 
-    
       {viewMode == 'source' && <div className='text-red-500 text-xs select-none'>Source Code Mode</div>}
 
       <div className='flex w-full items-center'>
@@ -131,7 +132,7 @@ export const Toolbar = ({
           onClick={() => {
             const nextMode = viewMode === 'source' ? 'rich-text' : 'source';
             eventBus.emit('editor:setViewMode', nextMode);
-          }}  
+          }}
         >
           {viewMode === 'source' ?
             <Icon icon="tabler:source-code" className='transition-all !text-red-500' /> :
@@ -139,12 +140,14 @@ export const Toolbar = ({
           }
         </ButtonWithTooltip>
 
-        
-        <Button size='sm' radius='md' onClick={() => {
-          RootStore.Get(DialogStore).close();
-        }} className={`${mode == 'create' ? 'hidden' : 'group ml-2'}`} isIconOnly>
-          <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-        </Button>
+
+        {showCloseButton && (
+          <Button size='sm' radius='md' onClick={() => {
+            RootStore.Get(DialogStore).close();
+          }} className={`group ml-2`} isIconOnly>
+            <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
+          </Button>
+        )}
 
         <Button
           isDisabled={!canSend}

@@ -2,7 +2,7 @@ import '@mdxeditor/editor/style.css';
 import '@/styles/editor.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertImage, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, } from '@mdxeditor/editor';
+import { MDXEditorMethods, toolbarPlugin } from '@mdxeditor/editor';
 import { Button, Card, Divider, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
 import React, { ReactElement, useEffect, useState, useMemo } from 'react';
@@ -14,19 +14,13 @@ import { MyPlugins, ProcessCodeBlocks } from './editorPlugins';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
-import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
-import { DialogStore } from '@/store/module/Dialog';
-import { AttachmentsRender } from '../AttachmentRender';
-import { ShowCamera } from '../CameraDialog';
-import { ShowAudioDialog } from '../AudioDialog';
 import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectPop';
 import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
-import { Icon } from '@iconify/react';
 import { usePasteFile } from '@/lib/hooks';
 import { Toolbar } from './toolBar';
 
@@ -43,13 +37,13 @@ type IProps = {
   onSend?: (args: OnSendContentType) => Promise<any>,
   isSendLoading?: boolean,
   bottomSlot?: ReactElement<any, any>,
-  originFiles?: Attachment[]
+  originFiles?: Attachment[],
+  showCloseButton?: boolean
 }
 
 export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
   if (originFiles?.length == 0) return []
   const res = originFiles?.map(file => {
-    console.log("file:", file)
     const extension = helper.getFileExtension(file.name)
     const previewType = helper.getFileType(file.type, file.name)
     return {
@@ -87,7 +81,7 @@ export const handleEditorKeyEvents = () => {
 
 type ViewMode = 'source' | 'rich-text';
 
-const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange }: IProps) => {
+const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange, showCloseButton }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('rich-text')
@@ -318,7 +312,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
   useEffect(() => {
     store.updateSendStatus()
     onHeightChange?.()
-  }, [blinko.noteTypeDefault, content,  store.files?.length])
+  }, [blinko.noteTypeDefault, content, store.files?.length])
 
   useEffect(() => {
     eventBus.on('editor:replace', store.replaceMarkdownTag)
@@ -329,6 +323,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     eventBus.on('editor:setMarkdownLoading', store.setMarkdownLoading)
     handleEditorKeyEvents()
     store.handleIOSFocus()
+
     return () => {
       eventBus.off('editor:replace', store.replaceMarkdownTag)
       eventBus.off('editor:clear', store.clearMarkdown)
@@ -364,11 +359,12 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       eventBus.off('editor:setViewMode', (mode) => setViewMode(mode))
     }
   }, [])
-  
+
   return <Card
     shadow='none' {...getRootProps()}
     className={`p-2 relative border-2 border-border transition-all 
     ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''} ${viewMode == 'source' ? 'border-red-500' : ''}`}>
+
     <div ref={cardRef}
       onKeyUp={async event => {
         event.preventDefault();
@@ -424,6 +420,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                 onSend={onSend}
                 onChange={onChange}
                 getInputProps={getInputProps}
+                showCloseButton={showCloseButton}
               />
             )
           }),
