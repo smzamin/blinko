@@ -183,5 +183,7 @@
   "insert-after": "Insert content after",
   "ai-emoji": "Ai Emoji",
   "custom-icon": "Custom Icon",
-  "ai-enhanced-search": "AI Enhanced Search"
+  "ai-enhanced-search": "AI Enhanced Search",
+  "preview-mode": "Preview Mode",
+  "source-code": "Source Code"
 }

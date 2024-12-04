@@ -176,5 +176,7 @@
   "update-name": "Atualizar nome",
   "ai-emoji": "Ai Emoji",
   "custom-icon": "Ícone personalizado",
-  "ai-enhanced-search": "Pesquisa optimizada por IA"
+  "ai-enhanced-search": "Pesquisa optimizada por IA",
+  "preview-mode": "Modo de pré-visualização",
+  "source-code": "Código fonte"
 }

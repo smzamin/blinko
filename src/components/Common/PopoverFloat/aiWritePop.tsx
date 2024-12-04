@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, Input, Button } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,9 @@ import { AiStore } from '@/store/aiStore';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { Icon } from '@iconify/react';
 import { SendIcon } from '../Icons';
+import { MarkdownRender } from '../MarkdownRender';
+import { ScrollArea, ScrollAreaHandles } from '../ScrollArea';
+import { useMediaQuery } from 'usehooks-ts';
 
 
 export const showAiWriteSuggestions = () => {
@@ -24,7 +27,9 @@ export const showAiWriteSuggestions = () => {
 
 const AiWritePop = observer(() => {
   const { t } = useTranslation()
+  const isPc = useMediaQuery('(min-width: 768px)')
   const ai = RootStore.Get(AiStore)
+  const scrollRef = useRef<ScrollAreaHandles>(null)
   const blinko = RootStore.Get(BlinkoStore)
   const store = RootStore.Local(() => ({
     rect: null as DOMRect | null,
@@ -60,13 +65,17 @@ const AiWritePop = observer(() => {
     }
   }, [])
 
+  useEffect(() => {
+    scrollRef.current?.scrollToBottom()
+  }, [ai.writingResponseText])
+
   return (
     <PopoverFloat
       show={store.show}
       onHide={store.hidden}
       anchorRect={store.rect}
-      maxWidth={400}
-      maxHeight={300}
+      maxWidth={isPc ? 700 : 400}
+      maxHeight={isPc ? 600 : 400}
       closeOnClickOutside={false}
     >
       <div className="flex flex-col gap-3 min-w-[300px]">
@@ -89,6 +98,30 @@ const AiWritePop = observer(() => {
             </>}
           />
         </div>
+        {
+          ai.writingResponseText != '' && <ScrollArea ref={scrollRef} className='p-2 max-h-[200px]' onBottom={() => { }}>
+            {ai.isLoading ? <div className='text-sm'>{ai.writingResponseText}</div> : <MarkdownRender content={ai.writingResponseText} disableOverflowing />}
+          </ScrollArea>
+        }
+        {ai.isWriting && (
+          <div id='ai-write-suggestions' className='flex gap-2 items-center'>
+            <Button onClick={() => {
+              ai.isWriting = false;
+              eventBus.emit('editor:insert', ai.writingResponseText)
+              ai.writingResponseText = ''
+              store.hidden()
+            }} startContent={<Icon icon="ic:sharp-check" className='green' />} size='sm' variant='light' color='success'>{t('accept')}</Button>
+            <Button onClick={() => {
+              ai.isWriting = false;
+              ai.writingResponseText = ''
+              store.hidden()
+            }} startContent={<Icon icon="ic:sharp-close" className='red' />} size='sm' variant='light' color='danger'>{t('reject')}</Button>
+            <Button onClick={() => {
+              ai.abort();
+            }} startContent={<Icon icon="mynaui:stop" className='blinko' />} size='sm' variant='light' color='warning'>{t('stop')} </Button>
+          </div>
+        )}
+
         <div className='flex items-center gap-2'>
           <Button startContent={<Icon icon="proicons:text-expand" width="16" height="16" />} variant='flat' color='warning' size='sm' onClick={e => {
             ai.writeStream('expand', blinko.isCreateMode ? blinko.noteContent : blinko.curSelectedNote!.content)
@@ -100,6 +133,7 @@ const AiWritePop = observer(() => {
           }}>{t('ai-polish')}</Button>
           <Button className='ml-auto' isLoading={ai.isLoading} isIconOnly size='sm' onClick={e => {
             store.hidden()
+            eventBus.emit('editor:deleteLastChar')
           }}>
             <Icon icon="ic:sharp-close" />
           </Button>

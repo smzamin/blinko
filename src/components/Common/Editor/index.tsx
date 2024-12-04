@@ -2,10 +2,10 @@ import '@mdxeditor/editor/style.css';
 import '@/styles/editor.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertImage, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, UndoRedo, type CodeBlockEditorDescriptor } from '@mdxeditor/editor';
+import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, InsertCodeBlock, InsertSandpack, InsertImage, InsertTable, ListsToggle, MDXEditorMethods, SandpackConfig, sandpackPlugin, Select, ShowSandpackInfo, SingleChoiceToggleGroup, toolbarPlugin, } from '@mdxeditor/editor';
 import { Button, Card, Divider, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
@@ -21,7 +21,6 @@ import { api } from '@/lib/trpc';
 import { NoteType, type Attachment } from '@/server/types';
 import { DialogStore } from '@/store/module/Dialog';
 import { AttachmentsRender } from '../AttachmentRender';
-
 import { ShowCamera } from '../CameraDialog';
 import { ShowAudioDialog } from '../AudioDialog';
 import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectPop';
@@ -29,6 +28,7 @@ import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
 import { Icon } from '@iconify/react';
 import { usePasteFile } from '@/lib/hooks';
+import { Toolbar } from './toolBar';
 
 const { MDXEditor } = await import('@mdxeditor/editor')
 
@@ -85,10 +85,12 @@ export const handleEditorKeyEvents = () => {
   })
 }
 
+type ViewMode = 'source' | 'rich-text';
+
 const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
-  const [isWriting, setIsWriting] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('rich-text')
   const { t } = useTranslation()
   const isPc = useMediaQuery('(min-width: 768px)')
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
@@ -153,24 +155,10 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       })
     },
     insertMarkdownByEvent(text) {
-      const processedText = text
-        .replace(/\#/g, '\\#')
-        .replace(/ /g, '&#x20;')
-        .replace(/```/g, '\\`\\`\\`')
-        .replace(/\[/g, '\\[')
-        .replace(/\]/g, '\\]')
-        .replace(/</g, '\\<')
-        .replace(/>/g, '\\>')
-        .replace(/\(/g, '\\(')
-        .replace(/\)/g, '\\)')
-        .replace(/\-/g, '\\-')
-        .replace(/\*/g, '\\*')
-        .replace(/(\r\n|\r|\n|↵|\\n)/g, '&#x20;\n\n&#x20;') //|\u2028|\u2029|\x0B|\x0C|\u0085 &#x20;
-      mdxEditorRef.current!.insertMarkdown(processedText)
+      mdxEditorRef.current!.insertMarkdown(text)
       store.focus()
     },
     focus(force = false) {
-      console.log(mdxEditorRef.current)
       if (force && store.lastRange) {
         const editorElements = getEditorElements()
         if (editorElements.length > 0) {
@@ -329,9 +317,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
   //fix ui not render
   useEffect(() => {
     store.updateSendStatus()
-    setIsWriting(ai.isWriting)
     onHeightChange?.()
-  }, [blinko.noteTypeDefault, content, ai.isWriting, store.files?.length])
+  }, [blinko.noteTypeDefault, content,  store.files?.length])
 
   useEffect(() => {
     eventBus.on('editor:replace', store.replaceMarkdownTag)
@@ -371,9 +358,17 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     }
   });
 
+  useEffect(() => {
+    eventBus.on('editor:setViewMode', (mode) => setViewMode(mode))
+    return () => {
+      eventBus.off('editor:setViewMode', (mode) => setViewMode(mode))
+    }
+  }, [])
+  
   return <Card
     shadow='none' {...getRootProps()}
-    className={`p-2 relative border-2 border-border transition-all ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''}`}>
+    className={`p-2 relative border-2 border-border transition-all 
+    ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''} ${viewMode == 'source' ? 'border-red-500' : ''}`}>
     <div ref={cardRef}
       onKeyUp={async event => {
         event.preventDefault();
@@ -408,6 +403,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           store.handlePopTag()
           store.handlePopAiWrite()
         }}
+
         autoFocus={{
           defaultSelection: 'rootEnd'
         }}
@@ -415,121 +411,20 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         plugins={[
           toolbarPlugin({
             toolbarContents: () => (
-              <div className='flex flex-col  w-full'>
-                {
-                  store.files.length > 0 && <div className='w-full my-2'>
-                    <AttachmentsRender files={store.files} />
-                  </div>
-                }
-                {
-                  isWriting &&
-                  <div id='ai-write-suggestions' className='flex gap-2 items-center'>
-                    <Button onClick={e => {
-                      ai.isWriting = false
-                    }} startContent={<Icon icon="ic:sharp-check" className='green' />} size='sm' variant='light' color='success'>{t('accept')}</Button>
-                    <Button onClick={e => {
-                      mdxEditorRef.current!.setMarkdown(ai.originalContent)
-                      store.focus()
-                      ai.isWriting = false
-                    }} startContent={<Icon icon="ic:sharp-close" className='red' />} size='sm' variant='light' color='danger'>{t('reject')}</Button>
-                    <Button onClick={e => {
-                      ai.abort()
-                    }} startContent={<Icon icon="mynaui:stop" className='blinko' />} size='sm' variant='light' color='warning'>{t('stop')} </Button>
-                  </div>
-                }
-                <div className='flex w-full items-center'>
-                  <ButtonWithTooltip className='!w-[24px] !h-[24px]' title={
-                    blinko.noteTypeDefault == NoteType.BLINKO ? t('blinko') : t('note')
-                  } onClick={e => {
-                    if (blinko.noteTypeDefault == NoteType.BLINKO) {
-                      blinko.noteTypeDefault = NoteType.NOTE
-                    } else {
-                      blinko.noteTypeDefault = NoteType.BLINKO
-                    }
-                  }}>
-                    {
-                      blinko.noteTypeDefault == NoteType.BLINKO ? <LightningIcon className='blinko' /> :
-                        <NotesIcon className='note' />
-                    }
-                  </ButtonWithTooltip>
-                  <ButtonWithTooltip className='!w-[24px] !h-[24px] mr-2' title={t('insert-hashtag')} onClick={e => {
-                    store.inertHash()
-                  }}>
-                    <HashtagIcon />
-                  </ButtonWithTooltip>
-
-                  <Divider orientation="vertical" />
-
-                  <ListsToggle />
-                  {isPc && <InsertTable />}
-                  {isPc && <InsertImage />}
-                  <ConditionalContents
-                    options={[
-                      { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
-                      { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
-                      {
-                        fallback: () => (<>
-                          {isPc && <InsertCodeBlock />}
-                          {isPc && <InsertSandpack />}
-                        </>)
-                      }
-                    ]}
-                  />
-                  <Divider orientation="vertical" />
-
-                  <ButtonWithTooltip className='!w-[24px] !h-[24px] mr-2' title={t('upload-file')} onClick={e => {
-                    open()
-                  }}>
-                    <input {...getInputProps()} />
-                    <FileUploadIcon className='hover:opacity-80 transition-all' />
-                  </ButtonWithTooltip>
-
-
-                  {
-                    blinko.showAi && <ButtonWithTooltip className='!w-[24px] !h-[24px] mr-2' title={t('recording')} onClick={e => {
-                      ShowAudioDialog((file) => {
-                        store.uploadFiles([file])
-                      })
-                    }}>
-                      <VoiceIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-                    </ButtonWithTooltip>
-                  }
-
-
-                  <ButtonWithTooltip title={t('upload-file')} className='!w-[24px] !h-[24px] mr-2' onClick={e => {
-                    ShowCamera((file) => {
-                      console.log(file)
-                      store.uploadFiles([file])
-                    })
-                  }}>
-                    <CameraIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-                  </ButtonWithTooltip>
-
-
-                  <Button size='sm' radius='md' onClick={() => {
-                    RootStore.Get(DialogStore).close()
-                  }} className={`${mode == 'create' ? 'hidden' : 'group ml-auto mr-2'}`} isIconOnly>
-                    <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-                  </Button>
-
-
-                  <Button isDisabled={!canSend} size='sm' radius='md' isLoading={isSendLoading} onClick={async e => {
-                    await onSend?.({
-                      content,
-                      files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value } })
-                    })
-                    onChange?.('')
-                    store.files = []
-                    ai.isWriting = false
-                  }} className={`${mode == 'create' ? 'ml-auto' : ''} w-[60px] group`} isIconOnly color='primary' >
-                    {
-                      store.files?.some(i => i.uploadPromise?.loading?.value) ?
-                        <Icon icon="line-md:uploading-loop" width="24" height="24" /> :
-                        <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
-                    }
-                  </Button>
-                </div>
-              </div>
+              <Toolbar
+                store={store}
+                openFileDialog={open}
+                files={store.files}
+                mode={mode}
+                isPc={isPc}
+                viewMode={viewMode}
+                canSend={canSend}
+                isSendLoading={isSendLoading}
+                mdxEditorRef={mdxEditorRef}
+                onSend={onSend}
+                onChange={onChange}
+                getInputProps={getInputProps}
+              />
             )
           }),
           ...MyPlugins

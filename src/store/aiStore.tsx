@@ -111,8 +111,7 @@ export class AiStore implements Store {
   scrollTicker = 0
   chatHistory = new StorageListState<Chat>({ key: 'chatHistory' })
   private abortController = new AbortController()
-
-  writingResponse = ''
+  writingResponseText = ''
   isWriting = false
   isAnswering = false
   writeQuestion = ''
@@ -169,7 +168,7 @@ export class AiStore implements Store {
       if (writeType == 'polish') {
         eventBus.emit('editor:clear')
       }
-      let testContent = ''
+      this.writingResponseText = ''
       // eventBus.emit('editor:setMarkdownLoading', true)
       const res = await streamApi.ai.writing.mutate({
         question: this.writeQuestion,
@@ -178,11 +177,11 @@ export class AiStore implements Store {
       }, { signal: this.abortController.signal })
       // eventBus.emit('editor:setMarkdownLoading', false)
       for await (const item of res) {
-        eventBus.emit('editor:insert', item.content)
-        testContent += item.content
+        // eventBus.emit('editor:insert', item.content)
+        this.writingResponseText += item.content
         this.scrollTicker++
       }
-      console.log('writeStream end', testContent)
+      console.log('writeStream end', this.writingResponseText)
       this.writeQuestion = ''
       eventBus.emit('editor:focus')
       this.isLoading = false

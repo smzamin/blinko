@@ -179,5 +179,7 @@
   "update-name": "Nom de la mise à jour",
   "ai-emoji": "Ai Emoji",
   "custom-icon": "Icône personnalisée",
-  "ai-enhanced-search": "Recherche améliorée par l'IA"
+  "ai-enhanced-search": "Recherche améliorée par l'IA",
+  "preview-mode": "Mode de prévisualisation",
+  "source-code": "Code source"
 }

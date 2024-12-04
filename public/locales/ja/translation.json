@@ -176,5 +176,7 @@
   "update-name": "更新名",
   "ai-emoji": "絵文字",
   "custom-icon": "カスタムアイコン",
-  "ai-enhanced-search": "AIによる検索強化"
+  "ai-enhanced-search": "AIによる検索強化",
+  "preview-mode": "プレビュー・モード",
+  "source-code": "ソースコード"
 }

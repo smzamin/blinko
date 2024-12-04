@@ -1,5 +1,6 @@
-import { codeMirrorPlugin, headingsPlugin, imagePlugin, linkPlugin, sandpackPlugin } from '@mdxeditor/editor';
+import { codeMirrorPlugin, diffSourcePlugin, headingsPlugin, imagePlugin, linkPlugin, realmPlugin, ViewMode, sandpackPlugin, viewMode$, linkDialogPlugin } from '@mdxeditor/editor';
 import { simpleSandpackConfig } from './type';
+import { eventBus } from '@/lib/event';
 const { codeBlockPlugin, tablePlugin, listsPlugin, quotePlugin, markdownShortcutPlugin } = await import('@mdxeditor/editor')
 export const codeBlockLanguages = {
   plain: "plain",
@@ -25,7 +26,7 @@ export const codeBlockLanguages = {
 export const ProcessCodeBlocks = (content: string): string => {
   if (!content) return '';
   const codeBlockRegex = /```(?:(\w*)\n)?([\s\S]*?)```/g;
-  
+
   let lastIndex = 0;
   let result = '';
   let match;
@@ -50,6 +51,14 @@ export const ProcessCodeBlocks = (content: string): string => {
   return result;
 };
 
+export const viewModePlugin = realmPlugin({
+  init: (realm) => {
+    eventBus.on('editor:setViewMode', (mode) => {
+      realm.pub(viewMode$, mode)
+    })
+  }
+})
+
 export const MyPlugins = [
   codeBlockPlugin({ defaultCodeBlockLanguage: 'plain' }),
   sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
@@ -62,5 +71,8 @@ export const MyPlugins = [
   quotePlugin(),
   tablePlugin(),
   headingsPlugin(),
-  markdownShortcutPlugin()
+  markdownShortcutPlugin(),
+  diffSourcePlugin({ viewMode: 'rich-text' }),
+  viewModePlugin(),
+  // linkDialogPlugin()
 ]
