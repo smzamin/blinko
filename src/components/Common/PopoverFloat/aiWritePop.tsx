@@ -125,11 +125,11 @@ const AiWritePop = observer(() => {
         <div className='flex items-center gap-2'>
           <Button startContent={<Icon icon="proicons:text-expand" width="16" height="16" />} variant='flat' color='warning' size='sm' onClick={e => {
             ai.writeStream('expand', blinko.isCreateMode ? blinko.noteContent : blinko.curSelectedNote!.content)
-            store.hidden()
+            // store.hidden()
           }}>{t('ai-expand')}</Button>
           <Button startContent={<Icon icon="lucide:scan-text" width="16" height="16" />} variant='flat' color='warning' size='sm' onClick={e => {
             ai.writeStream('polish', blinko.isCreateMode ? blinko.noteContent : blinko.curSelectedNote!.content)
-            store.hidden()
+            // store.hidden()
           }}>{t('ai-polish')}</Button>
           <Button className='ml-auto' isLoading={ai.isLoading} isIconOnly size='sm' onClick={e => {
             store.hidden()
