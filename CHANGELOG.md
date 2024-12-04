@@ -1,3 +1,11 @@
+## [0.17.2](https://github.com/blinko-space/blinko/compare/v0.17.1...v0.17.2) (2024-12-04)
+
+
+### Bug Fixes
+
+* ios editor focus issue& update mobile editor style ([8095a69](https://github.com/blinko-space/blinko/commit/8095a69a69f0b013c93366957612956e75bf7fd1))
+* style ([2052806](https://github.com/blinko-space/blinko/commit/20528068e1f5303f631881e8119cba347654c3b9))
+
 ## [0.17.1](https://github.com/blinko-space/blinko/compare/v0.17.0...v0.17.1) (2024-12-04)
 
 
