@@ -1,3 +1,10 @@
+# [0.17.0](https://github.com/blinko-space/blinko/compare/v0.16.0...v0.17.0) (2024-12-04)
+
+
+### Features
+
+* support source code mode & improve ai writing ([aa3a6f9](https://github.com/blinko-space/blinko/commit/aa3a6f96418d83c468215d1c963dbb246089b055))
+
 # [0.16.0](https://github.com/blinko-space/blinko/compare/v0.15.0...v0.16.0) (2024-12-03)
 
 
