@@ -1,3 +1,10 @@
+## [0.17.1](https://github.com/blinko-space/blinko/compare/v0.17.0...v0.17.1) (2024-12-04)
+
+
+### Bug Fixes
+
+* ai writing ([e896def](https://github.com/blinko-space/blinko/commit/e896def1ef37c1aebc1bd99c6f9dd56d663375f9))
+
 # [0.17.0](https://github.com/blinko-space/blinko/compare/v0.16.0...v0.17.0) (2024-12-04)
 
 
