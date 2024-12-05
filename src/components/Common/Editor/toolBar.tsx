@@ -134,9 +134,9 @@ export const Toolbar = ({
             eventBus.emit('editor:setViewMode', nextMode);
           }}
         >
-          {viewMode === 'source' ?
-            <Icon icon="tabler:source-code" className='transition-all !text-red-500' /> :
-            <Icon icon="iconoir:ecology-book" className='transition-all' />
+          {viewMode !== 'source' ?
+            <Icon icon="tabler:source-code" className='transition-all' /> :
+            <Icon icon="grommet-icons:form-view" className='transition-all !text-red-500'  />
           }
         </ButtonWithTooltip>
 
