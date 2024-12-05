@@ -1,3 +1,10 @@
+## [0.17.3](https://github.com/blinko-space/blinko/compare/v0.17.2...v0.17.3) (2024-12-05)
+
+
+### Bug Fixes
+
+* prevent video playback from propagating double-click events [#228](https://github.com/blinko-space/blinko/issues/228) ([d6f55d1](https://github.com/blinko-space/blinko/commit/d6f55d1ce474426595fc276dcfdb8832f0ae4a4d))
+
 ## [0.17.2](https://github.com/blinko-space/blinko/compare/v0.17.1...v0.17.2) (2024-12-04)
 
 
