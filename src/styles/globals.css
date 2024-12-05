@@ -114,6 +114,10 @@ body {
   background-color: var(--sencondbackground) !important;
 }
 
+.PhotoView-Portal{
+  z-index: 3000;
+}
+
 #__next {
   display: flex;
   flex-direction: column;

@@ -67,7 +67,7 @@ export const BlinkoCard = observer(({ blinkoItem, isShareMode = false }: BlinkoC
     blinko.curSelectedNote = _.cloneDeep(blinkoItem);
   };
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = (e: React.MouseEvent) => {
     blinko.curSelectedNote = _.cloneDeep(blinkoItem);
     ShowEditBlinkoModel();
   };

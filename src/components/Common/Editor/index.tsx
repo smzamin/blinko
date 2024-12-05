@@ -38,7 +38,6 @@ type IProps = {
   isSendLoading?: boolean,
   bottomSlot?: ReactElement<any, any>,
   originFiles?: Attachment[],
-  showCloseButton?: boolean
 }
 
 export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
@@ -81,7 +80,7 @@ export const handleEditorKeyEvents = () => {
 
 type ViewMode = 'source' | 'rich-text';
 
-const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange, showCloseButton }: IProps) => {
+const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('rich-text')
@@ -420,7 +419,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
                 onSend={onSend}
                 onChange={onChange}
                 getInputProps={getInputProps}
-                showCloseButton={showCloseButton}
               />
             )
           }),

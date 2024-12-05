@@ -5,8 +5,8 @@ import { Store } from "@/store/standard/base";
 import { RootStore } from "@/store/root";
 import { makeAutoObservable } from "mobx";
 
-export class DialogStore implements Store {
-  sid = "DialogStore";
+export class DialogStandaloneStore implements Store {
+  sid = "DialogStandaloneStore";
   provider = () => <Provider />;
   isOpen = false;
   preventClose = false;
@@ -23,7 +23,7 @@ export class DialogStore implements Store {
   content: React.ReactNode | ((props: any) => React.ReactNode) = "";
   isDismissable = true;
 
-  constructor(args?: Partial<DialogStore>) {
+  constructor(args?: Partial<DialogStandaloneStore>) {
     const classNames = {
       ...args?.classNames
     }
@@ -32,7 +32,7 @@ export class DialogStore implements Store {
   }
 
 
-  setData(v: Partial<DialogStore>) {
+  setData(v: Partial<DialogStandaloneStore>) {
     this.showOnlyContentCloseButton = false
     Object.assign(this, v);
   }
@@ -47,11 +47,11 @@ export class DialogStore implements Store {
     this.showOnlyContentCloseButton = false
   }
 
-  static show(v: Partial<DialogStore>) {
+  static show(v: Partial<DialogStandaloneStore>) {
     const classNames = {
       ...v?.classNames
     }
-    RootStore.Get(DialogStore).setData({
+    RootStore.Get(DialogStandaloneStore).setData({
       ...v,
       classNames,
       isOpen: true,
@@ -59,6 +59,6 @@ export class DialogStore implements Store {
   }
 
   static close() {
-    RootStore.Get(DialogStore).close();
+    RootStore.Get(DialogStandaloneStore).close();
   }
 }

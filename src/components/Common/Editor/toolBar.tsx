@@ -1,5 +1,5 @@
 import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, CreateLink, InsertCodeBlock, InsertImage, InsertSandpack, InsertTable, ListsToggle, MDXEditorMethods, ShowSandpackInfo } from '@mdxeditor/editor';
-import { Button, Divider } from '@nextui-org/react';
+import { Button, Divider, DropdownTrigger, DropdownItem, DropdownMenu, Dropdown } from '@nextui-org/react';
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { FileType } from './type';
@@ -27,7 +27,14 @@ type ToolbarProps = {
   mdxEditorRef: React.RefObject<MDXEditorMethods>;
   onSend?: (args: any) => Promise<any>;
   onChange?: (content: string) => void;
-  showCloseButton?: boolean;
+}
+
+type UploadAction = {
+  key: string;
+  icon: React.ReactNode;
+  title: string;
+  onClick: () => void;
+  showCondition?: boolean;
 }
 
 export const Toolbar = ({
@@ -43,11 +50,91 @@ export const Toolbar = ({
   onChange,
   openFileDialog,
   getInputProps,
-  showCloseButton
 }: ToolbarProps) => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore);
   const ai = RootStore.Get(AiStore);
+
+  const uploadActions: UploadAction[] = [
+    {
+      key: 'file',
+      icon: <FileUploadIcon className='hover:opacity-80 transition-all' />,
+      title: t('upload-file'),
+      onClick: openFileDialog,
+    },
+    {
+      key: 'audio',
+      icon: <VoiceIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />,
+      title: t('recording'),
+      onClick: () => ShowAudioDialog((file) => store.uploadFiles([file])),
+      showCondition: blinko.showAi,
+    },
+    {
+      key: 'camera',
+      icon: <CameraIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />,
+      title: t('camera'),
+      onClick: () => ShowCamera((file) => store.uploadFiles([file])),
+    },
+  ];
+
+  const renderUploadButtons = () => {
+    if (isPc) {
+      return (
+        <>
+          {uploadActions
+            .filter(action => action.showCondition !== false)
+            .map(action => (
+              <ButtonWithTooltip 
+                key={action.key}
+                className='!w-[24px] !h-[24px]' 
+                title={action.title} 
+                onClick={action.onClick}
+              >
+                {action.key === 'file' && <input {...getInputProps()} />}
+                {action.icon}
+              </ButtonWithTooltip>
+            ))}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <input {...getInputProps()} className="hidden" id="mobile-file-input" />
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              className="!w-[24px] !h-[24px]"
+            >
+              <FileUploadIcon className='hover:opacity-80 transition-all' />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Upload Actions">
+            {uploadActions
+              .filter(action => action.showCondition !== false)
+              .map(action => (
+                <DropdownItem
+                  key={action.key}
+                  startContent={action.icon}
+                  onClick={() => {
+                    if (action.key === 'file') {
+                      document.getElementById('mobile-file-input')?.click();
+                    } else {
+                      action.onClick();
+                    }
+                  }}
+                >
+                  {action.title}
+                </DropdownItem>
+              ))}
+          </DropdownMenu>
+        </Dropdown>
+      </>
+    );
+  };
 
   return (
     <div className='flex flex-col w-full'>
@@ -100,31 +187,7 @@ export const Toolbar = ({
 
         <Divider orientation="vertical" />
 
-        <ButtonWithTooltip className='!w-[24px] !h-[24px] ' title={t('upload-file')} onClick={() => {
-          openFileDialog();
-        }}>
-          <input {...getInputProps()} />
-          <FileUploadIcon className='hover:opacity-80 transition-all' />
-        </ButtonWithTooltip>
-
-        {blinko.showAi && (
-          <ButtonWithTooltip className='!w-[24px] !h-[24px] ' title={t('recording')} onClick={() => {
-            ShowAudioDialog((file) => {
-              store.uploadFiles([file]);
-            });
-          }}>
-            <VoiceIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-          </ButtonWithTooltip>
-        )}
-
-        <ButtonWithTooltip title={t('upload-file')} className='!w-[24px] !h-[24px] ' onClick={() => {
-          ShowCamera((file) => {
-            store.uploadFiles([file]);
-          });
-        }}>
-          <CameraIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-        </ButtonWithTooltip>
-
+        {renderUploadButtons()}
 
         <ButtonWithTooltip
           title={viewMode === 'source' ? t('preview-mode') : t('source-code')}
@@ -136,18 +199,9 @@ export const Toolbar = ({
         >
           {viewMode !== 'source' ?
             <Icon icon="tabler:source-code" className='transition-all' /> :
-            <Icon icon="grommet-icons:form-view" className='transition-all !text-red-500'  />
+            <Icon icon="grommet-icons:form-view" className='transition-all !text-red-500' />
           }
         </ButtonWithTooltip>
-
-
-        {showCloseButton && (
-          <Button size='sm' radius='md' onClick={() => {
-            RootStore.Get(DialogStore).close();
-          }} className={`group ml-2`} isIconOnly>
-            <CancelIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />
-          </Button>
-        )}
 
         <Button
           isDisabled={!canSend}

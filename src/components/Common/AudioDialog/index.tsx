@@ -7,6 +7,7 @@ import { LiveAudioVisualizer } from "react-audio-visualize"
 import { Icon } from "@iconify/react"
 import { Button } from "@nextui-org/react"
 import { SendIcon } from "../Icons"
+import { DialogStandaloneStore } from "@/store/module/DialogStandalone"
 
 interface MyAudioRecorderProps {
   onComplete?: (file: File) => void;
@@ -81,7 +82,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
         <Button
           isIconOnly
           className="absolute left-10 backdrop-blur-sm rounded-full"
-          onClick={() => RootStore.Get(DialogStore).close()}
+          onClick={() => RootStore.Get(DialogStandaloneStore).close()}
         >
           <Icon icon="iconamoon:close-thin" width="24" height="24" />
         </Button>
@@ -116,13 +117,13 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
 }
 
 export const ShowAudioDialog = ((onComplete: (file: File) => void) => {
-  return RootStore.Get(DialogStore).setData({
+  return RootStore.Get(DialogStandaloneStore).setData({
     size: 'full',
     isOpen: true,
     transparent: true,
     content: <MyAudioRecorder onComplete={(file) => {
       onComplete(file)
-      RootStore.Get(DialogStore).close();
+      RootStore.Get(DialogStandaloneStore).close();
     }} />
   })
 })

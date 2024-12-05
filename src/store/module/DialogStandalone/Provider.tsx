@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Button, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import { observer, useLocalStore } from "mobx-react-lite";
-import { DialogStore } from ".";
+import { DialogStandaloneStore } from ".";
 import { RootStore } from "@/store/root";
 import { useHistoryBack, useIsIOS } from "@/lib/hooks";
 import { useMediaQuery } from "usehooks-ts";
@@ -24,7 +24,7 @@ const CloseButton = ({ onClose }: { onClose: () => void }) => (
 
 
 const Dialog = observer(() => {
-  const modal = RootStore.Get(DialogStore);
+  const modal = RootStore.Get(DialogStandaloneStore);
   const isPc = useMediaQuery('(min-width: 768px)')
   const { className, classNames, isOpen, placement, title, size, content, isDismissable, onlyContent = false, noPadding = false, showOnlyContentCloseButton = false, transparent = false } = modal;
   const Content = typeof content === 'function' ? content : () => content;

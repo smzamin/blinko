@@ -75,7 +75,6 @@ export const useIsIOS = () => {
   useEffect(() => {
     setIsIOS(helper.env.isIOS());
   }, []);
-
   return isIOS;
 };
 

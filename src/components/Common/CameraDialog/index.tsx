@@ -1,5 +1,6 @@
 import { RootStore } from "@/store"
 import { DialogStore } from "@/store/module/Dialog"
+import { DialogStandaloneStore } from "@/store/module/DialogStandalone"
 import { Icon } from "@iconify/react"
 import { Button } from "@nextui-org/react"
 import { observer } from "mobx-react-lite"
@@ -202,7 +203,7 @@ export const MyCamera = ({ onComplete }: MyCameraProps) => {
       <Button
         isIconOnly
         className="absolute right-5 top-5 backdrop-blur-sm rounded-full"
-        onClick={() => RootStore.Get(DialogStore).close()}
+        onClick={() => RootStore.Get(DialogStandaloneStore).close()}
       >
         <Icon icon="iconamoon:close-thin" width="24" height="24" />
       </Button>
@@ -244,13 +245,13 @@ export const MyCamera = ({ onComplete }: MyCameraProps) => {
 }
 
 export const ShowCamera = ((onComplete: (file: File) => void) => {
-  return RootStore.Get(DialogStore).setData({
+  return RootStore.Get(DialogStandaloneStore).setData({
     size: 'full',
     isOpen: true,
     onlyContent: true,
     content: <MyCamera onComplete={(file) => {
       onComplete(file)
-      RootStore.Get(DialogStore).close();
+      RootStore.Get(DialogStandaloneStore).close();
     }} />
   })
 })
