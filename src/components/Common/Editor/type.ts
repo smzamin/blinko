@@ -31,6 +31,7 @@ export const simpleSandpackConfig: SandpackConfig = {
 export type OnSendContentType = {
   content: string;
   files: (FileType & { uploadPath: string })[]
+  references: number[]
 }
 
 export type FileType = {

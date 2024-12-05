@@ -4,9 +4,17 @@ import { observer } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
 import { type Attachment } from '@/server/types';
 import { FileType } from '../Editor/type';
-import { HandleFileType } from '../Editor';
 import { DeleteIcon, DownloadIcon } from './icons';
 import { ImageRender } from './imageRender';
+import { HandleFileType } from '../Editor/editorUtils';
+import { Icon } from '@iconify/react';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
+import { BlinkoCard } from '@/components/BlinkoCard';
+import { api } from '@/lib/trpc';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { cache } from '@/lib/cache';
 
 //https://www.npmjs.com/package/browser-thumbnail-generator
 
@@ -74,5 +82,48 @@ const FilesAttachmentRender = observer(({ files, preview, columns }: { files: At
   return <AttachmentsRender files={handledFiles} preview={preview} columns={columns} />
 })
 
-export { AttachmentsRender, FilesAttachmentRender }
+
+const ReferenceRender = observer(({ references, onDelete }: { references: number[], onDelete?: (id: number) => void }) => {
+  const store = RootStore.Local(() => ({
+    noteListByIds: new PromiseState({
+      function: async ({ ids }) => {
+        return await api.notes.listByIds.mutate({ ids })
+      }
+    })
+  }))
+
+  useEffect(() => {
+    store.noteListByIds.call({ ids: references })
+  }, [references])
+
+  const items = store.noteListByIds.value?.slice()?.sort((a, b) => references.indexOf(a.id) - references.indexOf(b.id))
+  return <div className='grid grid-cols-3 gap-2'>
+    {
+      items?.map(i => {
+        return <Popover placement="bottom">
+          <PopoverTrigger>
+            <div className="flex items-center gap-1 blinko-tag cursor-pointer hover:opacity-80 group">
+              <Icon className="min-w-[24px] !text-[#C35AF7]" icon="uim:arrow-up-left" width="24" height="24" />
+              <div className="truncate">{i.content}</div>
+              <div onClick={(e) => {
+                e.stopPropagation()
+                store.noteListByIds.value = store.noteListByIds.value?.filter(t => i.id !== t.id)
+                onDelete?.(i.id)
+              }} className={`group-hover:opacity-100 md:opacity-0 hover:opacity-100 cursor-pointer rounded-sm transition-al`}>
+                <Icon icon="basil:cross-solid" width={20} height={20} />
+              </div>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className='max-w-[300px]'>
+            <div className="px-1 py-2 max-w-[300px]" >
+              <BlinkoCard blinkoItem={i} />
+            </div>
+          </PopoverContent>
+        </Popover>
+      })
+    }
+  </div>
+})
+
+export { AttachmentsRender, FilesAttachmentRender, ReferenceRender }
 

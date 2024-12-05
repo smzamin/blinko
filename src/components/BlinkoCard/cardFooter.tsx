@@ -6,6 +6,7 @@ import { BlinkoStore } from '@/store/blinkoStore';
 import { useTranslation } from 'react-i18next';
 import dayjs from '@/lib/dayjs';
 import { _ } from '@/lib/lodash';
+import { ShowBlinkoReference } from '../BlinkoReference';
 
 interface CardFooterProps {
   blinkoItem: Note & {
@@ -22,7 +23,7 @@ export const CardFooter = ({ blinkoItem, blinko }: CardFooterProps) => {
   return (
     <div className="flex items-center mt-2">
       <ConvertTypeButton blinkoItem={blinkoItem} blinko={blinko} t={t} />
-      <CreatedTimeInfo blinkoItem={blinkoItem} t={t} />
+      <RightContent blinkoItem={blinkoItem} t={t} />
     </div>
   );
 };
@@ -55,15 +56,19 @@ const ConvertTypeButton = ({ blinkoItem, blinko, t }) => {
   );
 };
 
-const CreatedTimeInfo = ({ blinkoItem, t }) => {
-  if (!blinkoItem?.metadata?.isIndexed) {
-    return null;
-  }
+const RightContent = ({ blinkoItem, t }: { blinkoItem: Note, t: any }) => {
   return (
-    <div className='ml-auto flex items-center'>
-      <Tooltip content={"Indexed"} delay={1000}>
-        <Icon className='text-ignore opacity-50' icon="mingcute:ai-line" width="16" height="16" />
-      </Tooltip>
+    <div className='ml-auto flex items-center gap-2'>
+       {
+        ((blinkoItem?.references?.length) ?? 0) > 0 && <Tooltip content={blinkoItem?.references?.length + ' ' + t('reference')} delay={1000}>
+          <Icon icon="ix:reference" className='text-[#C35AF7] cursor-pointer' width="16" height="16" onClick={() => ShowBlinkoReference({ item: blinkoItem })} />
+        </Tooltip>
+      }
+      {
+        blinkoItem?.metadata?.isIndexed && <Tooltip content={"Indexed"} delay={1000}>
+          <Icon className='text-ignore opacity-50' icon="mingcute:ai-line" width="16" height="16" />
+        </Tooltip>
+      }
     </div>
   );
 };

@@ -8,7 +8,6 @@ import { useMediaQuery } from "usehooks-ts";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { CancelIcon } from "@/components/Common/Icons";
-import { createPortal } from "react-dom";
 
 const CloseButton = ({ onClose }: { onClose: () => void }) => (
   <div

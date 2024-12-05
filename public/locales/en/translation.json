@@ -186,5 +186,7 @@
   "ai-enhanced-search": "AI Enhanced Search",
   "preview-mode": "Preview Mode",
   "source-code": "Source Code",
-  "camera": "Camera"
+  "camera": "Camera",
+  "reference": "Reference",
+  "reference-note": "Reference Note"
 }

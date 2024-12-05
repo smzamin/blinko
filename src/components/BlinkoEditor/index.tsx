@@ -26,6 +26,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
     <Editor
       mode={mode}
       originFiles={!isCreateMode ? blinko.curSelectedNote?.attachments : []}
+      originReference={!isCreateMode ? blinko.curSelectedNote?.references?.map(i => i.toNoteId) : []}
       content={isCreateMode ? blinko.noteContent! : blinko.curSelectedNote?.content!}
       onChange={v => {
         isCreateMode ? (blinko.noteContent = v) : (blinko.curSelectedNote!.content = v)
@@ -38,10 +39,10 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
         isCreateMode ? <div className='text-xs text-ignore ml-2'>Drop to upload files</div> :
           <div className='text-xs text-desc'>{dayjs(blinko.curSelectedNote!.createdAt).format("YYYY-MM-DD hh:mm:ss")}</div>
       }
-      onSend={async ({ files }) => {
+      onSend={async ({ files, references }) => {
         if (isCreateMode) {
           //@ts-ignore
-          await blinko.upsertNote.call({ refresh: false, content: blinko.noteContent, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } }) })
+          await blinko.upsertNote.call({ references, refresh: false, content: blinko.noteContent, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } }) })
           if (blinko.noteTypeDefault == NoteType.NOTE && router.pathname != '/notes') {
             await router.push('/notes')
             blinko.forceQuery++
@@ -58,7 +59,8 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
             //@ts-ignore
             content: blinko.curSelectedNote.content,
             //@ts-ignore
-            attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } })
+            attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } }),
+            references
           })
         }
         onSended?.()

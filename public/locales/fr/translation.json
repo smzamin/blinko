@@ -182,5 +182,7 @@
   "ai-enhanced-search": "Recherche améliorée par l'IA",
   "preview-mode": "Mode de prévisualisation",
   "source-code": "Code source",
-  "camera": "Appareil photo"
+  "camera": "Appareil photo",
+  "reference": "Référence",
+  "reference-note": "Note de référence"
 }

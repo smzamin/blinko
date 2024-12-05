@@ -8,7 +8,7 @@ import { NoteType } from '../types';
 import path from 'path';
 import { UPLOAD_FILE_PATH } from '@/lib/constant';
 import { unlink } from 'fs/promises';
-import { attachmentsSchema, notesSchema, tagSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
+import { attachmentsSchema, noteReferenceSchema, notesSchema, tagSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
 import { getGlobalConfig } from './config';
 import { FileService } from '../plugins/utils';
 import { AiService } from '../plugins/ai';
@@ -44,7 +44,9 @@ export const noteRouter = router({
           z.object({
             tag: tagSchema
           }))
-        )
+        ),
+        references: z.array(z.object({ toNoteId: z.number() })).optional(),
+        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional()
       }))
     ))
     .mutation(async function ({ input, ctx }) {
@@ -99,7 +101,20 @@ export const noteRouter = router({
         orderBy: [{ isTop: "desc" }, timeOrderBy],
         skip: (page - 1) * size,
         take: size,
-        include: { tags: { include: { tag: true } }, attachments: true }
+        include: {
+          tags: { include: { tag: true } },
+          attachments: true,
+          references: {
+            select: {
+              toNoteId: true
+            }
+          },
+          referencedBy: {
+            select: {
+              fromNoteId: true
+            }
+          }
+        }
       })
     }),
   publicList: publicProcedure
@@ -121,6 +136,41 @@ export const noteRouter = router({
         skip: (page - 1) * size,
         take: size,
         include: { tags: true, attachments: true },
+      })
+    }),
+  listByIds: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/list-by-ids', summary: 'Query notes list by ids', protect: true, tags: ['Note'] } })
+    .input(z.object({ ids: z.array(z.number()) }))
+    .output(z.array(notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema),
+        tags: z.array(tagsToNoteSchema.merge(
+          z.object({
+            tag: tagSchema
+          }))
+        ),
+        references: z.array(z.object({ toNoteId: z.number() })).optional(),
+        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional()
+      }))
+    ))
+    .mutation(async function ({ input }) {
+      const { ids } = input
+      return await prisma.notes.findMany({
+        where: { id: { in: ids } },
+        include: {
+          tags: { include: { tag: true } },
+          attachments: true,
+          references: {
+            select: {
+              toNoteId: true
+            }
+          },
+          referencedBy: {
+            select: {
+              fromNoteId: true
+            }
+          }
+        }
       })
     }),
   publicDetail: publicProcedure
@@ -181,13 +231,13 @@ export const noteRouter = router({
       isArchived: z.union([z.boolean(), z.null()]).default(null),
       isTop: z.union([z.boolean(), z.null()]).default(null),
       isShare: z.union([z.boolean(), z.null()]).default(null),
+      references: z.array(z.number()).optional(),
     }))
     .output(z.any())
     .mutation(async function ({ input, ctx }) {
-      let { id, isArchived, type, attachments, content, isTop, isShare } = input
+      let { id, isArchived, type, attachments, content, isTop, isShare, references } = input
       if (content != null) {
         content = content?.replace(/&#x20;/g, ' ')?.replace(/&#x20;\\/g, '')?.replace(/\\([#<>{}[\]|`*-_.])/g, '$1');
-        // console.log({ content })
       }
       const tagTree = helper.buildHashTagTreeFromHashString(extractHashtags(content?.replace(/\\/g, '') + ' '))
       let newTags: Prisma.tagCreateManyInput[] = []
@@ -226,7 +276,13 @@ export const noteRouter = router({
         const newTagsString = newTags.map(i => `${i?.name}<key>${i?.parent}`)
         const needTobeAddedRelationTags = _.difference(newTagsString, oldTagsString);
         const needToBeDeletedRelationTags = _.difference(oldTagsString, newTagsString);
-        console.log({ oldTags, newTags, needTobeAddedRelationTags, needToBeDeletedRelationTags })
+
+        // handle references
+        const oldReferences = await prisma.noteReference.findMany({ where: { fromNoteId: note.id } });
+        const oldReferencesIds = oldReferences.map(ref => ref.toNoteId);
+        const needToBeAddedReferences = _.difference(references || [], oldReferencesIds);
+        const needToBeDeletedReferences = _.difference(oldReferencesIds, references || []);
+
         if (needToBeDeletedRelationTags.length != 0) {
           await prisma.tagsToNote.deleteMany({
             where: {
@@ -252,14 +308,33 @@ export const noteRouter = router({
             })
           })
         }
-        //delete unused tags
+
+        // add new references
+        if (needToBeAddedReferences.length != 0) {
+          await prisma.noteReference.createMany({
+            data: needToBeAddedReferences.map(toNoteId => ({ fromNoteId: note.id, toNoteId }))
+          });
+        }
+
+        // references delete old references
+        if (needToBeDeletedReferences.length != 0) {
+          await prisma.noteReference.deleteMany({
+            where: {
+              fromNoteId: note.id,
+              toNoteId: { in: needToBeDeletedReferences }
+            }
+          });
+        }
+
+        // delete unused tags
         const allTagsIds = oldTags?.map(i => i?.id)
         const usingTags = (await prisma.tagsToNote.findMany({ where: { tagId: { in: allTagsIds } } })).map(i => i.tagId).filter(i => !!i)
         const needTobeDeledTags = _.difference(allTagsIds, usingTags);
         if (needTobeDeledTags) {
           await prisma.tag.deleteMany({ where: { id: { in: needTobeDeledTags } } })
         }
-        //insert not repeate attachments
+
+        // insert not repeat attachments
         try {
           if (attachments?.length != 0) {
             const oldAttachments = await prisma.attachments.findMany({ where: { noteId: note.id } })
@@ -282,6 +357,14 @@ export const noteRouter = router({
           await prisma.attachments.createMany({
             data: attachments.map(i => { return { noteId: note.id, ...i } })
           })
+
+          //add references
+          if (references && references.length > 0) {
+            await prisma.noteReference.createMany({
+              data: references.map(toNoteId => ({ fromNoteId: note.id, toNoteId }))
+            });
+          }
+
           return note
         } catch (error) {
           console.log(error)
@@ -315,35 +398,154 @@ export const noteRouter = router({
     .output(z.any())
     .mutation(async function ({ input }) {
       const { ids } = input
-      const notes = await prisma.notes.findMany({ where: { id: { in: ids } }, include: { tags: { include: { tag: true } }, attachments: true } })
+      const notes = await prisma.notes.findMany({
+        where: { id: { in: ids } },
+        include: {
+          tags: { include: { tag: true } },
+          attachments: true,
+          references: true,
+          referencedBy: true
+        }
+      })
       const handleDeleteRelation = async () => {
         for (const note of notes) {
-          // await notesRepo.relations(note).tags.deleteMany({ where: { noteId: note.id } })
           await prisma.tagsToNote.deleteMany({ where: { noteId: note.id } })
-          //delete unused tags
+
+          await prisma.noteReference.deleteMany({
+            where: {
+              OR: [
+                { fromNoteId: note.id },
+                { toNoteId: note.id }
+              ]
+            }
+          })
+
           const allTagsInThisNote = note.tags || []
           const oldTags = allTagsInThisNote.map(i => i.tag).filter(i => !!i)
           const allTagsIds = oldTags?.map(i => i?.id)
-          const usingTags = (await prisma.tagsToNote.findMany({ where: { tagId: { in: allTagsIds } }, include: { tag: true } })).map(i => i.tag?.id).filter(i => !!i)
+          const usingTags = (await prisma.tagsToNote.findMany({
+            where: { tagId: { in: allTagsIds } },
+            include: { tag: true }
+          })).map(i => i.tag?.id).filter(i => !!i)
           const needTobeDeledTags = _.difference(allTagsIds, usingTags);
-          if (needTobeDeledTags) {
+          if (needTobeDeledTags?.length) {
             await prisma.tag.deleteMany({ where: { id: { in: needTobeDeledTags } } })
           }
-          if (note.attachments) {
+
+          if (note.attachments?.length) {
             for (const attachment of note.attachments) {
               try {
                 await FileService.deleteFile(attachment.path)
               } catch (error) {
-                console.log(error)
+                console.log('delete attachment error:', error)
               }
             }
-            await prisma.attachments.deleteMany({ where: { id: { in: note.attachments.map(i => i.id) } } })
+            await prisma.attachments.deleteMany({
+              where: { id: { in: note.attachments.map(i => i.id) } }
+            })
           }
         }
       }
+
       await handleDeleteRelation()
       await prisma.notes.deleteMany({ where: { id: { in: ids } } })
       return { ok: true }
     }),
+  addReference: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/add-reference', summary: 'Add note reference', protect: true, tags: ['Note'] } })
+    .input(z.object({
+      fromNoteId: z.number(),
+      toNoteId: z.number(),
+    }))
+    .output(z.any())
+    .mutation(async function ({ input }) {
+      return await insertNoteReference(input)
+    }),
+  noteReferenceList: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/reference-list', summary: 'Query note references', protect: true, tags: ['Note'] } })
+    .input(z.object({
+      noteId: z.number(),
+      type: z.enum(['references', 'referencedBy']).default('references')
+    }))
+    .output(z.array(notesSchema.merge(
+      z.object({
+        attachments: z.array(attachmentsSchema),
+        referenceCreatedAt: z.date()
+      })
+    )))
+    .mutation(async function ({ input }) {
+      const { noteId, type } = input;
+
+      if (type === 'references') {
+        const references = await prisma.noteReference.findMany({
+          where: { fromNoteId: noteId },
+          include: {
+            toNote: {
+              include: {
+                attachments: true,
+                tags: { include: { tag: true } },
+                references: {
+                  select: { toNoteId: true }
+                },
+                referencedBy: {
+                  select: { fromNoteId: true }
+                }
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
+        });
+
+        return references.map(ref => ({
+          ...ref.toNote,
+          referenceCreatedAt: ref.createdAt
+        }));
+      } else {
+        const referencedBy = await prisma.noteReference.findMany({
+          where: { toNoteId: noteId },
+          include: {
+            fromNote: {
+              include: {
+                attachments: true,
+                tags: { include: { tag: true } },
+                references: {
+                  select: { toNoteId: true }
+                },
+                referencedBy: {
+                  select: { fromNoteId: true }
+                }
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
+        });
+
+        return referencedBy.map(ref => ({
+          ...ref.fromNote,
+          referenceCreatedAt: ref.createdAt
+        }));
+      }
+    }),
 })
 
+let insertNoteReference = async ({ fromNoteId, toNoteId }) => {
+  const [fromNote, toNote] = await Promise.all([
+    prisma.notes.findUnique({ where: { id: fromNoteId } }),
+    prisma.notes.findUnique({ where: { id: toNoteId } })
+  ]);
+
+  if (!fromNote || !toNote) {
+    throw new Error('Note not found');
+  }
+
+  return await prisma.noteReference.create({
+    data: {
+      fromNoteId,
+      toNoteId,
+    }
+  });
+}
+
+let deleteNoteReference = async ({ fromNoteId, toNoteId }) => {
+  return await prisma.noteReference.deleteMany({ where: { fromNoteId, toNoteId } })
+}

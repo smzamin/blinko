@@ -2,10 +2,8 @@ import '@mdxeditor/editor/style.css';
 import '@/styles/editor.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { MDXEditorMethods, toolbarPlugin } from '@mdxeditor/editor';
-import { Button, Card, Divider, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
-import React, { ReactElement, useEffect, useState, useMemo } from 'react';
+import React, { ReactElement, useEffect, useState, useMemo, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
@@ -17,12 +15,23 @@ import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
-import { NoteType, type Attachment } from '@/server/types';
+import { type Note, NoteType, type Attachment } from '@/server/types';
 import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectPop';
 import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
 import { usePasteFile } from '@/lib/hooks';
-import { Toolbar } from './toolBar';
+import { getEditorElements, HandleFileType, UploadAction } from './editorUtils';
+import { handleEditorKeyEvents } from './editorUtils';
+import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, CreateLink, InsertCodeBlock, InsertImage, InsertSandpack, InsertTable, ListsToggle, MDXEditorMethods, ShowSandpackInfo, toolbarPlugin, ViewMode } from '@mdxeditor/editor';
+import { Button, Divider, DropdownTrigger, DropdownItem, DropdownMenu, Dropdown, Input, PopoverTrigger, Popover, PopoverContent, Card } from '@nextui-org/react';
+import { Icon } from '@iconify/react';
+import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
+import { AttachmentsRender, ReferenceRender } from '../AttachmentRender';
+import { ShowCamera } from '../CameraDialog';
+import { ShowAudioDialog } from '../AudioDialog';
+import { DialogStore } from '@/store/module/Dialog';
+import dayjs from 'dayjs';
+import { ScrollArea } from '../ScrollArea';
 
 const { MDXEditor } = await import('@mdxeditor/editor')
 
@@ -38,58 +47,24 @@ type IProps = {
   isSendLoading?: boolean,
   bottomSlot?: ReactElement<any, any>,
   originFiles?: Attachment[],
+  originReference?: number[],
+  showCloseButton?: boolean
 }
 
-export const HandleFileType = (originFiles: Attachment[]): FileType[] => {
-  if (originFiles?.length == 0) return []
-  const res = originFiles?.map(file => {
-    const extension = helper.getFileExtension(file.name)
-    const previewType = helper.getFileType(file.type, file.name)
-    return {
-      name: file.name,
-      size: file.size,
-      previewType,
-      extension: extension ?? '',
-      preview: file.path,
-      uploadPromise: new PromiseState({ function: async () => file.path }),
-      type: file.type
-    }
-  })
-  res?.map(i => i.uploadPromise.call())
-  return res
-}
-
-export const getEditorElements = () => {
-  const editorElements = document.querySelectorAll('._contentEditable_uazmk_379') as NodeListOf<HTMLElement>
-  return editorElements
-}
-
-
-export const handleEditorKeyEvents = () => {
-  const editorElements = getEditorElements()
-  editorElements.forEach(element => {
-    element.addEventListener('keydown', (e) => {
-      const isTagSelectVisible = IsTagSelectVisible()
-      if (e.key === 'Enter' && isTagSelectVisible) {
-        e.preventDefault()
-        return false
-      }
-    }, true)
-  })
-}
-
-type ViewMode = 'source' | 'rich-text';
-
-const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, mode, onHeightChange }: IProps) => {
+const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot, originFiles, originReference = [], mode, onHeightChange, showCloseButton }: IProps) => {
   content = ProcessCodeBlocks(content)
   const [canSend, setCanSend] = useState(false)
-  const [viewMode, setViewMode] = useState<ViewMode>('rich-text')
+  const [references, setReferences] = useState<number[]>(originReference)
+  const [referenceSearchList, setReferenceSearchList] = useState<Note[]>([])
+  const [isShowSearch, setIsShowSearch] = useState(false)
+
   const { t } = useTranslation()
   const isPc = useMediaQuery('(min-width: 768px)')
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
   const cardRef = React.useRef(null)
+
   const blinko = RootStore.Get(BlinkoStore)
-  const ai = RootStore.Get(AiStore)
+  const ai = RootStore.Get(AiStore);
   const { theme } = useTheme();
 
   const pastedFiles = usePasteFile(cardRef);
@@ -103,6 +78,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     files: [] as FileType[],
     lastRange: null as Range | null,
     lastRangeText: '',
+    viewMode: "rich-text" as ViewMode,
     lastSelection: null as Selection | null,
     handleIOSFocus() {
       try {
@@ -320,6 +296,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     eventBus.on('editor:deleteLastChar', store.deleteLastChar)
     eventBus.on('editor:focus', store.focus)
     eventBus.on('editor:setMarkdownLoading', store.setMarkdownLoading)
+    eventBus.on('editor:setViewMode', (mode) => store.viewMode = (mode))
     handleEditorKeyEvents()
     store.handleIOSFocus()
 
@@ -330,6 +307,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
       eventBus.off('editor:deleteLastChar', store.deleteLastChar)
       eventBus.off('editor:focus', store.focus)
       eventBus.off('editor:setMarkdownLoading', store.setMarkdownLoading)
+      eventBus.off('editor:setViewMode', (mode) => store.viewMode = (mode))
     }
   }, [])
 
@@ -337,7 +315,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     if (originFiles?.length != 0) {
       store.files = HandleFileType(originFiles!)
     }
-  }, [originFiles])
+    setReferenceSearchList(blinko.referenceSearchList?.value ?? [])
+  }, [originFiles,blinko.referenceSearchList.value])
 
   const {
     getRootProps,
@@ -352,17 +331,95 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
     }
   });
 
-  useEffect(() => {
-    eventBus.on('editor:setViewMode', (mode) => setViewMode(mode))
-    return () => {
-      eventBus.off('editor:setViewMode', (mode) => setViewMode(mode))
+  const uploadActions: UploadAction[] = [
+    {
+      key: 'file',
+      icon: <FileUploadIcon className='hover:opacity-80 transition-all' />,
+      title: t('upload-file'),
+      onClick: open,
+    },
+    {
+      key: 'audio',
+      icon: <VoiceIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />,
+      title: t('recording'),
+      onClick: () => ShowAudioDialog((file) => store.uploadFiles([file])),
+      showCondition: blinko.showAi,
+    },
+    {
+      key: 'camera',
+      icon: <CameraIcon className='primary-foreground group-hover:rotate-[180deg] transition-all' />,
+      title: t('camera'),
+      onClick: () => ShowCamera((file) => store.uploadFiles([file])),
+    },
+  ];
+
+  const renderUploadButtons = () => {
+    if (isPc) {
+      return (
+        <>
+          {uploadActions
+            .filter(action => action.showCondition !== false)
+            .map(action => (
+              <ButtonWithTooltip
+                key={action.key}
+                className='!w-[24px] !h-[24px]'
+                title={action.title}
+                onClick={action.onClick}
+              >
+                {action.key === 'file' && <input {...getInputProps()} />}
+                {action.icon}
+              </ButtonWithTooltip>
+            ))}
+        </>
+      );
     }
-  }, [])
+
+    return (
+      <>
+        <input {...getInputProps()} className="hidden" id="mobile-file-input" />
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              className="!w-[24px] !h-[24px]"
+            >
+              <FileUploadIcon className='hover:opacity-80 transition-all' />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Upload Actions">
+            {uploadActions
+              .filter(action => action.showCondition !== false)
+              .map(action => (
+                <DropdownItem
+                  key={action.key}
+                  startContent={action.icon}
+                  onClick={() => {
+                    if (action.key === 'file') {
+                      document.getElementById('mobile-file-input')?.click();
+                    } else {
+                      action.onClick();
+                    }
+                  }}
+                >
+                  {action.title}
+                </DropdownItem>
+              ))}
+          </DropdownMenu>
+        </Dropdown>
+      </>
+    );
+  };
+
+  const throttleSearchRef = useRef(_.throttle((searchText: string) => {
+    blinko.referenceSearchList.resetAndCall({ searchText })
+  }, 500, { trailing: true, leading: false }));
 
   return <Card
     shadow='none' {...getRootProps()}
     className={`p-2 relative border-2 border-border transition-all 
-    ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''} ${viewMode == 'source' ? 'border-red-500' : ''}`}>
+    ${isDragAccept ? 'border-2 border-green-500 border-dashed transition-all' : ''} ${store.viewMode == 'source' ? 'border-red-500' : ''}`}>
 
     <div ref={cardRef}
       onKeyUp={async event => {
@@ -370,7 +427,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         if (event.key === 'Enter' && event.ctrlKey) {
           await onSend?.({
             content,
-            files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value, type: i.type } })
+            files: store.files.map(i => { return { ...i, uploadPath: i.uploadPromise.value, type: i.type } }),
+            references
           })
           onChange?.('')
           store.files = []
@@ -398,7 +456,6 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
           store.handlePopTag()
           store.handlePopAiWrite()
         }}
-
         autoFocus={{
           defaultSelection: 'rootEnd'
         }}
@@ -406,20 +463,156 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, bottomSlot,
         plugins={[
           toolbarPlugin({
             toolbarContents: () => (
-              <Toolbar
-                store={store}
-                openFileDialog={open}
-                files={store.files}
-                mode={mode}
-                isPc={isPc}
-                viewMode={viewMode}
-                canSend={canSend}
-                isSendLoading={isSendLoading}
-                mdxEditorRef={mdxEditorRef}
-                onSend={onSend}
-                onChange={onChange}
-                getInputProps={getInputProps}
-              />
+              <div className='flex flex-col w-full'>
+                {/******************** AttchMent Render *****************/}
+                {store.files.length > 0 && (
+                  <div className='w-full my-2'>
+                    <AttachmentsRender files={store.files} />
+                  </div>
+                )}
+
+                {/******************** Reference Render *****************/}
+                <div className='w-full mb-2'>
+                  <ReferenceRender references={references} onDelete={(id) => {
+                    setReferences(references.filter(i => i != id))
+                  }} />
+                </div>
+
+                {/******************** Source/Rich Text Text *****************/}
+                {store.viewMode == 'source' && <div className='text-red-500 text-xs select-none'>Source Code Mode</div>}
+
+                {/******************** Mode Render *****************/}
+                <div className='flex w-full items-center'>
+                  <ButtonWithTooltip className='!w-[24px] !h-[24px]' title={
+                    blinko.noteTypeDefault == NoteType.BLINKO ? t('blinko') : t('note')
+                  } onClick={() => {
+                    blinko.noteTypeDefault = blinko.noteTypeDefault == NoteType.BLINKO ? NoteType.NOTE : NoteType.BLINKO;
+                  }}>
+                    {blinko.noteTypeDefault == NoteType.BLINKO ?
+                      <LightningIcon className='blinko' /> :
+                      <NotesIcon className='note' />
+                    }
+                  </ButtonWithTooltip>
+
+                  {/******************** Insert Hashtag *****************/}
+                  <ButtonWithTooltip className='!w-[24px] !h-[24px] ' title={t('insert-hashtag')} onClick={() => {
+                    store.inertHash();
+                  }}>
+                    <HashtagIcon />
+                  </ButtonWithTooltip>
+
+                  {/******************** Insert Reference *****************/}
+                  <Popover placement="bottom" backdrop='blur' isOpen={isShowSearch} onOpenChange={setIsShowSearch}>
+                    <PopoverTrigger>
+                      <div className='!w-[24px] !h-[24px] hover:bg-hover rounded-md flex items-center justify-center ml-1' onClick={e => {
+                        blinko.referenceSearchList.resetAndCall({ searchText: ' ' })
+                      }}>
+                        <Icon icon="hugeicons:at" width="24" height="24" />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent className='flex flex-col max-w-[300px]'>
+                      <Input onChange={e => throttleSearchRef.current?.(e.target.value)} type='text' autoFocus className='w-full my-2 focus:outline-none focus:ring-0' placeholder='Search' size='sm' endContent={<Icon className='cursor-pointer' icon="tabler:search" width="24" height="24" />} />
+                      <ScrollArea className='max-h-[400px] max-w-[290px]' onBottom={() => { blinko.referenceSearchList.callNextPage({}) }}>
+                        {
+                          referenceSearchList && referenceSearchList?.map(i => {
+                            return <div className={`flex flex-col w-full p-1 bg-background hover:bg-hover rounded-md cursor-pointer 
+                              ${(references?.includes(i.id!) || i.id == blinko.curSelectedNote?.id) ? 'opacity-50 not-allowed' : ''}`}
+                              onClick={e => {
+                                console.log('references', references, i.id)
+                                if (references?.includes(i.id!)) return
+                                setReferences([...references!, i.id!])
+                                console.log('references', references)
+                                setIsShowSearch(false)
+                              }}>
+                              <div className='flex flex-col w-full p-1'>
+                                <div className='text-xs text-desc'>
+                                  {blinko.config.value?.timeFormat == 'relative'
+                                    ? dayjs(blinko.config.value?.isOrderByCreateTime ? i.createdAt : i.updatedAt).fromNow()
+                                    : dayjs(blinko.config.value?.isOrderByCreateTime ? i.createdAt : i.updatedAt).format(blinko.config.value?.timeFormat ?? 'YYYY-MM-DD HH:mm:ss')
+                                  }
+                                </div>
+                                <div className='text-sm line-clamp-2'>
+                                  {i.content}
+                                </div>
+                              </div>
+                            </div>
+                          })
+                        }
+                      </ScrollArea>
+                    </PopoverContent>
+                  </Popover>
+
+                  <Divider orientation="vertical" />
+
+                  {/******************** Insert List *****************/}
+                  <ListsToggle />
+                  {isPc && <InsertTable />}
+                  {isPc && <InsertImage />}
+
+                  {/* <CreateLink /> */}
+
+                  {/******************** Insert Code *****************/}
+                  <ConditionalContents
+                    options={[
+                      { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
+                      { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
+                      {
+                        fallback: () => (<>
+                          {isPc && <InsertCodeBlock />}
+                          {isPc && <InsertSandpack />}
+                        </>)
+                      }
+                    ]}
+                  />
+
+                  <Divider orientation="vertical" />
+
+                  {/******************** Upload Render *****************/}
+                  {renderUploadButtons()}
+
+                  {/******************** View Mode Render *****************/}
+                  <ButtonWithTooltip
+                    title={store.viewMode === 'source' ? t('preview-mode') : t('source-code')}
+                    className='!ml-auto'
+                    onClick={() => {
+                      const nextMode = store.viewMode === 'source' ? 'rich-text' : 'source';
+                      eventBus.emit('editor:setViewMode', nextMode);
+                    }}
+                  >
+                    {store.viewMode !== 'source' ?
+                      <Icon icon="tabler:source-code" className='transition-all' /> :
+                      <Icon icon="grommet-icons:form-view" className='transition-all !text-red-500' />
+                    }
+                  </ButtonWithTooltip>
+
+                  {/******************** Send Render *****************/}
+                  <Button
+                    isDisabled={!canSend}
+                    size='sm'
+                    radius='md'
+                    isLoading={isSendLoading}
+                    onClick={async () => {
+                      await onSend?.({
+                        content: mdxEditorRef.current?.getMarkdown() ?? '',
+                        files: store.files.map(i => ({ ...i, uploadPath: i.uploadPromise.value })),
+                        references
+                      });
+                      onChange?.('');
+                      store.files = [];
+                      ai.isWriting = false;
+                      setReferences([])
+                    }}
+                    className={`ml-2 w-[60px] group`}
+                    isIconOnly
+                    color='primary'
+                  >
+                    {store.files?.some(i => i.uploadPromise?.loading?.value) ?
+                      <Icon icon="line-md:uploading-loop" width="24" height="24" /> :
+                      <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
+                    }
+                  </Button>
+                </div>
+              </div>
             )
           }),
           ...MyPlugins

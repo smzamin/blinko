@@ -179,5 +179,7 @@
   "ai-enhanced-search": "AIによる検索強化",
   "preview-mode": "プレビュー・モード",
   "source-code": "ソースコード",
-  "camera": "カメラ"
+  "camera": "カメラ",
+  "reference": "参考",
+  "reference-note": "参考資料"
 }

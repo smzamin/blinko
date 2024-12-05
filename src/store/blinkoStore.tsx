@@ -49,12 +49,12 @@ export class BlinkoStore implements Store {
   updateTicker = 0
   fullNoteList: Note[] = []
   upsertNote = new PromiseState({
-    function: async ({ content = null, isArchived, type, id, attachments = [], refresh = true, isTop, isShare, showToast = true }:
-      { content?: string | null, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean, isShare?: boolean, showToast?: boolean }) => {
+    function: async ({ content = null, isArchived, type, id, attachments = [], refresh = true, isTop, isShare, showToast = true, references = [] }:
+      { content?: string | null, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean, isShare?: boolean, showToast?: boolean, references?: number[] }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
-      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop, isShare })
+      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop, isShare, references })
       if (this.config.value?.isUseAI) {
         if (res?.id) {
           api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
@@ -75,6 +75,14 @@ export class BlinkoStore implements Store {
     function: async ({ page, size }) => {
       const notes = await api.notes.list.mutate({ ...this.noteListFilterConfig, page, size })
       return notes.map(i => { return { ...i, isExpand: false } })
+    }
+  })
+
+  referenceSearchList = new PromisePageState({
+    function: async ({ page, size, searchText }) => {
+      return await api.notes.list.mutate({
+        searchText
+      })
     }
   })
 

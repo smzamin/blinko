@@ -196,6 +196,7 @@ module.exports = {
     require('tailwindcss-animate'),
     require('@headlessui/tailwindcss'),
     require('@tailwindcss/typography'),
+    require('@tailwindcss/line-clamp'),
     nextui({
       prefix: 'nextui', // prefix for themes variables
       addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").

@@ -66,6 +66,8 @@ model notes {
   attachments   attachments[]
   tags          tagsToNote[]
   account       accounts?     @relation(fields: [accountId], references: [id])
+  referencedBy  noteReference[] @relation("ReferencedNote")
+  references    noteReference[] @relation("ReferencingNote")
 }
 
 model tag {
@@ -96,4 +98,16 @@ model scheduledTask {
   isSuccess Boolean  @default(true)
   isRunning Boolean  @default(false)
   output    Json?    @db.Json
+}
+
+model noteReference {
+  id              Int      @id @default(autoincrement())
+  fromNoteId      Int
+  toNoteId        Int
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  
+  fromNote        notes    @relation("ReferencingNote", fields: [fromNoteId], references: [id])
+  toNote          notes    @relation("ReferencedNote", fields: [toNoteId], references: [id])
+
+  @@unique([fromNoteId, toNoteId])
 }

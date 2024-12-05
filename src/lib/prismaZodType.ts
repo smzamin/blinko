@@ -147,3 +147,13 @@ export const configSelectSchema: z.ZodType<Prisma.configSelect> = z.object({
   key: z.boolean().optional(),
   config: z.boolean().optional(),
 }).strict()
+
+
+// NOTE REFERENCE
+//------------------------------------------------------
+
+export const noteReferenceSchema = z.object({
+  id: z.number().int(),
+  fromNoteId: z.number().int(),
+  toNoteId: z.number().int(),
+})

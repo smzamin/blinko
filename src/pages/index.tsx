@@ -9,12 +9,10 @@ import { useRouter } from 'next/router';
 import { BlinkoEditor } from '@/components/BlinkoEditor';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoCard } from '@/components/BlinkoCard';
-import { BaseStore } from '@/store/baseStore';
-import Webcam from "react-webcam";
 import { useMediaQuery } from 'usehooks-ts';
 import { ShowEditBlinkoModel } from '@/components/BlinkoRightClickMenu';
-import { getEditorElements } from '@/components/Common/Editor';
 import { motion } from 'framer-motion';
+import { getEditorElements } from '@/components/Common/Editor/editorUtils';
 
 const Home = observer(() => {
   const { t } = useTranslation();
