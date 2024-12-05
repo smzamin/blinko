@@ -1,3 +1,10 @@
+## [0.17.4](https://github.com/blinko-space/blinko/compare/v0.17.3...v0.17.4) (2024-12-05)
+
+
+### Bug Fixes
+
+* improve mobile toolbar ([eb53a01](https://github.com/blinko-space/blinko/commit/eb53a0151a7ba3c60a7c2d1189a06844a8ba2109))
+
 ## [0.17.3](https://github.com/blinko-space/blinko/compare/v0.17.2...v0.17.3) (2024-12-05)
 
 
