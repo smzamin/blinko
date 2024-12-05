@@ -1,3 +1,10 @@
+# [0.18.0](https://github.com/blinko-space/blinko/compare/v0.17.4...v0.18.0) (2024-12-05)
+
+
+### Features
+
+* support reference ([3c69deb](https://github.com/blinko-space/blinko/commit/3c69debbad080394bd614f79f384d06863c1e1d0))
+
 ## [0.17.4](https://github.com/blinko-space/blinko/compare/v0.17.3...v0.17.4) (2024-12-05)
 
 
