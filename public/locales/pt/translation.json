@@ -190,5 +190,7 @@
   "underline": "Sublinhar",
   "remove-bold": "Remover negrito",
   "italic": "Itálico",
-  "remove-underline": "Remover o sublinhado"
+  "remove-underline": "Remover o sublinhado",
+  "select-block-type": "Selecionar o tipo de bloco",
+  "block-type-select-placeholder": "Tipo de bloco"
 }

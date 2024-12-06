@@ -198,5 +198,7 @@
   "italic": "Italic",
   "remove-italic": "Remove Italic",
   "underline": "Underline",
-  "remove-underline": "Remove Underline"
+  "remove-underline": "Remove Underline",
+  "select-block-type": "Select Block Type",
+  "block-type-select-placeholder": "Block Type"
 }

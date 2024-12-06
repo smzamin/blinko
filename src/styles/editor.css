@@ -286,6 +286,10 @@ div[id^="radix-"][role="dialog"] h2 {
 .mdxeditor-diff-source-wrapper{
   margin-top: 5px;
 }
+._toolbarNodeKindSelectTrigger_uazmk_305, ._toolbarButtonSelectTrigger_uazmk_306, ._selectTrigger_uazmk_307{
+  background-color: transparent;
+}
+
 [data-radix-select-viewport] {
   border-radius: 12px;
 }

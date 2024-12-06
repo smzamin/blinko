@@ -86,7 +86,7 @@ const FilesAttachmentRender = observer(({ files, preview, columns }: { files: At
 
 
 const ReferenceRender = observer(({ store }: { store: EditorStore }) => {
-  return <div className='grid grid-cols-3 gap-2'>
+  return <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
     {
       store?.currentReferences?.map(i => {
         return <Popover placement="bottom">

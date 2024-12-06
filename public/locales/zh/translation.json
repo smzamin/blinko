@@ -197,5 +197,7 @@
   "underline": "下划线",
   "remove-bold": "删除粗体",
   "italic": "斜体",
-  "remove-underline": "删除下划线"
+  "remove-underline": "删除下划线",
+  "select-block-type": "选择区块类型",
+  "block-type-select-placeholder": "区块类型"
 }

@@ -155,25 +155,6 @@ export const BlinkoAiChat = observer(() => {
     </div>
   </div >
 })
-export const BlinkoAiButton = () => {
-  const isPc = useMediaQuery('(min-width: 768px)')
-  return <DraggableDiv >
-    <motion.div whileHover={{ opacity: 1, scale: 1.1 }} whileTap={{ scale: 1.2 }}
-      className="rounded-full p-2 cursor-pointer bg-primary !z-20 opacity-70 text-primary-foreground" onClick={e => {
-        if (!isPc) {
-          RootStore.Get(DialogStore).setData({
-            isOpen: true,
-            title: 'Blinko AI',
-            content: <BlinkoAiChat />,
-            size: '5xl'
-          })
-        }
-      }}
-    >
-      <Icon icon="mingcute:ai-line" width="20" height="20" />
-    </motion.div>
-  </DraggableDiv>
-}
 
 export const BlinkoAi = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
@@ -194,7 +175,7 @@ export const BlinkoAi = observer(() => {
             </ResizableWrapper>
           </div>
         </PopoverContent>
-      </Popover> : <BlinkoAiButton />
+      </Popover> : <></>
     }
   </>
 })

@@ -13,6 +13,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import { ShowEditBlinkoModel } from '@/components/BlinkoRightClickMenu';
 import { motion } from 'framer-motion';
 import { getEditorElements } from '@/components/Common/Editor/editorUtils';
+import { BlinkoAddButton } from '@/components/BlinkoAddButton';
 
 const Home = observer(() => {
   const { t } = useTranslation();
@@ -38,26 +39,7 @@ const Home = observer(() => {
         }} />
       </div>}
 
-      {
-        !isPc && <motion.div
-          whileTap={{ scale: 1.3 }}
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 0.3 }}
-          onClick={e => {
-            ShowEditBlinkoModel('2xl', 'create')
-            requestAnimationFrame(() => {
-              const editorElements = getEditorElements()
-              if (editorElements.length > 0) {
-                editorElements.forEach(editorElement => {
-                  editorElement.focus()
-                })
-              }
-            })
-          }}
-          className='w-[40px] h-[40px] flex items-center justify-center bg-[#FFCC00] text-black rounded-full z-[50] fixed left-[calc(50%-20px)] bottom-[80px]'>
-          <Icon icon="icon-park-outline:write" width="16" height="16" />
-        </motion.div>
-      }
+      {!isPc && <BlinkoAddButton />}
 
       <div className='text-ignore flex items-center justify-center gap-1 w-full '>
         <Icon className={`text-ignore mt-2 mb-[-5px] transition-all ${blinko.noteList.isLoading ? 'h-[30px]' : 'h-0'}`} icon="eos-icons:three-dots-loading" width="40" height="40" />

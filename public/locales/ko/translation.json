@@ -193,5 +193,7 @@
   "underline": "밑줄",
   "remove-bold": "굵게 제거",
   "italic": "이탤릭체",
-  "remove-underline": "밑줄 제거"
+  "remove-underline": "밑줄 제거",
+  "select-block-type": "블록 유형 선택",
+  "block-type-select-placeholder": "블록 유형"
 }

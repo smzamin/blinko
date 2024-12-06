@@ -193,5 +193,7 @@
   "underline": "Subraye",
   "italic": "Cursiva",
   "remove-bold": "Eliminar negrita",
-  "remove-underline": "Eliminar subrayado"
+  "remove-underline": "Eliminar subrayado",
+  "select-block-type": "Seleccione el tipo de bloque",
+  "block-type-select-placeholder": "Tipo de bloque"
 }

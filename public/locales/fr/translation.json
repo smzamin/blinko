@@ -194,5 +194,7 @@
   "underline": "Souligner",
   "italic": "Italique",
   "remove-bold": "Supprimer les caractères gras",
-  "remove-underline": "Supprimer le soulignement"
+  "remove-underline": "Supprimer le soulignement",
+  "select-block-type": "Sélectionner le type de bloc",
+  "block-type-select-placeholder": "Type de bloc"
 }

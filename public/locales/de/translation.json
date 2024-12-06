@@ -193,5 +193,7 @@
   "underline": "Unterstreichen Sie",
   "italic": "Kursiv",
   "remove-bold": "Fettdruck entfernen",
-  "remove-underline": "Unterstrich entfernen"
+  "remove-underline": "Unterstrich entfernen",
+  "select-block-type": "Blocktyp auswählen",
+  "block-type-select-placeholder": "Block Typ"
 }

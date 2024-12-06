@@ -199,5 +199,7 @@
   "underline": "تسطير",
   "italic": "مائل",
   "remove-bold": "إزالة الخط العريض",
-  "remove-underline": "إزالة التسطير"
+  "remove-underline": "إزالة التسطير",
+  "select-block-type": "حدد نوع الكتلة",
+  "block-type-select-placeholder": "نوع المربع"
 }
