@@ -1,3 +1,10 @@
+## [0.18.3](https://github.com/blinko-space/blinko/compare/v0.18.2...v0.18.3) (2024-12-06)
+
+
+### Bug Fixes
+
+* button direction ([17d0e5a](https://github.com/blinko-space/blinko/commit/17d0e5ada32eab1d980edfc1a7bc5e956423d9a6))
+
 ## [0.18.2](https://github.com/blinko-space/blinko/compare/v0.18.1...v0.18.2) (2024-12-06)
 
 
