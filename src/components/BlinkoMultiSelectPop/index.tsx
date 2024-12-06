@@ -16,7 +16,7 @@ import { api } from '@/lib/trpc';
 const SelectBox = `select-none multi-select-toolbar flex fixed w-fit h-[50px] 
 p-4 rounded-xl font-bold items-center justify-center 
 left-[calc(50%_-_150px)] md:left-[40%] top-10 md:bottom-10 md:top-auto
-bg-primary text-primary-foreground z-[-99] gap-4  shadow-lg`
+bg-primary text-primary-foreground z-[-999] gap-4  shadow-lg opacity-0`
 
 const SelectItems = "flex items-center justify-center gap-1 cursor-pointer hover:opacity-80 transition-all"
 
@@ -37,7 +37,7 @@ export const BlinkoMultiSelectPop = observer(() => {
         opacity: 0,
         type: 'spring',
         transitionEnd: {
-          zIndex: -99
+          zIndex: -999
         }
       },
     }}

@@ -188,5 +188,15 @@
   "source-code": "Source Code",
   "camera": "Camera",
   "reference": "Reference",
-  "reference-note": "Reference Note"
+  "reference-note": "Reference Note",
+  "source-code-mode": "Source Code Mode",
+  "heading": "Heading",
+  "paragraph": "Paragraph",
+  "quote": "Quote",
+  "bold": "Bold",
+  "remove-bold": "Remove Bold",
+  "italic": "Italic",
+  "remove-italic": "Remove Italic",
+  "underline": "Underline",
+  "remove-underline": "Remove Underline"
 }

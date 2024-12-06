@@ -20,8 +20,8 @@ export const BlinkoReference = observer(({ item }: { item: Note }) => {
   useEffect(() => {
     store.noteReferenceList.call()
   }, [item.id])
-  return <div className="flex md:flex-row flex-col gap-2 p-6 w-full bg-sencondbackground rounded-2xl">
-    <div className="w-full md:w-1/2">
+  return <div className="flex md:flex-row flex-col gap-2 p-6 w-full bg-sencondbackground rounded-2xl max-h-[80vh]">
+    <div className="w-full md:w-1/2 hidden md:block">
       <BlinkoCard blinkoItem={item} />
     </div>
     <ScrollArea className="w-full md:w-1/2 flex flex-col gap-4 max-h-[80vh]" onBottom={() => { }}>

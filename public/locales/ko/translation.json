@@ -183,5 +183,15 @@
   "source-code": "소스 코드",
   "camera": "카메라",
   "reference": "참조",
-  "reference-note": "참고 참고 사항"
+  "reference-note": "참고 참고 사항",
+  "source-code-mode": "소스 코드 모드",
+  "heading": "제목",
+  "paragraph": "단락",
+  "quote": "견적",
+  "bold": "Bold",
+  "remove-italic": "이탤릭체 제거",
+  "underline": "밑줄",
+  "remove-bold": "굵게 제거",
+  "italic": "이탤릭체",
+  "remove-underline": "밑줄 제거"
 }

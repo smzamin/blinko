@@ -15,6 +15,8 @@ import { BlinkoCard } from '@/components/BlinkoCard';
 import { api } from '@/lib/trpc';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { cache } from '@/lib/cache';
+import { reaction } from 'mobx';
+import { EditorStore } from '../Editor/editorStore';
 
 //https://www.npmjs.com/package/browser-thumbnail-generator
 
@@ -83,23 +85,10 @@ const FilesAttachmentRender = observer(({ files, preview, columns }: { files: At
 })
 
 
-const ReferenceRender = observer(({ references, onDelete }: { references: number[], onDelete?: (id: number) => void }) => {
-  const store = RootStore.Local(() => ({
-    noteListByIds: new PromiseState({
-      function: async ({ ids }) => {
-        return await api.notes.listByIds.mutate({ ids })
-      }
-    })
-  }))
-
-  useEffect(() => {
-    store.noteListByIds.call({ ids: references })
-  }, [references])
-
-  const items = store.noteListByIds.value?.slice()?.sort((a, b) => references.indexOf(a.id) - references.indexOf(b.id))
+const ReferenceRender = observer(({ store }: { store: EditorStore }) => {
   return <div className='grid grid-cols-3 gap-2'>
     {
-      items?.map(i => {
+      store?.currentReferences?.map(i => {
         return <Popover placement="bottom">
           <PopoverTrigger>
             <div className="flex items-center gap-1 blinko-tag cursor-pointer hover:opacity-80 group">
@@ -108,7 +97,7 @@ const ReferenceRender = observer(({ references, onDelete }: { references: number
               <div onClick={(e) => {
                 e.stopPropagation()
                 store.noteListByIds.value = store.noteListByIds.value?.filter(t => i.id !== t.id)
-                onDelete?.(i.id)
+                store.deleteReference(i.id)
               }} className={`group-hover:opacity-100 md:opacity-0 hover:opacity-100 cursor-pointer rounded-sm transition-al`}>
                 <Icon icon="basil:cross-solid" width={20} height={20} />
               </div>

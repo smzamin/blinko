@@ -183,5 +183,15 @@
   "source-code": "Código fuente",
   "camera": "Cámara",
   "reference": "Referencia",
-  "reference-note": "Nota de referencia"
+  "reference-note": "Nota de referencia",
+  "source-code-mode": "Modo de código fuente",
+  "heading": "Rúbrica",
+  "paragraph": "Párrafo",
+  "quote": "Cita",
+  "bold": "Negrita",
+  "remove-italic": "Eliminar cursiva",
+  "underline": "Subraye",
+  "italic": "Cursiva",
+  "remove-bold": "Eliminar negrita",
+  "remove-underline": "Eliminar subrayado"
 }

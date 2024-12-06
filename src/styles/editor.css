@@ -273,8 +273,21 @@ div[id^="radix-"][role="dialog"] h2 {
 
 .mdxeditor {
   display: flex;
-  /* flex-direction: column; */
-  flex-direction: column-reverse;
+  flex-direction: column;
+  /* flex-direction: column-reverse; */
+}
+
+._toolbarNodeKindSelectTrigger_uazmk_305, ._toolbarButtonSelectTrigger_uazmk_306, ._selectTrigger_uazmk_307{
+  width: 80px;
+}
+._toolbarNodeKindSelectContainer_uazmk_284, ._toolbarButtonDropdownContainer_uazmk_285, ._toolbarCodeBlockLanguageSelectContent_uazmk_286, ._selectContainer_uazmk_287{
+  background-color: transparent;
+}
+.mdxeditor-diff-source-wrapper{
+  margin-top: 5px;
+}
+[data-radix-select-viewport] {
+  border-radius: 12px;
 }
 
 .prose {

@@ -184,5 +184,15 @@
   "source-code": "源码",
   "camera": "照相机",
   "reference": "引用",
-  "reference-note": "参考说明"
+  "reference-note": "参考说明",
+  "source-code-mode": "源码模式",
+  "heading": "标题",
+  "paragraph": "段落",
+  "quote": "引用",
+  "bold": "粗体",
+  "remove-italic": "删除斜体",
+  "underline": "下划线",
+  "remove-bold": "删除粗体",
+  "italic": "斜体",
+  "remove-underline": "删除下划线"
 }

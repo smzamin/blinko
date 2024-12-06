@@ -183,5 +183,15 @@
   "source-code": "Quellcode",
   "camera": "Kamera",
   "reference": "Referenz",
-  "reference-note": "Referenz-Notiz"
+  "reference-note": "Referenz-Notiz",
+  "source-code-mode": "Quellcode-Modus",
+  "heading": "Überschrift",
+  "paragraph": "Absatz",
+  "quote": "Zitat",
+  "bold": "Kühn",
+  "remove-italic": "Kursivschrift entfernen",
+  "underline": "Unterstreichen Sie",
+  "italic": "Kursiv",
+  "remove-bold": "Fettdruck entfernen",
+  "remove-underline": "Unterstrich entfernen"
 }

@@ -62,10 +62,10 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
             attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } }),
             references
           })
-        }
-        onSended?.()
+        } 
+        onSended?.() 
       }} />
-  </div>
+  </div> 
 })
 
 

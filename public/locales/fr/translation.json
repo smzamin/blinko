@@ -184,5 +184,15 @@
   "source-code": "Code source",
   "camera": "Appareil photo",
   "reference": "Référence",
-  "reference-note": "Note de référence"
+  "reference-note": "Note de référence",
+  "source-code-mode": "Mode code source",
+  "heading": "Rubrique",
+  "paragraph": "Paragraphe",
+  "quote": "Citation",
+  "bold": "Gras",
+  "remove-italic": "Supprimer l'italique",
+  "underline": "Souligner",
+  "italic": "Italique",
+  "remove-bold": "Supprimer les caractères gras",
+  "remove-underline": "Supprimer le soulignement"
 }

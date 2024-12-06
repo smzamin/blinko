@@ -180,5 +180,15 @@
   "preview-mode": "Modo de pré-visualização",
   "source-code": "Código fonte",
   "reference": "Referência",
-  "reference-note": "Nota de referência"
+  "reference-note": "Nota de referência",
+  "source-code-mode": "Modo de código fonte",
+  "heading": "Título",
+  "paragraph": "Parágrafo",
+  "quote": "Citação",
+  "bold": "Negrito",
+  "remove-italic": "Remover itálico",
+  "underline": "Sublinhar",
+  "remove-bold": "Remover negrito",
+  "italic": "Itálico",
+  "remove-underline": "Remover o sublinhado"
 }

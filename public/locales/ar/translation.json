@@ -189,5 +189,15 @@
   "source-code": "كود المصدر",
   "camera": "كاميرا",
   "reference": "المرجع",
-  "reference-note": "مذكرة مرجعية"
+  "reference-note": "مذكرة مرجعية",
+  "source-code-mode": "وضع شفرة المصدر",
+  "heading": "العنوان",
+  "paragraph": "الفقرة",
+  "quote": "اقتباس",
+  "bold": "جريئة",
+  "remove-italic": "إزالة الخط المائل",
+  "underline": "تسطير",
+  "italic": "مائل",
+  "remove-bold": "إزالة الخط العريض",
+  "remove-underline": "إزالة التسطير"
 }

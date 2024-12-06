@@ -181,5 +181,15 @@
   "source-code": "ソースコード",
   "camera": "カメラ",
   "reference": "参考",
-  "reference-note": "参考資料"
+  "reference-note": "参考資料",
+  "source-code-mode": "ソースコードモード",
+  "heading": "見出し",
+  "paragraph": "パラグラフ",
+  "quote": "引用",
+  "bold": "太字",
+  "remove-italic": "イタリック体の削除",
+  "underline": "アンダーライン",
+  "italic": "イタリック",
+  "remove-bold": "太字を削除",
+  "remove-underline": "アンダーラインの削除"
 }

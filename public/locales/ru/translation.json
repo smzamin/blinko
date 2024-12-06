@@ -184,5 +184,15 @@
   "source-code": "Исходный код",
   "camera": "Камера",
   "reference": "Ссылка",
-  "reference-note": "Справочное пособие"
+  "reference-note": "Справочное пособие",
+  "source-code-mode": "Режим исходного кода",
+  "heading": "Направление",
+  "paragraph": "Параграф",
+  "quote": "Цитировать",
+  "bold": "Смелый",
+  "remove-italic": "Удалить курсив",
+  "underline": "Подчеркните",
+  "remove-bold": "Убрать жирный",
+  "italic": "Курсив",
+  "remove-underline": "Удалить подчеркивание"
 }
