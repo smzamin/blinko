@@ -117,8 +117,10 @@ export const BlinkoAddButton = observer(() => {
 
     // Trigger the corresponding action based on the currently active button
     if (activeButton === 'top') {
+      console.log('top111111')
       handleWriteAction();
     } else if (activeButton === 'bottom') {
+      console.log('bottom111')
       handleAiAction();
     } else if (activeButton !== 'none') {
       setShowActions(false);
