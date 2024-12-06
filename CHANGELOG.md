@@ -1,3 +1,10 @@
+## [0.18.1](https://github.com/blinko-space/blinko/compare/v0.18.0...v0.18.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* refacotr editor page ([a0fc60a](https://github.com/blinko-space/blinko/commit/a0fc60a6bdb4da625b48ffe1ba07dc54616c23bf))
+
 # [0.18.0](https://github.com/blinko-space/blinko/compare/v0.17.4...v0.18.0) (2024-12-05)
 
 
