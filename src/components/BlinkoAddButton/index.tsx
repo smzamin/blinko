@@ -115,13 +115,10 @@ export const BlinkoAddButton = observer(() => {
     isDraggingRef.current = false;
     setIsDragging(false);
 
-    // Trigger the corresponding action based on the currently active button
     if (activeButton === 'top') {
-      console.log('top111111')
-      handleWriteAction();
+      handleWriteAction();  
     } else if (activeButton === 'bottom') {
-      console.log('bottom111')
-      handleAiAction();
+      handleAiAction();    
     } else if (activeButton !== 'none') {
       setShowActions(false);
     }
@@ -146,9 +143,9 @@ export const BlinkoAddButton = observer(() => {
     bottom: 130,
     zIndex: 50
   }}>
-    {/* AI icon button */}
+    {/* Writing icon button (Top) */}
     <motion.div
-      onClick={handleAiAction}
+      onClick={handleWriteAction}
       initial={{ y: 0, opacity: 0 }}
       animate={{
         y: showActions ? -BUTTON_SPACING.TOP : 0,
@@ -167,9 +164,9 @@ export const BlinkoAddButton = observer(() => {
       <Icon icon="icon-park-outline:write" width={ICON_SIZE.ACTION} height={ICON_SIZE.ACTION} />
     </motion.div>
 
-    {/* Writing icon button */}
+    {/* AI icon button (Bottom) */}
     <motion.div
-      onClick={handleWriteAction}
+      onClick={handleAiAction}
       initial={{ y: 0, opacity: 0 }}
       animate={{
         y: showActions ? BUTTON_SPACING.BOTTOM : 0,
