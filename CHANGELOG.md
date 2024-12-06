@@ -1,3 +1,10 @@
+## [0.18.2](https://github.com/blinko-space/blinko/compare/v0.18.1...v0.18.2) (2024-12-06)
+
+
+### Bug Fixes
+
+* improve mobile  add button [#238](https://github.com/blinko-space/blinko/issues/238) ([ad84e3e](https://github.com/blinko-space/blinko/commit/ad84e3e4d681f91c4bee845b4e353b0a3163ef42))
+
 ## [0.18.1](https://github.com/blinko-space/blinko/compare/v0.18.0...v0.18.1) (2024-12-06)
 
 
