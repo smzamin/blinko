@@ -58,7 +58,7 @@ const Page = observer(() => {
         {
           blinko.resourceList.isEmpty && <div className='absolute top-[40%] select-none text-ignore flex items-center justify-center gap-2 w-full mt-2 md:mt-10'>
             <div><Icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" /></div>
-            <div className='text-md text-ignore font-bold'>{t('there-are-no-resources-yet-go-upload-them-now')}</div>
+            <div className='text-md text-ignore font-bold max-w-[200px]'>{t('there-are-no-resources-yet-go-upload-them-now')}</div>
           </div>
         }
       </PhotoProvider>

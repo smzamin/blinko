@@ -23,12 +23,12 @@ export const tagRouter = router({
             }
           }
         },
-        distinct: ['id'] 
+        distinct: ['id']
       });
       return tags;
     }),
   updateTagMany: authProcedure
-    .meta({ openapi: { method: 'POST', path: '/v1/tags/batch-update', summary: 'Batch update tags', protect: true , tags: ['Tag']} })
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/batch-update', summary: 'Batch update tags', protect: true, tags: ['Tag'] } })
     .input(z.object({
       ids: z.array(z.number()),
       tag: z.string()
@@ -44,7 +44,7 @@ export const tagRouter = router({
       return true
     }),
   updateTagName: authProcedure
-    .meta({ openapi: { method: 'POST', path: '/v1/tags/update-name', summary: 'Update tag name', protect: true , tags: ['Tag']} })
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/update-name', summary: 'Update tag name', protect: true, tags: ['Tag'] } })
     .input(z.object({
       oldName: z.string(),
       newName: z.string(),
@@ -60,12 +60,12 @@ export const tagRouter = router({
         i.content = i.content.replace(new RegExp(`#${oldName}`, 'g'), "#" + newName)
       })
       for (const note of hasTagNote) {
-        await adminCaller.notes.upsert({ content: note.content, id: note.id })
+        await adminCaller.notes.upsert({ content: note.content, id: note.id, type: note.type })
       }
       return true
     }),
   updateTagIcon: authProcedure
-    .meta({ openapi: { method: 'POST', path: '/v1/tags/update-icon', summary: 'Update tag icon', protect: true , tags: ['Tag']} })
+    .meta({ openapi: { method: 'POST', path: '/v1/tags/update-icon', summary: 'Update tag icon', protect: true, tags: ['Tag'] } })
     .input(z.object({
       id: z.number(),
       icon: z.string()
