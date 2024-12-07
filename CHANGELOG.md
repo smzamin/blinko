@@ -1,3 +1,10 @@
+## [0.19.10](https://github.com/blinko-space/blinko/compare/v0.19.9...v0.19.10) (2024-12-07)
+
+
+### Bug Fixes
+
+* enhance BlinkoEditor and BlinkoMultiSelectPop components ([a8a6d26](https://github.com/blinko-space/blinko/commit/a8a6d266979abedb65ffb189d49a9cd51929680c))
+
 ## [0.19.9](https://github.com/blinko-space/blinko/compare/v0.19.8...v0.19.9) (2024-12-07)
 
 
