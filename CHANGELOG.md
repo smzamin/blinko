@@ -1,3 +1,10 @@
+## [0.19.6](https://github.com/blinko-space/blinko/compare/v0.19.5...v0.19.6) (2024-12-07)
+
+
+### Bug Fixes
+
+* updateTagName type issue [#221](https://github.com/blinko-space/blinko/issues/221) ([34bf86e](https://github.com/blinko-space/blinko/commit/34bf86e00a7fbc42e3fbfe85af40ab850ebbfeff))
+
 ## [0.19.5](https://github.com/blinko-space/blinko/compare/v0.19.4...v0.19.5) (2024-12-07)
 
 
