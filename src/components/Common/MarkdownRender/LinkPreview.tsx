@@ -8,21 +8,22 @@ import { ImageWrapper } from './ImageWrapper';
 
 interface LinkPreviewProps {
   href: any;
+  text: any;
 }
 
-export const LinkPreview = ({ href }: LinkPreviewProps) => {
+export const LinkPreview = ({ href, text }: LinkPreviewProps) => {
   const store = RootStore.Local(() => ({
     previewData: new StorageState<LinkInfo | null>({ key: href, default: null })
   }))
-
-  try {
-    if (typeof href == 'object') {
-      return <ImageWrapper src={href?.props?.src} width={href?.props?.width} height={href?.props?.height} />
-    }
-  } catch (error) {
-    console.log(error)
-    return href
-  }
+  
+  // try {
+  //   if (typeof href == 'object') {
+  //     return <ImageWrapper src={href?.props?.src} width={href?.props?.width} height={href?.props?.height} />
+  //   }
+  // } catch (error) {
+  //   console.log(error)
+  //   return href
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +41,7 @@ export const LinkPreview = ({ href }: LinkPreviewProps) => {
 
   return (
     <>
-      <a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
+      <a href={href} target="_blank" rel="noopener noreferrer">{text}</a>
       {store.previewData?.value?.title && <Card onClick={() => {
         window.open(href, '_blank')
       }} className='p-2 my-1 bg-sencondbackground rounded-xl select-none cursor-pointer' radius='none' shadow='none'>

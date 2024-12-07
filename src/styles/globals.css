@@ -132,6 +132,9 @@ body {
   background: var(--swiper-3d-shadow) !important;
 }
 
+.ͼo.cm-focused .cm-matchingBracket {
+  color: var(--desc);
+}
 
 @layer base {
   :root {

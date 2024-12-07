@@ -87,7 +87,10 @@ export const MarkdownRender = observer(({ content = '', onChange, disableOverflo
           components={{
             p: ({ node, children }) => <p>{highlightTags(children)}</p>,
             code: Code,
-            a: ({ node, children }) => <LinkPreview href={children} />,
+            a: ({ node, children }) => {
+              // console.log(children, node) //node.properties.href
+              return <LinkPreview href={node?.properties?.href} text={children} />
+            },
             li: ({ node, children }) => <ListItem content={content} onChange={onChange}>{children}</ListItem>,
             img: ImageWrapper
           }}
