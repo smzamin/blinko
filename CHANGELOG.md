@@ -1,3 +1,10 @@
+# [0.19.0](https://github.com/blinko-space/blinko/compare/v0.18.7...v0.19.0) (2024-12-07)
+
+
+### Features
+
+* support trash bin ([e5230b0](https://github.com/blinko-space/blinko/commit/e5230b0384b150dd6809ca7eb94f2a514afe5e1a))
+
 ## [0.18.7](https://github.com/blinko-space/blinko/compare/v0.18.6...v0.18.7) (2024-12-07)
 
 
