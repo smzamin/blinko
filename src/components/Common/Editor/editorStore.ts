@@ -1,37 +1,16 @@
 import '@/styles/editor.css';
 import { RootStore } from '@/store';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { useTheme } from 'next-themes';
-import React, { ReactElement, useEffect, useState, useMemo, useRef } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { observer, useLocalObservable } from 'mobx-react-lite';
 import { helper } from '@/lib/helper';
 import { FileType, OnSendContentType } from './type';
-import { MyPlugins, ProcessCodeBlocks } from './editorPlugins';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
-import { useTranslation } from 'react-i18next';
-import { useMediaQuery } from 'usehooks-ts';
 import { api } from '@/lib/trpc';
-import { type Note, NoteType, type Attachment } from '@/server/types';
 import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectPop';
 import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
-import { usePasteFile } from '@/lib/hooks';
-import { getEditorElements, HandleFileType, UploadAction } from './editorUtils';
-import { handleEditorKeyEvents } from './editorUtils';
-import { ButtonWithTooltip, ChangeCodeMirrorLanguage, ConditionalContents, CreateLink, InsertCodeBlock, InsertImage, InsertSandpack, InsertTable, ListsToggle, MDXEditorMethods, ShowSandpackInfo, toolbarPlugin, ViewMode } from '@mdxeditor/editor';
-import { Button, Divider, DropdownTrigger, DropdownItem, DropdownMenu, Dropdown, Input, PopoverTrigger, Popover, PopoverContent, Card } from '@nextui-org/react';
-import { Icon } from '@iconify/react';
-import { CameraIcon, CancelIcon, FileUploadIcon, HashtagIcon, LightningIcon, NotesIcon, SendIcon, VoiceIcon } from '../Icons';
-import { AttachmentsRender, ReferenceRender } from '../AttachmentRender';
-import { ShowCamera } from '../CameraDialog';
-import { ShowAudioDialog } from '../AudioDialog';
-import { DialogStore } from '@/store/module/Dialog';
-import dayjs from 'dayjs';
-import { ScrollArea } from '../ScrollArea';
-import { IconButton } from './Toolbar/IconButton';
+import { getEditorElements, ViewMode } from './editorUtils';
 import { makeAutoObservable } from 'mobx';
 
 

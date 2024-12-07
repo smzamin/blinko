@@ -73,18 +73,12 @@ export const FocusEditor = () => {
     if (editorElements.length > 0) {
       editorElements.forEach(editorElement => {
         editorElement.focus()
-      })
-    }
-  })
-}
-
-export const FocusSourceEditor = () => {
-  requestAnimationFrame(() => {
-    const editorElements = document.querySelectorAll('.cm-editor') as NodeListOf<HTMLElement>
-    if (editorElements.length > 0) {
-      editorElements.forEach(editorElement => {
-        editorElement.className+=" cm-focused"
-        editorElement.focus()
+        const range = document.createRange()
+        range.selectNodeContents(editorElement)
+        range.collapse(false) 
+        const selection = window.getSelection()
+        selection?.removeAllRanges()
+        selection?.addRange(range)
       })
     }
   })

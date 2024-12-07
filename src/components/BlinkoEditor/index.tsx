@@ -6,6 +6,7 @@ import dayjs from "@/lib/dayjs"
 import { useEffect, useRef } from "react"
 import { NoteType } from "@/server/types"
 import { useRouter } from "next/router"
+import { FocusEditor } from "../Common/Editor/editorUtils"
 
 type IProps = {
   mode: 'create' | 'edit',
@@ -20,6 +21,7 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const router = useRouter()
   useEffect(() => {
     blinko.isCreateMode = mode == 'create'
+    FocusEditor()
   }, [mode])
   return <div className="max-h-[100vh]" ref={editorRef} id='global-editor' onClick={() => {
     blinko.isCreateMode = mode == 'create'

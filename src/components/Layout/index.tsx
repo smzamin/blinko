@@ -42,6 +42,7 @@ export const CommonLayout = observer(({
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
   const base = RootStore.Get(BaseStore)
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const throttleSearchRef = useRef(_.throttle(() => {
     blinkoStore.noteList.resetAndCall({})
@@ -118,6 +119,7 @@ export const CommonLayout = observer(({
               <div className="font-black select-none">{t(base.currentTitle)}</div>
               <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={() => blinkoStore.refreshData()} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
               <Input
+                ref={searchInputRef}
                 fullWidth
                 size={isPc ? 'md' : 'sm'}
                 variant="flat"
@@ -148,6 +150,7 @@ export const CommonLayout = observer(({
                     width="24"
                     height="24"
                     onClick={() => {
+                      searchInputRef.current?.focus()
                       blinkoStore.noteListFilterConfig.isUseAiQuery = !blinkoStore.noteListFilterConfig.isUseAiQuery
                       if (blinkoStore.noteListFilterConfig.searchText != '') {
                         throttleSearchRef.current()
