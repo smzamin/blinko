@@ -1,3 +1,10 @@
+## [0.19.9](https://github.com/blinko-space/blinko/compare/v0.19.8...v0.19.9) (2024-12-07)
+
+
+### Bug Fixes
+
+* update Chinese translations and improve SendButton component functionality ([397de27](https://github.com/blinko-space/blinko/commit/397de273f788a866f5f80c86abc38b25cebc0815))
+
 ## [0.19.8](https://github.com/blinko-space/blinko/compare/v0.19.7...v0.19.8) (2024-12-07)
 
 
