@@ -236,6 +236,10 @@ export const helper = {
   cron: {
     human(cronTime: string) {
       switch (cronTime) {
+        // case ''
+        // every 1 mintins for test
+        // case '*/1 * * * *':
+        //   return i18n.t('every-1-minutes')
         case '0 0 * * *':
           return i18n.t('every-day')
         case '0 0 * * 0':
@@ -249,6 +253,10 @@ export const helper = {
       }
     },
     cornTimeList: [
+      // {
+      //   label: i18n.t('every-1-minutes'),
+      //   value: '*/1 * * * *'
+      // },
       {
         label: i18n.t('every-day'),
         value: '0 0 * * *'

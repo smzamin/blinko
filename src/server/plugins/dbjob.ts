@@ -221,6 +221,7 @@ export class DBJob {
 
   static async SetCornTime(cronTime: string) {
     DBJob.Job.setTime(new CronTime(cronTime))
-    return await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { schedule: cronTime } })
+    await this.Start(cronTime, true)
+    // return await prisma.scheduledTask.update({ where: { name: DBBAK_TASK_NAME }, data: { schedule: cronTime, lastRun: new Date() } })
   }
 }

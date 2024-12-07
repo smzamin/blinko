@@ -57,6 +57,6 @@ export class ArchiveJob {
 
   static async SetCornTime(cronTime: string) {
     ArchiveJob.Job.setTime(new CronTime(cronTime))
-    return await prisma.scheduledTask.update({ where: { name: ARCHIVE_BLINKO_TASK_NAME }, data: { schedule: cronTime } })
+    await this.Start(cronTime, true)
   }
 }
