@@ -1,3 +1,10 @@
+## [0.19.1](https://github.com/blinko-space/blinko/compare/v0.19.0...v0.19.1) (2024-12-07)
+
+
+### Bug Fixes
+
+* enhance context handling in TRPC procedures ([f8b3793](https://github.com/blinko-space/blinko/commit/f8b3793a5a143d4c214c7f9e0925b5a0d4bf2f37))
+
 # [0.19.0](https://github.com/blinko-space/blinko/compare/v0.18.7...v0.19.0) (2024-12-07)
 
 
