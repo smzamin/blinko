@@ -145,6 +145,10 @@ export const PerferSetting = observer(() => {
             { key: "2", label: "2" },
             { key: "3", label: "3" },
             { key: "4", label: "4" },
+            { key: "5", label: "5" },
+            { key: "6", label: "6" },
+            { key: "7", label: "7" },
+            { key: "8", label: "8" },
           ]}
           onChange={async (value) => {
             await PromiseCall(api.config.update.mutate({
