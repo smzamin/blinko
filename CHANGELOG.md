@@ -1,3 +1,10 @@
+## [0.19.7](https://github.com/blinko-space/blinko/compare/v0.19.6...v0.19.7) (2024-12-07)
+
+
+### Bug Fixes
+
+* allow More Columns for Desktop mode [#243](https://github.com/blinko-space/blinko/issues/243) ([b536ff5](https://github.com/blinko-space/blinko/commit/b536ff595872965e5951f8ac4a5391c2fd011a74))
+
 ## [0.19.6](https://github.com/blinko-space/blinko/compare/v0.19.5...v0.19.6) (2024-12-07)
 
 
