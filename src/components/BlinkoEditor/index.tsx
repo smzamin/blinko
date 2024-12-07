@@ -19,9 +19,11 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps
   const blinko = RootStore.Get(BlinkoStore)
   const editorRef = useRef<any>(null)
   const router = useRouter()
+  
   useEffect(() => {
     blinko.isCreateMode = mode == 'create'
   }, [mode])
+
   return <div className="max-h-[100vh]" ref={editorRef} id='global-editor' onClick={() => {
     blinko.isCreateMode = mode == 'create'
   }}>

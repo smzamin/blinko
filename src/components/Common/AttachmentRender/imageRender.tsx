@@ -31,7 +31,6 @@ const ImageThumbnailRender = ({ file, className }: { file: FileType, className?:
       }
       setCurrentSrc(file.preview)
     }}
-    // style={{ borderRadius: '13px' }}
     className={className}
   />
 }
