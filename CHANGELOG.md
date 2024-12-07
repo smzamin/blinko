@@ -1,3 +1,10 @@
+## [0.19.4](https://github.com/blinko-space/blinko/compare/v0.19.3...v0.19.4) (2024-12-07)
+
+
+### Bug Fixes
+
+* enhance sidebar functionality and layout responsiveness [#244](https://github.com/blinko-space/blinko/issues/244) ([89825ec](https://github.com/blinko-space/blinko/commit/89825ecd781b09910b15a240ae4c9c779bd7e71d))
+
 ## [0.19.3](https://github.com/blinko-space/blinko/compare/v0.19.2...v0.19.3) (2024-12-07)
 
 
