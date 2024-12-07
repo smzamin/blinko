@@ -1,3 +1,10 @@
+## [0.19.11](https://github.com/blinko-space/blinko/compare/v0.19.10...v0.19.11) (2024-12-07)
+
+
+### Bug Fixes
+
+* enhance image rendering with responsive grid and error handling improvements ([b2a5883](https://github.com/blinko-space/blinko/commit/b2a58834a6dc4d21959722a8d675569f66be3423))
+
 ## [0.19.10](https://github.com/blinko-space/blinko/compare/v0.19.9...v0.19.10) (2024-12-07)
 
 
