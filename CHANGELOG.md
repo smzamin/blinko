@@ -1,3 +1,10 @@
+## [0.18.7](https://github.com/blinko-space/blinko/compare/v0.18.6...v0.18.7) (2024-12-07)
+
+
+### Bug Fixes
+
+* enhance editor focus behavior and clean up imports ([84c0b08](https://github.com/blinko-space/blinko/commit/84c0b0855a5d5c133f80197e0d4c9bd1d9a543ce))
+
 ## [0.18.6](https://github.com/blinko-space/blinko/compare/v0.18.5...v0.18.6) (2024-12-07)
 
 
