@@ -1,3 +1,10 @@
+## [0.18.6](https://github.com/blinko-space/blinko/compare/v0.18.5...v0.18.6) (2024-12-07)
+
+
+### Bug Fixes
+
+* improve mobile ([442178a](https://github.com/blinko-space/blinko/commit/442178a3002471b56f6f3a07ed89b5ce135e59ca))
+
 ## [0.18.5](https://github.com/blinko-space/blinko/compare/v0.18.4...v0.18.5) (2024-12-07)
 
 
