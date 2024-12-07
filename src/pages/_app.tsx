@@ -58,11 +58,14 @@ const MyApp = ({ Component, pageProps }) => {
 export default MyApp;
 
 const useProgressBar = () => {
-  const routeChangeStart = () => {
+  const routeChangeStart = (url: string, { shallow }) => {
+    console.log(url, shallow);
+    if (shallow) return;
     NProgress.start();
   };
 
-  const routeChangeEnd = () => {
+  const routeChangeEnd = (url: string, { shallow }) => {
+    if (shallow) return;
     NProgress.done(true);
   };
 

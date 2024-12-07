@@ -17,11 +17,13 @@ export class BaseStore implements Store {
     {
       title: "blinko",
       href: '/',
+      shallow: true,
       icon: 'basil:lightning-outline'
     },
     {
       title: "notes",
       href: '/notes',
+      shallow: true,
       icon: 'hugeicons:note'
     },
     {
@@ -32,6 +34,7 @@ export class BaseStore implements Store {
     {
       title: "archived",
       href: '/archived',
+      shallow: true,
       icon: 'solar:box-broken'
     },
     {

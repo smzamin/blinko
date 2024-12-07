@@ -21,8 +21,11 @@ import { eventBus } from "@/lib/event";
 import TagSelectPop from "../Common/PopoverFloat/tagSelectPop";
 import AiWritePop from "../Common/PopoverFloat/aiWritePop";
 import { createPortal } from "react-dom";
+import { Sidebar } from "./Sidebar";
+import { MobileNavBar } from "./MobileNavBar";
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
+
 export const CommonLayout = observer(({
   children,
   header,
@@ -68,56 +71,25 @@ export const CommonLayout = observer(({
     return <>{children}</>
   }
 
-  const SideBarContent = (
-    <div className="flex h-full w-[288px] flex-1 flex-col p-4 relative bg-background ">
-      <div className="flex items-center gap-2 px-2 select-none w-full ">
-        {
-          theme == 'dark' ? <Image src="/logo-dark.svg" width={100} /> : <Image src="/logo.svg" width={100} />
-        }
-      </div>
-      <ScrollShadow className="-mr-[16px] mt-[-5px] h-full max-h-full pr-6 ">
-        <div>
-          <div className="flex flex-col gap-1 mt-4 font-semibold">
-            {
-              base.routerList.map(i => {
-                return <Link key={i.title} href={i.href} onClick={() => {
-                  base.currentRouter = i
-                  setisOpen(false)
-                }}>
-                  <div className={`group ${SideBarItem} ${i?.href == router.pathname ? '!bg-primary !text-primary-foreground' : ''}`}>
-                    <Icon className="group-hover:translate-x-1  transition-all" icon={i.icon} width="20" height="20" />
-                    <div className="group-hover:translate-x-1  transition-all">{t(i.title)}</div>
-                  </div>
-                </Link>
-              })
-            }
-            <div>
-              {blinkoStore.tagList.value?.listTags.length != 0 && blinkoStore.tagList.value?.listTags && <>
-                <TagListPanel />
-              </>}
-            </div>
-          </div>
-        </div>
-      </ScrollShadow>
-      <div className="halation absolute inset-0 h-[250px] w-[250px] overflow-hidden blur-3xl z-[0] pointer-events-none">
-        <div className="w-full h-[100%] bg-[#ffc65c] opacity-20"
-          style={{ "clipPath": "circle(35% at 50% 50%)" }} />
-      </div>
-    </div>
-  );
-
   return (
     <div className="flex w-full h-mobile-full overflow-x-hidden" id="outer-container">
-      {
-        blinkoStore.showAi && createPortal(<BlinkoAi />, document.body)
-      }
+      {blinkoStore.showAi && createPortal(<BlinkoAi />, document.body)}
       <TagSelectPop />
       <AiWritePop />
-      <Menu disableAutoFocus onClose={() => setisOpen(false)} onOpen={setisOpen} isOpen={isOpen} pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
-        {SideBarContent}
+      
+      <Menu 
+        disableAutoFocus 
+        onClose={() => setisOpen(false)} 
+        onOpen={setisOpen} 
+        isOpen={isOpen} 
+        pageWrapId={'page-wrap'} 
+        outerContainerId={'outer-container'}
+      >
+        <Sidebar onItemClick={() => setisOpen(false)} />
       </Menu>
-      {isPc && SideBarContent}
-      {/* sm:max-w-[calc(100%_-_250px)] */}
+      
+      {isPc && <Sidebar />}
+      
       <main id="page-wrap" className={`flex overflow-y-hidden w-full flex-col gap-y-1 bg-sencondbackground ${isPc ? 'max-w-[calc(100%_-_250px)]' : ''}`}>
         {/* nav bar  */}
         <header className="relative flex h-16 min-h-16 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 pb-2">
@@ -232,22 +204,7 @@ export const CommonLayout = observer(({
           </div>
         </ScrollArea>
 
-        {/* mobile footer bar  */}
-        <div className={`h-[60px] flex w-full px-4 py-2 gap-2 bg-background ${blinkoStore.config.value?.isHiddenMobileBar ? 'hidden' : 'block'} md:hidden`}>
-          {
-            base.routerList.map(i => {
-              return <Link className="flex-1 " key={i.title} href={i.href} onClick={() => {
-                base.currentRouter = i
-                setisOpen(false)
-              }}>
-                <div className={`flex flex-col group ${SideBarItem} ${i?.href == router.pathname ? '!bg-primary !text-primary-foreground' : ''}`}>
-                  <Icon className="text-center" icon={i.icon} width="20" height="20" />
-                </div>
-              </Link>
-            })
-          }
-        </div>
-
+        <MobileNavBar onItemClick={() => setisOpen(false)} />
         <BlinkoRightClickMenu />
       </main>
     </div>

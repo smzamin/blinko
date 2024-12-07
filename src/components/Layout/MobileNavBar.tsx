@@ -1,0 +1,51 @@
+import React from "react";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { observer } from "mobx-react-lite";
+import { RootStore } from "@/store";
+import { BaseStore } from "@/store/baseStore";
+import { BlinkoStore } from "@/store/blinkoStore";
+import { SideBarItem } from "./index";
+import { useTranslation } from "react-i18next";
+
+interface MobileNavBarProps {
+  onItemClick?: () => void;
+}
+
+export const MobileNavBar = observer(({ onItemClick }: MobileNavBarProps) => {
+  const router = useRouter();
+  const base = RootStore.Get(BaseStore);
+  const { t } = useTranslation(); 
+  const blinkoStore = RootStore.Get(BlinkoStore);
+
+  if (blinkoStore.config.value?.isHiddenMobileBar) {
+    return null;
+  }
+
+  return (
+    <div className="h-[70px] flex w-full px-4 py-2 gap-2 bg-background block md:hidden">
+      {base.routerList.map(i => (
+        <Link
+          className="flex-1"
+          key={i.title}
+          shallow={i.shallow}
+          href={i.href}
+          onClick={() => {
+            base.currentRouter = i;
+            onItemClick?.();
+          }}
+        >
+          <div
+            className={`flex flex-col group ${SideBarItem} ${
+              i?.href == router.pathname ? '!bg-primary !text-primary-foreground' : ''
+            }`}
+          >
+            <Icon className="text-center" icon={i.icon} width="20" height="20" />
+            <div className="text-center text-xs mt-[-4px]">{t(i.title)}</div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+}); 

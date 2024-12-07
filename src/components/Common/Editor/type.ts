@@ -62,7 +62,7 @@ export const TranslationEditor = (key: string, defaultValue: string, interpolati
   if (key === 'toolbar.removeUnderline') return t('remove-underline');
   if (key === 'toolbar.blockTypeSelect.selectBlockTypeTooltip') return t('select-block-type');
   if (key === 'toolbar.blockTypeSelect.placeholder') return t('block-type-select-placeholder');
-  console.log(key, defaultValue, interpolations?.level); // Keep for debugging if needed
+  // console.log(key, defaultValue, interpolations?.level); // Keep for debugging if needed
   // Handle heading translations
   if (key.startsWith('toolbar.blockTypes.heading')) {
     return t('heading') + ' ' + interpolations?.level;
