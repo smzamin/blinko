@@ -1,3 +1,10 @@
+## [0.19.5](https://github.com/blinko-space/blinko/compare/v0.19.4...v0.19.5) (2024-12-07)
+
+
+### Bug Fixes
+
+* corn job issue [#252](https://github.com/blinko-space/blinko/issues/252) ([a709aeb](https://github.com/blinko-space/blinko/commit/a709aeb652791006d1ceaf40404ce81fc26a0b8c))
+
 ## [0.19.4](https://github.com/blinko-space/blinko/compare/v0.19.3...v0.19.4) (2024-12-07)
 
 
