@@ -1,3 +1,10 @@
+## [0.19.3](https://github.com/blinko-space/blinko/compare/v0.19.2...v0.19.3) (2024-12-07)
+
+
+### Bug Fixes
+
+* update LinkPreview component to accept text prop and improve link rendering [#250](https://github.com/blinko-space/blinko/issues/250) ([1b73ec0](https://github.com/blinko-space/blinko/commit/1b73ec08948e5042a91e744ed4f84149fd813088))
+
 ## [0.19.2](https://github.com/blinko-space/blinko/compare/v0.19.1...v0.19.2) (2024-12-07)
 
 
