@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 export const IconButton = observer(({ tooltip, icon, onClick, classNames, children }: {
   tooltip: string,
   icon: string | any,
-  onClick: (e) => void,
+  onClick?: (e) => void,
   classNames?: {
     base?: string,
     icon?: string,
