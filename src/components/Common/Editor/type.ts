@@ -69,3 +69,4 @@ export const TranslationEditor = (key: string, defaultValue: string, interpolati
   }
   return defaultValue;
 }
+

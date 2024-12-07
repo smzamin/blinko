@@ -65,3 +65,27 @@ export const handleEditorKeyEvents = () => {
     }, true)
   })
 }
+
+
+export const FocusEditor = () => {
+  requestAnimationFrame(() => {
+    const editorElements = getEditorElements()
+    if (editorElements.length > 0) {
+      editorElements.forEach(editorElement => {
+        editorElement.focus()
+      })
+    }
+  })
+}
+
+export const FocusSourceEditor = () => {
+  requestAnimationFrame(() => {
+    const editorElements = document.querySelectorAll('.cm-editor') as NodeListOf<HTMLElement>
+    if (editorElements.length > 0) {
+      editorElements.forEach(editorElement => {
+        editorElement.className+=" cm-focused"
+        editorElement.focus()
+      })
+    }
+  })
+}

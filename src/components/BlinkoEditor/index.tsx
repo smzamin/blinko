@@ -12,6 +12,7 @@ type IProps = {
   onSended?: () => void,
   onHeightChange?: (height: number) => void,
 }
+
 export const BlinkoEditor = observer(({ mode, onSended, onHeightChange }: IProps) => {
   const isCreateMode = mode == 'create'
   const blinko = RootStore.Get(BlinkoStore)
