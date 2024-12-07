@@ -1,3 +1,10 @@
+## [0.19.8](https://github.com/blinko-space/blinko/compare/v0.19.7...v0.19.8) (2024-12-07)
+
+
+### Bug Fixes
+
+* follow System theme settings for dark / light mode [#219](https://github.com/blinko-space/blinko/issues/219) ([4d702a5](https://github.com/blinko-space/blinko/commit/4d702a5f807e7486a86c68757b46051b184e2551))
+
 ## [0.19.7](https://github.com/blinko-space/blinko/compare/v0.19.6...v0.19.7) (2024-12-07)
 
 
