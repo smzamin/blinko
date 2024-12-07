@@ -25,23 +25,29 @@ const ImageThumbnailRender = ({ file, className }: { file: FileType, className?:
   }, [isOriginalError])
   return <Image
     src={currentSrc}
+    classNames={{
+      wrapper: '!max-w-full',
+    }}
     onError={() => {
       if (file.preview == currentSrc) {
         return setIsOriginalError(true)
       }
       setCurrentSrc(file.preview)
     }}
-    className={className}
+    className={`object-cover w-full ${className} `}  // 修改这里
   />
 }
 
 const ImageRender = observer((props: IProps) => {
-  const { files, preview = false, columns = 3 } = props
+  const { files, preview = false, columns } = props
   const isPc = useMediaQuery('(min-width: 768px)')
   const images = files?.filter(i => i.previewType == 'image')
 
   const imageRenderClassName = useMemo(() => {
     const imageLength = files?.filter(i => i.previewType == 'image')?.length
+    if (columns) {
+      return `grid grid-cols-${columns} gap-2`
+    }
     if (!preview && !isPc) {
       return `flex items-center overflow-x-scroll gap-2`
     }
@@ -49,17 +55,20 @@ const ImageRender = observer((props: IProps) => {
       return `grid grid-cols-2 gap-2`
     }
     if (imageLength > 1 && imageLength <= 5) {
-      return `grid grid-cols-2 gap-2`
+      return `grid grid-cols-2 gap-3`
     }
     if (imageLength > 5) {
-      return `grid grid-cols-3 gap-2`
+      return `grid grid-cols-3 gap-3`
     }
     return ''
   }, [images])
 
   const imageHeight = useMemo(() => {
     const imageLength = files?.filter(i => i.previewType == 'image')?.length
-    if (!preview&& !isPc) {
+    if (columns) {
+      return `max-h-[100px] w-auto`
+    }
+    if (!preview && !isPc) {
       return `h-[80px] w-[80px] min-w-[80px]`
     }
     if (imageLength == 1) {
