@@ -1,3 +1,10 @@
+## [0.18.5](https://github.com/blinko-space/blinko/compare/v0.18.4...v0.18.5) (2024-12-07)
+
+
+### Bug Fixes
+
+* improve side bar ([9e810a0](https://github.com/blinko-space/blinko/commit/9e810a09c1d33e93218ed3f60ad2b8748032d8c9))
+
 ## [0.18.4](https://github.com/blinko-space/blinko/compare/v0.18.3...v0.18.4) (2024-12-06)
 
 
