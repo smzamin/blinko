@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Store } from './standard/base';
 import { StorageState } from './standard/StorageState';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable, action } from 'mobx';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
@@ -116,5 +116,17 @@ export class BaseStore implements Store {
         this.currentTitle = this.currentRouter?.title ?? ''
       }
     }, [this.currentRouter, router.pathname])
+  }
+
+  isSidebarCollapsed: boolean = false;
+  sideBarWidth = 288
+
+  toggleSidebar = () => {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    this.sideBarWidth = this.isSidebarCollapsed ? 80 : 288
+  }
+  collapseSidebar = () => {
+    this.isSidebarCollapsed = false;
+    this.sideBarWidth = 288
   }
 }
