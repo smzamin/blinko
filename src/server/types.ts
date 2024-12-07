@@ -21,6 +21,7 @@ export const ZUserPerferConfigKey = z.union([
   z.literal('isOrderByCreateTime'),
   z.literal('language'),
   z.literal('theme'),
+  z.literal('webhookEndpoint'),
 ]);
 
 export const ZConfigKey = z.union([
@@ -75,6 +76,7 @@ export const ZConfigSchema = z.object({
   embeddingScore: z.number().optional(),
   language: z.any().optional(),
   theme: z.any().optional(),
+  webhookEndpoint: z.any().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

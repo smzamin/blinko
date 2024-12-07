@@ -73,4 +73,21 @@ export const publicRouter = router({
         }
       }, { ttl: 60 * 60 * 1000 })
     }),
+  testWebhook: publicProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/public/test-webhook', summary: 'Test webhook', tags: ['Public'] } })
+    .input(z.object({
+      data: z.any().optional(),
+      webhookType: z.string().optional()
+    }))
+    .output(z.object({
+      success: z.boolean(),
+      data: z.any().optional()
+    }))
+    .query(async function ({ input }) {
+      console.log('test webhook', input, input.data?.attachments, input.data?.tags)
+      return {
+        success: true,
+        data: input.data
+      }
+    })
 })

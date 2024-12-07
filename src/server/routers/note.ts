@@ -12,6 +12,8 @@ import { attachmentsSchema, noteReferenceSchema, notesSchema, tagSchema, tagsToN
 import { getGlobalConfig } from './config';
 import { FileService } from '../plugins/utils';
 import { AiService } from '../plugins/ai';
+import axios from 'axios';
+import { SendWebhook } from './helper';
 
 const extractHashtags = (input: string): string[] => {
   const withoutCodeBlocks = input.replace(/```[\s\S]*?```/g, '');
@@ -238,6 +240,7 @@ export const noteRouter = router({
     }))
     .output(z.any())
     .mutation(async function ({ input, ctx }) {
+      const globalConfig = await getGlobalConfig(ctx)
       let { id, isArchived, isRecycle, type, attachments, content, isTop, isShare, references } = input
       if (content != null) {
         content = content?.replace(/&#x20;/g, ' ')?.replace(/&#x20;\\/g, '')?.replace(/\\([#<>{}[\]|`*-_.])/g, '$1');
@@ -370,6 +373,7 @@ export const noteRouter = router({
             });
           }
 
+          SendWebhook({ ...note, attachments }, 'create', ctx)
           return note
         } catch (error) {
           console.log(error)
@@ -409,7 +413,7 @@ export const noteRouter = router({
       ids: z.array(z.number())
     }))
     .output(z.any())
-    .mutation(async function ({ input }) {
+    .mutation(async function ({ input, ctx }) {
       const { ids } = input
       const notes = await prisma.notes.findMany({
         where: { id: { in: ids } },
@@ -422,6 +426,7 @@ export const noteRouter = router({
       })
       const handleDeleteRelation = async () => {
         for (const note of notes) {
+          SendWebhook({ ...note }, 'delete', ctx)
           await prisma.tagsToNote.deleteMany({ where: { noteId: note.id } })
 
           await prisma.noteReference.deleteMany({
