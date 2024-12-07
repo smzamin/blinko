@@ -16,7 +16,7 @@ export async function createContext(
   if (!token?.sub) {
     return {} as User;
   }
-  return token
+  return { ...token, id: token.sub }
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

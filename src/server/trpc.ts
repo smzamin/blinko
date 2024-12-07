@@ -23,7 +23,6 @@ export const t = initTRPC.context<Context>().meta<OpenApiMeta>().create({
 export const router = t.router;
 export const publicProcedure = t.procedure;
 export const authProcedure = t.procedure.use(async ({ ctx, next }) => {
-  console.log(ctx)
   if (!ctx?.name) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -31,7 +30,8 @@ export const authProcedure = t.procedure.use(async ({ ctx, next }) => {
     })
   }
   return next({
-    ctx
+    ctx,
+    ...{ id: ctx.sub }
   })
 })
 
