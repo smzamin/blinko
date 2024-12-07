@@ -59,7 +59,6 @@ export const noteRouter = router({
         }
       }
       let where: Prisma.notesWhereInput = {
-        isRecycle,
         OR: [
           { accountId: Number(ctx.id) },
           { accountId: null }
@@ -72,7 +71,10 @@ export const noteRouter = router({
           content: { contains: searchText, mode: 'insensitive' }
         }
       } else {
-        where.isArchived = isArchived
+        where.isRecycle = isRecycle
+        if (!isRecycle) {
+          where.isArchived = isArchived
+        }
         if (type != -1) {
           where.type = type
         }
@@ -231,11 +233,12 @@ export const noteRouter = router({
       isArchived: z.union([z.boolean(), z.null()]).default(null),
       isTop: z.union([z.boolean(), z.null()]).default(null),
       isShare: z.union([z.boolean(), z.null()]).default(null),
-      references: z.array(z.number()).optional(),
+      isRecycle: z.union([z.boolean(), z.null()]).default(null),
+      references: z.array(z.number()).optional()
     }))
     .output(z.any())
     .mutation(async function ({ input, ctx }) {
-      let { id, isArchived, type, attachments, content, isTop, isShare, references } = input
+      let { id, isArchived, isRecycle, type, attachments, content, isTop, isShare, references } = input
       if (content != null) {
         content = content?.replace(/&#x20;/g, ' ')?.replace(/&#x20;\\/g, '')?.replace(/\\([#<>{}[\]|`*-_.])/g, '$1');
       }
@@ -263,6 +266,7 @@ export const noteRouter = router({
         ...(isArchived !== null && { isArchived }),
         ...(isTop !== null && { isTop }),
         ...(isShare !== null && { isShare }),
+        ...(isRecycle !== null && { isRecycle }),
         ...(content != null && { content })
       }
 
@@ -300,6 +304,7 @@ export const noteRouter = router({
             }
           })
         }
+
         if (needTobeAddedRelationTags.length != 0) {
           await prisma.tagsToNote.createMany({
             data: needTobeAddedRelationTags.map(i => {
@@ -389,8 +394,16 @@ export const noteRouter = router({
       }
       return await prisma.notes.updateMany({ where: { id: { in: ids } }, data: update })
     }),
+  trashMany: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/batch-trash', summary: 'Batch trash note', protect: true, tags: ['Note'] } })
+    .input(z.object({ ids: z.array(z.number()) }))
+    .output(z.any())
+    .mutation(async function ({ input }) {
+      const { ids } = input
+      return await prisma.notes.updateMany({ where: { id: { in: ids } }, data: { isRecycle: true } })
+    }),
   deleteMany: authProcedure.use(demoAuthMiddleware)
-    .meta({ openapi: { method: 'POST', path: '/v1/note/batch-delete', summary: 'Batch delete update note', protect: true, tags: ['Note'] } })
+    .meta({ openapi: { method: 'POST', path: '/v1/note/batch-delete', summary: 'Batch delete note', protect: true, tags: ['Note'] } })
     // .output(z.union([z.null(), notesSchema]))
     .input(z.object({
       ids: z.array(z.number())

@@ -195,5 +195,6 @@
   "remove-bold": "Eliminar negrita",
   "remove-underline": "Eliminar subrayado",
   "select-block-type": "Seleccione el tipo de bloque",
-  "block-type-select-placeholder": "Tipo de bloque"
+  "block-type-select-placeholder": "Tipo de bloque",
+  "trash": "basura"
 }

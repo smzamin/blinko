@@ -36,6 +36,7 @@ export class BlinkoStore implements Store {
   }
   noteListFilterConfig = {
     isArchived: false,
+    isRecycle: false,
     type: 0,
     tagId: null as number | null,
     searchText: "",
@@ -49,12 +50,12 @@ export class BlinkoStore implements Store {
   updateTicker = 0
   fullNoteList: Note[] = []
   upsertNote = new PromiseState({
-    function: async ({ content = null, isArchived, type, id, attachments = [], refresh = true, isTop, isShare, showToast = true, references = [] }:
-      { content?: string | null, isArchived?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean, isShare?: boolean, showToast?: boolean, references?: number[] }) => {
+    function: async ({ content = null, isArchived, isRecycle, type, id, attachments = [], refresh = true, isTop, isShare, showToast = true, references = [] }:
+      { content?: string | null, isArchived?: boolean, isRecycle?: boolean, type?: NoteType, id?: number, attachments?: Attachment[], refresh?: boolean, isTop?: boolean, isShare?: boolean, showToast?: boolean, references?: number[] }) => {
       if (type == undefined) {
         type = this.noteTypeDefault
       }
-      const res = await api.notes.upsert.mutate({ content, type, isArchived, id, attachments, isTop, isShare, references })
+      const res = await api.notes.upsert.mutate({ content, type, isArchived, isRecycle, id, attachments, isTop, isShare, references })
       if (this.config.value?.isUseAI) {
         if (res?.id) {
           api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
@@ -69,7 +70,6 @@ export class BlinkoStore implements Store {
       return res
     }
   })
-
 
   noteList = new PromisePageState({
     function: async ({ page, size }) => {
@@ -228,6 +228,7 @@ export class BlinkoStore implements Store {
       this.noteListFilterConfig.withLink = false
       this.noteListFilterConfig.withFile = false
       this.noteListFilterConfig.searchText = searchText ?? ''
+      this.noteListFilterConfig.isRecycle = false
 
       if (router.pathname == '/notes') {
         this.noteListFilterConfig.type = NoteType.NOTE
@@ -252,6 +253,9 @@ export class BlinkoStore implements Store {
       if (router.pathname == '/archived') {
         this.noteListFilterConfig.type = -1
         this.noteListFilterConfig.isArchived = true
+      }
+      if (router.pathname == '/trash') {
+        this.noteListFilterConfig.isRecycle = true
       }
       this.noteList.resetAndCall({})
     }, [router.isReady, this.forceQuery])

@@ -193,5 +193,6 @@
   "remove-bold": "太字を削除",
   "remove-underline": "アンダーラインの削除",
   "select-block-type": "ブロックタイプを選択",
-  "block-type-select-placeholder": "ブロックタイプ"
+  "block-type-select-placeholder": "ブロックタイプ",
+  "trash": "ゴミ"
 }

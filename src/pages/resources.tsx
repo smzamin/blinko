@@ -4,7 +4,6 @@ import { BlinkoStore } from "@/store/blinkoStore";
 import { Card, Image } from "@nextui-org/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { FileIcon, defaultStyles } from 'react-file-icon';
 import { filesize } from "filesize";
 import dayjs from "@/lib/dayjs";
 import { PhotoProvider, PhotoView } from "react-photo-view";

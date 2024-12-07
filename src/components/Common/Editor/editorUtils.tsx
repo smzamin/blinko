@@ -67,12 +67,13 @@ export const handleEditorKeyEvents = () => {
 }
 
 
-export const FocusEditor = () => {
+export const FocusEditor = (focusToEnd: boolean = false) => {
   requestAnimationFrame(() => {
     const editorElements = getEditorElements()
     if (editorElements.length > 0) {
       editorElements.forEach(editorElement => {
         editorElement.focus()
+        if(!focusToEnd) return
         const range = document.createRange()
         range.selectNodeContents(editorElement)
         range.collapse(false) 

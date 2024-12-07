@@ -200,5 +200,6 @@
   "underline": "Underline",
   "remove-underline": "Remove Underline",
   "select-block-type": "Select Block Type",
-  "block-type-select-placeholder": "Block Type"
+  "block-type-select-placeholder": "Block Type",
+  "trash": "Recycle Bin"
 }

@@ -38,6 +38,12 @@ export class BaseStore implements Store {
       icon: 'solar:box-broken'
     },
     {
+      title: "trash",
+      href: '/trash',
+      hiddenMobile: true,
+      icon: 'formkit:trash'
+    },
+    {
       title: "settings",
       href: '/settings',
       icon: 'lsicon:setting-outline'

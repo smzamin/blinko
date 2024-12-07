@@ -12,10 +12,9 @@ interface Props {
 }
 
 export const SendButton = ({ store, isSendLoading }: Props) => {
+  const isPc = useMediaQuery('(min-width: 768px)')
   return (
-    <Div onTap={() => {
-      store.handleSend()
-    }}>
+      <div>
       <Button
         isDisabled={!store.canSend}
         size='sm'
@@ -24,6 +23,17 @@ export const SendButton = ({ store, isSendLoading }: Props) => {
         className={`ml-2 w-[60px] group`}
         isIconOnly
         color='primary'
+        onClick={()=>{
+          if(isPc){
+            store.handleSend()
+          }
+        }}
+        onTouchEnd={(e)=>{
+          e.preventDefault()
+          if(!isPc){
+            store.handleSend()
+          }
+        }}
       >
         {store.files?.some(i => i.uploadPromise?.loading?.value) ? (
           <Icon icon="line-md:uploading-loop" width="24" height="24" />
@@ -31,6 +41,6 @@ export const SendButton = ({ store, isSendLoading }: Props) => {
           <SendIcon className='primary-foreground !text-primary-foreground group-hover:rotate-[-35deg] transition-all' />
         )}
       </Button>
-    </Div>
+      </div>
   );
 }; 

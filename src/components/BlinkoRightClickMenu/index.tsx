@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { NoteType } from "@/server/types";
 import { useRouter } from "next/router";
 import { AiStore } from "@/store/aiStore";
+import { FocusEditor } from "../Common/Editor/editorUtils";
 
 export const ShowEditBlinkoModel = (size: string = '2xl', mode: 'create' | 'edit' = 'edit') => {
   const blinko = RootStore.Get(BlinkoStore)
@@ -31,7 +32,6 @@ export const ShowEditBlinkoModel = (size: string = '2xl', mode: 'create' | 'edit
 }
 export const EditItem = observer(() => {
   const { t } = useTranslation();
-  const blinko = RootStore.Get(BlinkoStore)
   const [isDetailPage, setIsDetailPage] = useState(false)
   const router = useRouter()
   useEffect(() => {
@@ -105,10 +105,32 @@ export const ArchivedItem = observer(() => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore)
   return <div className="flex items-start gap-2" onClick={e => {
-    blinko.upsertNote.call({ id: blinko.curSelectedNote?.id, isArchived: !blinko.curSelectedNote?.isArchived })
+    if (blinko.curSelectedNote?.isRecycle) {
+      return blinko.upsertNote.call({
+        id: blinko.curSelectedNote?.id,
+        isRecycle: false,
+        isArchived: false
+      })
+    }
+
+    if (blinko.curSelectedNote?.isArchived) {
+      return blinko.upsertNote.call({
+        id: blinko.curSelectedNote?.id,
+        isArchived: false,
+      })
+    }
+
+    if (!blinko.curSelectedNote?.isArchived) {
+      return blinko.upsertNote.call({
+        id: blinko.curSelectedNote?.id,
+        isArchived: true
+      })
+    }
+
+ 
   }}>
     <Icon icon="eva:archive-outline" width="20" height="20" />
-    {blinko.curSelectedNote?.isArchived ? t('recovery') : t('archive')}
+    {blinko.curSelectedNote?.isArchived || blinko.curSelectedNote?.isRecycle ? t('recovery') : t('archive')}
   </div>
 })
 
@@ -120,11 +142,22 @@ export const AITagItem = observer(() => {
     <div className="flex items-start gap-2" onClick={e => {
       aiStore.autoTag.call(blinko.curSelectedNote?.id!, blinko.curSelectedNote?.content!)
     }}>
-      <Icon icon="carbon:ai-status" width="20" height="20" />
+      <Icon icon="majesticons:tag-line" width="20" height="20" />
       <div>{t('ai-tag')}</div>
     </div>
   );
 });
+
+export const TrashItem = observer(() => {
+  const { t } = useTranslation();
+  const blinko = RootStore.Get(BlinkoStore)
+  return <div className="flex items-start gap-2 text-red-500" onClick={e => {
+    PromiseCall(api.notes.trashMany.mutate({ ids: [blinko.curSelectedNote?.id!] }))
+  }}>
+    <Icon icon="mingcute:delete-2-line" width="20" height="20" />
+    <div>{t('trash')}</div>
+  </div>
+})
 
 export const DeleteItem = observer(() => {
   const { t } = useTranslation();
@@ -182,9 +215,18 @@ export const BlinkoRightClickMenu = observer(() => {
       <Divider orientation="horizontal" />
     </ContextMenuItem>
 
-    <ContextMenuItem >
-      <DeleteItem />
-    </ContextMenuItem>
+
+    {!blinko.curSelectedNote?.isRecycle ? (
+      <ContextMenuItem >
+        <TrashItem />
+      </ContextMenuItem>
+    ) : <></>}
+
+    {blinko.curSelectedNote?.isRecycle ? (
+      <ContextMenuItem >
+        <DeleteItem />
+      </ContextMenuItem>
+    ) : <></>}
   </ContextMenu>
 })
 
@@ -217,9 +259,17 @@ export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () 
         </DropdownItem>
       ) : <></>}
 
-      <DropdownItem key="DeleteItem" className="text-danger" >
-        <DeleteItem />
-      </DropdownItem>
+      {!blinko.curSelectedNote?.isRecycle ? (
+        <DropdownItem key="TrashItem">
+          <TrashItem />
+        </DropdownItem>
+      ) : <></>}
+
+      {blinko.curSelectedNote?.isRecycle ? (
+        <DropdownItem key="DeleteItem" className="text-danger" >
+          <DeleteItem />
+        </DropdownItem>
+      ) : <></>}
     </DropdownMenu>
   </Dropdown>
 })

@@ -195,5 +195,6 @@
   "remove-bold": "Fettdruck entfernen",
   "remove-underline": "Unterstrich entfernen",
   "select-block-type": "Blocktyp auswählen",
-  "block-type-select-placeholder": "Block Typ"
+  "block-type-select-placeholder": "Block Typ",
+  "trash": "Müll"
 }

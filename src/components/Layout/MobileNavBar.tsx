@@ -25,7 +25,7 @@ export const MobileNavBar = observer(({ onItemClick }: MobileNavBarProps) => {
 
   return (
     <div className="h-[70px] flex w-full px-4 py-2 gap-2 bg-background block md:hidden">
-      {base.routerList.map(i => (
+      {base.routerList.filter(i => !i.hiddenMobile).map(i => (
         <Link
           className="flex-1"
           key={i.title}

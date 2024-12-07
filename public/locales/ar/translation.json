@@ -201,5 +201,6 @@
   "remove-bold": "إزالة الخط العريض",
   "remove-underline": "إزالة التسطير",
   "select-block-type": "حدد نوع الكتلة",
-  "block-type-select-placeholder": "نوع المربع"
+  "block-type-select-placeholder": "نوع المربع",
+  "trash": "قمامة"
 }

@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'usehooks-ts';
 import { ShowEditBlinkoModel } from '../BlinkoRightClickMenu';
-import { getEditorElements } from '../Common/Editor/editorUtils';
+import { FocusEditor, getEditorElements } from '../Common/Editor/editorUtils';
 import { RootStore } from '@/store';
 import { DialogStore } from '@/store/module/Dialog';
 import { BlinkoAiChat } from '../BlinkoAi';
@@ -99,14 +99,7 @@ export const BlinkoAddButton = observer(() => {
   // Handle write action
   const handleWriteAction = () => {
     ShowEditBlinkoModel('2xl', 'create')
-    requestAnimationFrame(() => {
-      const editorElements = getEditorElements()
-      if (editorElements.length > 0) {
-        editorElements.forEach(editorElement => {
-          editorElement.focus()
-        })
-      }
-    })
+    FocusEditor()
     setShowActions(false);
   };
 

@@ -1,7 +1,7 @@
 import { BlinkoStore } from '@/store/blinkoStore';
 import { _ } from '@/lib/lodash';
 import { observer } from 'mobx-react-lite';
-import Masonry from 'react-masonry-css'
+import Masonry from 'react-masonry-css';
 import { useTranslation } from 'react-i18next';
 import { RootStore } from '@/store';
 import { Icon } from '@iconify/react';
@@ -10,9 +10,6 @@ import { BlinkoEditor } from '@/components/BlinkoEditor';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoCard } from '@/components/BlinkoCard';
 import { useMediaQuery } from 'usehooks-ts';
-import { ShowEditBlinkoModel } from '@/components/BlinkoRightClickMenu';
-import { motion } from 'framer-motion';
-import { getEditorElements } from '@/components/Common/Editor/editorUtils';
 import { BlinkoAddButton } from '@/components/BlinkoAddButton';
 
 const Home = observer(() => {
@@ -23,7 +20,7 @@ const Home = observer(() => {
   const store = RootStore.Local(() => ({
     editorHeight: 65,
     get showEditor() {
-      return !blinko.noteListFilterConfig.isArchived
+      return !blinko.noteListFilterConfig.isArchived && !blinko.noteListFilterConfig.isRecycle
     },
     get showLoadAll() {
       return blinko.noteList.isLoadAll
@@ -73,8 +70,6 @@ const Home = observer(() => {
           {store.showLoadAll && <div className='select-none w-full text-center text-sm font-bold text-ignore my-4'>{t('all-notes-have-been-loaded', { items: blinko.noteList.value?.length })}</div>}
         </ScrollArea>
       }
-
-
     </div>
   );
 });

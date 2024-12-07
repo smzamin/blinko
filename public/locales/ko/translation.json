@@ -195,5 +195,6 @@
   "italic": "이탤릭체",
   "remove-underline": "밑줄 제거",
   "select-block-type": "블록 유형 선택",
-  "block-type-select-placeholder": "블록 유형"
+  "block-type-select-placeholder": "블록 유형",
+  "trash": "쓰레기"
 }

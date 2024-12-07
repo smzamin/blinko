@@ -196,5 +196,6 @@
   "italic": "Курсив",
   "remove-underline": "Удалить подчеркивание",
   "select-block-type": "Выберите тип блока",
-  "block-type-select-placeholder": "Тип блока"
+  "block-type-select-placeholder": "Тип блока",
+  "trash": "мусор"
 }
