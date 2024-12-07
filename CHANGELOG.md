@@ -1,3 +1,10 @@
+## [0.19.2](https://github.com/blinko-space/blinko/compare/v0.19.1...v0.19.2) (2024-12-07)
+
+
+### Bug Fixes
+
+* support webhook ([6f5205f](https://github.com/blinko-space/blinko/commit/6f5205f744a7ff4b9c29331f49b6479c5699ebec))
+
 ## [0.19.1](https://github.com/blinko-space/blinko/compare/v0.19.0...v0.19.1) (2024-12-07)
 
 
