@@ -201,5 +201,8 @@
   "remove-underline": "Remove Underline",
   "select-block-type": "Select Block Type",
   "block-type-select-placeholder": "Block Type",
-  "trash": "Recycle Bin"
+  "trash": "Recycle Bin",
+  "light-mode": "Light Mode",
+  "dark-mode": "Dark Mode",
+  "follow-system": "Follow System"
 }
