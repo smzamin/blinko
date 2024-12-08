@@ -1,3 +1,10 @@
+## [0.20.3](https://github.com/blinko-space/blinko/compare/v0.20.2...v0.20.3) (2024-12-08)
+
+
+### Bug Fixes
+
+* include activityType in webhook payload for SendWebhook function ([e167b7d](https://github.com/blinko-space/blinko/commit/e167b7dd3b7eff111a6b678a17bb94a416e8b617))
+
 ## [0.20.2](https://github.com/blinko-space/blinko/compare/v0.20.1...v0.20.2) (2024-12-08)
 
 
