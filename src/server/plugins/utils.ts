@@ -48,8 +48,8 @@ export class FileService {
       const imagePath = `${UPLOAD_FILE_PATH}/` + filename;
       if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension.replace('.', '')?.toLowerCase() ?? '')) {
         await sharp(imagePath)
-          .rotate()  // 自动读取并根据 EXIF 的 Orientation 标签进行旋转
-          .resize(500, 500)  // 缩放到 500x500
+          .rotate()  // Automatically read and rotate based on the EXIF Orientation tag
+          .resize(500, 500)  // Scale to 500x500
           .toFile(UPLOAD_FILE_PATH + '/thumbnail_' + filename);
       }
     } catch (error) {
