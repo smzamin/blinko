@@ -64,7 +64,7 @@ export const BlinkoAiChat = observer(() => {
                       {ai.isAnswering && index === ai.chatHistory.list.length - 1 ? (
                         <div className="whitespace-pre-wrap">{i.content}</div>
                       ) : (
-                        <MarkdownRender content={i.content} disableOverflowing />
+                        <MarkdownRender content={i.content} />
                       )}
                     </>
                 }

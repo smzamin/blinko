@@ -12,11 +12,27 @@ import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
-
 import { Code } from './Code';
 import { LinkPreview } from './LinkPreview';
 import { ImageWrapper } from './ImageWrapper';
 import { ListItem } from './ListItem';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@nextui-org/react';
+
+const MermaidWrapper = dynamic(() => import('./MermaidWrapper').then(mod => mod.MermaidWrapper), {
+  loading: () => <Skeleton className='w-full h-[40px]' />,
+  ssr: false
+});
+
+const MarkmapWrapper = dynamic(() => import('./MarkmapWrapper').then(m => m.MarkmapWrapper), {
+  loading: () => <Skeleton className='w-full h-[40px]' />,
+  ssr: false
+});
+
+const EchartsWrapper = dynamic(() => import('./EchartsWrapper'), {
+  loading: () => <Skeleton className='w-full h-[40px]' />,
+  ssr: false
+});
 
 const highlightTags = (text) => {
   if (!text) return text
@@ -44,28 +60,13 @@ const highlightTags = (text) => {
   }
 };
 
-export const MarkdownRender = observer(({ content = '', onChange, disableOverflowing = false }: { content?: string, onChange?: (newContent: string) => void, disableOverflowing?: boolean }) => {
+export const MarkdownRender = observer(({ content = '', onChange, }: { content?: string, onChange?: (newContent: string) => void }) => {
   const { theme } = useTheme()
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(disableOverflowing ?? false);
   const contentRef = useRef(null);
-  const { t } = useTranslation()
-
-  useEffect(() => {
-    if (contentRef.current) {
-      //@ts-ignore
-      const isContentOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
-      //@ts-ignore
-      const isSingleLine = contentRef.current.clientHeight === parseFloat(getComputedStyle(contentRef.current).lineHeight);
-      if (!disableOverflowing) {
-        setIsOverflowing(isContentOverflowing && !isSingleLine);
-      }
-    }
-  }, []);
 
   return (
     <div className={`markdown-body`}>
-      <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content ${isExpanded ? "expanded" : "collapsed"}  ${disableOverflowing ? 'expanded' : ''}`}>
+      <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content`}>
         <ReactMarkdown
           remarkPlugins={[
             remarkGfm,
@@ -86,9 +87,25 @@ export const MarkdownRender = observer(({ content = '', onChange, disableOverflo
           ]}
           components={{
             p: ({ node, children }) => <p>{highlightTags(children)}</p>,
-            code: Code,
+            code: ({ node, className, children, ...props }) => {
+              const match = /language-(\w+)/.exec(className || '');
+              const language = match ? match[1] : '';
+
+              if (language === 'mermaid') {
+                return <MermaidWrapper content={String(children)} />;
+              }
+
+              if (language === 'mindmap') {
+                return <MarkmapWrapper content={String(children)} />;
+              }
+
+              if (language === 'echarts') {
+                return <EchartsWrapper options={String(children).trim()} />;
+              }
+
+              return <Code node={node} className={className} {...props}>{children}</Code>;
+            },
             a: ({ node, children }) => {
-              // console.log(children, node) //node.properties.href
               return <LinkPreview href={node?.properties?.href} text={children} />
             },
             li: ({ node, children }) => <ListItem content={content} onChange={onChange}>{children}</ListItem>,
@@ -98,12 +115,6 @@ export const MarkdownRender = observer(({ content = '', onChange, disableOverflo
           {content}
         </ReactMarkdown>
       </div>
-      {!disableOverflowing && isOverflowing && content && (
-        <div className='mt-2 cursor-pointer font-bold select-none hover:opacity-70 transition-all  tex-sm'
-          onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? t('show-less') : t('show-more')}
-        </div>
-      )}
     </div>
   );
 });

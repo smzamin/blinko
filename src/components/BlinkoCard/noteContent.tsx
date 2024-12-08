@@ -18,7 +18,6 @@ export const NoteContent = ({ blinkoItem, blinko, isExpanded }: NoteContentProps
           blinkoItem.content = newContent
           blinko.upsertNote.call({ id: blinkoItem.id, content: newContent, refresh: false })
         }}
-        disableOverflowing={isExpanded}
       />
       <div className={blinkoItem.attachments?.length != 0 ? 'my-2' : ''}>
         <FilesAttachmentRender files={blinkoItem.attachments ?? []} preview />

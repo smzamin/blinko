@@ -7,6 +7,9 @@ export const codeBlockLanguages = {
   js: "JavaScript",
   javascript: "JavaScript",
   typescript: "TypeScript",
+  mermaid: "Mermaid",
+  mindmap: "MindMap",
+  echarts:"Echarts",
   html: "HTML",
   python: "Python",
   java: "Java",
@@ -20,7 +23,7 @@ export const codeBlockLanguages = {
   json: "JSON",
   xml: "XML",
   yaml: "YAML",
-  ini: "INI"
+  ini: "INI",
 }
 
 export const ProcessCodeBlocks = (content: string): string => {

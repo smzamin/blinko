@@ -280,3 +280,24 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.mermaid-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.markmap-foreign{
+  color: var(--foreground);
+}
+
+.echarts-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--sencondbackground);
+}

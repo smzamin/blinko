@@ -35,7 +35,7 @@ const Detail = observer(() => {
           <div className="flex items-center justify-end">
             <LeftCickMenu  className={'-mr-[10px] group-hover/card:ml-2'} onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinko.noteDetail.value!) }} />
           </div>
-          <MarkdownRender content={blinko.noteDetail.value?.content ?? ''} disableOverflowing={true} />
+          <MarkdownRender content={blinko.noteDetail.value?.content ?? ''} />
           <div className="mt-4">
             <FilesAttachmentRender files={blinko.noteDetail.value?.attachments ?? []} preview />
           </div>

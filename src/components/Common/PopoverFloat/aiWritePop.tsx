@@ -100,7 +100,7 @@ const AiWritePop = observer(() => {
         </div>
         {
           ai.writingResponseText != '' && <ScrollArea ref={scrollRef} className='p-2 max-h-[200px]' onBottom={() => { }}>
-            {ai.isLoading ? <div className='text-sm'>{ai.writingResponseText}</div> : <MarkdownRender content={ai.writingResponseText} disableOverflowing />}
+            {ai.isLoading ? <div className='text-sm'>{ai.writingResponseText}</div> : <MarkdownRender content={ai.writingResponseText} />}
           </ScrollArea>
         }
         {ai.isWriting && (
