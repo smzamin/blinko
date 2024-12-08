@@ -1,3 +1,10 @@
+## [0.20.5](https://github.com/blinko-space/blinko/compare/v0.20.4...v0.20.5) (2024-12-08)
+
+
+### Bug Fixes
+
+* update editor CSS for improved layout and consistency ([dd6b65f](https://github.com/blinko-space/blinko/commit/dd6b65f753b93006c04d3a6ab7c0e82139b90ae0))
+
 ## [0.20.4](https://github.com/blinko-space/blinko/compare/v0.20.3...v0.20.4) (2024-12-08)
 
 
