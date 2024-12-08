@@ -1,3 +1,10 @@
+## [0.20.2](https://github.com/blinko-space/blinko/compare/v0.20.1...v0.20.2) (2024-12-08)
+
+
+### Bug Fixes
+
+* thumbnail orientation ([00a560e](https://github.com/blinko-space/blinko/commit/00a560e57e5d06aa6dcc9c5b603f83c2d8fd4ccc))
+
 ## [0.20.1](https://github.com/blinko-space/blinko/compare/v0.20.0...v0.20.1) (2024-12-08)
 
 
