@@ -1,3 +1,10 @@
+## [0.19.12](https://github.com/blinko-space/blinko/compare/v0.19.11...v0.19.12) (2024-12-08)
+
+
+### Bug Fixes
+
+* update noteListFilterConfig to handle trash route correctly ([ed7dd34](https://github.com/blinko-space/blinko/commit/ed7dd34fdbf100844b5e2f8dc9c1fa7daf828d61))
+
 ## [0.19.11](https://github.com/blinko-space/blinko/compare/v0.19.10...v0.19.11) (2024-12-07)
 
 
