@@ -17,6 +17,7 @@
   --fgColor-accent: Highlight;
 }
 
+
 .markdown-body,
 [data-markdown-theme="dark"] {
   /* dark */
@@ -404,8 +405,8 @@ menu {
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
-  margin-top: var(--base-size-24);
-  margin-bottom: var(--base-size-16);
+  /* margin-top: var(--base-size-4); */
+  margin-bottom: var(--base-size-8);
   font-weight: var(--base-text-weight-semibold, 600);
   line-height: 1.25;
 }
