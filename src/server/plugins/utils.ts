@@ -45,9 +45,11 @@ export class FileService {
 
   private static async createThumbnail(filename: string, extension: string) {
     try {
+      const imagePath = `${UPLOAD_FILE_PATH}/` + filename;
       if ('jpeg/jpg/png/bmp/tiff/tif/webp/svg'.includes(extension.replace('.', '')?.toLowerCase() ?? '')) {
-        await sharp(`${UPLOAD_FILE_PATH}/` + filename)
-          .resize(500, 500)
+        await sharp(imagePath)
+          .rotate()  // 自动读取并根据 EXIF 的 Orientation 标签进行旋转
+          .resize(500, 500)  // 缩放到 500x500
           .toFile(UPLOAD_FILE_PATH + '/thumbnail_' + filename);
       }
     } catch (error) {
