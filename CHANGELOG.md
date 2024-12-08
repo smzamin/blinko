@@ -1,3 +1,10 @@
+## [0.19.13](https://github.com/blinko-space/blinko/compare/v0.19.12...v0.19.13) (2024-12-08)
+
+
+### Bug Fixes
+
+* replace framer-motion to motion ([116ab0e](https://github.com/blinko-space/blinko/commit/116ab0e05291ed02e4bb38c4a48b051a7fb64468))
+
 ## [0.19.12](https://github.com/blinko-space/blinko/compare/v0.19.11...v0.19.12) (2024-12-08)
 
 
