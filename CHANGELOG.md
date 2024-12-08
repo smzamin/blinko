@@ -1,3 +1,10 @@
+## [0.20.1](https://github.com/blinko-space/blinko/compare/v0.20.0...v0.20.1) (2024-12-08)
+
+
+### Bug Fixes
+
+* update markdown heading margins and add spacing in github-markdown.css ([6eeeb18](https://github.com/blinko-space/blinko/commit/6eeeb18a58511693bda65007055b59c1548abb0b))
+
 # [0.20.0](https://github.com/blinko-space/blinko/compare/v0.19.13...v0.20.0) (2024-12-08)
 
 
