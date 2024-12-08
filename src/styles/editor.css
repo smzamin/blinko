@@ -19,11 +19,16 @@
 
 
 ._contentEditable_uazmk_379 {
-  max-height: 50vh;
+  max-height: 60vh;
   overflow-y: scroll;
   color: var(--foreground);
   padding: 0;
   padding-left: 5px;
+}
+
+.mdxeditor-source-editor {
+  max-height: 60vh;
+  overflow-y: scroll;
 }
 
 .prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)),
@@ -277,16 +282,26 @@ div[id^="radix-"][role="dialog"] h2 {
   /* flex-direction: column-reverse; */
 }
 
-._toolbarNodeKindSelectTrigger_uazmk_305, ._toolbarButtonSelectTrigger_uazmk_306, ._selectTrigger_uazmk_307{
+._toolbarNodeKindSelectTrigger_uazmk_305,
+._toolbarButtonSelectTrigger_uazmk_306,
+._selectTrigger_uazmk_307 {
   width: 80px;
 }
-._toolbarNodeKindSelectContainer_uazmk_284, ._toolbarButtonDropdownContainer_uazmk_285, ._toolbarCodeBlockLanguageSelectContent_uazmk_286, ._selectContainer_uazmk_287{
+
+._toolbarNodeKindSelectContainer_uazmk_284,
+._toolbarButtonDropdownContainer_uazmk_285,
+._toolbarCodeBlockLanguageSelectContent_uazmk_286,
+._selectContainer_uazmk_287 {
   background-color: transparent;
 }
-.mdxeditor-diff-source-wrapper{
+
+.mdxeditor-diff-source-wrapper {
   margin-top: 5px;
 }
-._toolbarNodeKindSelectTrigger_uazmk_305, ._toolbarButtonSelectTrigger_uazmk_306, ._selectTrigger_uazmk_307{
+
+._toolbarNodeKindSelectTrigger_uazmk_305,
+._toolbarButtonSelectTrigger_uazmk_306,
+._selectTrigger_uazmk_307 {
   background-color: transparent;
 }
 
