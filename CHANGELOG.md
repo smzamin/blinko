@@ -1,3 +1,10 @@
+## [0.20.4](https://github.com/blinko-space/blinko/compare/v0.20.3...v0.20.4) (2024-12-08)
+
+
+### Bug Fixes
+
+* enhance Markdown rendering and improve table ([ad223c9](https://github.com/blinko-space/blinko/commit/ad223c935b5868f860737dc75b545c0c1394aa40))
+
 ## [0.20.3](https://github.com/blinko-space/blinko/compare/v0.20.2...v0.20.3) (2024-12-08)
 
 
