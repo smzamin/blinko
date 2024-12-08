@@ -255,6 +255,7 @@ export class BlinkoStore implements Store {
         this.noteListFilterConfig.isArchived = true
       }
       if (router.pathname == '/trash') {
+        this.noteListFilterConfig.type = -1
         this.noteListFilterConfig.isRecycle = true
       }
       this.noteList.resetAndCall({})
