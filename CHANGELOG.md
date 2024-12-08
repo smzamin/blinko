@@ -1,3 +1,10 @@
+# [0.20.0](https://github.com/blinko-space/blinko/compare/v0.19.13...v0.20.0) (2024-12-08)
+
+
+### Features
+
+* add support for new markdown rendering features and libraries ([15ffdc3](https://github.com/blinko-space/blinko/commit/15ffdc30a783a25e7910a69c0d97576b86948f35))
+
 ## [0.19.13](https://github.com/blinko-space/blinko/compare/v0.19.12...v0.19.13) (2024-12-08)
 
 
