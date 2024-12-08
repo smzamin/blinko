@@ -5,7 +5,7 @@ import { DialogStandaloneStore } from ".";
 import { RootStore } from "@/store/root";
 import { useHistoryBack, useIsIOS } from "@/lib/hooks";
 import { useMediaQuery } from "usehooks-ts";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Icon } from "@iconify/react";
 import { CancelIcon } from "@/components/Common/Icons";
 import { createPortal } from "react-dom";

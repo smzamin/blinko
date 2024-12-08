@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { Tooltip } from "@nextui-org/react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { observer } from "mobx-react-lite";
 
 export const IconButton = observer(({ tooltip, icon, onClick, classNames, children }: {

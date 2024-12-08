@@ -4,7 +4,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import { Image, Textarea } from "@nextui-org/react";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { AiStore } from "@/store/aiStore";
 import { useEffect, useRef } from "react";
 import { useMediaQuery } from "usehooks-ts";

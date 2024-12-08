@@ -1,6 +1,6 @@
 import { helper } from "@/lib/helper";
 import { useIsIOS } from "@/lib/hooks";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 

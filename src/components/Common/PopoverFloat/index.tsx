@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card } from '@nextui-org/react';
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { useMediaQuery } from 'usehooks-ts'
 
 interface PopoverFloatProps {

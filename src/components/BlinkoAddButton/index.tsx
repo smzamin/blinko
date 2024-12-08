@@ -1,6 +1,6 @@
 // ... existing imports ...
 import { useState, useRef, TouchEvent } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Icon } from '@iconify/react';
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'usehooks-ts';

@@ -1,7 +1,7 @@
 import { _ } from "@/lib/lodash";
 import { observer } from "mobx-react-lite";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "motion/react";
 
 type IProps = {
   style?: any;

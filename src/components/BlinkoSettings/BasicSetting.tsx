@@ -15,7 +15,7 @@ import { PromiseCall, PromiseState } from "@/store/standard/PromiseState";
 import { api } from "@/lib/trpc";
 import { BlinkoStore } from "@/store/blinkoStore";
 import React, { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 export const BasicSetting = observer(() => {
   const user = RootStore.Get(UserStore)

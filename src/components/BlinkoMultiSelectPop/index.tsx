@@ -2,7 +2,7 @@
 import { _ } from '@/lib/lodash';
 import { observer } from 'mobx-react-lite';
 import { RootStore } from '@/store';
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { ToastPlugin } from '@/store/module/Toast/Toast';

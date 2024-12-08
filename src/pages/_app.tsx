@@ -15,7 +15,7 @@ import { initStore } from '@/store/init';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { CommonLayout } from '@/components/Layout';
 import { AppProvider } from '@/store/module/AppProvider';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { BlinkoMultiSelectPop } from '@/components/BlinkoMultiSelectPop';
 import { BlinkoAddButton } from '@/components/BlinkoAddButton';
 
