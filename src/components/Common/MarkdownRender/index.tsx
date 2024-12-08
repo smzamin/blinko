@@ -18,6 +18,7 @@ import { ImageWrapper } from './ImageWrapper';
 import { ListItem } from './ListItem';
 import dynamic from 'next/dynamic';
 import { Skeleton } from '@nextui-org/react';
+import { TableWrapper } from './TableWrapper';
 
 const MermaidWrapper = dynamic(() => import('./MermaidWrapper').then(mod => mod.MermaidWrapper), {
   loading: () => <Skeleton className='w-full h-[40px]' />,
@@ -60,6 +61,10 @@ const highlightTags = (text) => {
   }
 };
 
+const Table = ({ children }: { children: React.ReactNode }) => {
+  return <div className="table-container">{children}</div>;
+};
+
 export const MarkdownRender = observer(({ content = '', onChange, }: { content?: string, onChange?: (newContent: string) => void }) => {
   const { theme } = useTheme()
   const contentRef = useRef(null);
@@ -69,7 +74,7 @@ export const MarkdownRender = observer(({ content = '', onChange, }: { content?:
       <div ref={contentRef} data-markdown-theme={theme} className={`markdown-body content`}>
         <ReactMarkdown
           remarkPlugins={[
-            remarkGfm,
+            [remarkGfm, { table: false }],
             [remarkMath, {
               singleDollarTextMath: true,
               inlineMath: [['$', '$']],
@@ -109,7 +114,8 @@ export const MarkdownRender = observer(({ content = '', onChange, }: { content?:
               return <LinkPreview href={node?.properties?.href} text={children} />
             },
             li: ({ node, children }) => <ListItem content={content} onChange={onChange}>{children}</ListItem>,
-            img: ImageWrapper
+            img: ImageWrapper,
+            table: TableWrapper
           }}
         >
           {content}

@@ -59,7 +59,7 @@ export const ExpandableContainer = ({ isExpanded, children }: ExpandableContaine
 
   return (
     <motion.div
-      className='w-full'
+      className={`w-full ${isExpanded ? 'expand-container' : ''}`}
       style={{
         ...BASE_STYLES,
         position: isExpanded ? 'fixed' : 'relative',
