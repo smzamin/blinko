@@ -30,6 +30,7 @@ export class DBJob {
     try {
       const notes = await prisma.notes.findMany({
         select: {
+          id: true,
           account: true,
           content: true,
           isArchived: true,
@@ -39,6 +40,8 @@ export class DBJob {
           updatedAt: true,
           type: true,
           attachments: true,
+          references: true,
+          referencedBy: true,
         }
       });
       const exportData = {
