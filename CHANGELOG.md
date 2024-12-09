@@ -1,3 +1,10 @@
+## [0.20.6](https://github.com/blinko-space/blinko/compare/v0.20.5...v0.20.6) (2024-12-09)
+
+
+### Bug Fixes
+
+* enhance DBJob to include additional fields in notes retrieval ([ba3b3ed](https://github.com/blinko-space/blinko/commit/ba3b3ed8045fa01e72e56e8f39f5eaaa680020a7))
+
 ## [0.20.5](https://github.com/blinko-space/blinko/compare/v0.20.4...v0.20.5) (2024-12-08)
 
 
