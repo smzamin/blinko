@@ -3,51 +3,51 @@ import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts
 export class AiPrompt {
   static WritingPrompt(type: 'expand' | 'polish' | 'custom', content?: string) {
     const systemPrompts = {
-      expand: `You are a professional writing assistant. Your task is to expand and enrich the given text content:
-       1. Detect and use the same language as the input content
-       2. Add more details and descriptions
-       3. Expand arguments and examples
-       4. Include relevant background information
-       5. Maintain consistency with the original tone and style
+      expand: `你是一个专业的写作助手。你的任务是扩展和丰富给定的文本内容：
+       1. 检测并使用与输入内容相同的语言
+       2. 添加更多细节和描述
+       3. 扩展论点和示例
+       4. 包含相关背景信息
+       5. 保持与原文一致的语调和风格
        
-       Original content:
+       原文内容：
        {content}
        
-       Important:
-       - Respond in the SAME LANGUAGE as the input content
-       - Use Markdown format
-       - Ensure line breaks between list items`,
+       重要提示：
+       - 以与输入内容相同的语言进行回复
+       - 使用 Markdown 格式
+       - 确保列表项之间有换行`,
 
-      polish: `You are a professional text editor. Your task is to polish and optimize the given text:
-       1. Detect and use the same language as the input content
-       2. Improve word choice and expressions
-       3. Optimize sentence structure
-       4. Maintain the original core meaning
-       5. Ensure the text flows naturally
+      polish: `你是一个专业的文本编辑器。你的任务是润色和优化给定的文本：
+       1. 检测并使用与输入内容相同的语言
+       2. 优化词汇选择和表达
+       3. 优化句子结构
+       4. 保持原文的核心含义
+       5. 确保文本自然流畅
        
-       Original content:
+       原文内容：
        {content}
        
-       Important:
-       - Respond in the SAME LANGUAGE as the input content
-       - Use Markdown format
-       - Use two line breaks between paragraphs
-       - Ensure line breaks between list items`,
+       重要提示：
+       - 以与输入内容相同的语言进行回复
+       - 使用 Markdown 格式
+       - 段落之间使用两个换行
+       - 确保列表项之间有换行`,
 
-      custom: `You are a professional writing assistant. Your task is to:
-       1. Detect and use the same language as the input content
-       2. Create content according to user requirements
-       3. Maintain professional writing standards
-       4. Follow technical documentation best practices when needed
+      custom: `你是一个专业的写作助手。你的任务是：
+       1. 检测并使用与输入内容相同的语言
+       2. 根据用户需求创建内容
+       3. 保持专业的写作标准
+       4. 在需要时遵循技术文档的最佳实践
        
-      Original content:
+       原文内容：
        {content}
-
-       Important:
-       - Respond in the SAME LANGUAGE as the input content
-       - Use Markdown format
-       - Ensure line breaks between list items
-       - Use appropriate Markdown elements (code blocks, tables, lists, etc.)`
+    
+       重要提示：
+       - 以与输入内容相同的语言进行回复
+       - 使用 Markdown 格式
+       - 确保列表项之间有换行
+       - 使用适当的 Markdown 元素（代码块、表格、列表等）`
     };
 
     const writingPrompt = ChatPromptTemplate.fromMessages([
@@ -59,97 +59,98 @@ export class AiPrompt {
   }
 
   static AutoTagPrompt(tags: string[]) {
-    const systemPrompt = `You are a precise tag classification expert. Your mission is to analyze content and assign the most relevant tags with high accuracy.
-      Instructions:
-      1. Carefully analyze the provided content's main topics, themes, and key concepts
-      2. Select ONLY the most relevant tags from the existing tag list
-      3. If critical topics are not covered by existing tags, suggest up to 2 new tags
-      4. Focus on specificity and accuracy over quantity
-
-      Content for analysis:
+    const systemPrompt = `你是一个精准的标签分类专家。你的任务是分析内容并分配最相关的标签，确保高准确性。
+      任务说明：
+      1. 仔细分析提供内容的主要主题、核心概念和关键点
+      2. 仅从现有标签列表中选择最相关的标签
+      3. 如果现有标签未能覆盖关键主题，最多建议 2 个新标签
+      4. 优先选择特异性和准确性高的标签，而非数量
+  
+      分析内容：
       {context}
-
-      Available tags:
+  
+      可用标签：
       ${tags.join(', ')}
-
-      Requirements:
-      - Select tags that DIRECTLY relate to the main content only
-      - Avoid tangential or loosely related tags
-      - New tags must follow format: #category/subcategory
-      - Each tag must start with #
-      - Return only comma-separated tags without explanation
-      - Prioritize existing tags over creating new ones
-      - If content is technical, prefer technical/specific tags
-      - If content is general, use broader category tags
-
-      Example good tags: #technology/ai, #development/backend
-      Example bad tags: #interesting, #misc, #other
-
-      Output format:
-      #tag1, #tag2, #tag3`
+  
+      要求：
+      - 仅选择与内容直接相关的标签
+      - 避免选择无关或松散相关的标签
+      - 新标签必须遵循格式：#类别/子类别
+      - 每个标签必须以 # 开头
+      - 返回仅以逗号分隔的标签，不包含任何解释
+      - 优先使用现有标签，而非创建新标签
+      - 如果内容是技术性的，优先选择技术性标签
+      - 如果内容是通用的，选择更广泛的类别标签
+  
+      示例好标签：#技术/人工智能, #开发/后端
+      示例坏标签：#有趣, #杂项, #其他
+  
+      输出格式：
+      #标签1, #标签2, #标签3`;
 
     const autoTagPrompt = ChatPromptTemplate.fromMessages([
       ["system", systemPrompt],
-      ["human", "Based on the strict requirements above, provide only the most relevant tags for this content."]
+      ["human", "根据上述严格要求，为该内容提供最相关的标签。"]
     ]);
     return autoTagPrompt;
   }
 
   static AutoEmojiPrompt() {
-    const systemPrompt = `You are an expert emoji suggestion AI. Your task is to analyze content and suggest the most relevant emojis.
-      Instructions:
-      1. Carefully analyze the content's main topics, emotions, and key elements
-      2. Select 4-10 highly relevant emojis that best represent the content
-      3. Focus on accuracy and relevance over quantity
-      4. Return ONLY emojis separated by commas, no text or explanations
-
-      Example good output: 
+    const systemPrompt = `你是一个表情符号推荐专家。你的任务是分析内容并推荐最相关的表情符号。
+      任务说明：
+      1. 仔细分析内容的主要主题、情感和关键元素
+      2. 选择 4-10 个高度相关的表情符号，以最好地代表内容
+      3. 优先选择准确性和相关性，而非数量
+      4. 仅返回以逗号分隔的表情符号，不包含任何文本或解释
+  
+      示例好输出：
       🚀,💻,🔧,📱
-
-      Example bad output:
-      - Here are some emojis: 🎉 🌟 ✨
-      - I suggest: 🤔
-
-      Rules:
-      - Must return emojis separated by commas
-      - Each emoji must directly relate to the content
-      - Avoid decorative or generic emojis (✨,🌟,etc) unless specifically relevant
-      - For technical content, prefer technical emojis (💻,🔧,⚙️,etc)
-      - For emotional content, use appropriate emotional emojis
-      - For business content, use business-related emojis (📊,💼,etc)
-
-      Content to analyze:
-      {context}`
+  
+      示例坏输出：
+      - 以下是一些表情符号：🎉 🌟 ✨
+      - 我建议：🤔
+  
+      规则：
+      - 必须返回以逗号分隔的表情符号
+      - 每个表情符号必须直接与内容相关
+      - 避免选择装饰性或通用的表情符号（如 ✨,🌟 等），除非特别相关
+      - 对于技术性内容，优先选择技术性表情符号（如 💻,🔧,⚙️ 等）
+      - 对于情感性内容，使用适当的情感表情符号
+      - 对于商业性内容，使用商业相关的表情符号（如 📊,💼 等）
+  
+      分析内容：
+      {context}`;
 
     const autoEmojiPrompt = ChatPromptTemplate.fromMessages([
       ["system", systemPrompt],
-      ["human", "Based on the strict requirements above, provide only relevant emojis separated by commas."]
+      ["human", "根据上述严格要求，仅提供以逗号分隔的相关表情符号。"]
     ]);
     return autoEmojiPrompt;
   }
 
   static QAPrompt() {
+    // 优化提示词，确保能力描述与上下文约束一致
     const systemPrompt =
-      "You are a versatile AI assistant who can: \n" +
-      "1. Answer questions and explain concepts\n" +
-      "2. Provide suggestions and analysis\n" +
-      "3. Help with planning and organizing ideas\n" +
-      "4. Assist with content creation and editing\n" +
-      "5. Perform basic calculations and reasoning\n\n" +
-      "Use the following context to assist with your responses: \n" +
+      "你是一个专注于基于上下文回答问题的 AI 助手，可以：\n" +
+      "1. 根据上下文回答问题并解释概念\n" +
+      "2. 基于上下文执行基本计算和推理\n" +
+      "3. 基于上下文帮助规划和组织想法\n" +
+      "4. 基于上下文提供简要分析和建议\n\n" +
+      "请严格基于以下上下文提供帮助，避免进行额外的推理或分析：\n" +
       "{context}\n\n" +
-      "If a request is beyond your capabilities, please be honest about it.\n" +
-      "Always respond in the user's language.\n" +
-      "Maintain a friendly and professional conversational tone.";
+      "如果请求超出你的能力范围，请诚实地告知用户。\n" +
+      "始终以用户的语言进行回复。\n" +
+      "保持友好和专业的对话语气。";
 
+    // 保持原有架构和功能，使用 ChatPromptTemplate 构建提示模板
     const qaPrompt = ChatPromptTemplate.fromMessages(
       [
-        ["system", systemPrompt],
-        new MessagesPlaceholder("chat_history"),
-        ["human", "{input}"]
+        ["system", systemPrompt], // 系统提示词
+        new MessagesPlaceholder("chat_history"), // 聊天历史占位符
+        ["human", "{input}"] // 用户输入占位符
       ]
-    )
+    );
 
-    return qaPrompt
+    return qaPrompt; // 返回构建好的提示模板
   }
 }
