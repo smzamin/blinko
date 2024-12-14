@@ -8,6 +8,8 @@ ENV NEXT_PRIVATE_STANDALONE true
 COPY package.json pnpm-lock.yaml ./
 COPY prisma ./
 
+ENV USE_MIRROR=true
+
 RUN npm install -g pnpm && \
     if [ "$USE_MIRROR" = "true" ]; then \
         echo "Using mirror registry..." && \
