@@ -131,7 +131,7 @@ export class AiPrompt {
   static QAPrompt() {
     // 优化提示词，确保能力描述与上下文约束一致
     const systemPrompt =
-      `Today is ${dayjs().format('YYYY-MM-DD HH:mm:ss')}\n` +
+      `现在时间是 ${dayjs().format('YYYY-MM-DD HH:mm:ss')}\n` +
       "你是一个专注于基于上下文回答问题的 AI 助手，可以：\n" +
       "1. 根据上下文回答问题并解释概念\n" +
       "2. 基于上下文执行基本计算和推理\n" +
