@@ -1,3 +1,88 @@
+## [0.26.10](https://github.com/blinko-space/blinko/compare/v0.26.9...v0.26.10) (2024-12-16)
+
+
+### Bug Fixes
+
+* adjust editor height calculation in Home component ([7d1dbd4](https://github.com/blinko-space/blinko/commit/7d1dbd4fd9b37a73f7458e40caa2d01212382d59))
+
+## [0.26.9](https://github.com/blinko-space/blinko/compare/v0.26.8...v0.26.9) (2024-12-16)
+
+
+### Bug Fixes
+
+* enhance database job restoration process and UI components ([121755a](https://github.com/blinko-space/blinko/commit/121755ae1cd3087f4ce84ecbbbe97dd030f7ec4c))
+
+## [0.26.8](https://github.com/blinko-space/blinko/compare/v0.26.7...v0.26.8) (2024-12-16)
+
+
+### Bug Fixes
+
+* replace Card components with CollapsibleCard in settings ([c5897a8](https://github.com/blinko-space/blinko/commit/c5897a8b7153b7c40a9baa508ad97e886cd6e3f2))
+* update thumbnail size for image processing ([bfa5463](https://github.com/blinko-space/blinko/commit/bfa54633d1575ebbaee7fc6e4790a0480ab9fa7c))
+
+## [0.26.7](https://github.com/blinko-space/blinko/compare/v0.26.6...v0.26.7) (2024-12-16)
+
+
+### Bug Fixes
+
+* enhance file handling and thumbnail generation ([c5531cb](https://github.com/blinko-space/blinko/commit/c5531cb9141f74cd2997a54d0175ce4088c924e5))
+
+## [0.26.6](https://github.com/blinko-space/blinko/compare/v0.26.5...v0.26.6) (2024-12-16)
+
+
+### Bug Fixes
+
+* seed file ([a52c223](https://github.com/blinko-space/blinko/commit/a52c223f1446837079b570aedde5653050a8c9bb))
+
+## [0.26.5](https://github.com/blinko-space/blinko/compare/v0.26.4...v0.26.5) (2024-12-16)
+
+
+### Bug Fixes
+
+* update translations and enhance editor functionality ([06a3b27](https://github.com/blinko-space/blinko/commit/06a3b2777abd6da1044f9f05bf53a177e1f35b15))
+
+## [0.26.4](https://github.com/blinko-space/blinko/compare/v0.26.3...v0.26.4) (2024-12-16)
+
+
+### Bug Fixes
+
+* update translations and enhance editor functionality ([d3ab0cf](https://github.com/blinko-space/blinko/commit/d3ab0cf110425e045d8fe3ff61e967b6552d6d66))
+
+## [0.26.3](https://github.com/blinko-space/blinko/compare/v0.26.2...v0.26.3) (2024-12-16)
+
+
+### Bug Fixes
+
+* enhance AI service and prompt functionality ([467e441](https://github.com/blinko-space/blinko/commit/467e44108d74a4b215bb287643cce9602328b2bd))
+* enhance blog content and editor functionality [#315](https://github.com/blinko-space/blinko/issues/315) ([ea77bed](https://github.com/blinko-space/blinko/commit/ea77bed5d1426d5433e7a0c161d650c1369cc0ae))
+* enhance file access control and upload handling [#313](https://github.com/blinko-space/blinko/issues/313) ([45b7eb7](https://github.com/blinko-space/blinko/commit/45b7eb72a7be50f4e0718a903d34bf0e60e3eae0))
+
+## [0.26.2](https://github.com/blinko-space/blinko/compare/v0.26.1...v0.26.2) (2024-12-16)
+
+
+### Bug Fixes
+
+* style ([7238d83](https://github.com/blinko-space/blinko/commit/7238d83ea400aec428b10153981aece96929ce9c))
+
+## [0.26.1](https://github.com/blinko-space/blinko/compare/v0.26.0...v0.26.1) (2024-12-16)
+
+
+### Bug Fixes
+
+* enhance file upload handling and editor integration ([bfe6410](https://github.com/blinko-space/blinko/commit/bfe6410f6910afbad83cac865b5e4ef99245db72))
+
+# [0.26.0](https://github.com/blinko-space/blinko/compare/v0.25.6...v0.26.0) (2024-12-15)
+
+
+### Bug Fixes
+
+* update Vditor initialization HTML in useEditor hook ([be68e2f](https://github.com/blinko-space/blinko/commit/be68e2f8cbe9a0cd3b87068189fbd896ff60f6ba))
+
+
+### Features
+
+* integrate Vditor as the Markdown editor ([4d0fc10](https://github.com/blinko-space/blinko/commit/4d0fc103b0860598e70d7dea04707a89044371c0))
+
 ## [0.25.6](https://github.com/blinko-space/blinko/compare/v0.25.5...v0.25.6) (2024-12-14)
 
 
