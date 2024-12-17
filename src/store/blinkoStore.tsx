@@ -228,6 +228,7 @@ export class BlinkoStore implements Store {
     const { tagId, withoutTag, withFile, withLink, searchText } = router.query;
     useEffect(() => {
       if (!router.isReady) return
+      console.log(searchText)
       this.noteListFilterConfig.type = NoteType.BLINKO
       this.noteTypeDefault = NoteType.BLINKO
       this.noteListFilterConfig.tagId = null
@@ -279,7 +280,6 @@ export class BlinkoStore implements Store {
   @action
   setExcludeEmbeddingTagId(tagId: number | null) {
     this.excludeEmbeddingTagId = tagId;
-    // 可能需要保存到本地存储或发送到服务器
   }
 
   constructor() {
