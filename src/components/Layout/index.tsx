@@ -25,6 +25,12 @@ import { Sidebar } from "./Sidebar";
 import { MobileNavBar } from "./MobileNavBar";
 import FilterPop from "../Common/PopoverFloat/filterPop";
 import { AppProvider } from "@/store/module/AppProvider";
+import { api } from "@/lib/trpc";
+import { showTipsDialog } from "../Common/TipsDialog";
+import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { ToastPlugin } from "@/store/module/Toast/Toast";
+import { motion, AnimatePresence } from "framer-motion";
+import { BarSearchInput } from "./BarSearchInput";
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
 
@@ -44,14 +50,6 @@ export const CommonLayout = observer(({
   const user = RootStore.Get(UserStore)
   const blinkoStore = RootStore.Get(BlinkoStore)
   const base = RootStore.Get(BaseStore)
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const throttleSearchRef = useRef(_.throttle(() => {
-    if (base.currentRouter?.href == '/resources') {
-      return blinkoStore.resourceList.resetAndCall({ searchText: searchInputRef.current?.value })
-    }
-    blinkoStore.noteList.resetAndCall({})
-  }, 1000, { trailing: true, leading: false }));
 
   blinkoStore.use()
   user.use()
@@ -80,9 +78,7 @@ export const CommonLayout = observer(({
   return (
     <div className="flex w-full h-mobile-full overflow-x-hidden" id="outer-container">
       {blinkoStore.showAi && createPortal(<BlinkoAi />, document.body)}
-
       <AiWritePop />
-
       <Menu
         disableAutoFocus
         onClose={() => setisOpen(false)}
@@ -100,7 +96,7 @@ export const CommonLayout = observer(({
         style={{ width: isPc ? `calc(100% - ${base.sideBarWidth}px)` : '100%' }}
         className={`flex transition-all duration-300 overflow-y-hidden w-full flex-col gap-y-1 bg-sencondbackground`}>
         {/* nav bar  */}
-        <header className="relative flex md:h-16 md:min-h-16 h-14 min-h-14 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 md:pb-2">
+        <header className="relative flex md:h-16 md:min-h-16 h-14 min-h-14 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 md:pb-2 overflow-x-hidden">
           <div className="hidden md:block absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">
             <div className="w-full h-[100%] bg-[#9936e6] opacity-20"
               style={{ "clipPath": "circle(50% at 50% 50%)" }} />
@@ -120,64 +116,75 @@ export const CommonLayout = observer(({
                 width={24}
               />
             </Button>}
-            <div className="w-full truncate text-xl font-normal md:font-bold text-default-700 flex gap-2 items-center justify-center">
-              <div className="w-[4px] h-[16px] bg-primary rounded-xl" />
-              {/* @ts-ignore */}
-              <div className="font-black select-none">{t(base.currentTitle)}</div>
-              <Icon className="cursor-pointer hover:rotate-180 transition-all" onClick={() => blinkoStore.refreshData()} icon="fluent:arrow-sync-12-filled" width="20" height="20" />
-              <Input
-                ref={searchInputRef}
-                fullWidth
-                size={isPc ? 'md' : 'sm'}
-                variant="flat"
-                aria-label="search"
-                className={`ml-auto w-[200px] md:w-[300px] ${blinkoStore.noteListFilterConfig.isUseAiQuery ? 'input-highlight' : ''}`}
-                classNames={{
-                  base: "px-1 mr-1 w-[full] md:w-[300px]",
-                  inputWrapper: `bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20 ${blinkoStore.noteListFilterConfig.isUseAiQuery ? 'border-2 border-primary' : ''
-                    }`,
-                  input: "placeholder:text-default-600 group-data-[has-value=true]:text-foreground",
-                }}
-                labelPlacement="outside"
-                placeholder={t('search')}
-                value={blinkoStore.noteListFilterConfig.searchText}
-                onChange={e => {
-                  blinkoStore.noteListFilterConfig.searchText = e.target.value
-                  throttleSearchRef.current()
-                }}
-                startContent={
-                  <Icon className="text-default-600 [&>g]:stroke-[2px]" icon="lets-icons:search" width="24" height="24" />
+            <div className="flex flex-1 items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-[4px] h-[16px] bg-primary rounded-xl" />
+                <div className="flex flex-row items-center gap-1">
+                  <div className="font-black select-none">{t(base.currentTitle)}</div>
+                  {
+                    router.pathname != '/trash'
+                      ? <Icon className="cursor-pointer hover:rotate-180 transition-all"
+                        onClick={() => blinkoStore.refreshData()}
+                        icon="fluent:arrow-sync-12-filled"
+                        width="20"
+                        height="20"
+                      />
+                      : <Icon className="cursor-pointer transition-all text-red-500"
+                        onClick={() => {
+                          showTipsDialog({
+                            size: 'sm',
+                            title: t('confirm-to-delete'),
+                            content: t('this-operation-removes-the-associated-label-and-cannot-be-restored-please-confirm'),
+                            onConfirm: async () => {
+                              await RootStore.Get(ToastPlugin).promise(
+                                api.notes.clearRecycleBin.mutate(),
+                                {
+                                  loading: t('in-progress'),
+                                  success: <b>{t('your-changes-have-been-saved')}</b>,
+                                  error: <b>{t('operation-failed')}</b>,
+                                })
+                              blinkoStore.refreshData()
+                              RootStore.Get(DialogStandaloneStore).close()
+                            }
+                          })
+                        }}
+                        icon="mingcute:delete-2-line"
+                        width="20"
+                        height="20"
+                      />
+                  }
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-2 md:gap-4 w-auto ">
+                <BarSearchInput isPc={isPc} />
+                <FilterPop />
+                {blinkoStore.dailyReviewNoteList.value?.length != 0 &&
+                  <Badge size="sm" className="shrink-0" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
+                    <Link href="/review" passHref legacyBehavior>
+                      <Button 
+                        as="a"
+                        className="mt-[2px]" 
+                        isIconOnly 
+                        size="sm" 
+                        variant="light"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          router.push('/review');
+                        }}
+                      >
+                        <Icon className='cursor-pointer' icon="mingcute:message-1-line" width="24" height="24" />
+                      </Button>
+                    </Link>
+                  </Badge>
                 }
-                endContent={router.pathname != '/resources' && <Tooltip content={t('ai-enhanced-search')}>
-                  <Icon
-                    className="text-default-600 [&>g]:stroke-[2px] cursor-pointer hover:text-primary transition-colors"
-                    icon="mingcute:ai-line"
-                    width="24"
-                    height="24"
-                    onClick={() => {
-                      searchInputRef.current?.focus()
-                      blinkoStore.noteListFilterConfig.isUseAiQuery = !blinkoStore.noteListFilterConfig.isUseAiQuery
-                      if (blinkoStore.noteListFilterConfig.searchText != '') {
-                        throttleSearchRef.current()
-                      }
-                    }}
-                  />
-                </Tooltip>}
-              />
-              <FilterPop />
-              {blinkoStore.dailyReviewNoteList.value?.length != 0 &&
-                <Badge size="sm" className="mr-2 scale-75" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
-                  <Link href={'/review'}>
-                    <Icon className="mr-2 text-[#8600EF] cursor-pointer" icon="bxs:message-square-detail" width="24" height="24" />
-                  </Link>
-                </Badge>}
+              </div>
             </div>
           </div>
           {header}
         </header>
         {/* backdrop  pt-6 -mt-6 to fix the editor tooltip position */}
-            
-        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll">
+
+        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll overflow-x-hidden">
           <div className="relative flex h-full w-full flex-col rounded-medium layout-container" >
             {children}
           </div>

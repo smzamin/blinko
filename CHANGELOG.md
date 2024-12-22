@@ -1,3 +1,151 @@
+## [0.29.4](https://github.com/blinko-space/blinko/compare/v0.29.3...v0.29.4) (2024-12-21)
+
+
+### Bug Fixes
+
+* update LoadingPage and SendButton components for improved UI ([f6c3c54](https://github.com/blinko-space/blinko/commit/f6c3c54f4b9a4120cfc143f787a7cdc4b91beb7c))
+
+## [0.29.3](https://github.com/blinko-space/blinko/compare/v0.29.2...v0.29.3) (2024-12-21)
+
+
+### Bug Fixes
+
+* enhance ScrollArea component and update attachment router ([2b34bfa](https://github.com/blinko-space/blinko/commit/2b34bfaa9c5f9813198670b7355392e2c02f1f4e))
+
+## [0.29.2](https://github.com/blinko-space/blinko/compare/v0.29.1...v0.29.2) (2024-12-21)
+
+
+### Bug Fixes
+
+* enhance resource management and UI updates ([5248a03](https://github.com/blinko-space/blinko/commit/5248a03efbd39ea9636a5327a1b16da8289d3c91))
+
+## [0.29.1](https://github.com/blinko-space/blinko/compare/v0.29.0...v0.29.1) (2024-12-21)
+
+
+### Bug Fixes
+
+* add error handling for missing account information in DBJob plugin ([fd9bf88](https://github.com/blinko-space/blinko/commit/fd9bf8850574c5f998050d31a9956bda1ef713a1))
+
+# [0.29.0](https://github.com/blinko-space/blinko/compare/v0.28.1...v0.29.0) (2024-12-21)
+
+
+### Bug Fixes
+
+* update Chinese translations and enhance BlinkoMusicPlayer responsiveness ([838f26e](https://github.com/blinko-space/blinko/commit/838f26e6bba1b3c121ddc24093422d886b84c18c))
+
+
+### Features
+
+* add music metadata functionality and Spotify integration ([800cc73](https://github.com/blinko-space/blinko/commit/800cc73cee9f5c03b603975e2804964405409eef))
+
+## [0.28.1](https://github.com/blinko-space/blinko/compare/v0.28.0...v0.28.1) (2024-12-21)
+
+
+### Bug Fixes
+
+* build issue ([169e3b3](https://github.com/blinko-space/blinko/commit/169e3b301fec927b505ad8bb46d33c6f83ec906d))
+
+# [0.28.0](https://github.com/blinko-space/blinko/compare/v0.27.7...v0.28.0) (2024-12-20)
+
+
+### Bug Fixes
+
+* improve layout and accessibility in resources and layout components ([2bfb29c](https://github.com/blinko-space/blinko/commit/2bfb29c841c0c0b181f15c013b44dfb78c380c44))
+
+
+### Features
+
+* enhance configuration and improve attachment handling ([6572ebb](https://github.com/blinko-space/blinko/commit/6572ebb0e7c5255e51943eebc36bee96a16623d8))
+* enhance localization and improve resource context menu ([99003be](https://github.com/blinko-space/blinko/commit/99003be617eb533f4ac8d769018d329d6755e0e2))
+* refactor resource page ([cda450a](https://github.com/blinko-space/blinko/commit/cda450a89a96aca417ac2a98ebec69639189c233))
+
+## [0.27.7](https://github.com/blinko-space/blinko/compare/v0.27.6...v0.27.7) (2024-12-20)
+
+
+### Bug Fixes
+
+* german translations ([d498892](https://github.com/blinko-space/blinko/commit/d4988929592998df4bd79d9e60eacd0e21093cde))
+
+## [0.27.6](https://github.com/blinko-space/blinko/compare/v0.27.5...v0.27.6) (2024-12-19)
+
+
+### Bug Fixes
+
+* remove unused components and utility functions ([69b475b](https://github.com/blinko-space/blinko/commit/69b475b4c9d2754b5d4e1bc409dc85b761f5c307))
+
+## [0.27.5](https://github.com/blinko-space/blinko/compare/v0.27.4...v0.27.5) (2024-12-19)
+
+
+### Bug Fixes
+
+* add AI writing feature and enhance localization ([dbaa73e](https://github.com/blinko-space/blinko/commit/dbaa73ef615f8f387db573417cf9c04465eeaeb6))
+
+## [0.27.4](https://github.com/blinko-space/blinko/compare/v0.27.3...v0.27.4) (2024-12-19)
+
+
+### Bug Fixes
+
+* add edit time functionality and enhance note management [#242](https://github.com/blinko-space/blinko/issues/242) ([c112df6](https://github.com/blinko-space/blinko/commit/c112df6a149a2b31f3e9ff8273136585db763981))
+* add edit time option to BlinkoRightClickMenu ([57620e2](https://github.com/blinko-space/blinko/commit/57620e2b1fa5a21e4245ea4c2636822752351089))
+
+## [0.27.3](https://github.com/blinko-space/blinko/compare/v0.27.2...v0.27.3) (2024-12-19)
+
+
+### Bug Fixes
+
+* enhance user settings initialization and layout interaction ([251f2ff](https://github.com/blinko-space/blinko/commit/251f2ffd2a9e4b6c13235539932f1a77281374b9))
+
+## [0.27.2](https://github.com/blinko-space/blinko/compare/v0.27.1...v0.27.2) (2024-12-18)
+
+
+### Bug Fixes
+
+* disable dragging for image thumbnails in AttachmentRender component [#331](https://github.com/blinko-space/blinko/issues/331) ([b2edb76](https://github.com/blinko-space/blinko/commit/b2edb7620770c4a2315f272df16ed83a4ceba85a))
+* enhance attachment management and sorting functionality ([5b69f2b](https://github.com/blinko-space/blinko/commit/5b69f2b99f45c69165034c5d8132b9cea5656839))
+* enhance layout components and improve user interaction ([9de5e8e](https://github.com/blinko-space/blinko/commit/9de5e8e8786d1fec3e6781467af9bb4a565333e4))
+* improve BlinkoAiChat responsiveness and enhance file name handling ([91229c6](https://github.com/blinko-space/blinko/commit/91229c6addd1b4ca25547fe831a675f5b188642c))
+* pwa refresh language lose ([dc41a44](https://github.com/blinko-space/blinko/commit/dc41a44883e5f4a0913c7b956fc911baa7351415))
+* refactor sidebar state management and enhance resizing functionality ([6194067](https://github.com/blinko-space/blinko/commit/6194067d5de9f8ed95a2b850b747448d188ea539))
+* update dialog store reference in DeleteIcon component [#332](https://github.com/blinko-space/blinko/issues/332) ([4183c9f](https://github.com/blinko-space/blinko/commit/4183c9f964c6e851a0c2331c4e78d79eea4421e8))
+
+## [0.27.1](https://github.com/blinko-space/blinko/compare/v0.27.0...v0.27.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* adjust button alignment in TipsDialog component ([cf7b057](https://github.com/blinko-space/blinko/commit/cf7b05752a9221291d4f96bf37afffcd02b38015))
+* enhance file upload functionality and improve user feedback ([c86cd4e](https://github.com/blinko-space/blinko/commit/c86cd4e61c66cc5e419510c92ba7fac3ec40df5e))
+* enhance user sign-out process and improve component structure 326 ([e38501a](https://github.com/blinko-space/blinko/commit/e38501a071ea9c5b952e6cfe6354cf7e170effea))
+* remove bodyParser configuration from file upload route ([4047c64](https://github.com/blinko-space/blinko/commit/4047c64f68c41bb95b057e7a5a0ff1d8072c7808))
+* update icon paths in manifest.json for consistency ([66f1cbe](https://github.com/blinko-space/blinko/commit/66f1cbe38146e2d21de7d828841f3e310cc20dec))
+
+# [0.27.0](https://github.com/blinko-space/blinko/compare/v0.26.12...v0.27.0) (2024-12-17)
+
+
+### Bug Fixes
+
+* enhance sign-in component with theme-based logo and clean up imports ([f9d500c](https://github.com/blinko-space/blinko/commit/f9d500ce40ebd8a6d2608945e3dbfe8d123c89b6))
+
+
+### Features
+
+* add self-deletion prevention in user deletion logic ([60c4a41](https://github.com/blinko-space/blinko/commit/60c4a418164f0cc8e2eae32edad6a667f740a6df))
+* add user data deletion confirmation dialog and enhance translation files ([ef09306](https://github.com/blinko-space/blinko/commit/ef0930618aefbefa461fd98f9d23095d39e3ae34))
+
+## [0.26.12](https://github.com/blinko-space/blinko/compare/v0.26.11...v0.26.12) (2024-12-17)
+
+
+### Bug Fixes
+
+* add error logging in FileService writeFileSafe method ([17604c2](https://github.com/blinko-space/blinko/commit/17604c28f08e0e3f4ab426e074bbd8c812d6375f))
+
+## [0.26.11](https://github.com/blinko-space/blinko/compare/v0.26.10...v0.26.11) (2024-12-17)
+
+
+### Bug Fixes
+
+* update logo assets and caching headers ([da931de](https://github.com/blinko-space/blinko/commit/da931debcc34f0bf50ed86934c6fa1c5ab0b5f7d))
+
 ## [0.26.10](https://github.com/blinko-space/blinko/compare/v0.26.9...v0.26.10) (2024-12-16)
 
 

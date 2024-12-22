@@ -10,6 +10,7 @@ import { getGlobalConfig } from './config';
 import { FileService } from '../plugins/files';
 import { AiService } from '../plugins/ai';
 import { SendWebhook } from './helper';
+import { Context } from '../context';
 
 const extractHashtags = (input: string): string[] => {
   const withoutCodeBlocks = input.replace(/```[\s\S]*?```/g, '');
@@ -17,6 +18,7 @@ const extractHashtags = (input: string): string[] => {
   const matches = withoutCodeBlocks.match(hashtagRegex);
   return matches ? matches : [];
 }
+
 
 export const noteRouter = router({
   list: authProcedure
@@ -115,7 +117,12 @@ export const noteRouter = router({
         take: size,
         include: {
           tags: { include: { tag: true } },
-          attachments: true,
+          attachments: {
+            orderBy: [
+              { sortOrder: 'asc' },
+              { id: 'asc' }
+            ]
+          },
           references: {
             select: {
               toNoteId: true
@@ -171,7 +178,12 @@ export const noteRouter = router({
         where: { id: { in: ids }, accountId: Number(ctx.id) },
         include: {
           tags: { include: { tag: true } },
-          attachments: true,
+          attachments: {
+            orderBy: [
+              { sortOrder: 'asc' },
+              { id: 'asc' }
+            ]
+          },
           references: {
             select: {
               toNoteId: true
@@ -234,7 +246,13 @@ export const noteRouter = router({
       return await prisma.notes.update({ where: { id: input.id, accountId: Number(ctx.id) }, data: { isReviewed: true } })
     }),
   upsert: authProcedure
-    .meta({ openapi: { method: 'POST', path: '/v1/note/upsert', summary: 'Update or create note', protect: true, tags: ['Note'] } })
+    .meta({
+      openapi: {
+        method: 'POST', path: '/v1/note/upsert', summary: 'Update or create note',
+        description: "The attachments field is an array of objects with the following properties: name, path, and size which get from /api/file/upload",
+        protect: true, tags: ['Note']
+      }
+    })
     .input(z.object({
       content: z.union([z.string(), z.null()]).default(null),
       type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(0),
@@ -244,7 +262,9 @@ export const noteRouter = router({
       isTop: z.union([z.boolean(), z.null()]).default(null),
       isShare: z.union([z.boolean(), z.null()]).default(null),
       isRecycle: z.union([z.boolean(), z.null()]).default(null),
-      references: z.array(z.number()).optional()
+      references: z.array(z.number()).optional(),
+      createdAt: z.date().optional(),
+      updatedAt: z.date().optional()
     }))
     .output(z.any())
     .mutation(async function ({ input, ctx }) {
@@ -277,7 +297,9 @@ export const noteRouter = router({
         ...(isTop !== null && { isTop }),
         ...(isShare !== null && { isShare }),
         ...(isRecycle !== null && { isRecycle }),
-        ...(content != null && { content })
+        ...(content != null && { content }),
+        ...(input.createdAt && { createdAt: input.createdAt }),
+        ...(input.updatedAt && { updatedAt: input.updatedAt })
       }
 
       if (id) {
@@ -366,7 +388,18 @@ export const noteRouter = router({
             if (needTobeAddedAttachmentsPath.length != 0) {
               await prisma.attachments.createMany({
                 data: attachments?.filter(t => needTobeAddedAttachmentsPath.includes(t.path))
-                  .map(i => { return { noteId: note.id, ...i } })
+                  .map(i => { 
+                    const pathParts = (i.path as string)
+                      .replace('/api/file/', '')
+                      .replace('/api/s3file/', '')
+                      .split('/');
+                    return { 
+                      noteId: note.id, 
+                      ...i,
+                      depth: pathParts.length - 1,
+                      perfixPath: pathParts.slice(0, -1).join(',')
+                    } 
+                  })
               })
             }
           }
@@ -376,10 +409,31 @@ export const noteRouter = router({
         return note
       } else {
         try {
-          const note = await prisma.notes.create({ data: { content: content ?? '', type, accountId: Number(ctx.id), isShare: isShare ? true : false, isTop: isTop ? true : false } })
+          const note = await prisma.notes.create({ 
+            data: { 
+              content: content ?? '', 
+              type, 
+              accountId: Number(ctx.id), 
+              isShare: isShare ? true : false, 
+              isTop: isTop ? true : false,
+              ...(input.createdAt && { createdAt: input.createdAt }),
+              ...(input.updatedAt && { updatedAt: input.updatedAt })
+            } 
+          })
           await handleAddTags(tagTree, undefined, note.id)
           await prisma.attachments.createMany({
-            data: attachments.map(i => { return { noteId: note.id, ...i } })
+            data: attachments.map(i => { 
+              const pathParts = (i.path as string)
+                .replace('/api/file/', '')
+                .replace('/api/s3file/', '')
+                .split('/');
+              return { 
+                noteId: note.id, 
+                ...i,
+                depth: pathParts.length - 1,
+                perfixPath: pathParts.slice(0, -1).join(',')
+              } 
+            })
           })
 
           //add references
@@ -424,66 +478,12 @@ export const noteRouter = router({
     }),
   deleteMany: authProcedure.use(demoAuthMiddleware)
     .meta({ openapi: { method: 'POST', path: '/v1/note/batch-delete', summary: 'Batch delete note', protect: true, tags: ['Note'] } })
-    // .output(z.union([z.null(), notesSchema]))
     .input(z.object({
       ids: z.array(z.number())
     }))
     .output(z.any())
     .mutation(async function ({ input, ctx }) {
-      const { ids } = input
-      const notes = await prisma.notes.findMany({
-        where: { id: { in: ids }, accountId: Number(ctx.id) },
-        include: {
-          tags: { include: { tag: true } },
-          attachments: true,
-          references: true,
-          referencedBy: true
-        }
-      })
-      const handleDeleteRelation = async () => {
-        for (const note of notes) {
-          SendWebhook({ ...note }, 'delete', ctx)
-          await prisma.tagsToNote.deleteMany({ where: { noteId: note.id } })
-
-          await prisma.noteReference.deleteMany({
-            where: {
-              OR: [
-                { fromNoteId: note.id },
-                { toNoteId: note.id }
-              ]
-            }
-          })
-
-          const allTagsInThisNote = note.tags || []
-          const oldTags = allTagsInThisNote.map(i => i.tag).filter(i => !!i)
-          const allTagsIds = oldTags?.map(i => i?.id)
-          const usingTags = (await prisma.tagsToNote.findMany({
-            where: { tagId: { in: allTagsIds } },
-            include: { tag: true }
-          })).map(i => i.tag?.id).filter(i => !!i)
-          const needTobeDeledTags = _.difference(allTagsIds, usingTags);
-          if (needTobeDeledTags?.length) {
-            await prisma.tag.deleteMany({ where: { id: { in: needTobeDeledTags }, accountId: Number(ctx.id) } })
-          }
-
-          if (note.attachments?.length) {
-            for (const attachment of note.attachments) {
-              try {
-                await FileService.deleteFile(attachment.path)
-              } catch (error) {
-                console.log('delete attachment error:', error)
-              }
-            }
-            await prisma.attachments.deleteMany({
-              where: { id: { in: note.attachments.map(i => i.id) } }
-            })
-          }
-        }
-      }
-
-      await handleDeleteRelation()
-      await prisma.notes.deleteMany({ where: { id: { in: ids }, accountId: Number(ctx.id) } })
-      return { ok: true }
+      return await deleteNotes(input.ids, ctx);
     }),
   addReference: authProcedure
     .meta({ openapi: { method: 'POST', path: '/v1/note/add-reference', summary: 'Add note reference', protect: true, tags: ['Note'] } })
@@ -560,6 +560,52 @@ export const noteRouter = router({
         }));
       }
     }),
+  clearRecycleBin: authProcedure.use(demoAuthMiddleware)
+    .meta({ openapi: { method: 'POST', path: '/v1/note/clear-recycle-bin', summary: 'Clear recycle bin', protect: true, tags: ['Note'] } })
+    .input(z.void())
+    .output(z.any())
+    .mutation(async function ({ ctx }) {
+      const recycleBinNotes = await prisma.notes.findMany({
+        where: {
+          accountId: Number(ctx.id),
+          isRecycle: true
+        },
+        select: { id: true }
+      });
+
+      const noteIds = recycleBinNotes.map(note => note.id);
+      if (noteIds.length === 0) return { ok: true };
+
+      return await deleteNotes(noteIds, ctx);
+    }),
+  updateAttachmentsOrder: authProcedure
+    .meta({ openapi: { method: 'POST', path: '/v1/note/update-attachments-order', summary: 'Update attachments order', protect: true, tags: ['Note'] } })
+    .input(z.object({
+      attachments: z.array(z.object({
+        name: z.string(),
+        sortOrder: z.number()
+      }))
+    }))
+    .output(z.any())
+    .mutation(async function ({ input, ctx }) {
+      const { attachments } = input;
+
+      await Promise.all(
+        attachments.map(({ name, sortOrder }) =>
+          prisma.attachments.updateMany({
+            where: {
+              name,
+              note: {
+                accountId: Number(ctx.id)
+              }
+            },
+            data: { sortOrder }
+          })
+        )
+      );
+
+      return { success: true };
+    }),
 })
 
 let insertNoteReference = async ({ fromNoteId, toNoteId, accountId }) => {
@@ -580,6 +626,60 @@ let insertNoteReference = async ({ fromNoteId, toNoteId, accountId }) => {
   });
 }
 
-// let deleteNoteReference = async ({ fromNoteId, toNoteId, accountId }) => {
-//   return await prisma.noteReference.deleteMany({ where: { fromNoteId, toNoteId, accountId } })
-// }
+
+export async function deleteNotes(ids: number[], ctx: Context) {
+  const notes = await prisma.notes.findMany({
+    where: { id: { in: ids }, accountId: Number(ctx.id) },
+    include: {
+      tags: { include: { tag: true } },
+      attachments: true,
+      references: true,
+      referencedBy: true
+    }
+  });
+
+  const handleDeleteRelation = async () => {
+    for (const note of notes) {
+      SendWebhook({ ...note }, 'delete', ctx);
+      await prisma.tagsToNote.deleteMany({ where: { noteId: note.id } });
+
+      await prisma.noteReference.deleteMany({
+        where: {
+          OR: [
+            { fromNoteId: note.id },
+            { toNoteId: note.id }
+          ]
+        }
+      });
+
+      const allTagsInThisNote = note.tags || [];
+      const oldTags = allTagsInThisNote.map(i => i.tag).filter(i => !!i);
+      const allTagsIds = oldTags?.map(i => i?.id);
+      const usingTags = (await prisma.tagsToNote.findMany({
+        where: { tagId: { in: allTagsIds } },
+        include: { tag: true }
+      })).map(i => i.tag?.id).filter(i => !!i);
+      const needTobeDeledTags = _.difference(allTagsIds, usingTags);
+      if (needTobeDeledTags?.length) {
+        await prisma.tag.deleteMany({ where: { id: { in: needTobeDeledTags }, accountId: Number(ctx.id) } });
+      }
+
+      if (note.attachments?.length) {
+        for (const attachment of note.attachments) {
+          try {
+            await FileService.deleteFile(attachment.path);
+          } catch (error) {
+            console.log('delete attachment error:', error);
+          }
+        }
+        await prisma.attachments.deleteMany({
+          where: { id: { in: note.attachments.map(i => i.id) } }
+        });
+      }
+    }
+  };
+
+  await handleDeleteRelation();
+  await prisma.notes.deleteMany({ where: { id: { in: ids }, accountId: Number(ctx.id) } });
+  return { ok: true };
+}

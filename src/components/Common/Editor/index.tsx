@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { OnSendContentType } from './type';
+import { FileType, OnSendContentType } from './type';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +26,7 @@ import {
   useEditorHeight
 } from './hooks/useEditor';
 import { EditorStore } from "./editorStore";
+import { AIWriteButton } from "./Toolbar/AIWriteButton";
 
 //https://ld246.com/guide/markdown
 type IProps = {
@@ -72,6 +73,10 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
     }
   });
 
+  const handleFileReorder = (newFiles: FileType[]) => {
+    store.updateFileOrder(newFiles);
+  };
+
   return <Card
     shadow='none' {...getRootProps()}
     className={`p-2 relative border-2 border-border transition-all  overflow-visible 
@@ -90,7 +95,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
       {/******************** AttchMent Render *****************/}
       {store.files.length > 0 && (
         <div className='w-full my-2'>
-          <AttachmentsRender files={store.files} />
+          <AttachmentsRender files={store.files} onReorder={handleFileReorder} />
         </div>
       )}
 
@@ -102,6 +107,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
       <div className='flex w-full items-center gap-1'>
         <NoteTypeButton />
         <HashtagButton store={store} content={content} />
+        <AIWriteButton store={store} content={content} />
         <ReferenceButton store={store} />
         <UploadButtons
           getInputProps={getInputProps}

@@ -33,8 +33,11 @@ export const attachmentsSchema = z.object({
   size: z.instanceof(Prisma.Decimal, { message: "Field 'size' must be a Decimal. Location: ['Models', 'attachments']" }),
   noteId: z.number().int(),
   createdAt: z.coerce.date(),
+  sortOrder: z.number().int(),
   updatedAt: z.coerce.date(),
   type: z.string(),
+  depth: z.any(),
+  perfixPath: z.any(),
 })
 
 export type attachments = z.infer<typeof attachmentsSchema>
@@ -82,6 +85,7 @@ export const tagSchema = z.object({
   name: z.string(),
   icon: z.string(),
   parent: z.number().int(),
+  sortOrder: z.number().int(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
