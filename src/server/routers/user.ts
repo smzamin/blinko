@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { accountsSchema } from '@/lib/prismaZodType';
 import { hashPassword, verifyPassword } from 'prisma/seed';
 import { generateTOTP, generateTOTPQRCode, verifyTOTP } from "./helper";
+import { deleteNotes } from './note';
 
 const genToken = async ({ id, name, role }: { id: number, name: string, role: string }) => {
   return await encode({
@@ -90,8 +91,27 @@ export const userRouter = router({
         const passwordHash = await hashPassword(password)
         const count = await prisma.accounts.count()
         if (count == 0) {
-          const res = await prisma.accounts.create({ data: { name, password: passwordHash, nickname: name, role: 'superadmin' } })
-          await prisma.accounts.update({ where: { id: res.id }, data: { apiToken: await genToken({ id: res.id, name, role: 'superadmin' }) } })
+          const res = await prisma.accounts.create({ 
+            data: { 
+              name, 
+              password: passwordHash, 
+              nickname: name, 
+              role: 'superadmin',
+            } 
+          })
+          await prisma.accounts.update({ 
+            where: { id: res.id }, 
+            data: { 
+              apiToken: await genToken({ id: res.id, name, role: 'superadmin' }) 
+            } 
+          })
+          await prisma.config.create({
+            data: {
+              key: 'theme',
+              config: { value: 'system' },
+              userId: res.id
+            }
+          })
           return true
         } else {
           const config = await prisma.config.findFirst({ where: { key: 'isAllowRegister' } })
@@ -243,5 +263,67 @@ export const userRouter = router({
         throw new Error('Invalid verification code');
       }
       return true;
+    }),
+  deleteUser: authProcedure.use(superAdminAuthMiddleware).use(demoAuthMiddleware)
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/v1/user/delete',
+        summary: 'Delete user',
+        description: 'Delete user and all related data, need super admin permission',
+        tags: ['User']
+      }
+    })
+    .input(z.object({
+      id: z.number()
+    }))
+    .output(z.boolean())
+    .mutation(async ({ input, ctx }) => {
+      return prisma.$transaction(async () => {
+        const { id } = input
+
+        const userToDelete = await prisma.accounts.findFirst({
+          where: { id }
+        })
+
+
+
+        if (!userToDelete) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'User not found'
+          })
+        }
+
+        if (userToDelete.role === 'superadmin') {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Cannot delete super admin account'
+          })
+        }
+
+        if (userToDelete.id === Number(ctx.id)) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Cannot delete yourself'
+          })
+        }
+
+        const userNotes = await prisma.notes.findMany({
+          where: { accountId: id }
+        })
+        
+        await deleteNotes(userNotes.map(note => note.id), ctx)
+
+        await prisma.config.deleteMany({
+          where: { userId: id }
+        })
+
+        await prisma.accounts.delete({
+          where: { id }
+        })
+
+        return true
+      })
     }),
 })

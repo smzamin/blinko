@@ -6,6 +6,7 @@ export type Attachment = NonNullable<Note['attachments']>[0] & { size: any }
 export type Tag = NonNullable<RouterOutput['tags']['list']>[0]
 export type Config = NonNullable<RouterOutput['config']['list']>
 export type LinkInfo = NonNullable<RouterOutput['public']['linkPreview']>
+export type ResourceType = NonNullable<RouterOutput['attachments']['list']>[0]
 export enum NoteType {
   'BLINKO',
   'NOTE'
@@ -24,7 +25,7 @@ export const ZUserPerferConfigKey = z.union([
   z.literal('webhookEndpoint'),
   z.literal('toolbarVisibility'),
   z.literal('twoFactorEnabled'),
-  z.literal('twoFactorSecret'),
+  z.literal('twoFactorSecret')
 ]);
 
 export const ZConfigKey = z.union([
@@ -44,11 +45,14 @@ export const ZConfigKey = z.union([
   z.literal('s3Bucket'),
   z.literal('s3Region'),
   z.literal('s3CustomPath'),
+  z.literal('localCustomPath'),
   z.literal('embeddingModel'),
   z.literal('embeddingTopK'),
   z.literal('embeddingLambda'),
   z.literal('embeddingScore'),
   z.literal('excludeEmbeddingTagId'),
+  z.literal('spotifyConsumerKey'),
+  z.literal('spotifyConsumerSecret'),
   ZUserPerferConfigKey
 ]);
 
@@ -79,6 +83,7 @@ export const ZConfigSchema = z.object({
   s3Bucket: z.any().optional(),
   s3CustomPath: z.any().optional(),
   s3Region: z.any().optional(),
+  localCustomPath: z.any().optional(),
   embeddingModel: z.any().optional(),
   embeddingTopK: z.number().optional(),
   embeddingLambda: z.number().optional(),
@@ -89,7 +94,8 @@ export const ZConfigSchema = z.object({
   webhookEndpoint: z.any().optional(),
   twoFactorEnabled: z.boolean().optional(),
   twoFactorSecret: z.string().optional(),
-
+  spotifyConsumerKey: z.string().optional(),
+  spotifyConsumerSecret: z.string().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

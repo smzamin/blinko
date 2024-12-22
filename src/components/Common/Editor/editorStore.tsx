@@ -17,6 +17,8 @@ import i18n from '@/lib/i18n';
 import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
 import { handlePaste } from '@/lib/hooks';
 import { Button } from '@nextui-org/react';
+import axios from 'axios';
+import { ToastPlugin } from '@/store/module/Toast/Toast';
 export class EditorStore {
   files: FileType[] = []
   lastRange: Range | null = null
@@ -47,6 +49,10 @@ export class EditorStore {
         this.focus()
       }
     } catch (error) { }
+  }
+
+  updateFileOrder = (newFiles: FileType[]) => {
+    this.files = newFiles;
   }
 
   insertMarkdown = (text) => {
@@ -110,7 +116,8 @@ export class EditorStore {
     if (!this.blinko.showAi) {
       return
     }
-    if (filePath.endsWith('.webm') || filePath.endsWith('.mp3') || filePath.endsWith('.wav')) {
+    //|| filePath.endsWith('.mp3') || filePath.endsWith('.wav')
+    if (filePath.endsWith('.webm') ) {
       try {
         const doc = await api.ai.speechToText.mutate({ filePath })
         this.insertMarkdown(doc[0]?.pageContent)
@@ -132,11 +139,20 @@ export class EditorStore {
           function: async () => {
             const formData = new FormData();
             formData.append('file', file)
-            const response = await fetch('/api/file/upload', {
-              method: 'POST',
-              body: formData,
+            const { onUploadProgress } = RootStore.Get(ToastPlugin)
+              .setSizeThreshold(40)
+              .uploadProgress(file);
+
+            const response = await axios.post('/api/file/upload', formData, {
+              onUploadProgress
             });
-            const data = await response.json();
+            const data = response.data;
+            if (data.fileName) {
+              const fileIndex = this.files.findIndex(f => f.name === file.name);
+              if (fileIndex !== -1) {
+                this.files[fileIndex]!.name = data.fileName;
+              }
+            }
             this.speechToText(data.filePath)
             if (data.filePath) {
               return data.filePath
@@ -188,24 +204,24 @@ export class EditorStore {
     })
   }
 
-  handlePopAiWrite = () => {
-    if (!this.blinko.showAi) {
-      return
-    }
-    const selection = window.getSelection();
-    if (selection!.rangeCount > 0) {
-      const lastRange = selection!.getRangeAt(0);
-      const currentText = lastRange.startContainer?.textContent?.slice(0, lastRange.endOffset) ?? '';
-      const isEndsWithSlash = /[^\s]?\/$/.test(currentText);
-      if (currentText === '' || !isEndsWithSlash) {
-        setTimeout(() => eventBus.emit('aiwrite:hidden'));
-        return;
-      }
-      if (isEndsWithSlash) {
-        showAiWriteSuggestions();
-      }
-    }
-  }
+  // handlePopAiWrite = () => {
+  //   if (!this.blinko.showAi) {
+  //     return
+  //   }
+  //   const selection = window.getSelection();
+  //   if (selection!.rangeCount > 0) {
+  //     const lastRange = selection!.getRangeAt(0);
+  //     const currentText = lastRange.startContainer?.textContent?.slice(0, lastRange.endOffset) ?? '';
+  //     const isEndsWithSlash = /[^\s]?\/$/.test(currentText);
+  //     if (currentText === '' || !isEndsWithSlash) {
+  //       setTimeout(() => eventBus.emit('aiwrite:hidden'));
+  //       return;
+  //     }
+  //     if (isEndsWithSlash) {
+  //       showAiWriteSuggestions();
+  //     }
+  //   }
+  // }
 
   deleteLastChar = () => {
     const v = this.vditor?.getValue()
