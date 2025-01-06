@@ -1,3 +1,93 @@
+## [0.32.11](https://github.com/blinko-space/blinko/compare/v0.32.10...v0.32.11) (2025-01-05)
+
+
+### Bug Fixes
+
+* shareButton issue ([f254fc6](https://github.com/blinko-space/blinko/commit/f254fc656a1c74f0964f5bd2067ca88fe89794c9))
+
+## [0.32.10](https://github.com/blinko-space/blinko/compare/v0.32.9...v0.32.10) (2025-01-04)
+
+
+### Bug Fixes
+
+* add CORS support for file upload routes ([9fce501](https://github.com/blinko-space/blinko/commit/9fce5015f9f7caece05de3d9816a88eb35db066b))
+
+## [0.32.9](https://github.com/blinko-space/blinko/compare/v0.32.8...v0.32.9) (2025-01-01)
+
+
+### Bug Fixes
+
+* update HashtagButton to trigger onChange after inserting a hashtag ([ce71596](https://github.com/blinko-space/blinko/commit/ce71596024567f7575b73b0c48df596003ec75ae))
+
+## [0.32.8](https://github.com/blinko-space/blinko/compare/v0.32.7...v0.32.8) (2025-01-01)
+
+
+### Bug Fixes
+
+* enhance settings page layout and styling ([8b804ee](https://github.com/blinko-space/blinko/commit/8b804eebf3045402ece22f39c6c44b266859f575))
+
+## [0.32.7](https://github.com/blinko-space/blinko/compare/v0.32.6...v0.32.7) (2025-01-01)
+
+
+### Bug Fixes
+
+* add 'login-type' translation key across multiple languages ([0c01aa2](https://github.com/blinko-space/blinko/commit/0c01aa28213d23d3c8d43182469b8dd75cebfd12))
+
+## [0.32.6](https://github.com/blinko-space/blinko/compare/v0.32.5...v0.32.6) (2025-01-01)
+
+
+### Bug Fixes
+
+* enhance list item rendering in Markdown component ([34f7425](https://github.com/blinko-space/blinko/commit/34f74256e22218161bb382efe1d5bec106131aee))
+
+## [0.32.5](https://github.com/blinko-space/blinko/compare/v0.32.4...v0.32.5) (2025-01-01)
+
+
+### Bug Fixes
+
+* implement account linking functionality [#391](https://github.com/blinko-space/blinko/issues/391) ([c774af9](https://github.com/blinko-space/blinko/commit/c774af93ec9bdf4e3e51bdde8415fe420a24f177))
+
+## [0.32.4](https://github.com/blinko-space/blinko/compare/v0.32.3...v0.32.4) (2025-01-01)
+
+
+### Bug Fixes
+
+* implement TAB key functionality in editor for better text formatting ([8cb0dd5](https://github.com/blinko-space/blinko/commit/8cb0dd5656d8f726c4004f09dc304862b1de92ab))
+
+## [0.32.3](https://github.com/blinko-space/blinko/compare/v0.32.2...v0.32.3) (2024-12-31)
+
+
+### Bug Fixes
+
+* mobile themecolor ([569287d](https://github.com/blinko-space/blinko/commit/569287df5ca9a34c5c55995efadce90fe24f3b2f))
+
+## [0.32.2](https://github.com/blinko-space/blinko/compare/v0.32.1...v0.32.2) (2024-12-31)
+
+
+### Bug Fixes
+
+* add theme color customization and update translations ([a8faff6](https://github.com/blinko-space/blinko/commit/a8faff649b029bfb28b57be10e30c74a1afaf73e))
+
+## [0.32.1](https://github.com/blinko-space/blinko/compare/v0.32.0...v0.32.1) (2024-12-31)
+
+
+### Bug Fixes
+
+* enhance AboutSetting component and clean up unused code [#367](https://github.com/blinko-space/blinko/issues/367) ([dda53a8](https://github.com/blinko-space/blinko/commit/dda53a80b7e47561d9a27c31c3c9cceade830d7a))
+
+# [0.32.0](https://github.com/blinko-space/blinko/compare/v0.31.9...v0.32.0) (2024-12-31)
+
+
+### Bug Fixes
+
+* add community translations and enhance AboutSetting component ([46150d6](https://github.com/blinko-space/blinko/commit/46150d6cf01af1599e61668177a4052df1bb7f29))
+
+
+### Features
+
+* enhance OAuth2 provider integration and update translations ([c1ad05c](https://github.com/blinko-space/blinko/commit/c1ad05cfd731c0578efb540e079bf519c2cbc6ba))
+* implement tabbed settings interface with dynamic visibility based on user roles ([559eb23](https://github.com/blinko-space/blinko/commit/559eb23858a161a4dc681c453ab1f14fe70f6f1d))
+
 ## [0.31.9](https://github.com/blinko-space/blinko/compare/v0.31.8...v0.31.9) (2024-12-30)
 
 

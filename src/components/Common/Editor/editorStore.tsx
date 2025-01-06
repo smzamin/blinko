@@ -253,25 +253,6 @@ export class EditorStore {
     })
   }
 
-  // handlePopAiWrite = () => {
-  //   if (!this.blinko.showAi) {
-  //     return
-  //   }
-  //   const selection = window.getSelection();
-  //   if (selection!.rangeCount > 0) {
-  //     const lastRange = selection!.getRangeAt(0);
-  //     const currentText = lastRange.startContainer?.textContent?.slice(0, lastRange.endOffset) ?? '';
-  //     const isEndsWithSlash = /[^\s]?\/$/.test(currentText);
-  //     if (currentText === '' || !isEndsWithSlash) {
-  //       setTimeout(() => eventBus.emit('aiwrite:hidden'));
-  //       return;
-  //     }
-  //     if (isEndsWithSlash) {
-  //       showAiWriteSuggestions();
-  //     }
-  //   }
-  // }
-
   // ************************************* reference logic  start ************************************************************************************
   get currentReferences() {
     return this.noteListByIds.value?.slice()?.sort((a, b) => this.references.indexOf(a.id) - this.references.indexOf(b.id))
@@ -381,5 +362,30 @@ export class EditorStore {
         // }
       }
     } catch (error) { }
+  }
+
+  handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const vditorInput = document.querySelector(`#vditor-${this.mode} .vditor-reset`) as HTMLElement;
+      if (vditorInput) {
+
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) return;
+
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
+        const tabNode = document.createTextNode('\t');
+        range.insertNode(tabNode);
+
+        range.setStartAfter(tabNode);
+        range.setEndAfter(tabNode);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        console.log('vditor not found');
+      }
+    }
   }
 }
