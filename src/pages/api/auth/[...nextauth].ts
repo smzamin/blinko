@@ -15,16 +15,20 @@ import AppleProvider from "next-auth/providers/apple";
 import SlackProvider from "next-auth/providers/slack";
 import TwitchProvider from "next-auth/providers/twitch";
 import LineProvider from "next-auth/providers/line";
+import { getNextAuthSecret } from '@/server/routers/helper';
 
 async function verify2FACode(userId: string, userRole: string, userName: string, twoFactorCode: string) {
+  const now = Math.floor(Date.now() / 1000);
+  const thirtyDays = 30 * 24 * 60 * 60;
+  
   const config = await getGlobalConfig({
     ctx: {
       id: userId,
       role: userRole as 'superadmin' | 'user',
       name: userName,
       sub: userId,
-      exp: 0,
-      iat: 0
+      exp: now + thirtyDays,
+      iat: now
     }
   });
 
@@ -41,14 +45,17 @@ async function verify2FACode(userId: string, userRole: string, userName: string,
 }
 
 async function getUserConfig(userId: string, userRole: string, userName: string) {
+  const now = Math.floor(Date.now() / 1000);
+  const thirtyDays = 30 * 24 * 60 * 60;
+  
   return await getGlobalConfig({
     ctx: {
       id: userId,
       role: userRole as 'superadmin' | 'user',
       name: userName,
       sub: userId,
-      exp: 0,
-      iat: 0
+      exp: now + thirtyDays,
+      iat: now
     }
   });
 }
@@ -162,6 +169,8 @@ async function getProviderConfigList() {
 
 export default async function auth(req: any, res: any) {
   const providers = await getProviderConfigList()
+  const secret = await getNextAuthSecret();
+  
   return await NextAuth(req, res, {
     providers: [
       ...providers,
@@ -262,7 +271,6 @@ export default async function auth(req: any, res: any) {
                 role: user.role
               };
             }
-            console.log({ credentials })
             if (config.twoFactorEnabled) {
               return {
                 id: user.id.toString(),
@@ -286,9 +294,9 @@ export default async function auth(req: any, res: any) {
     pages: {
       signIn: '/signin',
     },
+    secret: secret,
     callbacks: {
       async signIn({ user, account }) {
-        console.log({ user, account })
         let userName = user.id ?? user.name ?? ''
         if (account?.type === 'oauth') {
           try {
@@ -410,8 +418,11 @@ export default async function auth(req: any, res: any) {
       },
     },
     session: {
-      // Set session maxAge to 30 days (30 days * 24 hours * 60 minutes * 60 seconds)
-      maxAge: 30 * 24 * 60 * 60, // 30 days
-    }
+      strategy: "jwt",
+      maxAge: 30 * 24 * 60 * 60,
+    },
+    jwt: {
+      maxAge: 30 * 24 * 60 * 60,
+    },
   });
 }

@@ -11,6 +11,7 @@ import { FileService } from '../plugins/files';
 import { AiService } from '../plugins/ai';
 import { SendWebhook } from './helper';
 import { Context } from '../context';
+import { cache } from '@/lib/cache';
 
 const extractHashtags = (input: string): string[] => {
   const withoutCodeBlocks = input.replace(/```[\s\S]*?```/g, '');
@@ -47,8 +48,18 @@ export const noteRouter = router({
             tag: tagSchema
           }))
         ),
-        references: z.array(z.object({ toNoteId: z.number() })).optional(),
-        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional()
+        references: z.array(z.object({
+          toNoteId: z.number(),
+          toNote: z.object({
+            content: z.string().optional(),
+            createdAt: z.date().optional(),
+            updatedAt: z.date().optional()
+          }).optional()
+        })).optional(),
+        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional(),
+        _count: z.object({
+          comments: z.number()
+        })
       }))
     ))
     .mutation(async function ({ input, ctx }) {
@@ -121,37 +132,97 @@ export const noteRouter = router({
           },
           references: {
             select: {
-              toNoteId: true
+              toNoteId: true,
+              toNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
             }
           },
           referencedBy: {
             select: {
               fromNoteId: true
             }
+          },
+          _count: {
+            select: {
+              comments: true
+            }
           }
         }
       })
     }),
   publicList: publicProcedure
-    .meta({ openapi: { method: 'POST', path: '/v1/note/public-list', summary: 'Query share notes list', tags: ['Note'] } })
+    .meta({
+      openapi: {
+        method: 'POST', path: '/v1/note/public-list', summary: 'Query share notes list', tags: ['Note']
+      },
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+      }
+    })
     .input(z.object({
       page: z.number().optional().default(1),
-      size: z.number().optional().default(30)
+      size: z.number().optional().default(30),
+      searchText: z.string().optional().default('')
     }))
     .output(z.array(notesSchema.merge(
       z.object({
-        attachments: z.array(attachmentsSchema)
+        attachments: z.array(attachmentsSchema),
+        account: z.object({
+          image: z.string().optional(),
+          nickname: z.string().optional(),
+          name: z.string().optional(),
+          id: z.number().optional(),
+        }).nullable().optional(),
+        tags: z.array(tagsToNoteSchema.merge(
+          z.object({
+            tag: tagSchema
+          }))
+        ),
+        _count: z.object({
+          comments: z.number()
+        })
       }))
     ))
     .mutation(async function ({ input }) {
-      const { page, size } = input
-      return await prisma.notes.findMany({
-        where: { isShare: true },
-        orderBy: [{ isTop: "desc" }, { updatedAt: 'desc' }],
-        skip: (page - 1) * size,
-        take: size,
-        include: { tags: true, attachments: true },
-      })
+      return cache.wrap('/v1/note/public-list', async () => {
+        const { page, size, searchText } = input
+        return await prisma.notes.findMany({
+          where: {
+            isShare: true,
+            sharePassword: "",
+            OR: [
+              { shareExpiryDate: { gt: new Date() } },
+              { shareExpiryDate: null }
+            ],
+            ...(searchText != '' && { content: { contains: searchText, mode: 'insensitive' } })
+          },
+          orderBy: [{ isTop: "desc" }, { updatedAt: 'desc' }],
+          skip: (page - 1) * size,
+          take: size,
+          include: {
+            tags: { include: { tag: true } },
+            account: {
+              select: {
+                image: true,
+                nickname: true,
+                name: true,
+                id: true,
+              }
+            },
+            attachments: true,
+            _count: {
+              select: {
+                comments: true
+              }
+            }
+          },
+        })
+      }, { ttl: 1000 * 5 })
     }),
   listByIds: authProcedure
     .meta({ openapi: { method: 'POST', path: '/v1/note/list-by-ids', summary: 'Query notes list by ids', protect: true, tags: ['Note'] } })
@@ -164,8 +235,17 @@ export const noteRouter = router({
             tag: tagSchema
           }))
         ),
-        references: z.array(z.object({ toNoteId: z.number() })).optional(),
-        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional()
+        references: z.array(z.object({
+          toNoteId: z.number(), toNote: z.object({
+            content: z.string().optional(),
+            createdAt: z.date().optional(),
+            updatedAt: z.date().optional()
+          }).optional()
+        })).optional(),
+        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional(),
+        _count: z.object({
+          comments: z.number()
+        })
       }))
     ))
     .mutation(async function ({ input, ctx }) {
@@ -182,12 +262,24 @@ export const noteRouter = router({
           },
           references: {
             select: {
-              toNoteId: true
+              toNoteId: true,
+              toNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
             }
           },
           referencedBy: {
             select: {
               fromNoteId: true
+            }
+          },
+          _count: {
+            select: {
+              comments: true
             }
           }
         }
@@ -201,9 +293,27 @@ export const noteRouter = router({
     }))
     .output(z.object({
       hasPassword: z.boolean(),
-      data: z.union([z.null(), notesSchema.merge(
+      data: z.union([z.null(),
+      notesSchema.merge(
         z.object({
-          attachments: z.array(attachmentsSchema)
+          attachments: z.array(attachmentsSchema),
+          references: z.array(z.object({
+            toNoteId: z.number(),
+            toNote: z.object({
+              content: z.string().optional(),
+              createdAt: z.date().optional(),
+              updatedAt: z.date().optional()
+            }).optional()
+          })).optional(),
+          account: z.object({
+            image: z.string().optional(),
+            nickname: z.string().optional(),
+            name: z.string().optional(),
+            id: z.number().optional(),
+          }).nullable().optional(),
+          _count: z.object({
+            comments: z.number()
+          })
         })
       )]),
       error: z.union([z.literal('expired'), z.null()]).default(null)
@@ -213,11 +323,37 @@ export const noteRouter = router({
       const note = await prisma.notes.findFirst({
         where: {
           shareEncryptedUrl,
-          isShare: true
+          isShare: true,
+          isRecycle: false
         },
         include: {
+          account: {
+            select: {
+              image: true,
+              nickname: true,
+              name: true,
+              id: true,
+            }
+          },
+          references: {
+            select: {
+              toNoteId: true,
+              toNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
+            }
+          },
           tags: true,
-          attachments: true
+          attachments: true,
+          _count: {
+            select: {
+              comments: true
+            }
+          }
         }
       })
 
@@ -261,11 +397,41 @@ export const noteRouter = router({
     }))
     .output(z.union([z.null(), notesSchema.merge(
       z.object({
-        attachments: z.array(attachmentsSchema)
-      }))]))
+        attachments: z.array(attachmentsSchema),
+        tags: z.array(tagsToNoteSchema.merge(
+          z.object({
+            tag: tagSchema
+          }))
+        ),
+        references: z.array(z.object({
+          toNoteId: z.number(),
+          toNote: z.object({
+            content: z.string().optional(),
+            createdAt: z.date().optional(),
+            updatedAt: z.date().optional()
+          }).optional()
+        })).optional(),
+        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional(),
+        _count: z.object({
+          comments: z.number()
+        })
+      }))
+    ]))
     .mutation(async function ({ input, ctx }) {
       const { id } = input
-      return await prisma.notes.findFirst({ where: { id, accountId: Number(ctx.id) }, include: { tags: true, attachments: true }, })
+      return await prisma.notes.findFirst({
+        where: { id, accountId: Number(ctx.id) }, include: {
+          tags: {
+            include: {
+              tag: true
+            }
+          },
+          attachments: true,
+          references: true,
+          referencedBy: true,
+          _count: { select: { comments: true } }
+        },
+      })
     }),
   dailyReviewNoteList: authProcedure
     .meta({ openapi: { method: 'GET', path: '/v1/note/daily-review-list', summary: 'Query daily review note list', protect: true, tags: ['Note'] } })
@@ -277,7 +443,10 @@ export const noteRouter = router({
     ))
     .query(async function ({ ctx }) {
       return await prisma.notes.findMany({
-        where: { createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }, isReviewed: false, isArchived: false, accountId: Number(ctx.id) },
+        where: {
+          createdAt: { gt: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) },
+          isReviewed: false, isArchived: false, isRecycle: false, accountId: Number(ctx.id)
+        },
         orderBy: { id: 'desc' },
         include: { attachments: true }
       })
@@ -320,6 +489,17 @@ export const noteRouter = router({
       let { id, isArchived, isRecycle, type, attachments, content, isTop, isShare, references } = input
       const tagTree = helper.buildHashTagTreeFromHashString(extractHashtags(content?.replace(/\\/g, '') + ' '))
       let newTags: Prisma.tagCreateManyInput[] = []
+      const config = await getGlobalConfig({ ctx })
+
+      const markdownImages = content?.match(/!\[.*?\]\((\/api\/(?:s3)?file\/[^)]+)\)/g)?.map(match => {
+        const matches = /!\[.*?\]\((\/api\/(?:s3)?file\/[^)]+)\)/.exec(match);
+        return matches?.[1] || '';
+      }) || [];
+      if (markdownImages.length > 0) {
+        const images = await prisma.attachments.findMany({ where: { path: { in: markdownImages } } })
+        attachments = [...attachments, ...images.map(i => ({ path: i.path, name: i.name, size: Number(i.size), type: i.type }))]
+      }
+
       const handleAddTags = async (tagTree: TagTreeNode[], parentTag: Prisma.tagCreateManyInput | undefined, noteId?: number) => {
         for (const i of tagTree) {
           let hasTag = await prisma.tag.findFirst({ where: { name: i.name, parent: parentTag?.id ?? 0, accountId: Number(ctx.id) } })
@@ -432,26 +612,25 @@ export const noteRouter = router({
             const oldAttachments = await prisma.attachments.findMany({ where: { noteId: note.id } })
             const needTobeAddedAttachmentsPath = _.difference(attachments?.map(i => i.path), oldAttachments.map(i => i.path));
             if (needTobeAddedAttachmentsPath.length != 0) {
-              await prisma.attachments.createMany({
-                data: attachments?.filter(t => needTobeAddedAttachmentsPath.includes(t.path))
-                  .map(i => {
-                    const pathParts = (i.path as string)
-                      .replace('/api/file/', '')
-                      .replace('/api/s3file/', '')
-                      .split('/');
-                    return {
-                      noteId: note.id,
-                      ...i,
-                      depth: pathParts.length - 1,
-                      perfixPath: pathParts.slice(0, -1).join(',')
-                    }
-                  })
+              // console.log({ needTobeAddedAttachmentsPath })
+              const attachmentsIds = await prisma.attachments.findMany({ where: { path: { in: needTobeAddedAttachmentsPath } } })
+              await prisma.attachments.updateMany({
+                where: { id: { in: attachmentsIds.map(i => i.id) } },
+                data: { noteId: note.id }
               })
             }
           }
         } catch (err) {
           console.log(err)
         }
+
+        if (config?.isUseAI) {
+          AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'update', createTime: note.createdAt! })
+          for (const attachment of attachments) {
+            AiService.embeddingInsertAttachments({ id: note.id, filePath: attachment.path })
+          }
+        }
+        SendWebhook({ ...note, attachments }, isRecycle ? 'delete' : 'update', ctx)
         return note
       } else {
         try {
@@ -467,21 +646,8 @@ export const noteRouter = router({
             }
           })
           await handleAddTags(tagTree, undefined, note.id)
-          await prisma.attachments.createMany({
-            data: attachments.map(i => {
-              const pathParts = (i.path as string)
-                .replace('/api/file/', '')
-                .replace('/api/s3file/', '')
-                .split('/');
-              return {
-                noteId: note.id,
-                ...i,
-                depth: pathParts.length - 1,
-                perfixPath: pathParts.slice(0, -1).join(',')
-              }
-            })
-          })
-
+          const attachmentsIds = await prisma.attachments.findMany({ where: { path: { in: attachments.map(i => i.path) } } })
+          await prisma.attachments.updateMany({ where: { id: { in: attachmentsIds.map(i => i.id) } }, data: { noteId: note.id } })
           //add references
           if (references && references.length > 0) {
             await prisma.noteReference.createMany({
@@ -490,6 +656,13 @@ export const noteRouter = router({
           }
 
           SendWebhook({ ...note, attachments }, 'create', ctx)
+
+          if (config?.isUseAI) {
+            AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'insert', createTime: note.createdAt! })
+            for (const attachment of attachments) {
+              AiService.embeddingInsertAttachments({ id: note.id, filePath: attachment.path })
+            }
+          }
           return note
         } catch (error) {
           console.log(error)
@@ -576,6 +749,7 @@ export const noteRouter = router({
     .output(z.any())
     .mutation(async function ({ input, ctx }) {
       const { ids } = input
+      SendWebhook({ ids }, 'delete', ctx)
       return await prisma.notes.updateMany({ where: { id: { in: ids }, accountId: Number(ctx.id) }, data: { isRecycle: true } })
     }),
   deleteMany: authProcedure.use(demoAuthMiddleware)
@@ -662,6 +836,7 @@ export const noteRouter = router({
         }));
       }
     }),
+
   clearRecycleBin: authProcedure.use(demoAuthMiddleware)
     .meta({ openapi: { method: 'POST', path: '/v1/note/clear-recycle-bin', summary: 'Clear recycle bin', protect: true, tags: ['Note'] } })
     .input(z.void())

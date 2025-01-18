@@ -1,3 +1,418 @@
+## [0.37.5](https://github.com/blinko-space/blinko/compare/v0.37.4...v0.37.5) (2025-01-16)
+
+
+### Bug Fixes
+
+* enhance notification and search functionality ([116b433](https://github.com/blinko-space/blinko/commit/116b4333fc52633888576ce5d33671cb83936f4b))
+
+## [0.37.4](https://github.com/blinko-space/blinko/compare/v0.37.3...v0.37.4) (2025-01-16)
+
+
+### Bug Fixes
+
+* support recommand list ([def886f](https://github.com/blinko-space/blinko/commit/def886ff42c1eb668101214de525cfb74341c8ae))
+
+## [0.37.3](https://github.com/blinko-space/blinko/compare/v0.37.2...v0.37.3) (2025-01-15)
+
+
+### Bug Fixes
+
+* update API endpoint placeholders in AiSetting component ([7920499](https://github.com/blinko-space/blinko/commit/7920499334d1d4b5926100bf4425cd6877067b0a))
+
+## [0.37.2](https://github.com/blinko-space/blinko/compare/v0.37.1...v0.37.2) (2025-01-15)
+
+
+### Bug Fixes
+
+* update notification styles and GitHub markdown background ([3884b6c](https://github.com/blinko-space/blinko/commit/3884b6c1b6b8e7e715cb30f19c1e873ded782f7a))
+
+## [0.37.1](https://github.com/blinko-space/blinko/compare/v0.37.0...v0.37.1) (2025-01-15)
+
+
+### Bug Fixes
+
+* add embedding API configuration and update translations ([6ef0f89](https://github.com/blinko-space/blinko/commit/6ef0f89c9762084bab1859ff0e88a17bb4d87630))
+
+# [0.37.0](https://github.com/blinko-space/blinko/compare/v0.36.12...v0.37.0) (2025-01-15)
+
+
+### Bug Fixes
+
+* add offline fallback functionality ([4080e52](https://github.com/blinko-space/blinko/commit/4080e52ce27807429f2bd5054edcabb148401f3e))
+
+
+### Features
+
+* add notifications feature and update translations ([e1ad253](https://github.com/blinko-space/blinko/commit/e1ad2539c3bf96ff839d5d55699282285e88f789))
+
+## [0.36.12](https://github.com/blinko-space/blinko/compare/v0.36.11...v0.36.12) (2025-01-15)
+
+
+### Bug Fixes
+
+* update note query to exclude recycled notes ([b256949](https://github.com/blinko-space/blinko/commit/b256949a1dd05877639a3c9d75302da6373711e2))
+
+## [0.36.11](https://github.com/blinko-space/blinko/compare/v0.36.10...v0.36.11) (2025-01-15)
+
+
+### Bug Fixes
+
+* add 'refresh' functionality and update translations ([a136a18](https://github.com/blinko-space/blinko/commit/a136a189424eb0cd746bb10251cf82ca90fada3e))
+
+## [0.36.10](https://github.com/blinko-space/blinko/compare/v0.36.9...v0.36.10) (2025-01-15)
+
+
+### Bug Fixes
+
+* update note query to exclude recycled notes ([e0bba4c](https://github.com/blinko-space/blinko/commit/e0bba4c6def3091a8ffb301f3c2a63d896ee0095))
+
+## [0.36.9](https://github.com/blinko-space/blinko/compare/v0.36.8...v0.36.9) (2025-01-14)
+
+
+### Bug Fixes
+
+* support hub list ([47ab7d2](https://github.com/blinko-space/blinko/commit/47ab7d2f55bf373200188976a88b06dce0a3e540))
+
+## [0.36.8](https://github.com/blinko-space/blinko/compare/v0.36.7...v0.36.8) (2025-01-14)
+
+
+### Bug Fixes
+
+* update user token generation and context logging ([66e321f](https://github.com/blinko-space/blinko/commit/66e321fc3f4251f58843808fd66c0b648b8842c8))
+
+## [0.36.7](https://github.com/blinko-space/blinko/compare/v0.36.6...v0.36.7) (2025-01-14)
+
+
+### Bug Fixes
+
+* integrate webhook notifications for note updates and deletions ([9693530](https://github.com/blinko-space/blinko/commit/96935300b924cd445db7e48bb55a95e41a9da06e))
+
+## [0.36.6](https://github.com/blinko-space/blinko/compare/v0.36.5...v0.36.6) (2025-01-12)
+
+
+### Bug Fixes
+
+* unify token retrieval method across API routes ([13d6729](https://github.com/blinko-space/blinko/commit/13d6729d1d7ee05292dd9fb5d02223fd9e542680))
+
+## [0.36.5](https://github.com/blinko-space/blinko/compare/v0.36.4...v0.36.5) (2025-01-12)
+
+
+### Bug Fixes
+
+* add Polish language support to Setting page ([477d0ad](https://github.com/blinko-space/blinko/commit/477d0adab028ff077c6c9b38deb6b2a859c3cc51))
+* update Hub component to reset shared notes on tab change ([c07ce20](https://github.com/blinko-space/blinko/commit/c07ce20ee81b2f126e706f2def2e16970423730e))
+
+## [0.36.4](https://github.com/blinko-space/blinko/compare/v0.36.3...v0.36.4) (2025-01-12)
+
+
+### Bug Fixes
+
+* integrate HubStore for comment handling and enhance authentication secret management ([4b314d9](https://github.com/blinko-space/blinko/commit/4b314d9b7235f704010f075fb2c767cae6610815))
+
+## [0.36.3](https://github.com/blinko-space/blinko/compare/v0.36.2...v0.36.3) (2025-01-11)
+
+
+### Bug Fixes
+
+* enhance BlinkoCard and BlinkoFollowDialog components, improve public API caching ([7833ae8](https://github.com/blinko-space/blinko/commit/7833ae89cd94b4c3ad7e53281b56dba1300a6621))
+
+## [0.36.2](https://github.com/blinko-space/blinko/compare/v0.36.1...v0.36.2) (2025-01-11)
+
+
+### Bug Fixes
+
+* improve layout and follow handling in BlinkoFollowDialog and follows router ([6357219](https://github.com/blinko-space/blinko/commit/635721976d1f65b4ff4ec7128502823fa45aeaee))
+
+## [0.36.1](https://github.com/blinko-space/blinko/compare/v0.36.0...v0.36.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* remove console logs and improve site avatar handling ([6e09839](https://github.com/blinko-space/blinko/commit/6e09839833e3f92458d664853ebc51dc73e5c3e0))
+
+# [0.36.0](https://github.com/blinko-space/blinko/compare/v0.35.9...v0.36.0) (2025-01-11)
+
+
+### Features
+
+* support hub follow unfollow website 🎉 ([18ffc3b](https://github.com/blinko-space/blinko/commit/18ffc3b641f00e089b97b9fad9a89eaed01cd8c5))
+
+## [0.35.9](https://github.com/blinko-space/blinko/compare/v0.35.8...v0.35.9) (2025-01-11)
+
+
+### Bug Fixes
+
+* update comment mutation to return a boolean ([3c7d7b9](https://github.com/blinko-space/blinko/commit/3c7d7b944b0b1c56054d5275ba5f2a6e9ae898ce))
+
+## [0.35.8](https://github.com/blinko-space/blinko/compare/v0.35.7...v0.35.8) (2025-01-10)
+
+
+### Bug Fixes
+
+* update AiTag and AiPrompt for improved tag handling ([985ee23](https://github.com/blinko-space/blinko/commit/985ee23090b4d3f95f678f82b83bcdf34b1d787d))
+
+## [0.35.7](https://github.com/blinko-space/blinko/compare/v0.35.6...v0.35.7) (2025-01-10)
+
+
+### Bug Fixes
+
+* simplify attachment retrieval logic in attachmentsRouter ([4133ce2](https://github.com/blinko-space/blinko/commit/4133ce2601a2faa379ff147d515c05662d050711))
+
+## [0.35.6](https://github.com/blinko-space/blinko/compare/v0.35.5...v0.35.6) (2025-01-10)
+
+
+### Bug Fixes
+
+* update PromiseCall usage in settings components for consistency ([e3af65b](https://github.com/blinko-space/blinko/commit/e3af65ba798bbd90eb50a6c129edb5b14ef8800f))
+
+## [0.35.5](https://github.com/blinko-space/blinko/compare/v0.35.4...v0.35.5) (2025-01-10)
+
+
+### Bug Fixes
+
+* update Editor and ReferenceButton components for improved functionality ([2c9cae5](https://github.com/blinko-space/blinko/commit/2c9cae57971c2f6d38108fa8ee850d8146f2ee4a))
+
+## [0.35.4](https://github.com/blinko-space/blinko/compare/v0.35.3...v0.35.4) (2025-01-10)
+
+
+### Bug Fixes
+
+* update text color in BlinkoCard footer for improved readability ([0353b7a](https://github.com/blinko-space/blinko/commit/0353b7a367260f1766481f560e0d7eeb50ae8671))
+
+## [0.35.3](https://github.com/blinko-space/blinko/compare/v0.35.2...v0.35.3) (2025-01-10)
+
+
+### Bug Fixes
+
+* enhance BlinkoCard and reference handling ([b26a1fb](https://github.com/blinko-space/blinko/commit/b26a1fbf34b575f310f50fc927d0458c3854489d))
+
+## [0.35.2](https://github.com/blinko-space/blinko/compare/v0.35.1...v0.35.2) (2025-01-10)
+
+
+### Bug Fixes
+
+* update Home component styling for responsive design [#424](https://github.com/blinko-space/blinko/issues/424) ([2b9dab8](https://github.com/blinko-space/blinko/commit/2b9dab8f473d710a45a1a19bfc25a253787a2d78))
+
+## [0.35.1](https://github.com/blinko-space/blinko/compare/v0.35.0...v0.35.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* update component styles and comment schema for consistency ([73e1674](https://github.com/blinko-space/blinko/commit/73e1674cda1ed3494bc45952455776da2d987e33))
+
+# [0.35.0](https://github.com/blinko-space/blinko/compare/v0.34.12...v0.35.0) (2025-01-10)
+
+
+### Features
+
+* enhance file upload and attachment handling [#426](https://github.com/blinko-space/blinko/issues/426) ([0d23c3f](https://github.com/blinko-space/blinko/commit/0d23c3f86cbd8bc3da302f706326a4bc2159d5ab))
+
+## [0.34.12](https://github.com/blinko-space/blinko/compare/v0.34.11...v0.34.12) (2025-01-09)
+
+
+### Bug Fixes
+
+* simplify comment schema and improve type definitions ([2145ab2](https://github.com/blinko-space/blinko/commit/2145ab26d6ce7b410105576fa94b2617178ffc97))
+
+## [0.34.11](https://github.com/blinko-space/blinko/compare/v0.34.10...v0.34.11) (2025-01-09)
+
+
+### Bug Fixes
+
+* update shareNoteList function to accept pagination parameters ([18fd8eb](https://github.com/blinko-space/blinko/commit/18fd8eb65f0063a199019c75cc76f30aac3ab450))
+* update shareNoteList function to accept pagination parameters ([019cdd5](https://github.com/blinko-space/blinko/commit/019cdd58514587202e8baeebadc327551ffb26b9))
+
+## [0.34.10](https://github.com/blinko-space/blinko/compare/v0.34.9...v0.34.10) (2025-01-09)
+
+
+### Bug Fixes
+
+* enhance editor functionality and localization support ([9821c64](https://github.com/blinko-space/blinko/commit/9821c64ee7b0ceb6efca0a8a9e492cd19ff8679b))
+* enhance localization and Blinko Hub integration ([ac7bbe7](https://github.com/blinko-space/blinko/commit/ac7bbe7a47b8c8a37df7e3f0a8b9fdb47ba648cf))
+
+## [0.34.9](https://github.com/blinko-space/blinko/compare/v0.34.8...v0.34.9) (2025-01-09)
+
+
+### Bug Fixes
+
+* change default state of isInsertBefore to false in AiTag component ([d158ed7](https://github.com/blinko-space/blinko/commit/d158ed732a06ea1f02909a330ba2bb312b0f608b))
+
+## [0.34.8](https://github.com/blinko-space/blinko/compare/v0.34.7...v0.34.8) (2025-01-09)
+
+
+### Bug Fixes
+
+* refine ScrollArea component usage in Home page ([dd36f58](https://github.com/blinko-space/blinko/commit/dd36f580c0ae70e28ff93c8aa748cc5a975a8154))
+* update ScrollArea component in Layout to enforce overflow styles ([eaf5a65](https://github.com/blinko-space/blinko/commit/eaf5a65f0e0fc9162e28de81f5b5fe05a19df203))
+
+## [0.34.7](https://github.com/blinko-space/blinko/compare/v0.34.6...v0.34.7) (2025-01-09)
+
+
+### Bug Fixes
+
+* update PerferSetting to include maxHomePageWidth in useEffect dependencies ([a6d5cd4](https://github.com/blinko-space/blinko/commit/a6d5cd44dfe1a90c5a4997287628b9de61bd6ee3))
+
+## [0.34.6](https://github.com/blinko-space/blinko/compare/v0.34.5...v0.34.6) (2025-01-09)
+
+
+### Bug Fixes
+
+* update ScrollArea component and layout styles ([21642f8](https://github.com/blinko-space/blinko/commit/21642f8fea65d5bad4ade326cbf0b4a9517cd7fe))
+
+## [0.34.5](https://github.com/blinko-space/blinko/compare/v0.34.4...v0.34.5) (2025-01-09)
+
+
+### Bug Fixes
+
+* update Tailwind CSS configuration and styles for improved theming [#418](https://github.com/blinko-space/blinko/issues/418) ([9f242fe](https://github.com/blinko-space/blinko/commit/9f242fe762028c670b67f8dd1f449c9a6af70334))
+
+## [0.34.4](https://github.com/blinko-space/blinko/compare/v0.34.3...v0.34.4) (2025-01-09)
+
+
+### Bug Fixes
+
+* enhance note retrieval logic with share password and expiry checks ([5c4da93](https://github.com/blinko-space/blinko/commit/5c4da930c1b73eeb680e3ede2a3e82eecc1accef))
+
+## [0.34.3](https://github.com/blinko-space/blinko/compare/v0.34.2...v0.34.3) (2025-01-09)
+
+
+### Bug Fixes
+
+* simplify image rendering logic in ImageRender component ([974b922](https://github.com/blinko-space/blinko/commit/974b9221ee6e5ec2d6857781bb9c179397223d17))
+
+## [0.34.2](https://github.com/blinko-space/blinko/compare/v0.34.1...v0.34.2) (2025-01-09)
+
+
+### Bug Fixes
+
+* enhance CommentButton component and update note router for comments ([0b8226b](https://github.com/blinko-space/blinko/commit/0b8226b8bfaaa0aa72a0b854982cc5254aa95630))
+
+## [0.34.1](https://github.com/blinko-space/blinko/compare/v0.34.0...v0.34.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* remove unused fallback-development.js and enhance CommentButton component ([9cfc1a1](https://github.com/blinko-space/blinko/commit/9cfc1a181a1588bd0e922831fbc532e33b0d0f50))
+
+# [0.34.0](https://github.com/blinko-space/blinko/compare/v0.33.3...v0.34.0) (2025-01-08)
+
+
+### Features
+
+* add comments feature and enhance user experience ([4a0c830](https://github.com/blinko-space/blinko/commit/4a0c830ecec1a96d1d8cf425e2ce5e2b1feb29a0))
+
+## [0.33.3](https://github.com/blinko-space/blinko/compare/v0.33.2...v0.33.3) (2025-01-08)
+
+
+### Bug Fixes
+
+* update query parameter for row count in RSS routes ([d6677ee](https://github.com/blinko-space/blinko/commit/d6677ee3494611d831f964d04f7266c60b770669))
+
+## [0.33.2](https://github.com/blinko-space/blinko/compare/v0.33.1...v0.33.2) (2025-01-08)
+
+
+### Bug Fixes
+
+* update ScrollArea margin classes for better layout consistency ([90194bf](https://github.com/blinko-space/blinko/commit/90194bfd31a87c6f8ea5370653ee36ba06ee81f2))
+
+## [0.33.1](https://github.com/blinko-space/blinko/compare/v0.33.0...v0.33.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* move generateFeed function to helper module ([b2dbba8](https://github.com/blinko-space/blinko/commit/b2dbba8ce62a4040d8a1bcf527864ff9bf184e0a))
+
+# [0.33.0](https://github.com/blinko-space/blinko/compare/v0.32.23...v0.33.0) (2025-01-08)
+
+
+### Features
+
+* support RSS ([6aade1c](https://github.com/blinko-space/blinko/commit/6aade1c6714aa11735d588eb0e7a7c86eed1a1cc))
+
+## [0.32.23](https://github.com/blinko-space/blinko/compare/v0.32.22...v0.32.23) (2025-01-08)
+
+
+### Bug Fixes
+
+* update image rendering styles and vditor CSS for better responsiveness ([5c3c41c](https://github.com/blinko-space/blinko/commit/5c3c41c1ef3cbed318cd09702c75090dc8d27e8d))
+
+## [0.32.22](https://github.com/blinko-space/blinko/compare/v0.32.21...v0.32.22) (2025-01-08)
+
+
+### Bug Fixes
+
+* update Chinese translation for 'outline' in translation.json ([503093a](https://github.com/blinko-space/blinko/commit/503093af96be36463e7a4905ee338a1fcf4f5605))
+
+## [0.32.21](https://github.com/blinko-space/blinko/compare/v0.32.20...v0.32.21) (2025-01-08)
+
+
+### Bug Fixes
+
+* add 'max home page width' setting and translations across multiple languages ([344b9e9](https://github.com/blinko-space/blinko/commit/344b9e9dae34b6b2bb56358547c6e8c844decfa7))
+
+## [0.32.20](https://github.com/blinko-space/blinko/compare/v0.32.19...v0.32.20) (2025-01-08)
+
+
+### Bug Fixes
+
+* add 'close daily review' feature across multiple languages and update settings component [#360](https://github.com/blinko-space/blinko/issues/360) ([99a4f90](https://github.com/blinko-space/blinko/commit/99a4f90912f5b00a559b250539f994c881cd55a4))
+
+## [0.32.19](https://github.com/blinko-space/blinko/compare/v0.32.18...v0.32.19) (2025-01-08)
+
+
+### Bug Fixes
+
+* comment out Indent and Outdent buttons in EditorToolbar ([1ad1897](https://github.com/blinko-space/blinko/commit/1ad18975bdac3efeaf464d859af71aa8c006242a))
+
+## [0.32.18](https://github.com/blinko-space/blinko/compare/v0.32.17...v0.32.18) (2025-01-08)
+
+
+### Bug Fixes
+
+* adjust ScrollArea margin for improved layout on Home page ([16aca50](https://github.com/blinko-space/blinko/commit/16aca50d16dfaebb33345692fbfa4df4709827bf))
+
+## [0.32.17](https://github.com/blinko-space/blinko/compare/v0.32.16...v0.32.17) (2025-01-08)
+
+
+### Bug Fixes
+
+* Merge pull request [#408](https://github.com/blinko-space/blinko/issues/408) from cedhuf/main ([b02c1ad](https://github.com/blinko-space/blinko/commit/b02c1ade7540155957f0ce20f20eddb6b6461b43))
+
+## [0.32.16](https://github.com/blinko-space/blinko/compare/v0.32.15...v0.32.16) (2025-01-08)
+
+
+### Bug Fixes
+
+* Merge pull request [#409](https://github.com/blinko-space/blinko/issues/409) from hnico21/patch-2 ([669ae76](https://github.com/blinko-space/blinko/commit/669ae767171a8dbc2289691a7cc66e80769a3fad))
+
+## [0.32.15](https://github.com/blinko-space/blinko/compare/v0.32.14...v0.32.15) (2025-01-08)
+
+
+### Bug Fixes
+
+* Merge pull request [#404](https://github.com/blinko-space/blinko/issues/404) from hnico21/patch-1 ([76b5b7c](https://github.com/blinko-space/blinko/commit/76b5b7c56358b46dfc28f43885131aa76c813d03))
+
+## [0.32.14](https://github.com/blinko-space/blinko/compare/v0.32.13...v0.32.14) (2025-01-08)
+
+
+### Bug Fixes
+
+* enhance UI components and editor functionality ([aa4d3de](https://github.com/blinko-space/blinko/commit/aa4d3de4d325c929358e4fcb7329eea7f7343d2d))
+
+## [0.32.13](https://github.com/blinko-space/blinko/compare/v0.32.12...v0.32.13) (2025-01-07)
+
+
+### Bug Fixes
+
+* simplify tab handling in editorStore ([a8c75e2](https://github.com/blinko-space/blinko/commit/a8c75e2dddcbfa34eeeb92aa0c8896d9c839c6d2))
+
+## [0.32.12](https://github.com/blinko-space/blinko/compare/v0.32.11...v0.32.12) (2025-01-07)
+
+
+### Bug Fixes
+
+* update AI integration in note handling ([247677f](https://github.com/blinko-space/blinko/commit/247677f6d391f3cce08572e2af1ddfe5784bdd97))
+
 ## [0.32.11](https://github.com/blinko-space/blinko/compare/v0.32.10...v0.32.11) (2025-01-05)
 
 

@@ -7,9 +7,20 @@ export type Tag = NonNullable<RouterOutput['tags']['list']>[0]
 export type Config = NonNullable<RouterOutput['config']['list']>
 export type LinkInfo = NonNullable<RouterOutput['public']['linkPreview']>
 export type ResourceType = NonNullable<RouterOutput['attachments']['list']>[0]
+export type Comment = NonNullable<RouterOutput['comments']['list']>
 export enum NoteType {
   'BLINKO',
   'NOTE'
+}
+export function toNoteTypeEnum(v?: number, fallback: NoteType = NoteType.BLINKO): NoteType {
+  switch (v) {
+    case 0:
+      return NoteType.BLINKO;
+    case 1:
+      return NoteType.NOTE;
+    default:
+      return fallback;
+  }
 }
 
 export const ZUserPerferConfigKey = z.union([
@@ -27,7 +38,10 @@ export const ZUserPerferConfigKey = z.union([
   z.literal('twoFactorEnabled'),
   z.literal('twoFactorSecret'),
   z.literal('themeColor'),
-  z.literal('themeForegroundColor')
+  z.literal('themeForegroundColor'),
+  z.literal('isCloseDailyReview'),
+  z.literal('maxHomePageWidth'),
+  z.literal('isUseBlinkoHub')
 ]);
 
 export const ZConfigKey = z.union([
@@ -58,6 +72,8 @@ export const ZConfigKey = z.union([
   z.literal('isCloseBackgroundAnimation'),
   z.literal('customBackgroundUrl'),
   z.literal('oauth2Providers'),
+  z.literal('embeddingApiEndpoint'),
+  z.literal('embeddingApiKey'),
   ZUserPerferConfigKey
 ]);
 
@@ -118,7 +134,12 @@ export const ZConfigSchema = z.object({
   twoFactorSecret: z.string().optional(),
   spotifyConsumerKey: z.string().optional(),
   spotifyConsumerSecret: z.string().optional(),
+  isCloseDailyReview: z.boolean().optional(),
+  maxHomePageWidth: z.number().optional(),
   oauth2Providers: z.array(ZOAuth2ProviderSchema).optional(),
+  isUseBlinkoHub: z.boolean().optional(),
+  embeddingApiEndpoint: z.string().optional(),
+  embeddingApiKey: z.string().optional(),
 });
 
 export type GlobalConfig = z.infer<typeof ZConfigSchema>;

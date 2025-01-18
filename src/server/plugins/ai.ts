@@ -23,6 +23,8 @@ import { FileService } from './files';
 import { AiPrompt } from './ai/aiPrompt';
 import { Context } from '../context';
 import dayjs from 'dayjs';
+import { CreateNotification } from '../routers/notification';
+import { NotificationType } from '@/lib/prismaZodType';
 
 //https://js.langchain.com/docs/introduction/
 //https://smith.langchain.com/onboarding
@@ -35,15 +37,12 @@ export class AiService {
       let loader: BaseDocumentLoader;
       switch (true) {
         case filePath.endsWith('.pdf'):
-          console.log('load pdf')
           loader = new PDFLoader(filePath);
           break;
         case filePath.endsWith('.docx') || filePath.endsWith('.doc'):
-          console.log('load docx')
           loader = new DocxLoader(filePath);
           break;
         case filePath.endsWith('.txt'):
-          console.log('load txt')
           loader = new TextLoader(filePath);
           break;
         // case filePath.endsWith('.csv'):
@@ -63,7 +62,6 @@ export class AiService {
 
   static async embeddingDeleteAll(id: number, VectorStore: FaissStore) {
     for (const index of new Array(9999).keys()) {
-      console.log('delete', `${id}-${index}`)
       try {
         await VectorStore.delete({ ids: [`${id}-${index}`] })
         await VectorStore.save(FaissStorePath)
@@ -189,7 +187,6 @@ export class AiService {
     await AiService.embeddingDeleteAll(id, VectorStore)
     const attachments = await prisma.attachments.findMany({ where: { noteId: id } })
     for (const attachment of attachments) {
-      console.log({ deletPath: attachment.path })
       await AiService.embeddingDeleteAllAttachments(attachment.path, VectorStore)
     }
     return { ok: true }
@@ -205,7 +202,6 @@ export class AiService {
       fetchK: topK * 3,
       lambda: lambda
     });
-    console.log('similaritySearch with scores:', results)
     const DISTANCE_THRESHOLD = score;
     const filteredResults = results
       .filter(([doc, distance]) => distance < DISTANCE_THRESHOLD)
@@ -229,7 +225,6 @@ export class AiService {
     const total = notes.length;
     const BATCH_SIZE = 5;
 
-    console.log({ total })
     let current = 0;
 
     for (let i = 0; i < notes.length; i += BATCH_SIZE) {
@@ -335,7 +330,15 @@ export class AiService {
         id: { in: filteredResultsWithScore.map(i => i.doc.metadata?.noteId).filter(i => !!i) },
         accountId: Number(ctx.id)
       },
-      include: { tags: { include: { tag: true } }, attachments: true }
+      include: {
+        tags: { include: { tag: true } },
+        attachments: true,
+        _count: {
+          select: {
+            comments: true
+          }
+        }
+      }
     })
     const sortedNotes = notes.sort((a, b) => {
       const scoreA = filteredResultsWithScore.find(r => r.doc.metadata?.noteId === a.id)?.distance ?? Infinity;
@@ -450,5 +453,56 @@ export class AiService {
     const loader = await AiModelFactory.GetAudioLoader(audioPath)
     const docs = await loader.load();
     return docs
+  }
+
+  static async AIComment({ content, noteId }: { content: string, noteId: number }) {
+    try {
+      const note = await prisma.notes.findUnique({
+        where: { id: noteId },
+        select: { content: true, accountId: true }
+      })
+
+      if (!note) {
+        throw new Error('Note not found')
+      }
+
+      const { LLM } = await AiModelFactory.GetProvider();
+      const commentPrompt = AiPrompt.CommentPrompt();
+      const commentChain = commentPrompt.pipe(LLM).pipe(new StringOutputParser());
+      const aiResponse = await commentChain.invoke({
+        content,
+        noteContent: note.content
+      });
+
+      const comment = await prisma.comments.create({
+        data: {
+          content: aiResponse.trim(),
+          noteId,
+          guestName: 'Blinko AI',
+          guestIP: '',
+          guestUA: ''
+        },
+        include: {
+          account: {
+            select: {
+              id: true,
+              name: true,
+              nickname: true,
+              image: true
+            }
+          }
+        }
+      });
+      await CreateNotification({
+        accountId: note.accountId ?? 0,
+        title: 'comment-notification',
+        content: 'comment-notification',
+        type: NotificationType.COMMENT,
+      })
+      return comment;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
 }

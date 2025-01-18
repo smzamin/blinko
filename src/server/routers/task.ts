@@ -2,6 +2,7 @@ import { router, authProcedure, demoAuthMiddleware, superAdminAuthMiddleware } f
 import { z } from 'zod';
 import { prisma } from '../prisma';
 import { DBJob } from '../plugins/dbjob';
+import '../plugins/recommandJob';
 import { ArchiveJob } from '../plugins/archivejob';
 import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME, TEMP_PATH, UPLOAD_FILE_PATH } from '@/lib/constant';
 import { scheduledTaskSchema } from '@/lib/prismaZodType';
@@ -30,14 +31,15 @@ export const taskRouter = router({
     .output(z.any())
     .mutation(async ({ input }) => {
       const { time, type, task } = input
-      if (type == 'start' && time) {
-        return task == DBBAK_TASK_NAME ? await DBJob.Start(time, true) : await ArchiveJob.Start(time, true)
+      if (type == 'start') {
+        const cronTime = time ?? '0 0 * * *'
+        return task == DBBAK_TASK_NAME ? await DBJob.Start(cronTime, true) : await ArchiveJob.Start(cronTime, true)
       }
       if (type == 'stop') {
         return task == DBBAK_TASK_NAME ? await DBJob.Stop() : await ArchiveJob.Stop()
       }
       if (type == 'update' && time) {
-        return task == DBBAK_TASK_NAME ? await DBJob.SetCornTime(time) : await ArchiveJob.SetCornTime(time)
+        return task == DBBAK_TASK_NAME ? await DBJob.SetCronTime(time) : await ArchiveJob.SetCronTime(time)
       }
     }),
   importFromBlinko: authProcedure.use(demoAuthMiddleware).use(superAdminAuthMiddleware)
@@ -73,11 +75,10 @@ export const taskRouter = router({
         for await (const result of memos.importMemosDB(ctx)) {
           yield result;
         }
-        for await (const result of memos.importFiles()) {
+        for await (const result of memos.importFiles(ctx)) {
           yield result;
         }
         memos.closeDB();
-        console.log({ dbPath })
         try {
           await unlink(dbPath)
           await FileService.deleteFile(input.filePath)

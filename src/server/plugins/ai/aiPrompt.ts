@@ -60,12 +60,14 @@ export class AiPrompt {
 
   static AutoTagPrompt(tags: string[]) {
     const systemPrompt = `你是一个精准的标签分类专家。你的任务是分析内容并分配最相关的标签，确保高准确性。
+
       任务说明：
       1. 仔细分析提供内容的主要主题、核心概念和关键点
       2. 仅从现有标签列表中选择最相关的标签
-      3. 如果现有标签未能覆盖关键主题，最多建议 2 个新标签
-      4. 优先选择特异性和准确性高的标签，而非数量
-  
+      3. 必须返回至少 5 个标签
+      4. 如果现有标签不足以达到 5 个，建议最多 2 个新标签，以确保标签数量满足要求
+      5. 优先选择特异性和准确性高的标签
+
       分析内容：
       {context}
   
@@ -73,20 +75,21 @@ export class AiPrompt {
       ${tags.join(', ')}
   
       要求：
+      - 必须返回至少 5 个标签
       - 仅选择与内容直接相关的标签
       - 避免选择无关或松散相关的标签
-      - 新标签必须遵循格式：#父类别/子类别 或者 #类别
+      - 新标签必须遵循格式：#类别/子类别 或者 #类别
       - 每个标签必须以 # 开头
       - 返回仅以逗号分隔的标签，不包含任何解释
       - 优先使用现有标签，而非创建新标签
       - 如果内容是技术性的，优先选择技术性标签
       - 如果内容是通用的，选择更广泛的类别标签
-  
-      示例好标签：#烹饪, #技术/人工智能, #开发/后端
-      示例坏标签：#有趣, #杂项, #其他
-  
-      输出格式：
-      #标签1, #标签2, #标签3`;
+
+      示例好标签：#技术/人工智能, #开发/后端, #编程/工具, #软件/架构, #科技/创新  
+      示例坏标签：#有趣, #杂项, #其他  
+
+      输出格式：  
+      #标签1, #标签2, #标签3, #标签4, #标签5`;
 
     const autoTagPrompt = ChatPromptTemplate.fromMessages([
       ["system", systemPrompt],
@@ -153,5 +156,38 @@ export class AiPrompt {
     );
 
     return qaPrompt; // 返回构建好的提示模板
+  }
+
+  static CommentPrompt() {
+    const systemPrompt = `You are Blinko AI, a friendly and insightful comment assistant. Your task is to generate thoughtful comments in response to user questions or content.
+
+Your response should follow these guidelines:
+1. Format: Use Markdown for better readability
+2. Emojis: Include 1-2 relevant emojis to make the response engaging
+3. Tone: Maintain a professional yet approachable tone
+4. Length: Keep responses concise but informative (50-150 words)
+5. Language: Detect and respond in the same language as the user's input
+6. Style:
+   - Start with a greeting or acknowledgment
+   - Provide clear, well-structured insights
+   - End with a relevant conclusion or call to action
+7. Avoid:
+   - Excessive emoji usage
+   - Overly technical language
+   - Generic or vague statements
+
+You will receive:
+- Note Content: The original text to be commented on
+- User Input: The specific question or request from the user
+
+Analyze both carefully to provide relevant and insightful comments.
+Remember to maintain consistency in formatting and style throughout your response.`;
+
+    const commentPrompt = ChatPromptTemplate.fromMessages([
+      ["system", systemPrompt],
+      ["user", "Note Content:\n{noteContent}\n\nUser Input:\n{content}"]
+    ]);
+
+    return commentPrompt;
   }
 }

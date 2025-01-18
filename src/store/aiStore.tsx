@@ -30,6 +30,9 @@ export class AiStore implements Store {
   sid = 'AiStore';
   constructor() {
     makeAutoObservable(this)
+    eventBus.on('user:signout', () => {
+      this.clear()
+    })
   }
   noteContent = '';
   aiSearchText = '';
@@ -202,7 +205,6 @@ export class AiStore implements Store {
         this.writingResponseText += item.content
         this.scrollTicker++
       }
-      console.log('writeStream end', this.writingResponseText)
       this.writeQuestion = ''
       eventBus.emit('editor:focus')
       this.isLoading = false
@@ -218,7 +220,6 @@ export class AiStore implements Store {
         RootStore.Get(ToastPlugin).loading(i18n.t('thinking'))
         const res = await api.ai.autoTag.mutate({ content, tags: this.blinko.tagList?.value?.pathTags ?? [] })
         RootStore.Get(ToastPlugin).remove()
-        console.log(res)
         RootStore.Get(DialogStore).setData({
           isOpen: true,
           size: '2xl',
@@ -271,5 +272,9 @@ export class AiStore implements Store {
     this.abortController = new AbortController()
     this.isLoading = false
     this.isAnswering = false
+  }
+
+  private clear() {
+    this.chatHistory.clear()
   }
 }

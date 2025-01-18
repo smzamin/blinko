@@ -6,18 +6,21 @@ import { encode } from 'next-auth/jwt';
 import { Prisma } from '@prisma/client';
 import { accountsSchema } from '@/lib/prismaZodType';
 import { hashPassword, verifyPassword } from 'prisma/seed';
-import { generateTOTP, generateTOTPQRCode, verifyTOTP } from "./helper";
+import { generateTOTP, generateTOTPQRCode, getNextAuthSecret, verifyTOTP } from "./helper";
 import { deleteNotes } from './note';
 import { createSeed } from 'prisma/seedData';
 
 const genToken = async ({ id, name, role }: { id: number, name: string, role: string }) => {
+  const secret = await getNextAuthSecret();
   return await encode({
     token: {
       role,
       name,
       sub: id.toString(),
+      exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365 * 100),
+      iat: Math.floor(Date.now() / 1000)
     },
-    secret: process.env.NEXTAUTH_SECRET!
+    secret
   })
 }
 
@@ -123,7 +126,8 @@ export const userRouter = router({
       nickName: z.string(),
       token: z.string(),
       isLinked: z.boolean(),
-      loginType: z.string()
+      loginType: z.string(),
+      image: z.string().nullable()
     }))
     .query(async ({ input, ctx }) => {
       const user = await prisma.accounts.findFirst({ where: { id: input.id } })
@@ -137,7 +141,8 @@ export const userRouter = router({
         nickName: user?.nickname ?? '',
         token: user?.apiToken ?? '',
         loginType: user?.loginType ?? '',
-        isLinked: isLinked ? true : false
+        isLinked: isLinked ? true : false,
+        image: user?.image ?? null
       }
     }),
   canRegister: publicProcedure
@@ -243,12 +248,13 @@ export const userRouter = router({
       name: z.string().optional(),
       originalPassword: z.string().optional(),
       password: z.string().optional(),
-      nickname: z.string().optional()
+      nickname: z.string().optional(),
+      image: z.string().optional()
     }))
     .output(z.union([z.boolean(), z.any()]))
     .mutation(async ({ input }) => {
       return prisma.$transaction(async () => {
-        const { id, nickname, name, password, originalPassword } = input
+        const { id, nickname, name, password, originalPassword, image } = input
 
         const update: Prisma.accountsUpdateInput = {}
         if (id) {
@@ -258,6 +264,7 @@ export const userRouter = router({
             update.password = passwordHash
           }
           if (nickname) update.nickname = nickname
+          if (image) update.image = image
           if (originalPassword) {
             const user = await prisma.accounts.findFirst({ where: { id } })
             if (user && !(await verifyPassword(originalPassword, user?.password ?? ''))) {

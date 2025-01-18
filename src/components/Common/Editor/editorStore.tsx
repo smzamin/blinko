@@ -3,22 +3,20 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { helper } from '@/lib/helper';
 import { FileType, OnSendContentType } from './type';
 import { BlinkoStore } from '@/store/blinkoStore';
-import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
 import { api } from '@/lib/trpc';
-import { IsTagSelectVisible, showTagSelectPop } from '../PopoverFloat/tagSelectPop';
-import { showAiWriteSuggestions } from '../PopoverFloat/aiWritePop';
 import { AiStore } from '@/store/aiStore';
 import { getEditorElements, type ViewMode } from './editorUtils';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable, action } from 'mobx';
 import Vditor from 'vditor';
 import { showTipsDialog } from '../TipsDialog';
 import i18n from '@/lib/i18n';
 import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
-import { handlePaste } from '@/lib/hooks';
 import { Button } from '@nextui-org/react';
 import axios from 'axios';
 import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { NoteType } from '@/server/types';
+
 export class EditorStore {
   files: FileType[] = []
   lastRange: Range | null = null
@@ -30,10 +28,12 @@ export class EditorStore {
   lastSelection: Selection | null = null
   vditor: Vditor | null = null
   onChange: ((markdown: string) => void) | null = null
-  mode: 'edit' | 'create' = 'edit'
+  mode: 'edit' | 'create' | 'comment' = 'edit'
   references: number[] = []
   isShowSearch: boolean = false
   onSend: (args: OnSendContentType) => Promise<any>
+  isFullscreen: boolean = false;
+  noteType: NoteType;
 
   get showIsEditText() {
     if (this.mode == 'edit') {
@@ -294,11 +294,11 @@ export class EditorStore {
 
   handleSend = async () => {
     if (!this.canSend) return;
-    console.log('handleSend', this.vditor?.getValue())
     try {
       await this.onSend?.({
         content: this.vditor?.getValue() ?? '',
         files: this.files.map(i => ({ ...i, uploadPath: i.uploadPromise.value })),
+        noteType: this.noteType,
         references: this.references
       });
       this.clearEditor();
@@ -364,28 +364,12 @@ export class EditorStore {
     } catch (error) { }
   }
 
-  handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const vditorInput = document.querySelector(`#vditor-${this.mode} .vditor-reset`) as HTMLElement;
-      if (vditorInput) {
-
-        const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0) return;
-
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
-
-        const tabNode = document.createTextNode('\t');
-        range.insertNode(tabNode);
-
-        range.setStartAfter(tabNode);
-        range.setEndAfter(tabNode);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      } else {
-        console.log('vditor not found');
-      }
+  setFullscreen(value: boolean) {
+    this.isFullscreen = value;
+    if (value) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
     }
   }
 }

@@ -15,10 +15,9 @@ export const AiTag: React.FC<AiTagProps> = ({
   tags,
   defaultSelected = [],
   onSelect,
-  confirmText = "Confirm",
 }) => {
   const [selected, setSelected] = React.useState<string[]>(defaultSelected);
-  const [isInsertBefore, setIsInsertBefore] = React.useState(true);
+  const [isInsertBefore, setIsInsertBefore] = React.useState(false);
   const { t } = useTranslation()
   const handleConfirm = () => {
     onSelect(selected, isInsertBefore);
@@ -49,7 +48,6 @@ export const AiTag: React.FC<AiTagProps> = ({
           className='flex-1'
           value={isInsertBefore ? 'insert-before' : 'insert-after'}
           onChange={(e) => {
-            console.log(e)
             setIsInsertBefore(e.target.value === 'insert-before')
           }}
         >

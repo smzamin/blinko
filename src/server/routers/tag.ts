@@ -38,7 +38,7 @@ export const tagRouter = router({
       const notes = await prisma.notes.findMany({ where: { id: { in: ids } } })
       for (const note of notes) {
         const newContent = note.content += ' #' + tag
-        await userCaller(ctx).notes.upsert({ content: newContent, id: note.id })
+        await userCaller(ctx).notes.upsert({ content: newContent, id: note.id, type: -1 })
       }
       return true
     }),
@@ -100,7 +100,6 @@ export const tagRouter = router({
         include: { tagsToNote: true }
       })
 
-      console.log({ tag }, '+++++++++++++++++++++++')
       if (!tag) return true
 
       const allNotesId = tag.tagsToNote.map(i => i.noteId)
@@ -135,7 +134,7 @@ export const tagRouter = router({
             content: note.content.replace(
               new RegExp(`#[^\\s]*${tag.name}(/[^\\s]*)?(?=\\s|$)`, 'g'),
               ''
-            ).replace(/\s+/g, ' ').trim()
+            ).trim()
           }
         })
 
@@ -180,10 +179,8 @@ export const tagRouter = router({
     .mutation(async function ({ input, ctx }) {
       const { id } = input
       const tag = await prisma.tag.findFirst({ where: { id, accountId: Number(ctx.id) }, include: { tagsToNote: true } })
-      console.log({ tag })
       const allNotesId = tag?.tagsToNote.map(i => i.noteId) ?? []
-      console.log(allNotesId)
-      await userCaller(ctx).notes.deleteMany({ ids: allNotesId })
+      await userCaller(ctx).notes.trashMany({ ids: allNotesId })
       return true
     }),
   updateTagOrder: authProcedure
