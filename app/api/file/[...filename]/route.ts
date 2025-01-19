@@ -5,16 +5,16 @@ import { stat, readFile } from "fs/promises";
 import mime from "mime-types";
 import { UPLOAD_FILE_PATH } from "@/lib/constant";
 import crypto from "crypto";
-import { getToken } from "next-auth/jwt";
 import sharp from "sharp";
 import { prisma } from "@/server/prisma";
+import { getToken } from "@/server/routers/helper";
 
 const STREAM_THRESHOLD = 5 * 1024 * 1024;
 const ONE_YEAR_IN_SECONDS = 31536000;
 
 export const GET = async (req: NextRequest, { params }: any) => {
   const fullPath = decodeURIComponent(params.filename.join('/'));
-  const token = await getToken({ req });
+  const token = await getToken(req);
 
   const searchParams = req.nextUrl.searchParams;
   const needThumbnail = searchParams.get('thumbnail') === 'true';
@@ -35,7 +35,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
       }
     })
     
-    if (myFile && !myFile?.note.isShare && Number(token?.id) != myFile?.note.accountId) {
+    if (myFile && !myFile?.note?.isShare && Number(token?.id) != myFile?.note?.accountId && !myFile?.accountId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
@@ -60,11 +60,14 @@ export const GET = async (req: NextRequest, { params }: any) => {
         })
         .toBuffer();
 
+      const filename = path.basename(fullPath);
+      const safeFilename = Buffer.from(filename).toString('base64');
+
       return new Response(thumbnail, {
         headers: {
           "Content-Type": mime.lookup(filePath) || "image/jpeg",
           "Cache-Control": "public, max-age=31536000",
-          "Content-Disposition": `inline; filename="thumb_${path.basename(fullPath)}"`,
+          "Content-Disposition": `inline; filename="${safeFilename}"`,
         }
       });
     }
@@ -80,7 +83,6 @@ export const GET = async (req: NextRequest, { params }: any) => {
 
     const fileHash = generateFileHash(filePath);
     const etag = `"${fileHash}"`;
-    console.log({ etag })
     const ifNoneMatch = req.headers.get("if-none-match");
     if (ifNoneMatch === etag) {
       return new Response(null, { status: 304 });

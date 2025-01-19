@@ -9,13 +9,14 @@ type IProps = {
   className?: any;
   onBottom: () => void;
   children: any;
+  disableAnimation?: boolean;
 };
 
 export type ScrollAreaHandles = {
   scrollToBottom: () => void;
 }
 
-export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ style, className, children, onBottom }, ref) => {
+export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ style, className, children, onBottom, disableAnimation = true }, ref) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isAtTop, setIsAtTop] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -39,7 +40,7 @@ export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ styl
 
     if (bottom) {
       debounceBottom?.();
-      if (!isAtBottom) {
+      if (!isAtBottom && !disableAnimation) {
         setIsAtBottom(true);
         controls.start({ y: [-10, 0], transition: { type: "spring", stiffness: 300 } });
       }
@@ -47,7 +48,7 @@ export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ styl
       setIsAtBottom(false);
     }
 
-    if (top) {
+    if (top && !disableAnimation) {
       if (!isAtTop) {
         setIsAtTop(true);
         controls.start({ y: [10, 0], transition: { type: "spring", stiffness: 300 } });
@@ -70,26 +71,26 @@ export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ styl
       ref={scrollRef}
       style={style}
       className={`${className} overflow-y-scroll overflow-x-hidden  ${isPc ? '' : 'scrollbar-hide'}`}
-      animate={controls}
+      animate={disableAnimation ? undefined : controls}
     >
       {children}
     </motion.div>
   );
 }))
 
-const styles = `
-  .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
-  }
+// const styles = `
+//   .scrollbar-hide {
+//     -ms-overflow-style: none;  /* IE and Edge */
+//     scrollbar-width: none;     /* Firefox */
+//   }
   
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
-  }
-`;
+//   .scrollbar-hide::-webkit-scrollbar {
+//     display: none;  /* Chrome, Safari and Opera */
+//   }
+// `;
 
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
-  styleSheet.textContent = styles;
-  document.head.appendChild(styleSheet);
-}
+// if (typeof document !== 'undefined') {
+//   const styleSheet = document.createElement('style');
+//   styleSheet.textContent = styles;
+//   document.head.appendChild(styleSheet);
+// }

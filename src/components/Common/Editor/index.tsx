@@ -10,7 +10,7 @@ import { BlinkoStore } from '@/store/blinkoStore';
 import { _ } from '@/lib/lodash';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
-import { type Attachment } from '@/server/types';
+import { toNoteTypeEnum, type Attachment } from '@/server/types';
 import { Card } from '@nextui-org/react';
 import { AttachmentsRender, ReferenceRender } from '../AttachmentRender';
 import { UploadButtons } from './Toolbar/UploadButtons';
@@ -27,10 +27,12 @@ import {
 } from './hooks/useEditor';
 import { EditorStore } from "./editorStore";
 import { AIWriteButton } from "./Toolbar/AIWriteButton";
+import { FullScreenButton } from "./Toolbar/FullScreenButton";
+import { eventBus } from "@/lib/event";
 
 //https://ld246.com/guide/markdown
 type IProps = {
-  mode: 'create' | 'edit',
+  mode: 'create' | 'edit' | 'comment',
   content: string,
   onChange?: (content: string) => void,
   onHeightChange?: () => void,
@@ -39,15 +41,17 @@ type IProps = {
   bottomSlot?: ReactElement<any, any>,
   originFiles?: Attachment[],
   originReference?: number[],
+  hiddenToolbar?: boolean
 }
 
-const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles, originReference = [], mode, onHeightChange }: IProps) => {
+const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles, originReference = [], mode, onHeightChange, hiddenToolbar = false }: IProps) => {
   const cardRef = React.useRef(null)
   const isPc = useMediaQuery('(min-width: 768px)')
   const store = useLocalObservable(() => new EditorStore())
   const blinko = RootStore.Get(BlinkoStore)
   const { t } = useTranslation()
 
+  store.noteType = mode === 'create' ? blinko.noteTypeDefault : toNoteTypeEnum(blinko.curSelectedNote?.type);
   useEditorInit(store, onChange, onSend, mode, originReference, content);
   useEditorEvents(store);
   useEditorFiles(store, blinko, originFiles);
@@ -78,52 +82,64 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
     store.updateFileOrder(newFiles);
   };
 
-  return <Card
-    shadow='none' {...getRootProps()}
-    className={`p-2 relative border-2 border-border transition-all  overflow-visible 
-    ${isDragAccept ? 'border-2 border-green-500 border-dashed' : ''} `}>
+  const handleFullScreenToggle = () => {
+    eventBus.emit('editor:setFullScreen', !store.isFullscreen);
+  };
 
-    <div ref={cardRef}
-      className="overflow-visible relative"
-      onKeyDown={e => {
-        store.handleKeyDown(e)
-        onHeightChange?.()
-        if (isPc) return
-        store.adjustMobileEditorHeight()
-      }}>
+  return (
+    <Card
+      shadow='none' {...getRootProps()}
+      className={`p-2 relative border-2 border-border transition-all overflow-visible 
+      ${isDragAccept ? 'border-2 border-green-500 border-dashed' : ''} 
+      ${store.isFullscreen ? 'fixed inset-0 z-[9999] m-0 rounded-none border-none bg-background' : ''}`}>
 
-      <div id={`vditor-${mode}`} className="vditor" />
-      {/******************** AttchMent Render *****************/}
-      {store.files.length > 0 && (
-        <div className='w-full my-2'>
-          <AttachmentsRender files={store.files} onReorder={handleFileReorder} />
+      <div ref={cardRef}
+        className="overflow-visible relative"
+        onKeyDown={e => {
+          onHeightChange?.()
+          if (isPc) return
+          store.adjustMobileEditorHeight()
+        }}>
+
+        <div id={`vditor-${mode}`} className="vditor" />
+        {store.files.length > 0 && (
+          <div className='w-full my-2 attachment-container'>
+            <AttachmentsRender files={store.files} onReorder={handleFileReorder} />
+          </div>
+        )}
+
+        <div className='w-full mb-2 reference-container'>
+          <ReferenceRender store={store} />
         </div>
-      )}
 
-      <div className='w-full mb-2'>
-        <ReferenceRender store={store} />
-      </div>
-
-      {/******************** Toolbar Render *****************/}
-      <div className='flex w-full items-center gap-1'>
-        <NoteTypeButton />
-        <HashtagButton store={store} content={content} />
-        <AIWriteButton store={store} content={content} />
-        <ReferenceButton store={store} />
-        <UploadButtons
-          getInputProps={getInputProps}
-          open={open}
-          onFileUpload={store.uploadFiles}
-        />
-        <div className='flex items-center gap-1 ml-auto'>
-          {store.showIsEditText && <div className="text-red-500 text-xs mr-2">{t('edited')}</div>}
-          <ViewModeButton viewMode={store.viewMode} />
-          <SendButton store={store} isSendLoading={isSendLoading} />
+        <div className='flex w-full items-center gap-1 mt-auto'>
+          {!hiddenToolbar && (
+            <>
+              <NoteTypeButton
+                noteType={store.noteType}
+                setNoteType={(noteType) => store.noteType = noteType}
+              />
+              <HashtagButton store={store} content={content} />
+              <ReferenceButton store={store} />
+              <AIWriteButton store={store} content={content} />
+              <UploadButtons
+                getInputProps={getInputProps}
+                open={open}
+                onFileUpload={store.uploadFiles}
+              />
+            </>
+          )}
+          <div className='flex items-center gap-1 ml-auto'>
+            {store.showIsEditText && <div className="text-red-500 text-xs mr-2">{t('edited')}</div>}
+            {isPc && <FullScreenButton isFullscreen={store.isFullscreen} onClick={handleFullScreenToggle} />}
+            <ViewModeButton viewMode={store.viewMode} />
+            <SendButton store={store} isSendLoading={isSendLoading} />
+          </div>
         </div>
       </div>
-    </div>
-  </Card >
-})
+    </Card>
+  );
+});
 
 export default Editor
 

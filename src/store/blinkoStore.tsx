@@ -1,3 +1,4 @@
+"use client"
 import { _ } from '@/lib/lodash';
 import { useEffect } from 'react';
 import { PromisePageState, PromiseState } from './standard/PromiseState';
@@ -9,7 +10,6 @@ import { eventBus } from '@/lib/event';
 import { StorageListState } from './standard/StorageListState';
 import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
-import { type RouterOutput } from '@/server/routers/_app';
 import { Attachment, NoteType, type Note } from '@/server/types';
 import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
 import { makeAutoObservable, observable, action } from 'mobx';
@@ -182,15 +182,6 @@ export class BlinkoStore implements Store {
         createdAt: inputCreatedAt ? new Date(inputCreatedAt) : undefined,
         updatedAt: inputUpdatedAt ? new Date(inputUpdatedAt) : undefined
       });
-
-      if (this.config.value?.isUseAI) {
-        if (res?.id) {
-          api.ai.embeddingUpsert.mutate({ id: res!.id, content: res!.content, type: id ? 'update' : 'insert' }, { context: { skipBatch: true } })
-        }
-        for (const attachment of attachments) {
-          api.ai.embeddingInsertAttachments.mutate({ id: res!.id, filePath: attachment.path }, { context: { skipBatch: true } })
-        }
-      }
       eventBus.emit('editor:clear')
       showToast && RootStore.Get(ToastPlugin).success(id ? i18n.t("update-successfully") : i18n.t("create-successfully"))
       refresh && this.updateTicker++
@@ -324,7 +315,7 @@ export class BlinkoStore implements Store {
   updateDBTask = new PromiseState({
     function: async (isStart) => {
       if (isStart) {
-        await api.task.upsertTask.mutate({ time: '0 0 * * 0', type: 'start', task: DBBAK_TASK_NAME })
+        await api.task.upsertTask.mutate({ type: 'start', task: DBBAK_TASK_NAME })
       } else {
         await api.task.upsertTask.mutate({ type: 'stop', task: DBBAK_TASK_NAME })
       }
@@ -334,7 +325,7 @@ export class BlinkoStore implements Store {
   updateArchiveTask = new PromiseState({
     function: async (isStart) => {
       if (isStart) {
-        await api.task.upsertTask.mutate({ time: '0 0 * * 0', type: 'start', task: ARCHIVE_BLINKO_TASK_NAME })
+        await api.task.upsertTask.mutate({ type: 'start', task: ARCHIVE_BLINKO_TASK_NAME })
       } else {
         await api.task.upsertTask.mutate({ type: 'stop', task: ARCHIVE_BLINKO_TASK_NAME })
       }
@@ -385,6 +376,11 @@ export class BlinkoStore implements Store {
     this.noteList.resetAndCall({})
     this.config.call()
     this.dailyReviewNoteList.call()
+  }
+
+  private clear() {
+    this.createContentStorage.clear()
+    this.editContentStorage.clear()
   }
 
   use() {
@@ -457,5 +453,13 @@ export class BlinkoStore implements Store {
 
   constructor() {
     makeAutoObservable(this)
+    eventBus.on('user:signout', () => {
+      this.clear()
+    })
+  }
+
+  removeCreateAttachments(file: { name: string, }) {
+    this.createAttachmentsStorage.removeByFind(f => f.name === file.name);
+    this.updateTicker++;
   }
 }

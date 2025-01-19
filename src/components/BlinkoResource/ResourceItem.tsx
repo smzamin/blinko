@@ -58,7 +58,7 @@ const ResourceCard = observer(({
 }: ResourceCardProps) => {
   const { t } = useTranslation();
   const resourceStore = RootStore.Get(ResourceStore);
-  const isImage = item.type?.startsWith('image/');
+  const isImage = item.type?.startsWith('image/') || item.name?.endsWith('.jpg') || item.name?.endsWith('.png') || item.name?.endsWith('.jpeg') || item.name?.endsWith('.gif') || item.name?.endsWith('.bmp') || item.name?.endsWith('.tiff') || item.name?.endsWith('.ico') || item.name?.endsWith('.webp');
 
   const fileNameAndExt = useMemo(() => {
     const fileName = toJS(item.name);
@@ -73,7 +73,6 @@ const ResourceCard = observer(({
   const isS3File = useMemo(() => item.path?.includes('s3file'), [item.path]);
 
   const handleContextMenu = useCallback(() => {
-    console.log('handlContetxmet')
     resourceStore.setContextMenuResource(_.cloneDeep(item));
   }, [item, resourceStore]);
 
@@ -130,6 +129,16 @@ const ResourceCard = observer(({
                 />
               </Tooltip>
             )}
+            {
+              !item.noteId && (
+                <Tooltip content={t('no-note-associated')}>
+                  <Icon
+                    icon="ic:twotone-no-backpack"
+                    className="w-4 h-4 text-yellow-500"
+                  />
+                </Tooltip>
+              )
+            }
           </div>
           <div className="text-xs text-gray-500 flex items-center gap-2 my-1">
             <span className="rounded-md px-1.5 py-0.5 bg-default-100 text-default-600">

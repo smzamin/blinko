@@ -13,7 +13,7 @@
 }
 
 .vditor a {
-  color: #C35AF7;
+  color: var(--primary);
   font-weight: 700;
 }
 .vditor-wysiwyg__block pre:first-child code{
@@ -44,7 +44,7 @@
   padding-right: 10px !important;
   background-color: transparent;
   color: var(--foreground);
-  max-height: 80vh;
+  max-height: 70vh;
   min-height: var(--min-editor-height);
   padding-top: 5px;
   padding-bottom: 5px;
@@ -130,7 +130,8 @@
 
 .vditor-reset img{
   max-height: 150px;
-  width: 100%;
+  /* width: 100%; */
+  margin: 0 auto;
   object-fit: cover;
 }
 /* .vditor-menu--current {
@@ -148,7 +149,7 @@
   top:4px;
   border-radius: 5px;
   left: 8px;
-  background-color: #C35AF7;
+  background-color: var(--primary);
 }
 
 .vditor-tip__content{

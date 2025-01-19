@@ -185,7 +185,7 @@ const Page = observer(() => {
     });
   };
 
-  return <div className="h-mobile-full flex flex-col">
+  return <div className="h-full flex flex-col">
     <div className="sticky top-0 z-10 w-full">
       <div className="relative  md:max-w-[980px] md:-translate-x-[3px] mx-3 md:mx-auto backdrop-blur-md bg-background rounded-2xl" ref={containerRef}>
         {showLeftArrow && (

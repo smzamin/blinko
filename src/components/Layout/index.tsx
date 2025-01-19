@@ -31,6 +31,7 @@ import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarSearchInput } from "./BarSearchInput";
+import { BlinkoNotification } from "@/components/BlinkoNotification";
 
 export const SideBarItem = "p-2 flex flex-row items-center cursor-pointer gap-2 hover:bg-hover rounded-xl transition-all"
 
@@ -97,7 +98,7 @@ export const CommonLayout = observer(({
         style={{ width: isPc ? `calc(100% - ${base.sideBarWidth}px)` : '100%' }}
         className={`flex transition-all duration-300 overflow-y-hidden w-full flex-col gap-y-1 bg-sencondbackground`}>
         {/* nav bar  */}
-        <header className="relative flex md:h-16 md:min-h-16 h-14 min-h-14 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 md:pb-2 overflow-x-hidden">
+        <header className="relative flex md:h-16 md:min-h-16 h-14 min-h-14 items-center justify-between gap-2 rounded-medium px-2 md:px:4 pt-2 md:pb-2 overflow-hidden">
           <div className="hidden md:block absolute bottom-[20%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">
             <div className="w-full h-[100%] bg-[#9936e6] opacity-20"
               style={{ "clipPath": "circle(50% at 50% 50%)" }} />
@@ -125,7 +126,10 @@ export const CommonLayout = observer(({
                   {
                     router.pathname != '/trash'
                       ? <Icon className="cursor-pointer hover:rotate-180 transition-all"
-                        onClick={() => blinkoStore.refreshData()}
+                        onClick={() => {
+                          blinkoStore.refreshData()
+                          blinkoStore.updateTicker++
+                        }}
                         icon="fluent:arrow-sync-12-filled"
                         width="20"
                         height="20"
@@ -170,7 +174,7 @@ export const CommonLayout = observer(({
               <div className="flex items-center justify-center gap-2 md:gap-4 w-auto ">
                 <BarSearchInput isPc={isPc} />
                 <FilterPop />
-                {blinkoStore.dailyReviewNoteList.value?.length != 0 &&
+                {blinkoStore.dailyReviewNoteList.value?.length != 0 && !blinkoStore.config.value?.isCloseDailyReview &&
                   <Badge size="sm" className="shrink-0" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
                     <Link href="/review" passHref legacyBehavior>
                       <Button
@@ -189,6 +193,8 @@ export const CommonLayout = observer(({
                     </Link>
                   </Badge>
                 }
+
+                <BlinkoNotification />
               </div>
             </div>
           </div>
@@ -196,7 +202,7 @@ export const CommonLayout = observer(({
         </header>
         {/* backdrop  pt-6 -mt-6 to fix the editor tooltip position */}
 
-        <ScrollArea onBottom={() => { }} className="flex h-[calc(100%_-_70px)] overflow-y-scroll overflow-x-hidden">
+        <ScrollArea onBottom={() => { }} className="h-[calc(100%_-_70px)] !overflow-y-auto overflow-x-hidden">
           <div className="relative flex h-full w-full flex-col rounded-medium layout-container" >
             {children}
           </div>

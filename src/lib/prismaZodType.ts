@@ -15,6 +15,7 @@ export const accountsSchema = z.object({
   note: z.number().int(),
   role: z.string(),
   loginType: z.string().optional(),
+  description: z.string().optional(),
   linkAccountId: z.number().int().nullable().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -32,8 +33,9 @@ export const attachmentsSchema = z.object({
   sharePassword: z.string(),
   name: z.string(),
   path: z.string(),
-  size: z.instanceof(Prisma.Decimal, { message: "Field 'size' must be a Decimal. Location: ['Models', 'attachments']" }),
-  noteId: z.number().int(),
+  size: z.union([z.instanceof(Prisma.Decimal, { message: "Field 'size' must be a Decimal. Location: ['Models', 'attachments']" }), z.number(), z.string()]),
+  noteId: z.number().int().nullable(),
+  accountId: z.number().int().nullable(),
   createdAt: z.coerce.date(),
   sortOrder: z.number().int(),
   updatedAt: z.coerce.date(),
@@ -167,3 +169,85 @@ export const noteReferenceSchema = z.object({
   fromNoteId: z.number().int(),
   toNoteId: z.number().int(),
 })
+
+/////////////////////////////////////////
+// COMMENTS SCHEMA
+/////////////////////////////////////////
+
+export const commentsSchema = z.object({
+  id: z.number().int(),
+  content: z.string(),
+  accountId: z.number().int().nullable(),
+  guestName: z.string().nullable(),
+  guestIP: z.string().nullable(),
+  guestUA: z.string().nullable(),
+  noteId: z.number().int(),
+  parentId: z.number().int().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
+
+export type comments = z.infer<typeof commentsSchema>
+
+
+/////////////////////////////////////////
+// FOLLOWS SCHEMA
+/////////////////////////////////////////
+
+export const followsSchema = z.object({
+  id: z.number().int(),
+  siteName: z.string().optional(),
+  siteUrl: z.string(),
+  siteAvatar: z.string().optional(),
+  description: z.string().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  followType: z.string(),
+  accountId: z.number().int(),
+})
+
+export type follows = z.infer<typeof followsSchema>
+
+/////////////////////////////////////////
+// NOTIFICATIONS SCHEMA
+/////////////////////////////////////////
+export const NotificationType = {
+  FOLLOW: 'follow',
+  COMMENT: 'comment',
+  SYSTEM: 'system',
+} as const
+
+export const notificationType = z.union([
+  z.enum([
+    NotificationType.FOLLOW,
+    NotificationType.COMMENT,
+    NotificationType.SYSTEM,
+  ]),
+  z.string()
+])
+
+export const notificationsSchema = z.object({
+  id: z.number().int(),
+  type: notificationType,
+  title: z.string(),
+  content: z.string(),
+  metadata: z.any(),
+  isRead: z.boolean(),
+  accountId: z.number().int(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
+
+export type Notifications = z.infer<typeof notificationsSchema>
+export type InputNotificationType = z.infer<typeof notificationType>
+
+/////////////////////////////////////////
+// CACHE SCHEMA
+/////////////////////////////////////////
+
+export const cacheSchema = z.object({
+  id: z.number().int(),
+  key: z.string(),
+  value: z.any(),
+})
+
