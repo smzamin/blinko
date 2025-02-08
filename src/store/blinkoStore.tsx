@@ -77,6 +77,7 @@ export class BlinkoStore implements Store {
     key: 'editModeAttachments'
   });
 
+  searchText: string = '';
   isCreateMode: boolean = true
   curSelectedNote: Note | null = null;
   curMultiSelectIds: number[] = [];
@@ -84,7 +85,7 @@ export class BlinkoStore implements Store {
   forceQuery: number = 0;
   allTagRouter = {
     title: 'total',
-    href: '/all',
+    href: '/?path=all',
     icon: ''
   }
   noteListFilterConfig = {
@@ -93,13 +94,13 @@ export class BlinkoStore implements Store {
     isShare: null as boolean | null,
     type: 0,
     tagId: null as number | null,
-    searchText: "",
     withoutTag: false,
     withFile: false,
     withLink: false,
     isUseAiQuery: false,
     startDate: null as Date | null,
     endDate: null as Date | null,
+    hasTodo: false
   }
   noteTypeDefault: NoteType = NoteType.BLINKO
   currentCommonFilter: filterType | null = null
@@ -129,11 +130,12 @@ export class BlinkoStore implements Store {
 
   upsertNote = new PromiseState({
     function: async (params: UpsertNoteParams) => {
+      console.log("upsertNote", params)
       const {
         content = null,
         isArchived,
         isRecycle,
-        type = this.noteTypeDefault,
+        type,
         id,
         attachments = [],
         refresh = true,
@@ -226,7 +228,7 @@ export class BlinkoStore implements Store {
       let notes: Note[] = [];
 
       if (this.isOnline) {
-        notes = await api.notes.list.mutate({ ...this.noteListFilterConfig, page, size });
+        notes = await api.notes.list.mutate({ ...this.noteListFilterConfig, searchText: this.searchText, page, size });
         if (this.offlineNotes.length > 0) {
           await this.syncOfflineNotes();
         }
@@ -395,7 +397,7 @@ export class BlinkoStore implements Store {
   }
 
   useQuery(router) {
-    const { tagId, withoutTag, withFile, withLink, searchText } = router.query;
+    const { tagId, withoutTag, withFile, withLink, searchText, hasTodo, path } = router.query;
     useEffect(() => {
       if (!router.isReady) return
       this.noteListFilterConfig.type = NoteType.BLINKO
@@ -405,15 +407,15 @@ export class BlinkoStore implements Store {
       this.noteListFilterConfig.withoutTag = false
       this.noteListFilterConfig.withLink = false
       this.noteListFilterConfig.withFile = false
-      this.noteListFilterConfig.searchText = searchText ?? ''
       this.noteListFilterConfig.isRecycle = false
       this.noteListFilterConfig.startDate = null
       this.noteListFilterConfig.endDate = null
       this.noteListFilterConfig.isShare = null
+      this.noteListFilterConfig.hasTodo = false
 
-      if (router.pathname == '/notes') {
+      if (path == 'notes') {
         this.noteListFilterConfig.type = NoteType.NOTE
-        this.noteTypeDefault = NoteType.NOTE
+        // this.noteTypeDefault = NoteType.NOTE
       }
       if (tagId) {
         this.noteListFilterConfig.tagId = Number(tagId) as number
@@ -427,20 +429,23 @@ export class BlinkoStore implements Store {
       if (withFile) {
         this.noteListFilterConfig.withFile = true
       }
+      if (hasTodo) {
+        this.noteListFilterConfig.hasTodo = true
+      }
 
-      if (router.pathname == '/all') {
+      if (path == 'all') {
         this.noteListFilterConfig.type = -1
       }
-      if (router.pathname == '/archived') {
+      if (path == 'archived') {
         this.noteListFilterConfig.type = -1
         this.noteListFilterConfig.isArchived = true
       }
-      if (router.pathname == '/trash') {
+      if (path == 'trash') {
         this.noteListFilterConfig.type = -1
         this.noteListFilterConfig.isRecycle = true
       }
       this.noteList.resetAndCall({})
-    }, [router.isReady, this.forceQuery])
+    }, [router.isReady, this.forceQuery, router?.query?.path])
   }
 
   @observable
@@ -450,6 +455,8 @@ export class BlinkoStore implements Store {
   setExcludeEmbeddingTagId(tagId: number | null) {
     this.excludeEmbeddingTagId = tagId;
   }
+
+  settingsSearchText: string = '';
 
   constructor() {
     makeAutoObservable(this)

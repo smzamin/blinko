@@ -86,7 +86,7 @@ export const TagListPanel = observer(() => {
   const { t } = useTranslation()
   const router = useRouter()
   const isSelected = (id) => {
-    return blinko.noteListFilterConfig.tagId == id && router.pathname == '/all'
+    return blinko.noteListFilterConfig.tagId == id && router.query?.path == 'all'
   }
   useEffect(() => { }, [blinko.noteListFilterConfig.tagId])
   return (
@@ -116,7 +116,7 @@ export const TagListPanel = observer(() => {
             <div className={`${SideBarItem} mb-1 relative group ${(isSelected(element.id)) ? '!bg-primary !text-primary-foreground' : ''}`}
               onClick={async e => {
                 base.currentRouter = blinko.allTagRouter
-                await router.push('/all?tagId=' + element.id, undefined, { shallow: true })
+                await router.push('/?path=all&tagId=' + element.id, undefined, { shallow: true })
                 blinko.forceQuery++
               }}
             >
@@ -143,6 +143,9 @@ export const TagListPanel = observer(() => {
 
               <div className="truncate overflow-hidden whitespace-nowrap" title={element.name}>
                 {element.name}
+                {isBranch && element.children?.length > 0 && (
+                  <span className="ml-1 text-xs opacity-60">({element.children.length})</span>
+                )}
               </div>
               <Dropdown>
                 <DropdownTrigger>
@@ -196,7 +199,7 @@ export const TagListPanel = observer(() => {
                           oldName: element.metadata?.path as string,
                           newName: tagName
                         }))
-                        router.push('/all')
+                        router.push('/?path=all')
                       }
                     })
                   }}  >

@@ -1,3 +1,154 @@
+## [0.38.3](https://github.com/blinko-space/blinko/compare/v0.38.2...v0.38.3) (2025-02-06)
+
+
+### Bug Fixes
+
+* **note:** FE accidentally turned into blinko after operating on note ([ee3ab80](https://github.com/blinko-space/blinko/commit/ee3ab80b34847cce1317bb0bdc2a54486e467feb))
+* **server/config:** customBackgroundUrl not work on Login Page & Share Page. ([9ef5dc2](https://github.com/blinko-space/blinko/commit/9ef5dc238375b2963d8c5fd5e0a03ad765ff024f))
+
+## [0.38.2](https://github.com/blinko-space/blinko/compare/v0.38.1...v0.38.2) (2025-02-05)
+
+
+### Bug Fixes
+
+* Add child count display for branch tags ([78f17cc](https://github.com/blinko-space/blinko/commit/78f17cca6b509b62b951d69ed3f7461bfb114376))
+
+## [0.38.1](https://github.com/blinko-space/blinko/compare/v0.38.0...v0.38.1) (2025-02-05)
+
+
+### Bug Fixes
+
+* pin pnpm and sqlite3 package versions ([86a0f1b](https://github.com/blinko-space/blinko/commit/86a0f1bce7b1df990200d001cbe4a2a10bbdbe43))
+
+# [0.38.0](https://github.com/blinko-space/blinko/compare/v0.37.22...v0.38.0) (2025-02-05)
+
+
+### Features
+
+* **memos:** correct import comments. ([9d49040](https://github.com/blinko-space/blinko/commit/9d49040cd5b84e56cce846f8ec0fa19ab331d85d))
+
+## [0.37.22](https://github.com/blinko-space/blinko/compare/v0.37.21...v0.37.22) (2025-02-05)
+
+
+### Bug Fixes
+
+* **ai:** keep note.updatedAt unchanged when embeddingInsertAttachments. ([5c29944](https://github.com/blinko-space/blinko/commit/5c29944855c9e2f0228a9446791a22cfd14ad411))
+* **ai:** keep note.updatedAt unchanged when import from memos. ([7e55724](https://github.com/blinko-space/blinko/commit/7e557240844c0c8016267b2376d8a138a1637f50))
+* **ai:** keep note.updatedAt unchanged when rebuilding index. ([0ebbe18](https://github.com/blinko-space/blinko/commit/0ebbe18055084e8f1329a4491a1d82a845d2d3f5))
+* **ai:** keep note.updatedAt unchanged when upsert note. ([9b7972a](https://github.com/blinko-space/blinko/commit/9b7972accbddbc71f91cadef31ff04fd415a39ba))
+
+## [0.37.21](https://github.com/blinko-space/blinko/compare/v0.37.20...v0.37.21) (2025-01-27)
+
+
+### Bug Fixes
+
+* Update search text reference in share note list retrieval ([95cd577](https://github.com/blinko-space/blinko/commit/95cd577ccdff0caf4f0282f7a9c019accd0ddde2))
+
+## [0.37.20](https://github.com/blinko-space/blinko/compare/v0.37.19...v0.37.20) (2025-01-27)
+
+
+### Bug Fixes
+
+* remove right click menu on share mode card [#432](https://github.com/blinko-space/blinko/issues/432) ([8ee0a9d](https://github.com/blinko-space/blinko/commit/8ee0a9de77c23c93b1fe2b9cb3478acfb3b94b52))
+
+## [0.37.19](https://github.com/blinko-space/blinko/compare/v0.37.18...v0.37.19) (2025-01-27)
+
+
+### Bug Fixes
+
+* Add notification hiding and search settings functionality ([279eb97](https://github.com/blinko-space/blinko/commit/279eb9709c363e718278d6592e1bc2200476805e))
+
+## [0.37.18](https://github.com/blinko-space/blinko/compare/v0.37.17...v0.37.18) (2025-01-27)
+
+
+### Bug Fixes
+
+* Login screen animated wallpaper not disabled [#468](https://github.com/blinko-space/blinko/issues/468) ([b608985](https://github.com/blinko-space/blinko/commit/b608985f827113c3cb9a1f4898134e93373430bd))
+
+## [0.37.17](https://github.com/blinko-space/blinko/compare/v0.37.16...v0.37.17) (2025-01-27)
+
+
+### Bug Fixes
+
+* /v1/user/detail returns information about the current user. [#470](https://github.com/blinko-space/blinko/issues/470) ([613a2ce](https://github.com/blinko-space/blinko/commit/613a2ce92345fb5045757897f768d485165bdfb3))
+
+## [0.37.16](https://github.com/blinko-space/blinko/compare/v0.37.15...v0.37.16) (2025-01-23)
+
+
+### Bug Fixes
+
+* add onClose functionality to ExpandableContainer ([0a8d048](https://github.com/blinko-space/blinko/commit/0a8d048891f83b173b653adf45cd95f6bcaf31b7))
+
+## [0.37.15](https://github.com/blinko-space/blinko/compare/v0.37.14...v0.37.15) (2025-01-23)
+
+
+### Bug Fixes
+
+* enhance task management and file handling ([1290b7f](https://github.com/blinko-space/blinko/commit/1290b7f8891fefef5493b6a6272fcc4e665445be))
+
+## [0.37.14](https://github.com/blinko-space/blinko/compare/v0.37.13...v0.37.14) (2025-01-22)
+
+
+### Bug Fixes
+
+* update editor logic and remove unused fallback script ([33ce02d](https://github.com/blinko-space/blinko/commit/33ce02d2f3329417e2120a7f100234774ef12c2d))
+
+## [0.37.13](https://github.com/blinko-space/blinko/compare/v0.37.12...v0.37.13) (2025-01-21)
+
+
+### Bug Fixes
+
+* improve BlinkoCard components and editor functionality ([6646476](https://github.com/blinko-space/blinko/commit/6646476712eb31550ed88f9bab8417c2680a32df))
+
+## [0.37.12](https://github.com/blinko-space/blinko/compare/v0.37.11...v0.37.12) (2025-01-21)
+
+
+### Bug Fixes
+
+* streamline routing and editor logic ([a7b432a](https://github.com/blinko-space/blinko/commit/a7b432a00b07d5fb0cf563f6d2ae4aa7d8c781c0))
+
+## [0.37.11](https://github.com/blinko-space/blinko/compare/v0.37.10...v0.37.11) (2025-01-21)
+
+
+### Bug Fixes
+
+* update routing and editor logic for improved consistency ([6d96d65](https://github.com/blinko-space/blinko/commit/6d96d65e9edb4219ce70e7963c7f6193b3cbf34f))
+
+## [0.37.10](https://github.com/blinko-space/blinko/compare/v0.37.9...v0.37.10) (2025-01-21)
+
+
+### Bug Fixes
+
+* refactor /note /trash /archived like spa ([7873c4b](https://github.com/blinko-space/blinko/commit/7873c4b6ee30fe6cc8b4205920dce9b957f5cfdf))
+
+## [0.37.9](https://github.com/blinko-space/blinko/compare/v0.37.8...v0.37.9) (2025-01-21)
+
+
+### Bug Fixes
+
+* update minimum page size in PerferSetting component ([cd9ff84](https://github.com/blinko-space/blinko/commit/cd9ff845177fbf12b24a355c765c6607477dd5e3))
+
+## [0.37.8](https://github.com/blinko-space/blinko/compare/v0.37.7...v0.37.8) (2025-01-20)
+
+
+### Bug Fixes
+
+* support backward reference  enhance Dockerfile and localization with new reset password script and translation keys [#460](https://github.com/blinko-space/blinko/issues/460) ([9cb27bf](https://github.com/blinko-space/blinko/commit/9cb27bfe262c6055c5531cec4413567855fd3535))
+
+## [0.37.7](https://github.com/blinko-space/blinko/compare/v0.37.6...v0.37.7) (2025-01-19)
+
+
+### Bug Fixes
+
+* add 'has-todo' translation key across multiple languages and integrate into filter functionality ([069bb14](https://github.com/blinko-space/blinko/commit/069bb1461ac6ec18d244635cff3e26075d4ad24d))
+
+## [0.37.6](https://github.com/blinko-space/blinko/compare/v0.37.5...v0.37.6) (2025-01-19)
+
+
+### Bug Fixes
+
+* update markdown insertion and replacement methods in EditorStore [#463](https://github.com/blinko-space/blinko/issues/463) ([01213fc](https://github.com/blinko-space/blinko/commit/01213fc1b247211067367bebf0ae4377468d541d))
+
 ## [0.37.5](https://github.com/blinko-space/blinko/compare/v0.37.4...v0.37.5) (2025-01-16)
 
 

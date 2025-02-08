@@ -470,5 +470,9 @@
   "system-notification": "Systembenachrichtigung",
   "embedding-api-endpoint": "Einbetten von API-Endpunkt",
   "embedding-api-key": "API-Schlüssel einbetten",
-  "recommand": "Empfehlung"
+  "recommand": "Empfehlung",
+  "has-todo": "Hat ZU TUN",
+  "reference-by": "Referenz Durch",
+  "hide-notification": "Benachrichtigung ausblenden",
+  "search-settings": "Sucheinstellungen..."
 }

@@ -39,6 +39,7 @@ export const noteRouter = router({
       isUseAiQuery: z.boolean().default(false).optional(),
       startDate: z.union([z.date(), z.null()]).default(null).optional(),
       endDate: z.union([z.date(), z.null()]).default(null).optional(),
+      hasTodo: z.boolean().default(false).optional(),
     }))
     .output(z.array(notesSchema.merge(
       z.object({
@@ -56,14 +57,21 @@ export const noteRouter = router({
             updatedAt: z.date().optional()
           }).optional()
         })).optional(),
-        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional(),
+        referencedBy: z.array(z.object({
+          fromNoteId: z.number(),
+          fromNote: z.object({
+            content: z.string().optional(),
+            createdAt: z.date().optional(),
+            updatedAt: z.date().optional()
+          }).optional()
+        })).optional(),
         _count: z.object({
           comments: z.number()
         })
       }))
     ))
     .mutation(async function ({ input, ctx }) {
-      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink, isUseAiQuery, startDate, endDate, isShare } = input
+      const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink, isUseAiQuery, startDate, endDate, isShare, hasTodo } = input
       if (isUseAiQuery && searchText?.trim() != '') {
         if (page == 1) {
           return await AiService.enhanceQuery({ query: searchText!, ctx })
@@ -115,6 +123,14 @@ export const noteRouter = router({
           { content: { contains: 'https://', mode: 'insensitive' } }
         ];
       }
+      if (hasTodo) {
+        where.OR = [
+          { content: { contains: '- [ ]', mode: 'insensitive' } },
+          { content: { contains: '- [x]', mode: 'insensitive' } },
+          { content: { contains: '* [ ]', mode: 'insensitive' } },
+          { content: { contains: '* [x]', mode: 'insensitive' } }
+        ];
+      }
       const config = await getGlobalConfig({ ctx })
       let timeOrderBy = config?.isOrderByCreateTime ? { createdAt: orderBy } : { updatedAt: orderBy }
       return await prisma.notes.findMany({
@@ -144,7 +160,14 @@ export const noteRouter = router({
           },
           referencedBy: {
             select: {
-              fromNoteId: true
+              fromNoteId: true,
+              fromNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
             }
           },
           _count: {
@@ -242,7 +265,14 @@ export const noteRouter = router({
             updatedAt: z.date().optional()
           }).optional()
         })).optional(),
-        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional(),
+        referencedBy: z.array(z.object({
+          fromNoteId: z.number(),
+          fromNote: z.object({
+            content: z.string().optional(),
+            createdAt: z.date().optional(),
+            updatedAt: z.date().optional()
+          }).optional()
+        })).optional(),
         _count: z.object({
           comments: z.number()
         })
@@ -274,7 +304,14 @@ export const noteRouter = router({
           },
           referencedBy: {
             select: {
-              fromNoteId: true
+              fromNoteId: true,
+              fromNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
             }
           },
           _count: {
@@ -300,6 +337,14 @@ export const noteRouter = router({
           references: z.array(z.object({
             toNoteId: z.number(),
             toNote: z.object({
+              content: z.string().optional(),
+              createdAt: z.date().optional(),
+              updatedAt: z.date().optional()
+            }).optional()
+          })).optional(),
+          referencedBy: z.array(z.object({
+            fromNoteId: z.number(),
+            fromNote: z.object({
               content: z.string().optional(),
               createdAt: z.date().optional(),
               updatedAt: z.date().optional()
@@ -411,7 +456,14 @@ export const noteRouter = router({
             updatedAt: z.date().optional()
           }).optional()
         })).optional(),
-        referencedBy: z.array(z.object({ fromNoteId: z.number() })).optional(),
+        referencedBy: z.array(z.object({
+          fromNoteId: z.number(),
+          fromNote: z.object({
+            content: z.string().optional(),
+            createdAt: z.date().optional(),
+            updatedAt: z.date().optional()
+          }).optional()
+        })).optional(),
         _count: z.object({
           comments: z.number()
         })
@@ -427,8 +479,30 @@ export const noteRouter = router({
             }
           },
           attachments: true,
-          references: true,
-          referencedBy: true,
+          references: {
+            select: {
+              toNoteId: true,
+              toNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
+            }
+          },
+          referencedBy: {
+            select: {
+              fromNoteId: true,
+              fromNote: {
+                select: {
+                  content: true,
+                  createdAt: true,
+                  updatedAt: true
+                }
+              }
+            }
+          },
           _count: { select: { comments: true } }
         },
       })
@@ -468,7 +542,7 @@ export const noteRouter = router({
     })
     .input(z.object({
       content: z.union([z.string(), z.null()]).default(null),
-      type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(0),
+      type: z.union([z.nativeEnum(NoteType), z.literal(-1)]).default(-1),
       attachments: z.array(z.object({
         name: z.string(),
         path: z.string(),
@@ -625,9 +699,9 @@ export const noteRouter = router({
         }
 
         if (config?.isUseAI) {
-          AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'update', createTime: note.createdAt! })
+          AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'update', createTime: note.createdAt!, updatedAt: note.updatedAt })
           for (const attachment of attachments) {
-            AiService.embeddingInsertAttachments({ id: note.id, filePath: attachment.path })
+            AiService.embeddingInsertAttachments({ id: note.id, updatedAt: note.updatedAt, filePath: attachment.path })
           }
         }
         SendWebhook({ ...note, attachments }, isRecycle ? 'delete' : 'update', ctx)
@@ -658,9 +732,9 @@ export const noteRouter = router({
           SendWebhook({ ...note, attachments }, 'create', ctx)
 
           if (config?.isUseAI) {
-            AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'insert', createTime: note.createdAt! })
+            AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'insert', createTime: note.createdAt!, updatedAt: note.updatedAt })
             for (const attachment of attachments) {
-              AiService.embeddingInsertAttachments({ id: note.id, filePath: attachment.path })
+              AiService.embeddingInsertAttachments({ id: note.id, updatedAt: note.updatedAt, filePath: attachment.path })
             }
           }
           return note
