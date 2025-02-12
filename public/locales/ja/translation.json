@@ -443,5 +443,9 @@
   "system-notification": "システム通知",
   "embedding-api-endpoint": "APIエンドポイントの埋め込み",
   "embedding-api-key": "APIキーの埋め込み",
-  "recommand": "お勧め"
+  "recommand": "お勧め",
+  "has-todo": "「やるべきこと」",
+  "reference-by": "言及者",
+  "hide-notification": "通知を非表示",
+  "search-settings": "検索設定..."
 }

@@ -10,7 +10,7 @@ COPY prisma ./
 
 ENV USE_MIRROR=true
 
-RUN npm install -g pnpm && \
+RUN npm install -g pnpm@9.12.2 && \
     if [ "$USE_MIRROR" = "true" ]; then \
         echo "Using mirror registry..." && \
         npm install -g nrm && \
@@ -41,6 +41,7 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/seed.js ./seed.js
+COPY --from=builder /app/resetpassword.js ./resetpassword.js
 
 ENV NODE_ENV=production
 ENV PORT=1111

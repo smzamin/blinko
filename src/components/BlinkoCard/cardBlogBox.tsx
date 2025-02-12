@@ -28,7 +28,7 @@ const gradientPairs: [string, string][] = [
   ['#4B134F', '#C94B4B'],
 ];
 
-export const BlogContent = ({ blinkoItem, isExpanded }: BlogContentProps) => {
+export const CardBlogBox = ({ blinkoItem, isExpanded }: BlogContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number>(112);
 
@@ -66,7 +66,7 @@ export const BlogContent = ({ blinkoItem, isExpanded }: BlogContentProps) => {
   }, [blinkoItem.content, blinkoItem.title, blinkoItem.tags]);
 
   return (
-    <div className={`flex items-start gap-2 mt-4 w-full ${isExpanded ? 'mb-4' : 'mb-1'}`}>
+    <div className={`flex items-start gap-2 mt-4 w-full mb-4`}>
       {blinkoItem.blogCover ? (
         <Image
           src={blinkoItem.blogCover}
@@ -124,7 +124,7 @@ export const BlogContent = ({ blinkoItem, isExpanded }: BlogContentProps) => {
                 return uniquePaths.map((path) => (
                   <div key={path} className='text-desc text-xs blinko-tag whitespace-nowrap font-bold hover:opacity-80 transition-all cursor-pointer' onClick={(e) => {
                     e.stopPropagation()
-                    router.replace(`/all?searchText=${encodeURIComponent("#" + path)}`)
+                    router.replace(`/?path=all&searchText=${encodeURIComponent("#" + path)}`)
                     RootStore.Get(BlinkoStore).forceQuery++
                   }}>
                     #{path}

@@ -57,12 +57,13 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange, isInDial
           return []
         }
       } else {
-        const attachments = blinko.editAttachmentsStorage.list.filter(i => Number(i.id) == Number(blinko.curSelectedNote!.id))
-        if (attachments?.length) {
-          return attachments
-        } else {
-          return blinko.curSelectedNote?.attachments
-        }
+        return blinko.curSelectedNote?.attachments
+        // const attachments = blinko.editAttachmentsStorage.list.filter(i => Number(i.id) == Number(blinko.curSelectedNote!.id))
+        // if (attachments?.length) {
+        //   return attachments
+        // } else {
+        //   return blinko.curSelectedNote?.attachments
+        // }
       }
     }
   }))
@@ -107,12 +108,13 @@ export const BlinkoEditor = observer(({ mode, onSended, onHeightChange, isInDial
       }
       onSend={async ({ files, references, noteType }) => {
         if (isCreateMode) {
+          console.log("createMode", files, references, noteType)
           //@ts-ignore
           await blinko.upsertNote.call({ type: noteType, references, refresh: false, content: blinko.noteContent, attachments: files.map(i => { return { name: i.name, path: i.uploadPath, size: i.size, type: i.type } }) })
           blinko.createAttachmentsStorage.clear()
           blinko.createContentStorage.clear()
-          if (blinko.noteTypeDefault == NoteType.NOTE && router.pathname != '/notes') {
-            await router.push('/notes')
+          if (blinko.noteTypeDefault == NoteType.NOTE && router.query?.path != 'notes') {
+            await router.push('/?path=notes')
             blinko.forceQuery++
           }
           if (blinko.noteTypeDefault == NoteType.BLINKO && router.pathname != '/') {

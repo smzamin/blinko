@@ -395,5 +395,9 @@
   "system-notification": "Notificação do sistema",
   "embedding-api-endpoint": "Incorporando o Ponto de Extremidade da API",
   "embedding-api-key": "Incorporar chave da API",
-  "recommand": "Recomendar"
+  "recommand": "Recomendar",
+  "has-todo": "Tem PARA FAZER",
+  "reference-by": "Referência por",
+  "hide-notification": "Ocultar notificação",
+  "search-settings": "Configurações de pesquisa..."
 }

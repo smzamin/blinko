@@ -487,5 +487,9 @@
   "system-notification": "Powiadomienie systemowe",
   "embedding-api-endpoint": "Osadzanie punktu końcowego interfejsu API.",
   "embedding-api-key": "Osadzanie klucza API",
-  "recommand": "Polecaj"
+  "recommand": "Polecaj",
+  "has-todo": "Do wykonania",
+  "reference-by": "Odnośnik do",
+  "hide-notification": "Ukryj powiadomienie",
+  "search-settings": "Ustawienia wyszukiwania..."
 }
