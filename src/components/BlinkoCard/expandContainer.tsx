@@ -22,7 +22,7 @@ const BASE_STYLES = {
 
 export const ExpandableContainer = ({ isExpanded, children, onClose }: ExpandableContainerProps) => {
   const isIOS = useIsIOS()
-  
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isExpanded) {
@@ -55,7 +55,7 @@ export const ExpandableContainer = ({ isExpanded, children, onClose }: Expandabl
         document.body
       );
     }
-  
+
     return (
       <div
         className='w-full expand-container touch-manipulation'

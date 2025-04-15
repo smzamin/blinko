@@ -1,4 +1,3 @@
-import { eventBus } from "@/lib/event"
 
 export const Emoji = {
   name: 'emoji',

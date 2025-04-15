@@ -1,6 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
 import { IconButton } from '../IconButton';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
   isFullscreen: boolean;
@@ -19,4 +19,4 @@ export const FullScreenButton = ({ isFullscreen, onClick }: Props) => {
       />
     </div>
   );
-}; 
+};

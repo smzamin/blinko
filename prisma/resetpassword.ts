@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client'
-
-import { randomBytes, pbkdf2 } from 'crypto'
+import { PrismaClient } from '@prisma/client';
+import { pbkdf2, randomBytes } from 'crypto';
 
 export async function hashPassword(password: string): Promise<string> {
   return new Promise((resolve, reject) => {

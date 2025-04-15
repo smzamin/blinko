@@ -1,13 +1,13 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 export const LoadingPage = () => {
   const [show, setShow] = useState(true);
-  
+
   useEffect(() => {
     const minDisplayTime = 500;
     const startTime = Date.now();
-    
+
     return () => {
       const elapsedTime = Date.now() - startTime;
       if (elapsedTime < minDisplayTime) {
@@ -22,7 +22,7 @@ export const LoadingPage = () => {
   return (
     <AnimatePresence>
       {show && (
-        <motion.div 
+        <motion.div
           className="fixed inset-0 flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -43,4 +43,4 @@ export const LoadingPage = () => {
       )}
     </AnimatePresence>
   );
-}; 
+};

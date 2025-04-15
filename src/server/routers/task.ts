@@ -1,17 +1,11 @@
-import { router, authProcedure, demoAuthMiddleware, superAdminAuthMiddleware } from '../trpc';
-import { z } from 'zod';
-import { prisma } from '../prisma';
-import { DBJob } from '../plugins/dbjob';
-import '../plugins/recommandJob';
-import { ArchiveJob } from '../plugins/archivejob';
-import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME, TEMP_PATH, UPLOAD_FILE_PATH } from '@/lib/constant';
+import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
 import { scheduledTaskSchema } from '@/lib/prismaZodType';
-import { Memos } from '../plugins/memos';
 import { unlink } from 'fs/promises';
-import { FileService } from '../plugins/files';
-import path from 'path';
-import fs from 'fs';
-
+import { z } from 'zod';
+import '../plugins/recommandJob';
+import { prisma } from '../prisma';
+import { authProcedure, demoAuthMiddleware, router, superAdminAuthMiddleware } from '../trpc';
+import { FileService } from './helper/files';
 
 export const taskRouter = router({
   list: authProcedure.use(superAdminAuthMiddleware)
@@ -31,16 +25,16 @@ export const taskRouter = router({
     .output(z.any())
     .mutation(async ({ input }) => {
       const { time, type, task } = input
-      if (type == 'start') {
-        const cronTime = time ?? '0 0 * * *'
-        return task == DBBAK_TASK_NAME ? await DBJob.Start(cronTime, true) : await ArchiveJob.Start(cronTime, true)
-      }
-      if (type == 'stop') {
-        return task == DBBAK_TASK_NAME ? await DBJob.Stop() : await ArchiveJob.Stop()
-      }
-      if (type == 'update' && time) {
-        return task == DBBAK_TASK_NAME ? await DBJob.SetCronTime(time) : await ArchiveJob.SetCronTime(time)
-      }
+      // if (type == 'start') {
+      //   const cronTime = time ?? '0 0 * * *'
+      //   return task == DBBAK_TASK_NAME ? await DBJob.Start(cronTime, true) : await ArchiveJob.Start(cronTime, true)
+      // }
+      // if (type == 'stop') {
+      //   return task == DBBAK_TASK_NAME ? await DBJob.Stop() : await ArchiveJob.Stop()
+      // }
+      // if (type == 'update' && time) {
+      //   return task == DBBAK_TASK_NAME ? await DBJob.SetCronTime(time) : await ArchiveJob.SetCronTime(time)
+      // }
     }),
   importFromBlinko: authProcedure.use(demoAuthMiddleware).use(superAdminAuthMiddleware)
     .input(z.object({
@@ -50,10 +44,10 @@ export const taskRouter = router({
       const { filePath } = input
       try {
         const localFilePath = await FileService.getFile(filePath)
-        const res = DBJob.RestoreDB(localFilePath, ctx)
-        for await (const result of res) {
-          yield result;
-        }
+        // const res = DBJob.RestoreDB(localFilePath, ctx)
+        // for await (const result of res) {
+        //   yield result;
+        // }
         try {
           await unlink(localFilePath)
           await FileService.deleteFile(filePath)
@@ -70,17 +64,17 @@ export const taskRouter = router({
     }))
     .mutation(async function* ({ input, ctx }) {
       try {
-        const memos = new Memos();
-        const dbPath = await memos.initDB(input.filePath);
-        for await (const result of memos.importMemosDB(ctx)) {
-          yield result;
-        }
-        for await (const result of memos.importFiles(ctx)) {
-          yield result;
-        }
-        memos.closeDB();
+        // const memos = new Memos();
+        // const dbPath = await memos.initDB(input.filePath);
+        // for await (const result of memos.importMemosDB(ctx)) {
+        //   yield result;
+        // }
+        // for await (const result of memos.importFiles(ctx)) {
+        //   yield result;
+        // }
+        // memos.closeDB();
         try {
-          await unlink(dbPath)
+          // await unlink(dbPath)
           await FileService.deleteFile(input.filePath)
         } catch (error) {
         }
@@ -102,21 +96,25 @@ export const taskRouter = router({
       error: z.string().optional()
     }))
     .mutation(async ({ input, ctx }) => {
-      const result = await DBJob.ExporMDFiles({ ...input, ctx });
-      setTimeout(async () => {
-        try {
-          const zipPath = path.join(UPLOAD_FILE_PATH, result.path);
-          if (fs.existsSync(zipPath)) {
-            await unlink(zipPath);
-          }
-        } catch (error) {
-          console.warn('Failed to cleanup export zip file:', error);
-        }
-      }, 5 * 60 * 1000);
+      // const result = await DBJob.ExporMDFiles({ ...input, ctx });
+      // setTimeout(async () => {
+      //   try {
+      //     const zipPath = path.join(UPLOAD_FILE_PATH, result.path);
+      //     if (fs.existsSync(zipPath)) {
+      //       await unlink(zipPath);
+      //     }
+      //   } catch (error) {
+      //     console.warn('Failed to cleanup export zip file:', error);
+      //   }
+      // }, 5 * 60 * 1000);
+      // return {
+      //   success: true,
+      //   downloadUrl: `/api/file${result.path}`,
+      //   fileCount: result.fileCount
+      // };
       return {
-        success: true,
-        downloadUrl: `/api/file${result.path}`,
-        fileCount: result.fileCount
-      };
+        success: false,
+        error: 'Not implemented'
+      }
     }),
 })

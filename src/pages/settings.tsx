@@ -1,25 +1,24 @@
-import { observer } from 'mobx-react-lite';
-import { BasicSetting } from '@/components/BlinkoSettings/BasicSetting';
-import { AiSetting } from '@/components/BlinkoSettings/AiSetting';
-import { PerferSetting } from '@/components/BlinkoSettings/PerferSetting';
-import { TaskSetting } from '@/components/BlinkoSettings/TaskSetting';
-import { ImportSetting } from '@/components/BlinkoSettings/ImportSetting';
-import { ScrollArea } from '@/components/Common/ScrollArea';
-import { UserStore } from '@/store/user';
-import { RootStore } from '@/store';
-import { UserSetting } from '@/components/BlinkoSettings/UserSetting';
 import { AboutSetting } from '@/components/BlinkoSettings/AboutSetting';
-import { StorageSetting } from '@/components/BlinkoSettings/StorageSetting';
+import { AiSetting } from '@/components/BlinkoSettings/AiSetting';
+import { BasicSetting } from '@/components/BlinkoSettings/BasicSetting';
 import { ExportSetting } from '@/components/BlinkoSettings/ExportSetting';
-import { MusicSetting } from '@/components/BlinkoSettings/MusicSetting';
-import { SSOSetting } from '@/components/BlinkoSettings/SSOSetting';
 import { HttpProxySetting } from '@/components/BlinkoSettings/HttpProxySetting';
-import { useTranslation } from 'react-i18next';
-import { JSX } from 'react';
-import { ScrollableTabs, TabItem } from '@/components/Common/ScrollableTabs';
-import { useState } from 'react';
-import { BlinkoStore } from '@/store/blinkoStore';
+import { ImportSetting } from '@/components/BlinkoSettings/ImportSetting';
+import { MusicSetting } from '@/components/BlinkoSettings/MusicSetting';
+import { PerferSetting } from '@/components/BlinkoSettings/PerferSetting';
 import { PluginSetting } from '@/components/BlinkoSettings/PluginSetting';
+import { SSOSetting } from '@/components/BlinkoSettings/SSOSetting';
+import { StorageSetting } from '@/components/BlinkoSettings/StorageSetting';
+import { TaskSetting } from '@/components/BlinkoSettings/TaskSetting';
+import { UserSetting } from '@/components/BlinkoSettings/UserSetting';
+import { ScrollableTabs, TabItem } from '@/components/Common/ScrollableTabs';
+import { ScrollArea } from '@/components/Common/ScrollArea';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { UserStore } from '@/store/user';
+import { observer } from 'mobx-react-lite';
+import { JSX, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type SettingItem = {
   key: string;
@@ -154,16 +153,16 @@ const Page = observer(() => {
 
     if (blinkoStore.searchText) {
       const lowerSearchText = blinkoStore.searchText.toLowerCase();
-      const filteredSettings = settings.filter((setting) => 
-        setting.title.toLowerCase().includes(lowerSearchText) || 
+      const filteredSettings = settings.filter((setting) =>
+        setting.title.toLowerCase().includes(lowerSearchText) ||
         setting.keywords?.some((keyword) => keyword.toLowerCase().includes(lowerSearchText))
       );
-      
+
       // If no settings match the search criteria, return all settings instead of an empty list
       if (filteredSettings.length === 0) {
         return settings;
       }
-      
+
       return filteredSettings;
     }
 

@@ -1,7 +1,7 @@
-import { IconButton } from '../IconButton';
-import { useTranslation } from 'react-i18next';
 import { eventBus } from '@/lib/event';
+import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
+import { IconButton } from '../IconButton';
 
 interface Props {
   viewMode: "wysiwyg" | "sv" | "ir";
@@ -9,7 +9,7 @@ interface Props {
 
 export const ViewModeButton = ({ viewMode }: Props) => {
   const { t } = useTranslation();
-  
+
   const isPc = useMediaQuery('(min-width: 768px)')
 
   const getNextMode = () => {
@@ -49,4 +49,4 @@ export const ViewModeButton = ({ viewMode }: Props) => {
       />
     </div>
   );
-}; 
+};

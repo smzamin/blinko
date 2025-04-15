@@ -1,29 +1,29 @@
-import { observer } from "mobx-react-lite";
-import { Alert, Button, Input, Switch, Tooltip } from "@heroui/react";
-import { RootStore } from "@/store";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { UserStore } from "@/store/user";
-import { useTranslation } from "react-i18next";
+import { eventBus } from "@/lib/event";
+import { api } from "@/lib/trpc";
+import { RootStore } from "@/store";
+import { BlinkoStore } from "@/store/blinkoStore";
 import { DialogStore } from "@/store/module/Dialog";
-import { UpdateUserInfo, UpdateUserPassword } from "../Common/UpdateUserInfo";
-import { Item } from "./Item";
+import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { PromiseCall, PromiseState } from "@/store/standard/PromiseState";
+import { UserStore } from "@/store/user";
+import { Alert, Button, Input, Switch, Tooltip } from "@heroui/react";
+import Avatar from "boring-avatars";
+import { observer } from "mobx-react-lite";
+import { AnimatePresence, motion } from "motion/react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { CollapsibleCard } from "../Common/CollapsibleCard";
 import { Copy } from "../Common/Copy";
 import { MarkdownRender } from "../Common/MarkdownRender";
-import { PromiseCall, PromiseState } from "@/store/standard/PromiseState";
-import { api } from "@/lib/trpc";
-import { BlinkoStore } from "@/store/blinkoStore";
-import { useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ShowGen2FATokenModal } from "../Common/TwoFactorModal/gen2FATokenModal";
-import { CollapsibleCard } from "../Common/CollapsibleCard";
-import { eventBus } from "@/lib/event";
 import { LinkAccountModal } from "../Common/Modals/LinkAccountModal";
 import { showTipsDialog } from "../Common/TipsDialog";
-import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { ShowGen2FATokenModal } from "../Common/TwoFactorModal/gen2FATokenModal";
+import { UpdateUserInfo, UpdateUserPassword } from "../Common/UpdateUserInfo";
 import { UploadFileWrapper } from "../Common/UploadFile";
-import Avatar from "boring-avatars";
+import { Item } from "./Item";
 
 export const BasicSetting = observer(() => {
   const user = RootStore.Get(UserStore)

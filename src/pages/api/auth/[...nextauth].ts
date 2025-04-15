@@ -1,21 +1,21 @@
-import CredentialsProvider from 'next-auth/providers/credentials';
-import NextAuth from 'next-auth';
 import { prisma } from '@/server/prisma';
-import { authenticator } from 'otplib';
 import { getGlobalConfig } from '@/server/routers/config';
+import { getNextAuthSecret } from '@/server/routers/helper';
+import { verifyPassword } from '@/server/routers/user';
+import NextAuth from 'next-auth';
+import AppleProvider from "next-auth/providers/apple";
+import CredentialsProvider from 'next-auth/providers/credentials';
+import DiscordProvider from "next-auth/providers/discord";
+import FacebookProvider from "next-auth/providers/facebook";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
-import TwitterProvider from "next-auth/providers/twitter";
-import DiscordProvider from "next-auth/providers/discord";
-import SpotifyProvider from "next-auth/providers/spotify";
-import AppleProvider from "next-auth/providers/apple";
-import SlackProvider from "next-auth/providers/slack";
-import TwitchProvider from "next-auth/providers/twitch";
 import LineProvider from "next-auth/providers/line";
-import { getNextAuthSecret } from '@/server/routers/helper';
 import { OAuthConfig } from 'next-auth/providers/oauth';
-import { verifyPassword } from '@/server/routers/user';
+import SlackProvider from "next-auth/providers/slack";
+import SpotifyProvider from "next-auth/providers/spotify";
+import TwitchProvider from "next-auth/providers/twitch";
+import TwitterProvider from "next-auth/providers/twitter";
+import { authenticator } from 'otplib';
 
 async function verify2FACode(userId: string, userRole: string, userName: string, twoFactorCode: string) {
   const now = Math.floor(Date.now() / 1000);

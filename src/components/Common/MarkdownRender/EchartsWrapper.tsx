@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
+import React, { useEffect, useRef } from 'react';
 
 interface EchartsWrapperProps {
   options: string;
@@ -14,11 +14,11 @@ const EchartsWrapper: React.FC<EchartsWrapperProps> = ({ options }) => {
 
     try {
       const parsedOptions = JSON.parse(options);
-      
+
       if (!chartInstance.current) {
         chartInstance.current = echarts.init(chartRef.current);
       }
-      
+
       chartInstance.current.setOption(parsedOptions);
     } catch (error) {
       console.error('Failed to parse Echarts options:', error);
@@ -50,4 +50,4 @@ const EchartsWrapper: React.FC<EchartsWrapperProps> = ({ options }) => {
   );
 };
 
-export default EchartsWrapper; 
+export default EchartsWrapper;

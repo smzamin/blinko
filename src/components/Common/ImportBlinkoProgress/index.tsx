@@ -1,5 +1,4 @@
 import { streamApi } from '@/lib/trpc'
-import { type RestoreResult } from '@/server/plugins/dbjob'
 import { RootStore } from '@/store'
 import { BlinkoStore } from '@/store/blinkoStore'
 import { DialogStore } from '@/store/module/Dialog'
@@ -8,14 +7,13 @@ import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-
 export const ImportProgress = observer(({ filePath }: { filePath: string }) => {
   const { t } = useTranslation()
   const blinko = RootStore.Get(BlinkoStore)
   const store = RootStore.Local(() => ({
     progress: 0,
     total: 0,
-    message: [] as RestoreResult[],
+    message: [] as any[],
     status: '',
     get value() {
       const v = Math.round((store.progress / store.total) * 100)
@@ -28,7 +26,7 @@ export const ImportProgress = observer(({ filePath }: { filePath: string }) => {
       return store.status === 'error'
     },
     handleAsyncGenerator: async () => {
-      const asyncGeneratorRes = await streamApi.task.importFromBlinko.mutate({ filePath })
+      const asyncGeneratorRes = await streamApi?.['task'].importFromBlinko.mutate({ filePath })
       for await (const item of asyncGeneratorRes) {
         store.progress = item.progress?.current ?? 0
         store.total = item.progress?.total ?? 0

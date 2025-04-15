@@ -1,5 +1,5 @@
-import { RouterOutput } from "./routers/_app";
 import { z } from "zod";
+import { RouterOutput } from "./routers/_app";
 
 export type Note = Partial<NonNullable<RouterOutput['notes']['list'][0]>>
 export type Attachment = NonNullable<Note['attachments']>[0] & { size: any }
@@ -208,4 +208,4 @@ export const installPluginSchema = pluginInfoSchema.omit({
 
 // TypeScript types derived from the schemas
 export type PluginInfo = z.infer<typeof pluginInfoSchema>;
-export type InstallPluginInput = z.infer<typeof installPluginSchema>; 
+export type InstallPluginInput = z.infer<typeof installPluginSchema>;

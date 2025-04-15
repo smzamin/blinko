@@ -1,5 +1,5 @@
-import { createTRPCClient, httpBatchLink, httpLink, splitLink, httpBatchStreamLink } from '@trpc/client';
 import type { AppRouter } from '@/server/routers/_app';
+import { createTRPCClient, httpBatchLink, httpBatchStreamLink, httpLink, splitLink } from '@trpc/client';
 import superjson from 'superjson';
 
 export const api = createTRPCClient<AppRouter>({

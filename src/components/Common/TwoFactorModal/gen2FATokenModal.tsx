@@ -1,13 +1,13 @@
-import { Button, InputOtp } from "@heroui/react";
-import { useTranslation } from "react-i18next";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { RootStore } from "@/store";
-import { DialogStore } from "@/store/module/Dialog";
-import { QRCodeSVG } from "qrcode.react";
-import { PromiseCall } from "@/store/standard/PromiseState";
 import { api } from "@/lib/trpc";
+import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
+import { DialogStore } from "@/store/module/Dialog";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
+import { PromiseCall } from "@/store/standard/PromiseState";
+import { Button, InputOtp } from "@heroui/react";
+import { QRCodeSVG } from "qrcode.react";
+import { useTranslation } from "react-i18next";
 
 interface TwoFactorModalProps {
   onConfirm?: (code: string) => void;

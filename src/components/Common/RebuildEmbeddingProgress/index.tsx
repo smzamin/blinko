@@ -1,15 +1,14 @@
+import { Icon } from '@/components/Common/Iconify/icons'
 import i18n from '@/lib/i18n'
 import { api } from '@/lib/trpc'
-import { type ProgressResult } from '@/server/plugins/memos'
 import { RootStore } from '@/store'
 import { BlinkoStore } from '@/store/blinkoStore'
+import { DialogStandaloneStore } from '@/store/module/DialogStandalone'
 import { ToastPlugin } from '@/store/module/Toast/Toast'
+import { Progress } from "@heroui/react"
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Icon } from '@/components/Common/Iconify/icons'
-import { Progress } from "@heroui/react"
-import { DialogStandaloneStore } from '@/store/module/DialogStandalone'
 
 export const ImportProgress = observer(({ force }: { force: boolean }) => {
   const { t } = useTranslation()
@@ -17,7 +16,7 @@ export const ImportProgress = observer(({ force }: { force: boolean }) => {
   const store = RootStore.Local(() => ({
     progress: 0,
     total: 0,
-    message: [] as ProgressResult[],
+    message: [],
     status: '',
     isPolling: false,
     pollingInterval: null as NodeJS.Timeout | null,
@@ -54,7 +53,7 @@ export const ImportProgress = observer(({ force }: { force: boolean }) => {
 
     async fetchProgress() {
       try {
-        const result = await api.ai.rebuildEmbeddingProgress.query();
+        const result = await api?.['ai'].rebuildEmbeddingProgress.query();
         if (result) {
           store.progress = result.current || 0;
           store.total = result.total || 0;
@@ -76,13 +75,13 @@ export const ImportProgress = observer(({ force }: { force: boolean }) => {
             if (store.message.length === 0) {
               store.message = newMessages.reverse();
             } else {
-              const existingContents = new Set(store.message.map(m => `${m.type}:${m.content}`));
+              const existingContents = new Set(store.message.map(m => `${m?.['type']}:${m?.['content']}`));
               const newUniqueMessages = newMessages.filter(
                 m => !existingContents.has(`${m.type}:${m.content}`)
               );
 
               if (newUniqueMessages.length > 0) {
-                store.message = [...newUniqueMessages.reverse(), ...store.message];
+                store['message'] = [...newUniqueMessages.reverse(), ...store.message] as any;
               }
             }
           }
@@ -97,14 +96,14 @@ export const ImportProgress = observer(({ force }: { force: boolean }) => {
 
     async handleStart() {
       try {
-        await api.ai.rebuildEmbeddingStart.mutate({ force });
+        await api?.['ai'].rebuildEmbeddingStart.mutate({ force });
 
         store.startPolling();
 
-        store.message.unshift({
-          type: 'info',
-          content: t('rebuild-started'),
-        });
+        // store.message.unshift({
+        //   type: 'info',
+        //   content: t('rebuild-started'),
+        // });
 
         blinko.updateTicker++;
       } catch (err) {
@@ -114,20 +113,20 @@ export const ImportProgress = observer(({ force }: { force: boolean }) => {
 
     async stopTask() {
       try {
-        await api.ai.rebuildEmbeddingStop.mutate();
-        
-        const result = await api.ai.rebuildEmbeddingProgress.query();
+        await api?.['ai'].rebuildEmbeddingStop.mutate();
+
+        const result = await api?.['ai'].rebuildEmbeddingProgress.query();
         if (result) {
           store.progress = result.current || 0;
           store.total = result.total || 0;
           store.status = 'success';
         }
-        
-        store.message.unshift({
-          type: 'info',
-          content: t('rebuild-stopped-by-user'),
-        });
-        
+
+        // store.message.unshift({
+        //   type: 'info',
+        //   content: t('rebuild-stopped-by-user'),
+        // });
+
         blinko.updateTicker++;
         store.stopPolling();
         RootStore.Get(DialogStandaloneStore).close()
@@ -186,15 +185,15 @@ export const ImportProgress = observer(({ force }: { force: boolean }) => {
     <div className='flex flex-col max-h-[400px] overflow-y-auto mt-2'>
       {store.message.map((item, index) => (
         <div key={index} className='flex gap-2 mb-1'>
-          <div className={`${item.type === 'success' ? 'text-green-500' :
-            item.type === 'error' ? 'text-red-500' :
-              item.type === 'info' ? 'text-blue-500' : ''
+          <div className={`${item['type'] === 'success' ? 'text-green-500' :
+            item['type'] === 'error' ? 'text-red-500' :
+              item['type'] === 'info' ? 'text-blue-500' : ''
             }`}>
-            {getStatusIcon(item.type)}
+            {getStatusIcon(item['type'])}
           </div>
           <div className='flex justify-center flex-col'>
-            <div className={`truncate text-gray-500`}>{item?.content}</div>
-            {item.error as unknown as string && <div className="text-red-500 text-xs">{String(item.error as unknown as string)}</div>}
+            <div className={`truncate text-gray-500`}>{item?.['content']}</div>
+            {item['error'] as unknown as string && <div className="text-red-500 text-xs">{String(item['error'] as unknown as string)}</div>}
           </div>
 
         </div>

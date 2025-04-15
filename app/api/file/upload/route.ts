@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { FileService } from "@/server/plugins/files";
 import { getToken } from "@/server/routers/helper";
-import { Readable, PassThrough } from "stream";
+import { FileService } from '@/server/routers/helper/files';
+import { NextRequest, NextResponse } from "next/server";
+import { PassThrough, Readable } from "stream";
 import * as webStreams from "stream/web";
 
 export async function OPTIONS() {
@@ -27,28 +27,28 @@ export const POST = async (req: NextRequest) => {
     if (!contentType.includes('multipart/form-data')) {
       return NextResponse.json({ error: "Content type must be multipart/form-data" }, { status: 400 });
     }
-    
+
     const busboy = (await import('busboy')).default({ headers: Object.fromEntries(req.headers) });
-    
-    let fileInfo: { 
+
+    let fileInfo: {
       stream: PassThrough | null,
       filename: string,
       mimeType: string,
       size: number
     } | null = null;
-    
+
     return new Promise<Response>((resolve) => {
       busboy.on('file', (fieldname, stream, info) => {
         if (fieldname === 'file') {
           const passThrough = new PassThrough();
           let fileSize = 0;
           const decodedFilename = Buffer.from(info.filename, 'binary').toString('utf-8');
-          
+
           stream.on('data', (chunk) => {
             fileSize += chunk.length;
             passThrough.write(chunk);
           });
-          
+
           stream.on('end', () => {
             passThrough.end();
             fileInfo = {
@@ -60,16 +60,16 @@ export const POST = async (req: NextRequest) => {
           });
         }
       });
-      
+
       busboy.on('finish', async () => {
         if (!fileInfo || !fileInfo.stream) {
           resolve(NextResponse.json({ error: "No files received." }, { status: 400 }));
           return;
         }
-        
+
         try {
           const webReadableStream = Readable.toWeb(fileInfo.stream) as unknown as ReadableStream;
-          
+
           const filePath = await FileService.uploadFileStream({
             stream: webReadableStream,
             originalName: fileInfo.filename,
@@ -77,7 +77,7 @@ export const POST = async (req: NextRequest) => {
             type: fileInfo.mimeType,
             accountId: Number(token.id)
           });
-          
+
           const response = NextResponse.json({
             Message: "Success",
             status: 200,
@@ -85,18 +85,18 @@ export const POST = async (req: NextRequest) => {
             type: fileInfo.mimeType,
             size: fileInfo.size
           });
-          
+
           response.headers.set('Access-Control-Allow-Origin', '*');
           response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
           response.headers.set('Access-Control-Allow-Headers', '*');
-          
+
           resolve(response);
         } catch (error) {
           console.error('Upload error:', error);
           resolve(NextResponse.json({ error: "Upload failed" }, { status: 500 }));
         }
       });
-      
+
       if (req.body) {
         const reqBodyStream = Readable.fromWeb(req.body as unknown as webStreams.ReadableStream);
         reqBodyStream.pipe(busboy);

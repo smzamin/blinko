@@ -1,11 +1,11 @@
-import { observer } from 'mobx-react-lite';
 import { PluginSetting } from '@/components/BlinkoSettings/PluginSetting';
 import { ScrollArea } from '@/components/Common/ScrollArea';
+import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
 const PluginPage = observer(() => {
   const { t } = useTranslation();
-  
+
   return (
     <div className="h-full flex flex-col">
       <ScrollArea onBottom={() => {}} className="flex-1">

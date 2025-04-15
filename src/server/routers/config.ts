@@ -1,9 +1,9 @@
-import { router, authProcedure, publicProcedure } from '../trpc';
-import { z } from 'zod';
-import { prisma } from '../prisma';
-import { GlobalConfig, ZConfigKey, ZConfigSchema, ZUserPerferConfigKey } from '../types';
 import { configSchema } from '@/lib/prismaZodType';
+import { z } from 'zod';
 import { Context } from '../context';
+import { prisma } from '../prisma';
+import { authProcedure, publicProcedure, router } from '../trpc';
+import { GlobalConfig, ZConfigKey, ZConfigSchema, ZUserPerferConfigKey } from '../types';
 
 export const getGlobalConfig = async ({ ctx, useAdmin = false }: { ctx?: Context, useAdmin?: boolean }) => {
   const userId = Number(ctx?.id ?? 0);
@@ -68,14 +68,14 @@ export const configRouter = router({
       const isUserPreferConfig = ZUserPerferConfigKey.safeParse(key).success;
       if (isUserPreferConfig) {
         const matchedConfigs = await prisma.config.findMany({ where: { userId, key } });
-        
+
         if (matchedConfigs.length > 0) {
           const configToKeep = matchedConfigs[0];
-          const updateResult = await prisma.config.update({ 
-            where: { id: configToKeep?.id }, 
-            data: { config: { type: typeof value, value } } 
+          const updateResult = await prisma.config.update({
+            where: { id: configToKeep?.id },
+            data: { config: { type: typeof value, value } }
           });
-          
+
           if (matchedConfigs.length > 1) {
             await prisma.config.deleteMany({
               where: {
@@ -85,24 +85,24 @@ export const configRouter = router({
               }
             });
           }
-          
+
           return updateResult;
         }
-        
+
         return await prisma.config.create({ data: { userId, key, config: { type: typeof value, value } } });
       } else {
         if (ctx.role !== 'superadmin') {
           throw new Error('You are not allowed to update global config')
         }
         const matchedConfigs = await prisma.config.findMany({ where: { key } });
-        
+
         if (matchedConfigs.length > 0) {
           const configToKeep = matchedConfigs[0];
-          const updateResult = await prisma.config.update({ 
-            where: { id: configToKeep?.id }, 
-            data: { config: { type: typeof value, value } } 
+          const updateResult = await prisma.config.update({
+            where: { id: configToKeep?.id },
+            data: { config: { type: typeof value, value } }
           });
-          
+
           if (matchedConfigs.length > 1) {
             await prisma.config.deleteMany({
               where: {
@@ -111,10 +111,10 @@ export const configRouter = router({
               }
             });
           }
-          
+
           return updateResult;
         }
-        
+
         return await prisma.config.create({ data: { key, config: { type: typeof value, value } } });
       }
     }),

@@ -1,28 +1,28 @@
-import { useEffect, useRef } from 'react';
-import { Swiper, SwiperSlide, } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-cards";
-import { EffectCards, Virtual } from 'swiper/modules';
-import 'swiper/css/virtual';
-import '../styles/swiper-cards.css';
-import { observer } from 'mobx-react-lite';
+import { BlinkoCard } from '@/components/BlinkoCard';
+import { FilesAttachmentRender } from '@/components/Common/AttachmentRender';
+import { Icon } from '@/components/Common/Iconify/icons';
+import { LightningIcon, NotesIcon } from '@/components/Common/Icons';
+import { MarkdownRender } from '@/components/Common/MarkdownRender';
+import { showTipsDialog } from '@/components/Common/TipsDialog';
+import dayjs from '@/lib/dayjs';
+import { api } from '@/lib/trpc';
+import { NoteType } from '@/server/types';
 import { RootStore } from '@/store';
 import { BlinkoStore } from '@/store/blinkoStore';
-import { MarkdownRender } from '@/components/Common/MarkdownRender';
-import dayjs from '@/lib/dayjs';
-import { NoteType } from '@/server/types';
-import { Icon } from '@/components/Common/Iconify/icons';
-import { useTranslation } from 'react-i18next';
-import { Button, Tooltip } from '@heroui/react';
-import { LightningIcon, NotesIcon } from '@/components/Common/Icons';
-import { PromiseCall } from '@/store/standard/PromiseState';
-import { api } from '@/lib/trpc';
-import { showTipsDialog } from '@/components/Common/TipsDialog';
-import confetti from 'canvas-confetti';
-import { useMediaQuery } from 'usehooks-ts';
-import { FilesAttachmentRender } from '@/components/Common/AttachmentRender';
 import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
-import { BlinkoCard } from '@/components/BlinkoCard';
+import { PromiseCall } from '@/store/standard/PromiseState';
+import { Button, Tooltip } from '@heroui/react';
+import confetti from 'canvas-confetti';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import "swiper/css";
+import "swiper/css/effect-cards";
+import 'swiper/css/virtual';
+import { EffectCards, Virtual } from 'swiper/modules';
+import { Swiper, SwiperSlide, } from "swiper/react";
+import { useMediaQuery } from 'usehooks-ts';
+import '../styles/swiper-cards.css';
 const App = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)
   const swiperRef = useRef(null);
@@ -77,7 +77,7 @@ const App = observer(() => {
         >
           {t('random-mode')}
         </Button>
-        
+
         {store.isRandomReviewMode && (
           <Button
             className="ml-2 text-sm"

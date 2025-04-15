@@ -1,36 +1,36 @@
-import "vditor/dist/index.css";
-import '@/styles/vditor.css';
-import { RootStore } from '@/store';
-import React, { ReactElement, useState, useEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { FileType, OnSendContentType } from './type';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { useTranslation } from 'react-i18next';
-import { useMediaQuery } from 'usehooks-ts';
-import { type Attachment } from '@/server/types';
-import { Card, Popover, PopoverTrigger, PopoverContent } from '@heroui/react';
-import { AttachmentsRender, ReferenceRender } from '../AttachmentRender';
-import { UploadButtons } from './Toolbar/UploadButtons';
-import { ReferenceButton } from './Toolbar/ReferenceButton';
-import { NoteTypeButton } from './Toolbar/NoteTypeButton';
-import { HashtagButton } from './Toolbar/HashtagButton';
-import { ViewModeButton } from './Toolbar/ViewModeButton';
-import { SendButton } from './Toolbar/SendButton';
-import {
-  useEditorInit,
-  useEditorEvents,
-  useEditorFiles,
-  useEditorHeight
-} from './hooks/useEditor';
-import { EditorStore } from "./editorStore";
-import { AIWriteButton } from "./Toolbar/AIWriteButton";
-import { FullScreenButton } from "./Toolbar/FullScreenButton";
 import { eventBus } from "@/lib/event";
+import { type Attachment } from '@/server/types';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { PluginApiStore } from "@/store/plugin/pluginApiStore";
 import { PluginRender } from '@/store/plugin/pluginRender';
+import '@/styles/vditor.css';
+import { Card, Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
+import "vditor/dist/index.css";
+import { AttachmentsRender, ReferenceRender } from '../AttachmentRender';
+import { EditorStore } from "./editorStore";
+import {
+  useEditorEvents,
+  useEditorFiles,
+  useEditorHeight,
+  useEditorInit
+} from './hooks/useEditor';
+import { AIWriteButton } from "./Toolbar/AIWriteButton";
+import { FullScreenButton } from "./Toolbar/FullScreenButton";
+import { HashtagButton } from './Toolbar/HashtagButton';
 import { IconButton } from "./Toolbar/IconButton";
+import { NoteTypeButton } from './Toolbar/NoteTypeButton';
+import { ReferenceButton } from './Toolbar/ReferenceButton';
 import { ResourceReferenceButton } from "./Toolbar/ResourceReferenceButton";
+import { SendButton } from './Toolbar/SendButton';
+import { UploadButtons } from './Toolbar/UploadButtons';
+import { ViewModeButton } from './Toolbar/ViewModeButton';
+import { FileType, OnSendContentType } from './type';
 
 //https://ld246.com/guide/markdown
 type IProps = {
@@ -104,8 +104,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
   return (
     <Card
       shadow='none' {...getRootProps()}
-      className={`p-2 relative border-2 border-border transition-all overflow-visible 
-      ${isDragAccept ? 'border-2 border-green-500 border-dashed' : ''} 
+      className={`p-2 relative border-2 border-border transition-all overflow-visible
+      ${isDragAccept ? 'border-2 border-green-500 border-dashed' : ''}
       ${store.isFullscreen ? 'fixed inset-0 z-[9999] m-0 rounded-none border-none bg-background' : ''}`}
       ref={el => {
         if (el) {
@@ -180,8 +180,8 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
               {pluginApi.customToolbarIcons
                 .map((item) => (
                   item.content ? (
-                    <Popover 
-                      key={item.name} 
+                    <Popover
+                      key={item.name}
                       placement={item.placement}
                       isOpen={openPopover === item.name}
                       onOpenChange={(open) => {

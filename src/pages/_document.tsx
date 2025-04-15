@@ -1,5 +1,4 @@
-import React from 'react';
-import { Html, Head, Main, NextScript, DocumentProps } from 'next/document';
+import { DocumentProps, Head, Html, Main, NextScript } from 'next/document';
 
 export default function _Document(props: DocumentProps) {
   return (

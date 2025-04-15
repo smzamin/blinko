@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-import { Card, Image } from '@heroui/react';
 import { api } from '@/lib/trpc';
 import { LinkInfo } from '@/server/types';
 import { RootStore } from '@/store';
 import { StorageState } from '@/store/standard/StorageState';
-import { ImageWrapper } from './ImageWrapper';
+import { Card, Image } from '@heroui/react';
+import { useEffect } from 'react';
 
 interface LinkPreviewProps {
   href: any;
@@ -15,7 +14,7 @@ export const LinkPreview = ({ href, text }: LinkPreviewProps) => {
   const store = RootStore.Local(() => ({
     previewData: new StorageState<LinkInfo | null>({ key: href, default: null })
   }))
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,4 +43,4 @@ export const LinkPreview = ({ href, text }: LinkPreviewProps) => {
       </Card>}
     </>
   );
-}; 
+};

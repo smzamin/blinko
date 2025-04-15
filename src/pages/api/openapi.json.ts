@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import { openApiDocument } from '../../server/openapi';
 
 const hander = (req: NextApiRequest, res: NextApiResponse) => {

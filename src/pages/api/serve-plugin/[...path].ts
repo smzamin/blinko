@@ -1,6 +1,6 @@
 import { createReadStream } from 'fs';
-import { join } from 'path';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { join } from 'path';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { path } = req.query;
@@ -14,4 +14,4 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     res.status(404).json({ error: 'Plugin not found' });
   }
-} 
+}

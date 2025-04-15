@@ -1,16 +1,16 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import { observer } from 'mobx-react-lite';
-import { RootStore } from '@/store';
 import { TipsPopover } from '@/components/Common/TipsDialog';
-import { ToastPlugin } from '@/store/module/Toast/Toast';
-import { useTranslation } from 'react-i18next';
-import { PromiseState } from '@/store/standard/PromiseState';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { helper } from '@/lib/helper';
-import { FileType } from '../Editor/type';
-import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
-import { Tooltip } from '@heroui/react';
 import { eventBus } from '@/lib/event';
+import { helper } from '@/lib/helper';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
+import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { Tooltip } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
+import { FileType } from '../Editor/type';
 
 export const DeleteIcon = observer(({ className, file, files, size = 20 }: { className: string, file: FileType, files: FileType[], size?: number }) => {
   const store = RootStore.Local(() => ({

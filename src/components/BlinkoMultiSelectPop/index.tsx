@@ -1,13 +1,13 @@
-import { observer } from 'mobx-react-lite';
-import { RootStore } from '@/store';
-import { useTranslation } from 'react-i18next';
-import { ToastPlugin } from '@/store/module/Toast/Toast';
-import { ShowUpdateTagDialog } from '../Common/UpdateTagPop';
-import { showTipsDialog } from '../Common/TipsDialog';
-import { BlinkoStore } from '@/store/blinkoStore';
 import { api } from '@/lib/trpc';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
+import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
 import { MultiSelectToolbar } from '../Common/MultiSelectToolbar';
+import { showTipsDialog } from '../Common/TipsDialog';
+import { ShowUpdateTagDialog } from '../Common/UpdateTagPop';
 
 export const BlinkoMultiSelectPop = observer(() => {
   const { t } = useTranslation();
@@ -64,7 +64,7 @@ export const BlinkoMultiSelectPop = observer(() => {
                 success: <b>{t('your-changes-have-been-saved')}</b>,
                 error: <b>{t('operation-failed')}</b>,
               });
-            blinko.curMultiSelectIds.map(i => api.ai.embeddingDelete.mutate({ id: i }));
+            blinko.curMultiSelectIds.map(i => api?.['ai'].embeddingDelete.mutate({ id: i }));
             blinko.onMultiSelectRest();
             RootStore.Get(DialogStandaloneStore).close();
           }

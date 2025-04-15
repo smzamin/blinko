@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
-import { ShaderGradientCanvas, ShaderGradient } from '@shadergradient/react';
-import { RootStore } from '@/store/root';
 import { BlinkoStore } from '@/store/blinkoStore';
+import { RootStore } from '@/store/root';
 import { cn } from '@heroui/react';
+import { ShaderGradient, ShaderGradientCanvas } from '@shadergradient/react';
+import { ReactNode } from 'react';
 interface GradientBackgroundProps {
   children: ReactNode;
   className?: string;
@@ -61,4 +61,4 @@ export const GradientBackground = ({ children, className }: GradientBackgroundPr
       </div>
     </div>
   );
-}; 
+};

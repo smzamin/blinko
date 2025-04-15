@@ -1,9 +1,7 @@
-import { z } from "zod"
-import { Prisma } from "@prisma/client"
 import dayjs from "@/lib/dayjs"
-
-import { router, authProcedure } from "../trpc"
+import { z } from "zod"
 import { prisma } from "../prisma"
+import { authProcedure, router } from "../trpc"
 
 export const analyticsRouter = router({
   dailyNoteCount: authProcedure
@@ -15,7 +13,7 @@ export const analyticsRouter = router({
     })))
     .mutation(async function ({ ctx }) {
       const dailyStats = await prisma.$queryRaw<Array<{ date: string; count: bigint }>>`
-        SELECT 
+        SELECT
           to_char("createdAt"::date, 'YYYY-MM-DD') as date,
           COUNT(*) as count
         FROM "notes"
@@ -61,7 +59,7 @@ export const analyticsRouter = router({
       })
 
       const wordStats = await prisma.$queryRaw<Array<{ date: string; words: bigint }>>`
-        SELECT 
+        SELECT
           to_char("createdAt"::date, 'YYYY-MM-DD') as date,
           SUM(LENGTH(content)) as words
         FROM "notes"
@@ -105,7 +103,7 @@ export const analyticsRouter = router({
       const validTags = tagStats.filter(tag => tag._count.tagsToNote > 0)
       const TOP_TAG_COUNT = 10
       const topTags = validTags.slice(0, TOP_TAG_COUNT)
-      
+
       const otherTagsCount = validTags.slice(TOP_TAG_COUNT).reduce((sum, tag) => sum + tag._count.tagsToNote, 0)
 
       const finalTagStats = [

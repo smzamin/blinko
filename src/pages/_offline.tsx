@@ -1,7 +1,7 @@
-import { Button } from "@heroui/react";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { useTranslation } from "react-i18next";
+import { Button } from "@heroui/react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 export default function Offline() {
   const { t } = useTranslation();
@@ -10,8 +10,8 @@ export default function Offline() {
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <div className="flex flex-col items-center gap-4 p-4 text-center">
-        <Icon 
-          icon="mdi:wifi-off" 
+        <Icon
+          icon="mdi:wifi-off"
           className="text-warning h-16 w-16"
         />
         <h1 className="text-xl font-bold">

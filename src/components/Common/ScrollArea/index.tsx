@@ -1,7 +1,7 @@
 import { _ } from "@/lib/lodash";
 import { observer } from "mobx-react-lite";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { motion, useAnimation } from "motion/react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
 type IProps = {
@@ -83,7 +83,7 @@ export const ScrollArea = observer(forwardRef<ScrollAreaHandles, IProps>(({ styl
 //     -ms-overflow-style: none;  /* IE and Edge */
 //     scrollbar-width: none;     /* Firefox */
 //   }
-  
+
 //   .scrollbar-hide::-webkit-scrollbar {
 //     display: none;  /* Chrome, Safari and Opera */
 //   }

@@ -10,4 +10,4 @@ const ContextMenuItem = dynamic(() => import('rctx-contextmenu').then(c => c.Con
   ssr: false,
 });
 
-export { ContextMenuTrigger, ContextMenu, ContextMenuItem }
+export { ContextMenu, ContextMenuItem, ContextMenuTrigger };

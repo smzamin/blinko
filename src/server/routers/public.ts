@@ -1,19 +1,17 @@
-import { z } from 'zod';
-import { router, publicProcedure } from '../trpc';
-import packageJson from '../../../package.json';
-import axios from 'axios';
 import { cache } from '@/lib/cache';
+import { UPLOAD_FILE_PATH } from '@/lib/constant';
+import * as fs from 'fs';
+import * as mm from 'music-metadata';
+import pLimit from 'p-limit';
 import { unfurl } from 'unfurl.js';
 import { Metadata } from 'unfurl.js/dist/types';
-import pLimit from 'p-limit';
-import * as mm from 'music-metadata';
-import { UPLOAD_FILE_PATH } from '@/lib/constant';
-import { SpotifyClient } from './helper/spotify';
-import { getGlobalConfig } from './config';
-import { Readable } from 'stream';
+import { z } from 'zod';
+import packageJson from '../../../package.json';
 import { prisma } from '../prisma';
-import * as fs from 'fs';
+import { publicProcedure, router } from '../trpc';
+import { getGlobalConfig } from './config';
 import { getWithProxy } from './helper/proxy';
+import { SpotifyClient } from './helper/spotify';
 
 const limit = pLimit(5);
 let refreshTicker = 0;

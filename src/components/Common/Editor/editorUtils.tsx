@@ -1,9 +1,8 @@
 import { helper } from "@/lib/helper"
 import { Attachment } from "@/server/types"
-import { FileType } from "./type"
 import { PromiseState } from "@/store/standard/PromiseState"
-import { IsTagSelectVisible } from "../PopoverFloat/tagSelectPop"
 import Vditor from "vditor"
+import { FileType } from "./type"
 
 export type ViewMode = "wysiwyg" | "sv" | "ir"
 

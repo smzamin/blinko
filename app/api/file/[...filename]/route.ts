@@ -1,16 +1,16 @@
-import { NextResponse, NextRequest } from "next/server";
-import path from "path";
-import { createReadStream, statSync } from "fs";
-import { stat, readFile } from "fs/promises";
-import mime from "mime-types";
 import { UPLOAD_FILE_PATH } from "@/lib/constant";
-import crypto from "crypto";
-import sharp from "sharp";
 import { prisma } from "@/server/prisma";
 import { getToken } from "@/server/routers/helper";
+import crypto from "crypto";
+import { createReadStream, statSync } from "fs";
+import { readFile, stat } from "fs/promises";
+import mime from "mime-types";
+import { NextRequest, NextResponse } from "next/server";
+import path from "path";
+import sharp from "sharp";
 
 const STREAM_THRESHOLD = 5 * 1024 * 1024;
-const IMAGE_PROCESSING_TIMEOUT = 30000; 
+const IMAGE_PROCESSING_TIMEOUT = 30000;
 
 let activeStreams = 0;
 
@@ -59,7 +59,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
           { status: 408 }
         );
       }, IMAGE_PROCESSING_TIMEOUT);
-      
+
       try {
         const thumbnailStream = sharp()
           .rotate()
@@ -67,9 +67,9 @@ export const GET = async (req: NextRequest, { params }: any) => {
             fit: 'inside',
             withoutEnlargement: true
           });
-        
+
         createReadStream(filePath).pipe(thumbnailStream);
-        
+
         const thumbnail = await thumbnailStream.toBuffer();
 
         const filename = path.basename(fullPath);
@@ -83,7 +83,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
             "Content-Disposition": `inline; filename="${safeFilename}"`,
           }
         });
-      } catch(error) {
+      } catch (error) {
         clearTimeout(processingTimeout);
         throw error;
       }
@@ -123,10 +123,10 @@ export const GET = async (req: NextRequest, { params }: any) => {
     if (stats.size > STREAM_THRESHOLD) {
       const abortController = new AbortController();
       const { signal } = abortController;
-      
+
       activeStreams++;
       console.log(`[File Stream] Active streams: ${activeStreams}, Path: ${fullPath}`);
-      
+
       if (range) {
         const parts = range.replace(/bytes=/, "").split("-");
         const start = parseInt(parts[0]!, 10);
@@ -140,16 +140,16 @@ export const GET = async (req: NextRequest, { params }: any) => {
               stream.destroy();
               controller.error(new Error('Stream timeout'));
               activeStreams--;
-            }, 300000); 
-            
+            }, 300000);
+
             stream.on('data', (chunk) => controller.enqueue(chunk));
-            
+
             stream.on('end', () => {
               clearTimeout(timeout);
               controller.close();
               activeStreams--;
             });
-            
+
             stream.on('error', (error) => {
               clearTimeout(timeout);
               console.error(`[File Stream] Stream error: ${error.message}`);
@@ -158,7 +158,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
               activeStreams--;
               console.log(`[File Stream] Stream errored. Active streams: ${activeStreams}`);
             });
-            
+
             signal.addEventListener('abort', () => {
               clearTimeout(timeout);
               stream.destroy();
@@ -167,7 +167,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
             });
           },
           cancel() {
-            stream.destroy(); 
+            stream.destroy();
             activeStreams--;
           }
         });
@@ -194,16 +194,16 @@ export const GET = async (req: NextRequest, { params }: any) => {
               stream.destroy();
               controller.error(new Error('Stream timeout'));
               activeStreams--;
-            }, 300000); 
-            
+            }, 300000);
+
             stream.on('data', (chunk) => controller.enqueue(chunk));
-            
+
             stream.on('end', () => {
               clearTimeout(timeout);
               controller.close();
               activeStreams--;
             });
-            
+
             stream.on('error', (error) => {
               clearTimeout(timeout);
               console.error(`[File Stream] Stream error: ${error.message}`);
@@ -211,7 +211,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
               stream.destroy();
               activeStreams--;
             });
-            
+
             signal.addEventListener('abort', () => {
               clearTimeout(timeout);
               console.log(`[File Stream] Connection aborted for ${fullPath}`);

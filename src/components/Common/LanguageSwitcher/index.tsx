@@ -1,14 +1,14 @@
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem
-} from "@heroui/dropdown";
-import { Button } from '@heroui/react';
+import { Icon } from '@/components/Common/Iconify/icons';
 import { RootStore } from '@/store';
 import { BaseStore } from '@/store/baseStore';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger
+} from "@heroui/dropdown";
+import { Button } from '@heroui/react';
 import { useTranslation } from 'react-i18next';
-import { Icon } from '@/components/Common/Iconify/icons';
 
 interface LanguageSwitcherProps {
   value?: string;
@@ -18,14 +18,14 @@ interface LanguageSwitcherProps {
 const LanguageSwitcher = ({ value, onChange }: LanguageSwitcherProps = {}) => {
   const baseStore = RootStore.Get(BaseStore)
   const { i18n } = useTranslation();
-  
+
   function onSelectChange(nextLocale: string) {
     baseStore.changeLanugage(i18n, nextLocale)
     onChange?.(nextLocale)
   }
 
   const currentLocale = value || baseStore.locale.value
-  
+
   return (
     <Dropdown>
       <DropdownTrigger>

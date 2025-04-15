@@ -9,9 +9,9 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
-import type { Context } from './context';
-import superjson from 'superjson'
+import superjson from 'superjson';
 import { OpenApiMeta } from 'trpc-to-openapi';
+import type { Context } from './context';
 
 export const t = initTRPC.context<Context>().meta<OpenApiMeta>().create({
   transformer: superjson,

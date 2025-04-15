@@ -1,13 +1,12 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import { Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Button, Radio, RadioGroup } from "@heroui/react";
-import { useTranslation } from "react-i18next";
+import TagSelector from "@/components/Common/TagSelector";
+import dayjs from "@/lib/dayjs";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
+import { Button, Popover, PopoverContent, PopoverTrigger, Radio, RadioGroup, RangeCalendar, Select, SelectItem } from "@heroui/react";
+import { getLocalTimeZone, today } from "@internationalized/date";
 import { useState } from "react";
-import { RangeCalendar } from "@heroui/react";
-import { today, getLocalTimeZone } from "@internationalized/date";
-import dayjs from "@/lib/dayjs";
-import TagSelector from "@/components/Common/TagSelector";
+import { useTranslation } from "react-i18next";
 
 export default function FilterPop() {
   const { t } = useTranslation();
@@ -174,7 +173,7 @@ export default function FilterPop() {
                 <Icon icon="solar:tags-bold" width="20" height="20" />
                 {t('select-tags')}
               </div>
-              
+
               <TagSelector
                 selectedTag={selectedTag}
                 onSelectionChange={(key) => setSelectedTag(key)}
@@ -222,4 +221,4 @@ export default function FilterPop() {
       </PopoverContent>
     </Popover>
   );
-} 
+}

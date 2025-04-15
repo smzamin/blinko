@@ -2,36 +2,32 @@
  * This file contains the root router of your tRPC-backend
  */
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
-import { router, t } from '../trpc';
 import { Context } from '../context';
-import { lazy } from '@trpc/server';
-import { noteRouter } from './note';
+import { router, t } from '../trpc';
+import { analyticsRouter } from './analytics';
+import { attachmentsRouter } from './attachment';
+import { commentRouter } from './comment';
 import { configRouter } from './config';
-import { followsRouter } from './follows';
+import { conversationRouter } from './conversation';
+import { messageRouter } from './message';
+import { noteRouter } from './note';
 import { notificationRouter } from './notification';
-import { aiRouter } from './ai';
+import { pluginRouter } from './plugin';
+import { publicRouter } from './public';
 import { tagRouter } from './tag';
 import { userRouter } from './user';
-import { commentRouter } from './comment';
-import { pluginRouter } from './plugin';
-import { conversationRouter } from './conversation';
-import { attachmentsRouter } from './attachment';
-import { publicRouter } from './public';
-import { analyticsRouter } from './analytics';
-import { messageRouter } from './message';
 
 export const appRouter = router({
-  ai: aiRouter,
   notes: noteRouter,
   tags: tagRouter,
   users: userRouter,
   attachments: attachmentsRouter,
   config: configRouter,
   public: publicRouter,
-  task: lazy(() => import('./task')),
+  // task: lazy(() => import('./task')),
   analytics: analyticsRouter,
   comments: commentRouter,
-  follows: followsRouter,
+  // follows: followsRouter,
   notifications: notificationRouter,
   plugin: pluginRouter,
   conversation: conversationRouter,

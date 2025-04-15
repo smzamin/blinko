@@ -1,6 +1,6 @@
+import { Icon } from '@/components/Common/Iconify/icons';
 import { RootStore } from "@/store";
 import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
-import { Icon } from '@/components/Common/Iconify/icons';
 import { Button } from "@heroui/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";

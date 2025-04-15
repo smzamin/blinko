@@ -1,8 +1,8 @@
-import { router, authProcedure, demoAuthMiddleware } from '../trpc';
+import { tagSchema } from '@/lib/prismaZodType';
 import { z } from 'zod';
 import { prisma } from '../prisma';
+import { authProcedure, demoAuthMiddleware, router } from '../trpc';
 import { userCaller } from './_app';
-import { tagSchema } from '@/lib/prismaZodType';
 
 export const tagRouter = router({
   list: authProcedure
@@ -42,11 +42,11 @@ export const tagRouter = router({
         if (!currentTag || currentTag.parent === 0) {
           return [currentTag.name];
         }
-        
+
         const parentTag = await prisma.tag.findFirst({
           where: { id: currentTag.parent }
         });
-        
+
         if (!parentTag) {
           return [currentTag.name];
         }
@@ -147,27 +147,27 @@ export const tagRouter = router({
 
         const getAllTagIdsInChain = async (tagId: number): Promise<number[]> => {
           const result: number[] = [tagId];
-          
+
           let currentTag = await prisma.tag.findFirst({ where: { id: tagId } });
           while (currentTag && currentTag.parent !== 0) {
             result.push(currentTag.parent);
             currentTag = await prisma.tag.findFirst({ where: { id: currentTag.parent } });
           }
-          
+
           const childTags = await prisma.tag.findMany({ where: { parent: tagId } });
           for (const childTag of childTags) {
             const childChain = await getAllTagIdsInChain(childTag.id);
             result.push(...childChain);
           }
-          
+
           return [...new Set(result)];
         };
 
         const tagIdsInChain = await getAllTagIdsInChain(tag.id);
-        
+
         await prisma.notes.update({
           where: { id: note.id },
-          data: { 
+          data: {
             content: note.content.replace(
               new RegExp(`#[^\\s]*${tag.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/[^\\s]*)?(?=\\s|$)`, 'g'),
               ''
@@ -175,20 +175,20 @@ export const tagRouter = router({
           }
         })
 
-        await prisma.tagsToNote.deleteMany({ 
-          where: { 
+        await prisma.tagsToNote.deleteMany({
+          where: {
             noteId: note.id,
             tagId: {
               in: tagIdsInChain
             }
-          } 
+          }
         })
 
         for (const tagId of tagIdsInChain) {
           const tagExists = await prisma.tag.findFirst({
             where: { id: tagId }
           });
-          
+
           if (tagExists) {
             const tagUsageCount = await prisma.tagsToNote.count({
               where: { tagId }

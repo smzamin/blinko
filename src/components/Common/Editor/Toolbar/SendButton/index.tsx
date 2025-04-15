@@ -1,7 +1,7 @@
 import { Icon } from '@/components/Common/Iconify/icons';
+import { observer } from 'mobx-react-lite';
 import { SendIcon } from '../../../Icons';
 import { EditorStore } from '../../editorStore';
-import { observer } from 'mobx-react-lite';
 
 interface Props {
   store: EditorStore;
@@ -25,7 +25,7 @@ export const SendButton = observer(({ store, isSendLoading }: Props) => {
       }}
     >
       <div
-        className='w-[60px] group ml-2 bg-primary text-foreground flex items-center justify-center rounded-[11px] cursor-pointer h-[32px]' 
+        className='w-[60px] group ml-2 bg-primary text-foreground flex items-center justify-center rounded-[11px] cursor-pointer h-[32px]'
       >
         {(store.files?.some(i => i.uploadPromise?.loading?.value) || isSendLoading) ? (
           <Icon icon="eos-icons:three-dots-loading" width="24" height="24" className='text-[#F5A524]'/>

@@ -1,21 +1,20 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import { observer } from "mobx-react-lite";
-import { Button } from "@heroui/react";
-import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
-import { motion, AnimatePresence } from "framer-motion";
-import { MarkdownRender } from "../Common/MarkdownRender";
-import { AiStore, AssisantMessageMetadata } from "@/store/aiStore";
-import { RootStore } from "@/store";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { BlinkoCard, BlinkoItem } from "../BlinkoCard";
-import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
-import { IconButton } from "../Common/Editor/Toolbar/IconButton";
-import copy from "copy-to-clipboard";
-import { ToastPlugin } from "@/store/module/Toast/Toast";
 import i18n from "@/lib/i18n";
-import { BlinkoStore } from "@/store/blinkoStore";
 import { NoteType } from "@/server/types";
+import { RootStore } from "@/store";
+import { AiStore, AssisantMessageMetadata } from "@/store/aiStore";
+import { BlinkoStore } from "@/store/blinkoStore";
+import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { ToastPlugin } from "@/store/module/Toast/Toast";
+import { Button } from "@heroui/react";
+import copy from "copy-to-clipboard";
+import { AnimatePresence, motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
+import { useEffect, useRef } from "react";
+import { BlinkoCard, BlinkoItem } from "../BlinkoCard";
+import { IconButton } from "../Common/Editor/Toolbar/IconButton";
+import { MarkdownRender } from "../Common/MarkdownRender";
+import { ScrollArea, ScrollAreaHandles } from "../Common/ScrollArea";
 import { ToolUsageChip } from "./ToolComponents";
 
 const UserMessage = ({ content, time }: { content: string; time: string }) => (

@@ -1,11 +1,11 @@
-import { z } from "zod";
-import { router, authProcedure, publicProcedure } from "../trpc";
-import { TRPCError } from "@trpc/server";
-import { prisma } from '../prisma';
-import axios from "axios";
 import { followsSchema, NotificationType } from "@/lib/prismaZodType";
+import { TRPCError } from "@trpc/server";
+import axios from "axios";
+import { z } from "zod";
+import { prisma } from '../prisma';
+import { authProcedure, publicProcedure, router } from "../trpc";
 import { CreateNotification } from "./notification";
-import { RecommandJob, recommandListSchema, RecommandListType } from "../plugins/recommandJob";
+// import { RecommandJob, recommandListSchema, RecommandListType } from "../plugins/recommandJob";
 
 
 export const followsRouter = router({
@@ -21,7 +21,7 @@ export const followsRouter = router({
     .input(z.object({
       searchText: z.string().optional().default('')
     }).optional())
-    .output(recommandListSchema)
+    // .output(recommandListSchema)
     .query(async function ({ ctx, input }) {
       const searchText = input?.searchText ?? ''
       const res = await prisma.cache.findFirst({
@@ -32,7 +32,7 @@ export const followsRouter = router({
           value: true
         }
       })
-      const recommandList = res?.value?.[String(ctx.id)] as RecommandListType
+      const recommandList = res?.value?.[String(ctx.id)];
       // console.log(recommandList, 'recommand_list')
       return recommandList.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).filter(item => item.content.includes(searchText))
     }),
@@ -100,7 +100,7 @@ export const followsRouter = router({
           siteAvatar: input.mySiteUrl + mySiteInfo?.image,
         });
 
-        RecommandJob.RunTask()
+        // RecommandJob.RunTask()
 
         return {
           success: true,
@@ -192,7 +192,7 @@ export const followsRouter = router({
         input.siteUrl = new URL(input.siteUrl).origin;
         input.mySiteUrl = new URL(input.mySiteUrl).origin;
         const followerId = ctx.id;
-        
+
         await tx.follows.deleteMany({
           where: {
             siteUrl: input.siteUrl,
@@ -200,12 +200,12 @@ export const followsRouter = router({
             accountId: Number(followerId),
           },
         });
-        
+
         try {
           const siteInfo = await axios.get(input.siteUrl + '/api/v1/public/site-info', {
             timeout: 5000
           });
-          
+
           axios.post(input.siteUrl + '/api/v1/follows/unfollow-from', {
             mySiteAccountId: siteInfo?.data?.id,
             siteUrl: input.mySiteUrl,
@@ -217,10 +217,10 @@ export const followsRouter = router({
           console.error(`Failed to get info from site ${input.siteUrl}:`, error.message);
         }
 
-        RecommandJob.RunTask().catch(err => {
-          console.error('Failed to run recommand job:', err);
-        });
-        
+        // RecommandJob.RunTask().catch(err => {
+        //   console.error('Failed to run recommand job:', err);
+        // });
+
         return true;
       });
     }),

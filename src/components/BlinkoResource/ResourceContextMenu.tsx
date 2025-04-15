@@ -1,17 +1,17 @@
-import { observer } from "mobx-react-lite";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Input } from '@heroui/react';
 import { Icon } from '@/components/Common/Iconify/icons';
-import { useTranslation } from 'react-i18next';
-import { RootStore } from "@/store";
-import { ResourceStore } from "@/store/resourceStore";
-import { api } from "@/lib/trpc";
-import { DialogStore } from "@/store/module/Dialog";
-import { useState } from "react";
 import { helper } from "@/lib/helper";
-import { showTipsDialog } from "../Common/TipsDialog";
-import { PromiseCall } from "@/store/standard/PromiseState";
-import { ToastPlugin } from "@/store/module/Toast/Toast";
+import { api } from "@/lib/trpc";
+import { RootStore } from "@/store";
+import { DialogStore } from "@/store/module/Dialog";
 import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { ToastPlugin } from "@/store/module/Toast/Toast";
+import { ResourceStore } from "@/store/resourceStore";
+import { PromiseCall } from "@/store/standard/PromiseState";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@heroui/react';
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import { useTranslation } from 'react-i18next';
+import { showTipsDialog } from "../Common/TipsDialog";
 
 const MenuItem = ({ icon, label, className = '' }: { icon: string; label: string; className?: string }) => (
   <div className={`flex items-center gap-2 ${className} `}>
@@ -177,7 +177,7 @@ export const ResourceContextMenu = observer(({ onTrigger }: ResourceContextMenuP
   const handleMoveToParent = async () => {
     if (!resource || !resourceStore.currentFolder) return;
     await RootStore.Get(ToastPlugin).promise(
-      resourceStore.moveToParentFolder([resource]), 
+      resourceStore.moveToParentFolder([resource]),
       {
         loading: t("operation-in-progress"),
         success: t("operation-success"),
@@ -246,4 +246,4 @@ export const ResourceContextMenu = observer(({ onTrigger }: ResourceContextMenuP
       </DropdownMenu>
     </Dropdown>
   );
-}); 
+});

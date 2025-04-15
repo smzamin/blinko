@@ -1,8 +1,8 @@
-import type * as trpcNext from '@trpc/server/adapters/next';
-import requestIp from 'request-ip';
-import Bowser from 'bowser';
 import { getToken } from "@/server/routers/helper";
+import type * as trpcNext from '@trpc/server/adapters/next';
+import Bowser from 'bowser';
 import { JWT } from "next-auth/jwt";
+import requestIp from 'request-ip';
 
 export interface User extends JWT {
   name: string;

@@ -1,8 +1,7 @@
-import { Button } from '@heroui/react';
-import { Tabs, Tab } from '@heroui/react';
 import { Icon } from '@/components/Common/Iconify/icons';
+import { Button, Tab, Tabs } from '@heroui/react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useState, useRef, useEffect } from 'react';
 
 export type TabItem = {
   key: string;

@@ -1,7 +1,7 @@
+import { getToken } from "@/server/routers/helper";
+import { FileService } from '@/server/routers/helper/files';
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
-import { FileService } from "@/server/plugins/files";
-import { getToken } from "@/server/routers/helper";
 
 export async function OPTIONS() {
   return new NextResponse(null, {

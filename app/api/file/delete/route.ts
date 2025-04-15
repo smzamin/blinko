@@ -1,6 +1,5 @@
+import { FileService } from '@/server/routers/helper/files';
 import { NextResponse } from "next/server";
-import { FileService } from "@/server/plugins/files";
-
 
 export const POST = async (req: Request) => {
   try {

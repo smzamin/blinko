@@ -204,7 +204,7 @@ export const openApiDocument = generateOpenApiDocument(appRouter, {
   }
 });
 
-// @ts-ignore 
+// @ts-ignore
 openApiDocument.paths = {
   ...openApiDocument.paths,
   ...fileApiPaths

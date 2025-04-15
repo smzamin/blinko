@@ -1,7 +1,7 @@
-import { Card, Button } from "@heroui/react";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { motion, AnimatePresence } from "motion/react";
-import { useState, ReactNode, useEffect } from "react";
+import { Button, Card } from "@heroui/react";
+import { AnimatePresence, motion } from "motion/react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface CollapsibleCardProps {
   icon: string;
@@ -118,4 +118,4 @@ export const CollapsibleCard = ({
       </AnimatePresence>
     </Card>
   );
-}; 
+};

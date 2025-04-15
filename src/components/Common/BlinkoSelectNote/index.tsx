@@ -1,13 +1,13 @@
-import { Input, Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
-import { observer } from 'mobx-react-lite';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { RootStore } from '@/store';
-import { ScrollArea } from '../ScrollArea';
-import { IconButton } from '../Editor/Toolbar/IconButton';
-import { useState, useCallback } from 'react';
 import { getDisplayTime } from '@/lib/helper';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { Input, Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
 import { throttle } from 'lodash';
+import { observer } from 'mobx-react-lite';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { IconButton } from '../Editor/Toolbar/IconButton';
+import { ScrollArea } from '../ScrollArea';
 
 interface Props {
   iconButton?: React.ReactNode;

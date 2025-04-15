@@ -1,19 +1,19 @@
-import { observer } from "mobx-react-lite";
-import { Switch, Input, Tooltip } from "@heroui/react";
-import { useTranslation } from "react-i18next";
-import { Item, ItemWithTooltip, SelectDropdown } from "./Item";
-import ThemeSwitcher from "../Common/Theme/ThemeSwitcher";
-import { ThemeColor } from "../Common/Theme/ThemeColor";
-import LanguageSwitcher from "../Common/LanguageSwitcher";
+import { api } from "@/lib/trpc";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PageSize, PromiseCall } from "@/store/standard/PromiseState";
-import { api } from "@/lib/trpc";
-import { useState, useEffect } from "react";
+import { UserStore } from "@/store/user";
+import { Input, Switch, Tooltip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useMediaQuery } from "usehooks-ts";
 import { CollapsibleCard } from "../Common/CollapsibleCard";
 import { GradientBackground } from "../Common/GradientBackground";
-import { UserStore } from "@/store/user";
+import LanguageSwitcher from "../Common/LanguageSwitcher";
+import { ThemeColor } from "../Common/Theme/ThemeColor";
+import ThemeSwitcher from "../Common/Theme/ThemeSwitcher";
+import { Item, ItemWithTooltip, SelectDropdown } from "./Item";
 
 export const PerferSetting = observer(() => {
   const { t } = useTranslation()

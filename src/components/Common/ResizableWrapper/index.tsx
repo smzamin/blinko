@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface ResizableWrapperProps {
   children: React.ReactNode;
@@ -6,10 +6,10 @@ interface ResizableWrapperProps {
   defaultSize?: { width: number; height: number };
 }
 
-export const ResizableWrapper: React.FC<ResizableWrapperProps> = ({ 
-  children, 
+export const ResizableWrapper: React.FC<ResizableWrapperProps> = ({
+  children,
   id,
-  defaultSize = { width: 420, height: 420 } 
+  defaultSize = { width: 420, height: 420 }
 }) => {
   const getSavedSize = () => {
     const saved = localStorage.getItem(`resizable-${id}`);
@@ -50,7 +50,7 @@ export const ResizableWrapper: React.FC<ResizableWrapperProps> = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     startPos.current = {
       x: e.clientX,
       y: e.clientY,
@@ -64,10 +64,10 @@ export const ResizableWrapper: React.FC<ResizableWrapperProps> = ({
   };
 
   return (
-    <div 
+    <div
       className="relative"
-      style={{ 
-        width: size.width, 
+      style={{
+        width: size.width,
         height: size.height,
         minWidth: '320px',
         minHeight: '320px',

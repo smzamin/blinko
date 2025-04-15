@@ -1,9 +1,7 @@
-import { router, authProcedure, publicProcedure } from '../trpc';
+import { InputNotificationType, notificationsSchema, notificationType } from '@/lib/prismaZodType';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { InputNotificationType, notificationsSchema, notificationType, NotificationType } from '@/lib/prismaZodType';
-import { Context } from '../context';
-
+import { authProcedure, router } from '../trpc';
 
 export const CreateNotification = async (input: {
   title: string,

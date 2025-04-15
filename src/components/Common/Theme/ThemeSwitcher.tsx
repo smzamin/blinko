@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
-import { observer } from 'mobx-react-lite';
-import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react';
 import { Icon } from '@/components/Common/Iconify/icons';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ThemeSwitcherProps {

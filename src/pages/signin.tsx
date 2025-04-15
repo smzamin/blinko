@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Button, Input, Checkbox, Link, Image, Divider } from "@heroui/react";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { signIn } from "next-auth/react";
+import { ShowTwoFactorModal } from "@/components/Common/TwoFactorModal";
+import { api } from "@/lib/trpc";
 import { RootStore } from "@/store";
-import { useRouter } from "next/router";
+import { DialogStore } from "@/store/module/Dialog";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
-import { useTranslation } from "react-i18next";
+import { PromiseState } from "@/store/standard/PromiseState";
 import { StorageState } from "@/store/standard/StorageState";
 import { UserStore } from "@/store/user";
-import { ShowTwoFactorModal } from "@/components/Common/TwoFactorModal";
-import { DialogStore } from "@/store/module/Dialog";
-import { PromiseState } from "@/store/standard/PromiseState";
+import { Button, Checkbox, Divider, Image, Input, Link } from "@heroui/react";
+import { signIn } from "next-auth/react";
 import { useTheme } from "next-themes";
-import { api } from "@/lib/trpc";
 import dynamic from 'next/dynamic';
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const GradientBackground = dynamic(
   () => import('@/components/Common/GradientBackground').then((mod) => mod.GradientBackground),
@@ -47,7 +47,7 @@ export default function Component() {
     function: async () => {
       const res = await signIn('credentials', {
         username: user ?? userStorage.value,
-        password: password ?? passwordStorage.value,
+        password: password, // ?? passwordStorage.value,
         callbackUrl: '/',
         redirect: false,
       })
@@ -58,7 +58,7 @@ export default function Component() {
     function: async (code: string) => {
       const res = await signIn('credentials', {
         username: user ?? userStorage.value,
-        password: password ?? passwordStorage.value,
+        password: password, // ?? passwordStorage.valu,
         callbackUrl: '/',
         redirect: false,
         twoFactorCode: code,
@@ -69,7 +69,7 @@ export default function Component() {
   })
 
   const userStorage = new StorageState({ key: 'username' })
-  const passwordStorage = new StorageState({ key: 'password' })
+  // const passwordStorage = new StorageState({ key: 'password' })
 
   useEffect(() => {
     try {
@@ -79,9 +79,9 @@ export default function Component() {
       if (userStorage.value) {
         setUser(userStorage.value)
       }
-      if (passwordStorage.value) {
-        setPassword(passwordStorage.value)
-      }
+      // if (passwordStorage.value) {
+      //   setPassword(passwordStorage.value)
+      // }
     } catch (error) {
     }
   }, [])
@@ -98,7 +98,7 @@ export default function Component() {
             if (twoFactorRes?.ok) {
               RootStore.Get(DialogStore).close()
               userStorage.setValue(user)
-              passwordStorage.setValue(password)
+              // passwordStorage.setValue(password)
               router.push('/')
             } else {
               RootStore.Get(ToastPlugin).error(twoFactorRes?.error ?? t('user-or-password-error'))
@@ -106,7 +106,7 @@ export default function Component() {
           }, SignInTwoFactor.loading.value)
         } else {
           userStorage.setValue(user)
-          passwordStorage.setValue(password)
+          // passwordStorage.setValue(password)
           router.push('/')
         }
       } else {

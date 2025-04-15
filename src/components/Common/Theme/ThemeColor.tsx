@@ -1,7 +1,5 @@
-import { observer } from "mobx-react-lite";
 import { Button } from "@heroui/react";
-import { api } from "@/lib/trpc";
-import { PromiseCall } from "@/store/standard/PromiseState";
+import { observer } from "mobx-react-lite";
 
 const colors = [
   { name: 'default', background: '', foreground: '' },

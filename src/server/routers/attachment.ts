@@ -1,9 +1,8 @@
-import { router, authProcedure } from '../trpc';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { Prisma } from '@prisma/client';
-import path from 'path';
-import { FileService } from '../plugins/files';
+import { authProcedure, router } from '../trpc';
+import { FileService } from './helper/files';
 
 export interface AttachmentResult {
   id: number | null;
@@ -101,7 +100,7 @@ export const attachmentsRouter = router({
           WITH combined_items AS (
             SELECT DISTINCT ON (folder_name)
               NULL as id,
-              CASE 
+              CASE
                 WHEN path LIKE '/api/s3file/%' THEN '/api/s3file/'
                 ELSE '/api/file/'
               END || split_part("perfixPath", ',', array_length(string_to_array(${folderPath}, ','), 1) + 1) as path,
@@ -122,10 +121,10 @@ export const attachmentsRouter = router({
             ) OR "accountId" = ${Number(ctx.id)})
               AND "perfixPath" LIKE ${`${folderPath},%`}
               AND array_length(string_to_array("perfixPath", ','), 1) > array_length(string_to_array(${folderPath}, ','), 1)
-            
+
             UNION ALL
-            
-            SELECT 
+
+            SELECT
               id,
               path,
               name,
@@ -160,7 +159,7 @@ export const attachmentsRouter = router({
         WITH combined_items AS (
           SELECT DISTINCT ON (folder_name)
             NULL as id,
-            CASE 
+            CASE
               WHEN path LIKE '/api/s3file/%' THEN '/api/s3file/'
               ELSE '/api/file/'
             END || split_part("perfixPath", ',', 1) as path,
@@ -181,10 +180,10 @@ export const attachmentsRouter = router({
           ) OR "accountId" = ${Number(ctx.id)})
             AND "perfixPath" != ''
             AND LOWER("perfixPath") LIKE ${`%${searchText?.toLowerCase() || ''}%`}
-          
+
           UNION ALL
-          
-          SELECT 
+
+          SELECT
             id,
             path,
             name,
@@ -336,7 +335,7 @@ export const attachmentsRouter = router({
             const isS3File = oldPath.startsWith('/api/s3file/');
             const baseUrl = isS3File ? '/api/s3file/' : '/api/file/';
 
-            const newPath = targetFolder 
+            const newPath = targetFolder
               ? `${baseUrl}${targetFolder.split(',').join('/')}/${attachment.name}`
               : `${baseUrl}${attachment.name}`;
 
@@ -351,7 +350,7 @@ export const attachmentsRouter = router({
               }
             });
           }
-          
+
           return {
             success: true,
             message: 'Files moved successfully'

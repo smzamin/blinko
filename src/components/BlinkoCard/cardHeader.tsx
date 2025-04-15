@@ -1,19 +1,19 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import { Button, Tooltip } from '@heroui/react';
-import { Copy } from "../Common/Copy";
-import { LeftCickMenu } from "../BlinkoRightClickMenu";
-import { BlinkoStore } from '@/store/blinkoStore';
+import dayjs from '@/lib/dayjs';
+import { useIsIOS } from '@/lib/hooks';
+import { _ } from '@/lib/lodash';
 import { Note } from '@/server/types';
 import { RootStore } from '@/store';
-import dayjs from '@/lib/dayjs';
-import { useTranslation } from 'react-i18next';
-import { _ } from '@/lib/lodash';
-import { useIsIOS } from '@/lib/hooks';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { DialogStore } from '@/store/module/Dialog';
-import { BlinkoShareDialog } from '../BlinkoShareDialog';
+import { Button, Tooltip } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
-import { AvatarAccount, CommentButton, UserAvatar } from './commentButton';
+import { useTranslation } from 'react-i18next';
 import { HistoryButton } from '../BlinkoNoteHistory/HistoryButton';
+import { LeftCickMenu } from "../BlinkoRightClickMenu";
+import { BlinkoShareDialog } from '../BlinkoShareDialog';
+import { Copy } from "../Common/Copy";
+import { AvatarAccount, CommentButton, UserAvatar } from './commentButton';
 
 interface CardHeaderProps {
   blinkoItem: Note;
@@ -108,8 +108,8 @@ export const CardHeader = ({ blinkoItem, blinko, isShareMode, isExpanded, accoun
 
         {/* History button for viewing note versions */}
         {!isShareMode && !!blinkoItem._count?.histories && blinkoItem._count?.histories > 0 && (
-          <HistoryButton 
-            noteId={blinkoItem.id!} 
+          <HistoryButton
+            noteId={blinkoItem.id!}
             className={'opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 ml-2 cursor-pointer hover:text-primary text-desc mt-[1px]'}
           />
         )}

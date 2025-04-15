@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createTRPCClient, httpBatchStreamLink } from '@trpc/client';
 import { AppRouter } from '@/server/routers/_app';
-import superjson from 'superjson';
-import { getToken } from '@/server/routers/helper';
 import { getGlobalConfig } from '@/server/routers/config';
+import { getToken } from '@/server/routers/helper';
+import { createTRPCClient, httpBatchStreamLink } from '@trpc/client';
+import { NextRequest, NextResponse } from 'next/server';
+import superjson from 'superjson';
 
 // Create a streaming server-side TRPC client
 const createServerStreamClient = (req: NextRequest) => {
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
           let id = '';
           try {
             id = `chatcmpl-${Math.random().toString(36).substring(2, 12)}`;
-            
+
             // Send start event
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({
               id,
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
             })}\n\n`));
 
             // Call TRPC streaming API
-            const res = await trpcClient.ai.completions.mutate({
+            const res = await trpcClient['ai'].completions.mutate({
               question,
               conversations,
               withRAG,
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
               model: model || 'blinko-default',
               choices: [{ delta: {}, index: 0, finish_reason: 'stop' }]
             })}\n\n`));
-            
+
             controller.enqueue(encoder.encode('data: [DONE]\n\n'));
             controller.close();
           } catch (error) {
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
     } else {
       // Non-streaming response
       let fullResponse = '';
-      const res = await trpcClient.ai.completions.mutate({
+      const res = await trpcClient['ai'].completions.mutate({
         question,
         conversations,
         withRAG,
@@ -190,4 +190,4 @@ export async function POST(request: NextRequest) {
       { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } }
     );
   }
-} 
+}

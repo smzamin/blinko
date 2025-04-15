@@ -1,25 +1,25 @@
-import { observer } from "mobx-react-lite";
-import { BlinkoStore } from '@/store/blinkoStore';
-import { Card } from '@heroui/react';
-import { RootStore } from '@/store';
 import { ContextMenuTrigger } from '@/components/Common/ContextMenu';
-import { Note } from '@/server/types';
-import { ShowEditBlinkoModel } from "../BlinkoRightClickMenu";
-import { useMediaQuery } from "usehooks-ts";
-import { _ } from '@/lib/lodash';
-import { useState } from "react";
-import { ExpandableContainer } from "./expandContainer";
-import { CardBlogBox } from "./cardBlogBox";
-import { NoteContent } from "./noteContent";
 import { helper } from "@/lib/helper";
-import { CardHeader } from "./cardHeader";
-import { CardFooter } from "./cardFooter";
 import { useHistoryBack } from "@/lib/hooks";
-import { useRouter } from "next/router";
-import { FocusEditorFixMobile } from "../Common/Editor/editorUtils";
-import { AvatarAccount } from "./commentButton";
+import { _ } from '@/lib/lodash';
+import { Note } from '@/server/types';
+import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { PluginApiStore } from "@/store/plugin/pluginApiStore";
 import { PluginRender } from "@/store/plugin/pluginRender";
+import { Card } from '@heroui/react';
+import { observer } from "mobx-react-lite";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useMediaQuery } from "usehooks-ts";
+import { ShowEditBlinkoModel } from "../BlinkoRightClickMenu";
+import { FocusEditorFixMobile } from "../Common/Editor/editorUtils";
+import { CardBlogBox } from "./cardBlogBox";
+import { CardFooter } from "./cardFooter";
+import { CardHeader } from "./cardHeader";
+import { AvatarAccount } from "./commentButton";
+import { ExpandableContainer } from "./expandContainer";
+import { NoteContent } from "./noteContent";
 
 export type BlinkoItem = Note & {
   isBlog?: boolean;
@@ -107,9 +107,9 @@ export const BlinkoCard = observer(({ blinkoItem, account, isShareMode = false, 
               shadow='none'
               className={`
                 flex flex-col p-4 ${glassEffect ? 'bg-transparent' : 'bg-background'} transition-all group/card
-                ${isExpanded ? 'h-screen overflow-y-scroll rounded-none' : ''} 
-                ${isPc && !isExpanded && !blinkoItem.isShare && !withoutHoverAnimation ? 'hover:translate-y-1' : ''} 
-                ${blinkoItem.isBlog ? 'cursor-pointer' : ''} 
+                ${isExpanded ? 'h-screen overflow-y-scroll rounded-none' : ''}
+                ${isPc && !isExpanded && !blinkoItem.isShare && !withoutHoverAnimation ? 'hover:translate-y-1' : ''}
+                ${blinkoItem.isBlog ? 'cursor-pointer' : ''}
                 ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}
                 ${className}
               `}

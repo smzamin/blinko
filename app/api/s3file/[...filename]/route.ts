@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { FileService } from '@/server/routers/helper/files';
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { FileService } from "@/server/plugins/files";
-import sharp from "sharp";
 import mime from "mime-types";
+import { NextResponse } from "next/server";
+import sharp from "sharp";
 
 const MAX_PRESIGNED_URL_EXPIRY = 604800 - (60 * 60 * 24);
 const CACHE_DURATION = MAX_PRESIGNED_URL_EXPIRY;
@@ -126,4 +126,4 @@ export const GET = async (req: Request, { params }) => {
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     }, { status: 404 });
   }
-};                                                                                                                                                                                            
+};

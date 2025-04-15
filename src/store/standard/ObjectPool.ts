@@ -1,5 +1,3 @@
-
-
 export class ObjectPool {
   static pool: { [key: string]: any } = {};
 

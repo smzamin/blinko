@@ -1,10 +1,10 @@
-import { Image } from '@heroui/react';
-import { Note } from '@/server/types';
 import { helper } from '@/lib/helper';
-import { RootStore } from '@/store/root';
-import router from 'next/router';
+import { Note } from '@/server/types';
 import { BlinkoStore } from '@/store/blinkoStore';
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { RootStore } from '@/store/root';
+import { Image } from '@heroui/react';
+import router from 'next/router';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface BlogContentProps {
   blinkoItem: Note & {
@@ -53,7 +53,7 @@ export const CardBlogBox = ({ blinkoItem, isExpanded }: BlogContentProps) => {
     const coverMatch = blinkoItem.content?.match(/\!\[cover\]\(([^)]+)\)/);
     return coverMatch ? coverMatch[1] : null;
   }, [blinkoItem.blogCover, blinkoItem.content]);
-  
+
   useEffect(() => {
     const updateHeight = () => {
       if (contentRef.current) {

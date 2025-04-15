@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { observer } from 'mobx-react-lite';
 import { Card } from '@heroui/react';
-import { motion } from "motion/react"
-import { useMediaQuery } from 'usehooks-ts'
+import { observer } from 'mobx-react-lite';
+import { motion } from "motion/react";
+import React, { useEffect, useRef } from 'react';
+import { useMediaQuery } from 'usehooks-ts';
 
 interface PopoverFloatProps {
   children: React.ReactNode;

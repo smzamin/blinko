@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
-import { IconButton } from '../IconButton';
-import { ShowAudioDialog } from '../../../AudioDialog';
-import { BlinkoStore } from '@/store/blinkoStore';
 import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { DropzoneInputProps } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
+import { ShowAudioDialog } from '../../../AudioDialog';
+import { IconButton } from '../IconButton';
 
 interface UploadAction {
   key: string;
@@ -61,4 +61,4 @@ export const UploadButtons = ({ getInputProps, open, onFileUpload }: Props) => {
         ))}
     </>
   );
-}; 
+};

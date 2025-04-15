@@ -1,20 +1,20 @@
-import { observer } from 'mobx-react-lite';
-import { Textarea } from '@heroui/react';
 import { Icon } from '@/components/Common/Iconify/icons';
-import { IconButton } from '../Common/Editor/Toolbar/IconButton';
-import { motion } from 'framer-motion';
-import { useMediaQuery } from 'usehooks-ts';
+import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
 import { AiStore } from '@/store/aiStore';
-import { RootStore } from '@/store/root';
 import { DialogStore } from '@/store/module/Dialog';
-import { AiConversactionList } from './aiConversactionList';
+import { RootStore } from '@/store/root';
 import { PromiseCall } from '@/store/standard/PromiseState';
-import { BlinkoSelectNote } from '../Common/BlinkoSelectNote';
-import i18n from '@/lib/i18n';
+import { Textarea } from '@heroui/react';
+import { motion } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
 import { AiSetting } from '../BlinkoSettings/AiSetting';
+import { BlinkoSelectNote } from '../Common/BlinkoSelectNote';
+import { IconButton } from '../Common/Editor/Toolbar/IconButton';
 import { ScrollArea } from '../Common/ScrollArea';
+import { AiConversactionList } from './aiConversactionList';
 
 interface AiInputProps {
   mode?: 'card' | 'inline';

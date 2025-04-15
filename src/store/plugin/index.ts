@@ -1,18 +1,17 @@
-import { api } from "../../lib/trpc";
-import { eventBus } from "../../lib/event";
-import System from 'systemjs/dist/system.js';
 import i18n from "@/lib/i18n";
-import { ToastPlugin } from "../module/Toast/Toast";
+import copy from "copy-to-clipboard";
+import System from 'systemjs/dist/system.js';
+import { eventBus } from "../../lib/event";
+import { api } from "../../lib/trpc";
 import { BaseStore } from "../baseStore";
 import { BlinkoStore } from "../blinkoStore";
 import { HubStore } from "../hubStore";
+import { ToastPlugin } from "../module/Toast/Toast";
 import { ResourceStore } from "../resourceStore";
+import { PromisePageState, PromiseState } from "../standard/PromiseState";
 import { StorageState } from "../standard/StorageState";
-import { PromiseState } from "../standard/PromiseState";
-import { PromisePageState } from "../standard/PromiseState";
-import { PluginApiStore } from "./pluginApiStore";
-import copy from "copy-to-clipboard"
 import { UserStore } from "../user";
+import { PluginApiStore } from "./pluginApiStore";
 
 declare global {
   interface Window {

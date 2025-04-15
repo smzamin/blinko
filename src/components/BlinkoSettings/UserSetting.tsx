@@ -1,19 +1,19 @@
-import { observer } from "mobx-react-lite";
-import { useTranslation } from "react-i18next";
-import { Item } from "./Item";
+import { Icon } from '@/components/Common/Iconify/icons';
+import { api } from "@/lib/trpc";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
-import { PromiseCall, PromiseState } from "@/store/standard/PromiseState";
-import { api } from "@/lib/trpc";
-import { Button, Chip, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
-import { useEffect } from "react";
-import { Icon } from '@/components/Common/Iconify/icons';
 import { DialogStore } from "@/store/module/Dialog";
-import { PasswordInput } from "../Common/PasswordInput";
-import { CollapsibleCard } from "../Common/CollapsibleCard";
-import { showTipsDialog } from "../Common/TipsDialog";
-import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { ToastPlugin } from "@/store/module/Toast/Toast";
+import { PromiseCall, PromiseState } from "@/store/standard/PromiseState";
+import { Button, Chip, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { CollapsibleCard } from "../Common/CollapsibleCard";
+import { PasswordInput } from "../Common/PasswordInput";
+import { showTipsDialog } from "../Common/TipsDialog";
+import { Item } from "./Item";
 
 const UpdateUserInfo = observer(({ id, name, password, nickname, loginType }: { id?: number, name: string, password: string, nickname?: string, loginType?: string }) => {
   const { t } = useTranslation()
@@ -24,8 +24,8 @@ const UpdateUserInfo = observer(({ id, name, password, nickname, loginType }: { 
     nickname: nickname || name,
     upsertUser: new PromiseState({
       function: async () => {
-        const upsertItem: { name: string; password: string; nickname?: string; id?: number } = { 
-          name: store.username, 
+        const upsertItem: { name: string; password: string; nickname?: string; id?: number } = {
+          name: store.username,
           password: store.password,
           nickname: store.nickname
         }

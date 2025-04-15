@@ -1,6 +1,14 @@
-import { observer } from "mobx-react-lite";
+import { Icon } from '@/components/Common/Iconify/icons';
+import dayjs from "@/lib/dayjs";
+import { helper } from "@/lib/helper";
+import { _ } from "@/lib/lodash";
+import { api } from "@/lib/trpc";
+import { RootStore } from "@/store";
+import { BlinkoStore } from "@/store/blinkoStore";
+import { PromiseCall } from "@/store/standard/PromiseState";
 import {
   Input,
+  Progress,
   Select,
   SelectItem,
   Switch,
@@ -10,20 +18,12 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  Progress,
 } from "@heroui/react";
-import { RootStore } from "@/store";
-import { BlinkoStore } from "@/store/blinkoStore";
-import { PromiseCall } from "@/store/standard/PromiseState";
-import { helper } from "@/lib/helper";
-import dayjs from "@/lib/dayjs";
-import { Icon } from '@/components/Common/Iconify/icons';
-import { api } from "@/lib/trpc";
-import { Item } from "./Item";
-import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { _ } from "@/lib/lodash";
+import { useTranslation } from "react-i18next";
 import { CollapsibleCard } from "../Common/CollapsibleCard";
+import { Item } from "./Item";
 
 const UpdateDebounceCall = _.debounce((v) => {
   return PromiseCall(api.config.update.mutate({ key: 'autoArchivedDays', value: Number(v) }))
@@ -66,7 +66,7 @@ export const TaskSetting = observer(() => {
           <Switch
             thumbIcon={blinko.updateDBTask.loading.value ? <Icon icon="eos-icons:three-dots-loading" width="24" height="24" /> : null}
             isDisabled={blinko.updateDBTask.loading.value}
-            isSelected={blinko.DBTask?.isRunning}
+            isSelected={blinko.DBTask?.['isRunning']}
             onChange={async e => {
               setPolling(true);
               await blinko.updateDBTask.call(e.target.checked);
@@ -92,7 +92,7 @@ export const TaskSetting = observer(() => {
             <Switch
               thumbIcon={blinko.updateArchiveTask.loading.value ? <Icon icon="eos-icons:three-dots-loading" width="24" height="24" /> : null}
               isDisabled={blinko.updateArchiveTask.loading.value}
-              isSelected={blinko.ArchiveTask?.isRunning}
+              isSelected={blinko.ArchiveTask?.['isRunning']}
               onChange={async e => {
                 await blinko.updateArchiveTask.call(e.target.checked)
               }}
@@ -116,18 +116,18 @@ const TasksPanel = observer(() => {
     </TableHeader>
     <TableBody>
       {
-        blinko.task.value!.filter(i => i.name != 'rebuildEmbedding').map(i => {
-          const progress = i.output?.progress;
+        blinko.task.value!.filter(i => i?.['name'] != 'rebuildEmbedding').map(i => {
+          const progress = i?.['output']?.['progress'];
           return <TableRow>
-            <TableCell>{i.name}</TableCell>
+            <TableCell>{i?.['name']}</TableCell>
             <TableCell>
               <Select
-                selectedKeys={[i.schedule]}
+                selectedKeys={[i?.['schedule']]}
                 onChange={async e => {
-                  await PromiseCall(api.task.upsertTask.mutate({
+                  await PromiseCall(api?.['task'].upsertTask.mutate({
                     time: e.target.value,
                     type: 'update',
-                    task: i.name as any
+                    task: i?.['name'] as any
                   }))
                   blinko.task.call()
                 }}
@@ -141,38 +141,38 @@ const TasksPanel = observer(() => {
                 ))}
               </Select>
             </TableCell>
-            <TableCell>{dayjs(i?.lastRun).fromNow()}</TableCell>
+            <TableCell>{dayjs(i?.['lastRun']).fromNow()}</TableCell>
             <TableCell>
               <div className="flex items-center gap-1">
                 {
-                  i.output?.filePath && <>
+                  i?.['output']?.['filePath'] && <>
                     {/* @ts-ignore  */}
                     {i.output?.filePath}
                     {/* @ts-ignore  */}
                     <Icon className='cursor-pointer' onClick={e => helper.download.downloadByLink(i?.output?.filePath)} icon="tabler:download" width="24" height="24" />
                   </>
                 }
-                {progress && !i.output?.filePath && (
+                {progress && !i?.['output']?.['filePath'] && (
                   <div className="w-full max-w-[200px]">
                     <Progress
                       size="sm"
-                      value={progress.percent}
+                      value={progress?.['percent']}
                       color="primary"
                       className="max-w-md"
                       showValueLabel={true}
                     />
                     <div className="text-xs text-gray-500">
-                      {`${(progress.processedBytes / (1024 * 1024)).toFixed(2)} MB`}
+                      {`${(progress?.['processedBytes'] / (1024 * 1024)).toFixed(2)} MB`}
                     </div>
                   </div>
                 )}
               </div>
             </TableCell>
             <TableCell>
-              <div className={`${i?.isRunning ? 'text-green-500' : 'text-red-500'} flex items-center `}>
+              <div className={`${i?.['isRunning'] ? 'text-green-500' : 'text-red-500'} flex items-center `}>
                 <Icon icon="bi:dot" width="24" height="24" />
                 <div className="min-w-[50px]">
-                  {i?.isRunning ? (
+                  {i?.['isRunning'] ? (
                     progress ? `${t('running')}` : t('running')
                   ) : t('stopped')}
                 </div>

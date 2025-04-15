@@ -268,7 +268,7 @@ export const pluginSchema = z.object({
 
 export type plugin = z.infer<typeof pluginSchema>
 
-  
+
 /////////////////////////////////////////
 // CONVERSATION SCHEMA
 /////////////////////////////////////////

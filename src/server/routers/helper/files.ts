@@ -1,14 +1,14 @@
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client, CopyObjectCommand } from "@aws-sdk/client-s3";
-import { getGlobalConfig } from "../routers/config";
 import { UPLOAD_FILE_PATH } from "@/lib/constant";
 import fs, { unlink, writeFile } from 'fs/promises';
 import path from 'path';
 import { cache } from "@/lib/cache";
-import { prisma } from "../prisma";
 import { Readable } from 'stream';
 import { Upload } from "@aws-sdk/lib-storage";
 import { PassThrough } from 'stream';
 import { createWriteStream } from "fs";
+import { getGlobalConfig } from '../config';
+import { prisma } from '@/server/prisma';
 
 export class FileService {
   public static async getS3Client() {
@@ -209,7 +209,7 @@ export class FileService {
 
         const passThrough = new PassThrough();
         const nodeReadable = Readable.fromWeb(stream as any);
-        
+
         // Setup proper error handling
         nodeReadable.on('error', (err) => {
           passThrough.destroy(err);
@@ -234,11 +234,11 @@ export class FileService {
           nodeReadable.destroy();
           throw error;
         }
-        
+
         // Explicitly destroy streams after upload completes
         passThrough.destroy();
         nodeReadable.destroy();
-        
+
         const s3Url = `/api/s3file/${s3Key}`;
 
         await FileService.createAttachment({
@@ -267,7 +267,7 @@ export class FileService {
         nodeReadable.on('error', (err) => {
           writeStream.destroy(err);
         });
-        
+
         writeStream.on('error', (err) => {
           nodeReadable.destroy();
           throw err;

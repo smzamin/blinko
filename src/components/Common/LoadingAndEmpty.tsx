@@ -30,4 +30,4 @@ export const LoadingAndEmpty = ({ isLoading, isEmpty, emptyMessage, className, i
       )}
     </div>
   );
-}; 
+};

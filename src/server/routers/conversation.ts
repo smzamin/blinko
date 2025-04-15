@@ -1,6 +1,6 @@
-import { router, authProcedure } from '../trpc';
 import { z } from 'zod';
 import { prisma } from '../prisma';
+import { authProcedure, router } from '../trpc';
 
 export const conversationRouter = router({
   create: authProcedure
@@ -102,4 +102,4 @@ export const conversationRouter = router({
         });
       });
     }),
-}); 
+});

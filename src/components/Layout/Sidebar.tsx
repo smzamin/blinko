@@ -1,19 +1,19 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { observer } from 'mobx-react-lite';
-import { Button, ScrollShadow } from '@heroui/react';
 import { RootStore } from '@/store';
 import { BaseStore } from '@/store/baseStore';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { UserStore } from '@/store/user';
-import { SideBarItem } from './index';
+import { Button, ScrollShadow } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { useTheme } from 'next-themes';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
-import { useTheme } from 'next-themes';
-import { UserAvatarDropdown } from '../Common/UserAvatarDropdown';
 import { TagListPanel } from '../Common/TagListPanel';
-import { useEffect } from 'react';
-import { BlinkoStore } from '@/store/blinkoStore';
+import { UserAvatarDropdown } from '../Common/UserAvatarDropdown';
+import { SideBarItem } from './index';
 
 interface SidebarProps {
   onItemClick?: () => void;
@@ -38,13 +38,13 @@ export const Sidebar = observer(({ onItemClick }: SidebarProps) => {
   return (
     <div
       style={{ width: isPc ? `${base.sideBarWidth}px` : '100%' }}
-      className={`flex h-full flex-1 flex-col p-4 relative bg-background 
-        ${!base.isDragging ? 'transition-all duration-300' : 'transition-none'} 
+      className={`flex h-full flex-1 flex-col p-4 relative bg-background
+        ${!base.isDragging ? 'transition-all duration-300' : 'transition-none'}
         group/sidebar`}
     >
       {!base.isSidebarCollapsed && (
         <div
-          className={`absolute right-0 top-0 h-full w-2 cursor-col-resize 
+          className={`absolute right-0 top-0 h-full w-2 cursor-col-resize
             hover:bg-primary/20 active:bg-primary/40 z-50
             ${base.isResizing ? 'bg-primary/40' : ''}`}
           onMouseDown={base.startResizing}

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { api } from '@/lib/trpc';
-import { FileType } from '../Editor/type';
-import { DeleteIcon, DownloadIcon } from './icons';
 import { Icon } from '@/components/Common/Iconify/icons';
+import { api } from '@/lib/trpc';
 import { RootStore } from '@/store';
 import { MusicManagerStore } from '@/store/musicManagerStore';
-import { observer } from 'mobx-react-lite';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@heroui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FileType } from '../Editor/type';
+import { DeleteIcon, DownloadIcon } from './icons';
 
 interface AudioMetadata {
   coverUrl?: string;

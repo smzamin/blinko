@@ -1,21 +1,21 @@
-import { RootStore } from '@/store';
-import { PromiseState } from '@/store/standard/PromiseState';
+import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
-import { FileType, OnSendContentType } from './type';
-import { BlinkoStore } from '@/store/blinkoStore';
+import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
+import { NoteType } from '@/server/types';
+import { RootStore } from '@/store';
 import { AiStore } from '@/store/aiStore';
-import { getEditorElements, type ViewMode } from './editorUtils';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
+import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { Button } from '@heroui/react';
+import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 import Vditor from 'vditor';
 import { showTipsDialog } from '../TipsDialog';
-import i18n from '@/lib/i18n';
-import { DialogStandaloneStore } from '@/store/module/DialogStandalone';
-import { Button } from '@heroui/react';
-import axios from 'axios';
-import { ToastPlugin } from '@/store/module/Toast/Toast';
-import { NoteType } from '@/server/types';
-import { eventBus } from '@/lib/event';
+import { getEditorElements, type ViewMode } from './editorUtils';
+import { FileType, OnSendContentType } from './type';
 
 export class EditorStore {
   files: FileType[] = []
@@ -153,7 +153,7 @@ export class EditorStore {
     //|| filePath.endsWith('.mp3') || filePath.endsWith('.wav')
     if (filePath.endsWith('.webm')) {
       try {
-        const doc = await api.ai.speechToText.mutate({ filePath })
+        const doc = await api?.['ai'].speechToText.mutate({ filePath })
         this.insertMarkdown(doc[0]?.pageContent)
       } catch (error) { }
     }

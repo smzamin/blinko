@@ -1,9 +1,9 @@
-import { Card, CardBody } from "@heroui/react"
-import { observer } from "mobx-react-lite"
-import { useTranslation } from "react-i18next"
-import { motion, AnimatePresence } from "framer-motion"
-import { useMemo } from "react"
 import { Icon } from '@/components/Common/Iconify/icons'
+import { Card, CardBody } from "@heroui/react"
+import { AnimatePresence, motion } from "framer-motion"
+import { observer } from "mobx-react-lite"
+import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 interface StatsCardsProps {
   stats: {
@@ -46,8 +46,8 @@ const StatCard = ({ label, value, delay = 0, gradient, icon }: StatCardProps) =>
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ 
-              duration: 0.3, 
+            transition={{
+              duration: 0.3,
               delay: delay,
               type: "spring",
               stiffness: 200,
@@ -64,7 +64,7 @@ const StatCard = ({ label, value, delay = 0, gradient, icon }: StatCardProps) =>
 
 export const StatsCards = observer(({ stats }: StatsCardsProps) => {
   const { t } = useTranslation()
-  
+
   const randomGradients = useMemo(() => {
     const indices = Array.from({ length: gradients.length }, (_, i) => i)
     for (let i = indices.length - 1; i > 0; i--) {
@@ -74,7 +74,7 @@ export const StatsCards = observer(({ stats }: StatsCardsProps) => {
     }
     return indices.slice(0, 4).map(i => gradients[i]!)
   }, [])
-  
+
   const statItems = [
     { label: t('note-count'), value: stats?.noteCount ?? 0, delay: 0, gradient: randomGradients[0]!, icon: 'ri:file-list-3-line' },
     { label: t('total-words'), value: stats?.totalWords ?? 0, delay: 0.1, gradient: randomGradients[1]!, icon: 'ri:file-text-line' },
@@ -89,4 +89,4 @@ export const StatsCards = observer(({ stats }: StatsCardsProps) => {
       ))}
     </div>
   )
-}) 
+})

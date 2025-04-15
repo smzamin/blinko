@@ -1,13 +1,13 @@
-import { observer } from "mobx-react-lite";
-import { Input } from "@heroui/react";
-import { useTranslation } from "react-i18next";
-import { Item, ItemWithTooltip } from "./Item";
+import { api } from "@/lib/trpc";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { PromiseCall } from "@/store/standard/PromiseState";
-import { api } from "@/lib/trpc";
-import { CollapsibleCard } from "../Common/CollapsibleCard";
+import { Input } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
 import { useMediaQuery } from "usehooks-ts";
+import { CollapsibleCard } from "../Common/CollapsibleCard";
+import { Item, ItemWithTooltip } from "./Item";
 
 export const MusicSetting = observer(() => {
   const { t } = useTranslation();

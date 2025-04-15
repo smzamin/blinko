@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: any }
 ) {
   const { searchParams } = new URL(request.url);
-  
+
   const userId = params.userId;
   const rows = searchParams.get('row') ? parseInt(searchParams.get('row')!) : 20;
   const origin = request.headers.get('origin') || request.headers.get('host') || 'http://localhost:1111';

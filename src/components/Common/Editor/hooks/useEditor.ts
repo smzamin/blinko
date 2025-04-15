@@ -1,20 +1,20 @@
-import { useEffect } from 'react';
 import { eventBus } from '@/lib/event';
-import { EditorStore } from '../editorStore';
-import { FocusEditorFixMobile, HandleFileType } from '../editorUtils';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { OnSendContentType } from '../type';
-import Vditor from 'vditor';
-import { ToolbarMobile, ToolbarPC } from '../EditorToolbar';
+import { api } from '@/lib/trpc';
+import { NoteType, toNoteTypeEnum } from '@/server/types';
 import { RootStore } from '@/store';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { UserStore } from '@/store/user';
-import { i18nEditor } from '../EditorToolbar/i18n';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
+import Vditor from 'vditor';
+import { EditorStore } from '../editorStore';
+import { ToolbarMobile, ToolbarPC } from '../EditorToolbar';
 import { AIExtend, Extend } from '../EditorToolbar/extends';
-import { NoteType, toNoteTypeEnum } from '@/server/types';
-import { useRouter } from 'next/router';
-import { api } from '@/lib/trpc';
+import { i18nEditor } from '../EditorToolbar/i18n';
+import { FocusEditorFixMobile, HandleFileType } from '../editorUtils';
+import { OnSendContentType } from '../type';
 
 export const useEditorInit = (
   store: EditorStore,
@@ -288,4 +288,4 @@ export const useEditorHeight = (
   useEffect(() => {
     onHeightChange?.();
   }, [store.noteType, content, store.files?.length, store.viewMode]);
-}; 
+};

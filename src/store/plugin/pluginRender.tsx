@@ -17,7 +17,7 @@ export const PluginRender: React.FC<PluginRenderProps> = observer(({ content, da
       const contentElement = content(data);
       containerRef.current.appendChild(contentElement);
     }
-    
+
     // Clean up on unmount or before re-render
     return () => {
       if (containerRef.current) {

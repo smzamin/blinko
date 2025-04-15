@@ -1,7 +1,6 @@
-import { makeAutoObservable, makeObservable } from "mobx";
-import { type Store, type StoreClass } from "./standard/base";
+import { makeObservable } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
-
+import { type Store, type StoreClass } from "./standard/base";
 
 export class RootStore {
   instanceMap = new Map<Function, Map<string, Store>>();

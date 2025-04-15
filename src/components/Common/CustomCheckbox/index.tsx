@@ -1,4 +1,4 @@
-import { useCheckbox, Chip, VisuallyHidden, tv } from "@heroui/react";
+import { Chip, VisuallyHidden, tv, useCheckbox } from "@heroui/react";
 
 const checkbox = tv({
   slots: {
@@ -13,7 +13,7 @@ const checkbox = tv({
       }
     },
     isFocusVisible: {
-      true: { 
+      true: {
         base: "",
       }
     }

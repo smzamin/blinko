@@ -1,15 +1,15 @@
-import { observer } from 'mobx-react-lite';
-import { Button, Input, Switch } from '@heroui/react';
+import { Icon } from '@/components/Common/Iconify/icons';
+import { api } from '@/lib/trpc';
 import { RootStore } from '@/store';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { PromiseCall } from '@/store/standard/PromiseState';
-import { Icon } from '@/components/Common/Iconify/icons';
-import { api } from '@/lib/trpc';
-import { useTranslation } from 'react-i18next';
-import { Item, ItemWithTooltip } from './Item';
+import { Button, Input, Switch } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'usehooks-ts';
 import { CollapsibleCard } from '../Common/CollapsibleCard';
+import { Item, ItemWithTooltip } from './Item';
 
 export const HttpProxySetting = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
@@ -50,7 +50,7 @@ export const HttpProxySetting = observer(() => {
       const result = await api.public.testHttpProxy.mutate({
         url: testUrl
       });
-      
+
       setTestResult(result);
     } catch (error) {
       setTestResult({
@@ -272,12 +272,12 @@ export const HttpProxySetting = observer(() => {
                       {t('test')}
                     </Button>
                   </div>
-                  
+
                   {Object.keys(testResult).length > 0 && (
                     <div className={`p-3 rounded-lg mt-2 ${testResult.success ? 'bg-success-50 text-success-600' : 'bg-danger-50 text-danger-600'}`}>
                       <div className="flex items-center gap-2">
-                        {testResult.success 
-                          ? <Icon icon="mdi:check-circle" width="20" height="20" /> 
+                        {testResult.success
+                          ? <Icon icon="mdi:check-circle" width="20" height="20" />
                           : <Icon icon="mdi:alert-circle" width="20" height="20" />
                         }
                         <span className="font-medium">{testResult.message}</span>

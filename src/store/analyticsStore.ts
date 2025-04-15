@@ -1,9 +1,9 @@
-import { makeAutoObservable } from "mobx"
-import { Store } from './standard/base';
 import { api } from "@/lib/trpc";
-import { PromiseState } from "./standard/PromiseState";
-import { useEffect } from "react";
 import dayjs from "dayjs";
+import { makeAutoObservable } from "mobx";
+import { useEffect } from "react";
+import { Store } from './standard/base';
+import { PromiseState } from "./standard/PromiseState";
 
 interface MonthlyStats {
   noteCount: number;

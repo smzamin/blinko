@@ -211,20 +211,20 @@ export async function createSeed(accountId: number) {
       await prisma.$executeRaw`SELECT setval('"tagsToNote_id_seq"', 1, false);`
       await prisma.$executeRaw`SELECT setval('attachments_id_seq', 1, false);`
 
-      await prisma.notes.createMany({ 
+      await prisma.notes.createMany({
         data: notes.map(note => ({
           ...note,
           accountId
         }))
       });
-      
-      await prisma.tag.createMany({ 
+
+      await prisma.tag.createMany({
         data: tag.map(t => ({
           ...t,
           accountId
         }))
       });
-      
+
       await prisma.tagsToNote.createMany({ data: tagsToNote });
       await prisma.attachments.createMany({ data: attachments });
 

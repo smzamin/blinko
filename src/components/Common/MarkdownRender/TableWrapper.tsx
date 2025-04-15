@@ -1,6 +1,5 @@
+import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import React from 'react';
-import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@heroui/react";
-import { Pagination } from "@heroui/react";
 
 export const TableWrapper = ({ children }: { children: React.ReactNode }) => {
     //@ts-ignore
@@ -95,4 +94,4 @@ export const TableWrapper = ({ children }: { children: React.ReactNode }) => {
       )}
     </div>
   );
-}; 
+};

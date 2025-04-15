@@ -1,15 +1,14 @@
+import { Icon } from '@/components/Common/Iconify/icons';
 import { follows } from '@/lib/prismaZodType';
 import { api } from '@/lib/trpc';
 import { RootStore } from '@/store';
 import { DialogStore } from '@/store/module/Dialog';
 import { PromiseCall, PromiseState } from '@/store/standard/PromiseState';
-import { Icon } from '@/components/Common/Iconify/icons';
-
 import { Button, Input, Link } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserAvatar } from '../BlinkoCard/commentButton';
-import { useEffect } from 'react';
 import { LoadingAndEmpty } from '../Common/LoadingAndEmpty';
 import { ScrollArea } from '../Common/ScrollArea';
 
@@ -96,7 +95,7 @@ export const BlinkoFollowDialog = observer(({ onConfirm }: { onConfirm: () => vo
             <Button
               className="w-[100px]"
               onPress={async () => {
-                await PromiseCall(api.follows.follow.mutate({ siteUrl: store.siteUrl, mySiteUrl: window.location.origin }));
+                await PromiseCall(api['follows'].follow.mutate({ siteUrl: store.siteUrl, mySiteUrl: window.location.origin }));
                 onConfirm();
                 RootStore.Get(DialogStore).close();
               }}
@@ -134,7 +133,7 @@ export const BlinkoFollowDialog = observer(({ onConfirm }: { onConfirm: () => vo
             tags={item.tags}
             showFollow={true}
             onConfirm={() => {
-              PromiseCall(api.follows.follow.mutate({ siteUrl: item.url, mySiteUrl: window.location.origin }));
+              PromiseCall(api['follows'].follow.mutate({ siteUrl: item.url, mySiteUrl: window.location.origin }));
               onConfirm();
               RootStore.Get(DialogStore).close();
             }}
@@ -161,12 +160,12 @@ export const BlinkoFollowingDialog = observer(({ data, onConfirm, isFollowing = 
           showFollow={!isFollowing}
           onConfirm={() => {
             if (isFollowing) {
-              PromiseCall(api.follows.unfollow.mutate({ siteUrl: item.siteUrl, mySiteUrl: window.location.origin })).then(() => {
+              PromiseCall(api['follows'].unfollow.mutate({ siteUrl: item.siteUrl, mySiteUrl: window.location.origin })).then(() => {
                 onConfirm();
                 RootStore.Get(DialogStore).close();
               });
             } else {
-              PromiseCall(api.follows.follow.mutate({ siteUrl: item.siteUrl, mySiteUrl: window.location.origin })).then(() => {
+              PromiseCall(api['follows'].follow.mutate({ siteUrl: item.siteUrl, mySiteUrl: window.location.origin })).then(() => {
                 onConfirm();
                 RootStore.Get(DialogStore).close();
               });

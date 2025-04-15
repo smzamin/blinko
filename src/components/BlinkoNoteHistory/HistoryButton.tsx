@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react-lite';
 import { Icon } from '@/components/Common/Iconify/icons';
-import { Tooltip } from '@heroui/react';
 import { RootStore } from '@/store';
 import { DialogStore } from '@/store/module/Dialog';
-import NoteHistoryModal from './NoteHistoryModal';
+import { Tooltip } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
+import NoteHistoryModal from './NoteHistoryModal';
 
 interface HistoryButtonProps {
   noteId: number;

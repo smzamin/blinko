@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import { FileType } from '../Editor/type';
-import { Image } from '@heroui/react';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { Icon } from '@/components/Common/Iconify/icons';
-import { DeleteIcon, DownloadIcon, InsertConextButton } from './icons';
+import { Image } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
+import { useEffect, useMemo, useState } from 'react';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { useMediaQuery } from 'usehooks-ts';
+import { FileType } from '../Editor/type';
 import { DraggableFileGrid } from './DraggableFileGrid';
+import { DeleteIcon, DownloadIcon, InsertConextButton } from './icons';
 
 type IProps = {
   files: FileType[]
@@ -102,4 +102,4 @@ const ImageRender = observer((props: IProps) => {
   )
 })
 
-export { ImageRender }
+export { ImageRender };

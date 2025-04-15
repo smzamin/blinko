@@ -1,24 +1,24 @@
 import { observer } from "mobx-react-lite";
 
-import { Input } from "@heroui/react";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { useTranslation } from "react-i18next";
+import { Input } from "@heroui/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-export const PasswordInput = observer(({ 
-  value, 
-  onChange, 
+export const PasswordInput = observer(({
+  value,
+  onChange,
   onBlur,
-  label, 
-  placeholder, 
-  className 
-}: { 
-  value: string, 
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, 
+  label,
+  placeholder,
+  className
+}: {
+  value: string,
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void,
-  label?: string, 
-  placeholder?: string, 
-  className?: string 
+  label?: string,
+  placeholder?: string,
+  className?: string
 }) => {
   const { t } = useTranslation()
   const [isConfirmVisible, setIsConfirmVisible] = useState(false)

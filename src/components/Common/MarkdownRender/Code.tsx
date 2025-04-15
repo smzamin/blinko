@@ -1,6 +1,6 @@
 import { useTheme } from 'next-themes';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { oneLight, vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { Copy } from '../Copy';
 
 interface CodeProps {
@@ -12,11 +12,11 @@ interface CodeProps {
 export const Code = ({ className, children, ...props }: CodeProps) => {
   const { theme } = useTheme()
   const match = /language-(\w+)/.exec(className || '');
-  
+
   const shouldHighlight = !className || className?.includes('language-') || className?.includes('hljs');
-  
+
   const isCodeBlock = shouldHighlight && String(children).includes('\n');
-  
+
   return isCodeBlock ? (
     <div className="relative group">
       <Copy content={String(children).replace(/\n$/, '')} size={16} className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -36,4 +36,4 @@ export const Code = ({ className, children, ...props }: CodeProps) => {
       {children}
     </code>
   );
-}; 
+};

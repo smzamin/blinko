@@ -1,18 +1,18 @@
-import { useEffect, useRef } from 'react';
-import { observer } from 'mobx-react-lite';
-import { Input, Button } from '@heroui/react';
-import { useTranslation } from 'react-i18next';
+import { Icon } from '@/components/Common/Iconify/icons';
 import { eventBus } from '@/lib/event';
-import PopoverFloat from '.';
 import { RootStore } from '@/store';
 import { AiStore } from '@/store/aiStore';
 import { BlinkoStore } from '@/store/blinkoStore';
-import { Icon } from '@/components/Common/Iconify/icons';
+import { Button, Input } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
+import PopoverFloat from '.';
 import { SendIcon } from '../Icons';
 import { MarkdownRender } from '../MarkdownRender';
 import { ScrollArea, ScrollAreaHandles } from '../ScrollArea';
-import { useMediaQuery } from 'usehooks-ts';
-import ReactDOM from 'react-dom';
 
 export const showAiWriteSuggestions = () => {
   setTimeout(() => {
@@ -72,7 +72,7 @@ const AiWritePop = observer(() => {
     if (!store.rect) return false;
     const dialogElement = document.querySelector('.modal-content');
     if (!dialogElement) return false;
-    
+
     const dialogRect = dialogElement.getBoundingClientRect();
     return (
       store.rect.top >= dialogRect.top &&

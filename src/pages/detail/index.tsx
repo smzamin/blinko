@@ -1,15 +1,14 @@
-import { BlinkoCard } from "@/components/BlinkoCard";
 import { LeftCickMenu, ShowEditBlinkoModel } from "@/components/BlinkoRightClickMenu";
 import { FilesAttachmentRender } from "@/components/Common/AttachmentRender";
+import { ContextMenuTrigger } from "@/components/Common/ContextMenu";
 import { MarkdownRender } from "@/components/Common/MarkdownRender";
 import { ScrollArea } from "@/components/Common/ScrollArea";
+import { _ } from "@/lib/lodash";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
-import { _ } from "@/lib/lodash";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { ContextMenuTrigger } from "@/components/Common/ContextMenu";
 
 const Detail = observer(() => {
   const router = useRouter()

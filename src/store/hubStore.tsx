@@ -1,10 +1,10 @@
 import { api } from "@/lib/trpc";
 import axios from "axios";
-import { Store } from "./standard/base";
-import { StorageState } from "./standard/StorageState";
-import { PromisePageState, PromiseState } from "./standard/PromiseState";
-import { BlinkoStore } from "./blinkoStore";
 import { RootStore } from ".";
+import { BlinkoStore } from "./blinkoStore";
+import { Store } from "./standard/base";
+import { PromisePageState, PromiseState } from "./standard/PromiseState";
+import { StorageState } from "./standard/StorageState";
 
 export class HubStore implements Store {
   sid = 'hubStore'
@@ -22,7 +22,7 @@ export class HubStore implements Store {
         const notes = await api.notes.publicList.mutate({ page, size, searchText })
         return notes
       } else if (this.currentListType == 'recommand') {
-        const recommandList = await api.follows.recommandList.query({ searchText })
+        const recommandList = await api['follows'].recommandList.query({ searchText })
         return recommandList
       } else if (this.currentListType == 'site') {
         if (this.currentSiteURL) {
@@ -49,13 +49,13 @@ export class HubStore implements Store {
   })
   followList = new PromisePageState({
     function: async ({ page, size }) => {
-      const followList = await api.follows.followerList.query({ userId: null })
+      const followList = await api['follows'].followerList.query({ userId: null })
       return followList
     }
   })
   followingList = new PromisePageState({
     function: async ({ page, size }) => {
-      const followingList = await api.follows.followList.query({ userId: null })
+      const followingList = await api['follows'].followList.query({ userId: null })
       return followingList
     }
   })

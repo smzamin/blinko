@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
+import React, { useEffect, useRef, useState } from 'react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface MermaidWrapperProps {
@@ -51,4 +51,4 @@ export const MermaidWrapper: React.FC<MermaidWrapperProps> = ({ content }) => {
       </div>
     </div >
   );
-}; 
+};

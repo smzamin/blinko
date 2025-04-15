@@ -1,18 +1,16 @@
-import { router, authProcedure, demoAuthMiddleware, publicProcedure } from '../trpc';
-import { z } from 'zod';
-import { prisma } from '../prisma';
-import { Prisma } from '@prisma/client';
+import { cache } from '@/lib/cache';
 import { helper, TagTreeNode } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
-import { NoteType } from '../types';
 import { attachmentsSchema, historySchema, notesSchema, tagSchema, tagsToNoteSchema } from '@/lib/prismaZodType';
-import { getGlobalConfig } from './config';
-import { FileService } from '../plugins/files';
-import { AiService } from '../plugins/ai';
-import { SendWebhook } from './helper';
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 import { Context } from '../context';
-import { cache } from '@/lib/cache';
-import { AiModelFactory } from '../plugins/ai/aiModelFactory';
+import { prisma } from '../prisma';
+import { authProcedure, demoAuthMiddleware, publicProcedure, router } from '../trpc';
+import { NoteType } from '../types';
+import { getGlobalConfig } from './config';
+import { SendWebhook } from './helper';
+import { FileService } from './helper/files';
 
 const extractHashtags = (input: string): string[] => {
   const withoutCodeBlocks = input.replace(/```[\s\S]*?```/g, '');
@@ -103,13 +101,13 @@ export const noteRouter = router({
     )
     .mutation(async function ({ input, ctx }) {
       const { tagId, type, isArchived, isRecycle, searchText, page, size, orderBy, withFile, withoutTag, withLink, isUseAiQuery, startDate, endDate, isShare, hasTodo } = input;
-      if (isUseAiQuery && searchText?.trim() != '') {
-        if (page == 1) {
-          return await AiService.enhanceQuery({ query: searchText!, ctx });
-        } else {
-          return [];
-        }
-      }
+      // if (isUseAiQuery && searchText?.trim() != '') {
+      //   if (page == 1) {
+      //     return await AiService.enhanceQuery({ query: searchText!, ctx });
+      //   } else {
+      //     return [];
+      //   }
+      // }
 
       let where: Prisma.notesWhereInput = {
         OR: [
@@ -220,7 +218,7 @@ export const noteRouter = router({
               histories: true,
             },
           },
-          internalShares: true, 
+          internalShares: true,
         },
       });
 
@@ -688,9 +686,9 @@ export const noteRouter = router({
       const { limit } = input;
 
       const randomNotes = await prisma.$queryRaw`
-        SELECT n.* 
+        SELECT n.*
         FROM "notes" n
-        WHERE n."isArchived" = false 
+        WHERE n."isArchived" = false
         AND n."isRecycle" = false
         AND n."accountId" = ${Number(ctx.id)}
         ORDER BY RANDOM()
@@ -784,17 +782,17 @@ export const noteRouter = router({
       if (!originalNote) {
         throw new Error('Note not found or you do not have access');
       }
-      const agent = await AiModelFactory.RelatedNotesAgent();
+      // const agent = await AiModelFactory.RelatedNotesAgent();
       const extractionPrompt = `
         Please extract keywords from the following note content:
-        
+
         ${originalNote.content.substring(0, 2000)}
       `;
-      const keywordsResult = await agent.generate(extractionPrompt);
-      const keywords = keywordsResult.text.trim();
-      console.log("Extracted keywords:", keywords);
-      const { notes } = await AiModelFactory.queryVector(keywords, Number(ctx.id), 10);
-      return notes;
+      // const keywordsResult = await agent.generate(extractionPrompt);
+      // const keywords = keywordsResult.text.trim();
+      // console.log("Extracted keywords:", keywords);
+      // const { notes } = await AiModelFactory.queryVector(keywords, Number(ctx.id), 10);
+      return originalNote as any;
     }),
   reviewNote: authProcedure
     .meta({ openapi: { method: 'POST', path: '/v1/note/review', summary: 'Review a note', protect: true, tags: ['Note'] } })
@@ -1079,13 +1077,6 @@ export const noteRouter = router({
           console.log(err);
         }
 
-        if (config?.isUseAI) {
-          AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'update', createTime: note.createdAt!, updatedAt: note.updatedAt });
-          for (const attachment of attachments) {
-            AiService.embeddingInsertAttachments({ id: note.id, updatedAt: note.updatedAt, filePath: attachment.path });
-          }
-        }
-
         SendWebhook({ ...note, attachments }, isRecycle ? 'delete' : 'update', ctx);
         return note;
       } else {
@@ -1110,25 +1101,6 @@ export const noteRouter = router({
             await prisma.noteReference.createMany({
               data: references.map((toNoteId) => ({ fromNoteId: note.id, toNoteId })),
             });
-          }
-
-          if (config?.isUseAI) {
-            AiService.embeddingUpsert({ id: note.id, content: note.content, type: 'insert', createTime: note.createdAt!, updatedAt: note.updatedAt });
-            for (const attachment of attachments) {
-              AiService.embeddingInsertAttachments({ id: note.id, updatedAt: note.updatedAt, filePath: attachment.path });
-            }
-          }
-
-          // Process with AI if post-processing is enabled
-          if (config?.isUseAiPostProcessing) {
-            try {
-              // Run post-processing asynchronously to not block the response
-              AiService.postProcessNote({ noteId: note.id, ctx }).catch((err) => {
-                console.error('Error in post-processing note:', err);
-              });
-            } catch (error) {
-              console.error('Failed to start post-processing:', error);
-            }
           }
 
           SendWebhook({ ...note, attachments }, 'create', ctx);
@@ -1758,8 +1730,6 @@ export async function deleteNotes(ids: number[], ctx: Context) {
           where: { id: { in: note.attachments.map((i) => i.id) } },
         });
       }
-
-      AiModelFactory.queryAndDeleteVectorById(note.id);
     }
   };
 

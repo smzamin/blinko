@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react-lite';
+import { Icon } from '@/components/Common/Iconify/icons';
 import { RootStore } from '@/store';
 import { MusicManagerStore } from '@/store/musicManagerStore';
-import { Icon } from '@/components/Common/Iconify/icons';
+import { AnimatePresence, motion } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from 'usehooks-ts';
 
 export const BlinkoMusicPlayer = observer(() => {

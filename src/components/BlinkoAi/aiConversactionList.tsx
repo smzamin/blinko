@@ -1,14 +1,14 @@
-import { RootStore } from "@/store/root"
+import { api } from "@/lib/trpc"
 import { AiStore } from "@/store/aiStore"
+import { DialogStore } from "@/store/module/Dialog"
+import { RootStore } from "@/store/root"
+import { PromiseCall } from "@/store/standard/PromiseState"
 import { observer } from "mobx-react-lite"
 import { useEffect, useState } from "react"
-import { LoadingAndEmpty } from "../Common/LoadingAndEmpty"
-import { DialogStore } from "@/store/module/Dialog"
-import { IconButton } from "../Common/Editor/Toolbar/IconButton"
-import { ScrollArea } from "../Common/ScrollArea"
-import { api } from "@/lib/trpc"
-import { PromiseCall } from "@/store/standard/PromiseState"
 import { useTranslation } from "react-i18next"
+import { IconButton } from "../Common/Editor/Toolbar/IconButton"
+import { LoadingAndEmpty } from "../Common/LoadingAndEmpty"
+import { ScrollArea } from "../Common/ScrollArea"
 
 export const AiConversactionList = observer(() => {
   const aiStore = RootStore.Get(AiStore)
@@ -27,7 +27,7 @@ export const AiConversactionList = observer(() => {
     aiStore.conversactionList.resetAndCall({})
     setEditingId(null)
   };
-  
+
   const handleDelete = async (item) => {
     await PromiseCall(api.conversation.delete.mutate({
       id: item.id

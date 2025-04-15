@@ -1,20 +1,19 @@
 "use client";
-import { useEffect } from 'react';
-import { PromisePageState, PromiseState } from './standard/PromiseState';
-import { Store } from './standard/base';
-import { helper } from '@/lib/helper';
-import { ToastPlugin } from './module/Toast/Toast';
-import { RootStore } from './root';
 import { eventBus } from '@/lib/event';
-import { StorageListState } from './standard/StorageListState';
+import { helper } from '@/lib/helper';
 import i18n from '@/lib/i18n';
 import { api } from '@/lib/trpc';
 import { Attachment, NoteType, type Note } from '@/server/types';
-import { ARCHIVE_BLINKO_TASK_NAME, DBBAK_TASK_NAME } from '@/lib/constant';
-import { makeAutoObservable, observable, action } from 'mobx';
-import { UserStore } from './user';
+import { action, makeAutoObservable, observable } from 'mobx';
+import { useEffect } from 'react';
 import { BaseStore } from './baseStore';
+import { ToastPlugin } from './module/Toast/Toast';
+import { RootStore } from './root';
+import { PromisePageState, PromiseState } from './standard/PromiseState';
+import { StorageListState } from './standard/StorageListState';
 import { StorageState } from './standard/StorageState';
+import { Store } from './standard/base';
+import { UserStore } from './user';
 
 type filterType = {
   label: string;
@@ -342,9 +341,9 @@ export class BlinkoStore implements Store {
   task = new PromiseState({
     function: async () => {
       try {
-        if (RootStore.Get(UserStore).role == 'superadmin') {
-          return (await api.task.list.query()) ?? [];
-        }
+        // if (RootStore.Get(UserStore).role == 'superadmin') {
+        //   return (await api.task.list.query()) ?? [];
+        // }
         return []
       } catch (error) {
         return []
@@ -354,32 +353,32 @@ export class BlinkoStore implements Store {
 
   updateDBTask = new PromiseState({
     function: async (isStart) => {
-      if (isStart) {
-        await api.task.upsertTask.mutate({ type: 'start', task: DBBAK_TASK_NAME })
-      } else {
-        await api.task.upsertTask.mutate({ type: 'stop', task: DBBAK_TASK_NAME })
-      }
+      // if (isStart) {
+      //   await api.task.upsertTask.mutate({ type: 'start', task: DBBAK_TASK_NAME })
+      // } else {
+      //   await api.task.upsertTask.mutate({ type: 'stop', task: DBBAK_TASK_NAME })
+      // }
       await this.task.call()
     }
   })
   updateArchiveTask = new PromiseState({
     function: async (isStart) => {
-      if (isStart) {
-        await api.task.upsertTask.mutate({ type: 'start', task: ARCHIVE_BLINKO_TASK_NAME })
-      } else {
-        await api.task.upsertTask.mutate({ type: 'stop', task: ARCHIVE_BLINKO_TASK_NAME })
-      }
+      // if (isStart) {
+      //   await api.task.upsertTask.mutate({ type: 'start', task: ARCHIVE_BLINKO_TASK_NAME })
+      // } else {
+      //   await api.task.upsertTask.mutate({ type: 'stop', task: ARCHIVE_BLINKO_TASK_NAME })
+      // }
       await this.task.call()
     }
   })
 
 
   get DBTask() {
-    return this.task.value?.find(i => i.name == DBBAK_TASK_NAME)
+    return // this.task.value?.find(i => i.name == DBBAK_TASK_NAME)
   }
 
   get ArchiveTask() {
-    return this.task.value?.find(i => i.name == ARCHIVE_BLINKO_TASK_NAME)
+    return // this.task.value?.find(i => i.name == ARCHIVE_BLINKO_TASK_NAME)
   }
 
 

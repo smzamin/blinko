@@ -1,14 +1,13 @@
-import { IconButton } from '../IconButton';
-import { useTranslation } from 'react-i18next';
-import { EditorStore } from '../../editorStore';
-import { useMediaQuery } from 'usehooks-ts';
-import { Input } from '@heroui/react';
-import { Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
 import { ScrollArea } from '@/components/Common/ScrollArea';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { RootStore } from '@/store/root';
+import { Input, Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
+import { EditorStore } from '../../editorStore';
+import { IconButton } from '../IconButton';
 
 interface Props {
   store: EditorStore;
@@ -100,4 +99,4 @@ export const HashtagButton = observer(({ store, content }: Props) => {
     </Popover >
 
   );
-}); 
+});

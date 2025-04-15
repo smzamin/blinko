@@ -1,15 +1,14 @@
-import { router, authProcedure } from '../trpc';
-import { z } from 'zod';
-import { prisma } from '../prisma';
+import { cache } from '@/lib/cache';
+import { pluginSchema } from '@/lib/prismaZodType';
+import axios from 'axios';
+import { createWriteStream, existsSync } from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
-import axios from 'axios';
 import yauzl from 'yauzl-promise';
-import { createWriteStream } from 'fs';
-import { pluginInfoSchema, installPluginSchema } from '../types';
-import { pluginSchema } from '@/lib/prismaZodType';
-import { cache } from '@/lib/cache';
-import { existsSync } from 'fs';
+import { z } from 'zod';
+import { prisma } from '../prisma';
+import { authProcedure, router } from '../trpc';
+import { installPluginSchema, pluginInfoSchema } from '../types';
 import { getHttpCacheKey, getWithProxy } from './helper/proxy';
 
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache duration
@@ -132,10 +131,10 @@ export const pluginRouter = router({
         if (!existsSync(pluginDir)) {
           return [];
         }
-        
+
         const cssFiles = await scanCssFiles(pluginDir);
         const result: Array<{ fileName: string, content: string }> = [];
-        
+
         for (const cssFile of cssFiles) {
           try {
             const filePath = path.join(pluginDir, cssFile);
@@ -148,7 +147,7 @@ export const pluginRouter = router({
             console.error(`Failed to read CSS file ${cssFile}:`, error);
           }
         }
-        
+
         return result;
       } catch (error) {
         console.error(`Failed to get CSS contents for plugin ${input.pluginName}:`, error);
@@ -169,21 +168,21 @@ export const pluginRouter = router({
       try {
         // Clean dev plugin directory
         await cleanPluginDir('dev');
-        
+
         // Rebuild directory and save file
         const devPluginDir = getPluginDir('dev');
         await ensureDirectoryExists(devPluginDir);
-        
+
         const fullFilePath = path.join(devPluginDir, input.fileName);
         await writeFileWithDir(fullFilePath, input.code);
-        
+
         return { success: true };
       } catch (error) {
         console.error('Save dev plugin error:', error);
         throw error;
       }
     }),
-    
+
   // Save additional files for dev plugin
   saveAdditionalDevFile: authProcedure
     .input(
@@ -199,7 +198,7 @@ export const pluginRouter = router({
         const devPluginDir = getPluginDir('dev');
         const fullPath = path.join(devPluginDir, input.filePath);
         await writeFileWithDir(fullPath, input.content);
-        
+
         return { success: true };
       } catch (error) {
         console.error(`Save additional dev file error: ${input.filePath}`, error);
@@ -311,7 +310,7 @@ export const pluginRouter = router({
         }
 
         const metadata = plugin.metadata as { name: string };
-        
+
         // Delete plugin files
         await cleanPluginDir(metadata.name);
 

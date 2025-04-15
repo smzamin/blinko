@@ -1,9 +1,9 @@
-import * as echarts from 'echarts'
-import { useEffect, useRef } from "react"
-import { useMediaQuery } from "usehooks-ts"
 import dayjs from "dayjs"
-import { useTranslation } from 'react-i18next'
+import * as echarts from 'echarts'
 import { useTheme } from 'next-themes'
+import { useEffect, useRef } from "react"
+import { useTranslation } from 'react-i18next'
+import { useMediaQuery } from "usehooks-ts"
 
 interface HeatMapProps {
   data: Array<[string, number]>
@@ -81,9 +81,9 @@ export const HeatMap = ({ data, title, description }: HeatMapProps) => {
           color: foregroundColor
         },
         inRange: {
-          color: theme === 'dark' 
-          ? ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'] 
-          : ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'] 
+          color: theme === 'dark'
+          ? ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353']
+          : ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
         }
       },
       calendar: {
@@ -157,4 +157,4 @@ export const HeatMap = ({ data, title, description }: HeatMapProps) => {
       </div>
     </div>
   )
-} 
+}

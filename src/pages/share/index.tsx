@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
-import Hub from "../hub";
 import { useEffect } from "react";
+import Hub from "../hub";
 
 const Share = observer(() => {
   useEffect(() => {

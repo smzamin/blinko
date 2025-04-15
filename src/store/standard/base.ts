@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-
 import { type RootStore } from "../root";
 
 export abstract class Store {
@@ -9,7 +8,6 @@ export abstract class Store {
   autoObservable?: boolean;
   autoAsyncable?: boolean;
   _active?: number;
-
   stores?: Store[];
 
   private pannel?: {

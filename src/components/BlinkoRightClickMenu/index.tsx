@@ -1,27 +1,26 @@
-import { observer } from "mobx-react-lite";
-import { BlinkoStore } from '@/store/blinkoStore';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, DatePicker } from '@heroui/react';
-import { useTranslation } from 'react-i18next';
 import { ContextMenu, ContextMenuItem } from '@/components/Common/ContextMenu';
 import { Icon } from '@/components/Common/Iconify/icons';
-import { PromiseCall } from '@/store/standard/PromiseState';
-import { api } from '@/lib/trpc';
-import { RootStore } from "@/store";
-import { DialogStore } from "@/store/module/Dialog";
-import { BlinkoEditor } from "../BlinkoEditor";
-import { useEffect, useState } from "react";
-import { NoteType } from "@/server/types";
-import { useRouter } from "next/router";
-import { AiStore } from "@/store/aiStore";
-import { FocusEditorFixMobile } from "../Common/Editor/editorUtils";
-import { parseAbsoluteToLocal } from "@internationalized/date";
 import i18n from "@/lib/i18n";
-import { BlinkoShareDialog } from "../BlinkoShareDialog";
+import { api } from '@/lib/trpc';
+import { Note, NoteType } from "@/server/types";
+import { RootStore } from "@/store";
+import { AiStore } from "@/store/aiStore";
 import { BaseStore } from "@/store/baseStore";
-import { PluginApiStore } from "@/store/plugin/pluginApiStore";
+import { BlinkoStore } from '@/store/blinkoStore';
+import { DialogStore } from "@/store/module/Dialog";
 import { ToastPlugin } from "@/store/module/Toast/Toast";
-import { Note } from "@/server/types";
+import { PluginApiStore } from "@/store/plugin/pluginApiStore";
+import { PromiseCall } from '@/store/standard/PromiseState';
+import { Button, DatePicker, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react';
+import { parseAbsoluteToLocal } from "@internationalized/date";
+import { observer } from "mobx-react-lite";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { BlinkoCard } from "../BlinkoCard";
+import { BlinkoEditor } from "../BlinkoEditor";
+import { BlinkoShareDialog } from "../BlinkoShareDialog";
+import { FocusEditorFixMobile } from "../Common/Editor/editorUtils";
 
 export const ShowEditTimeModel = () => {
   const blinko = RootStore.Get(BlinkoStore)
@@ -170,7 +169,7 @@ const handleTrash = () => {
 const handleDelete = async () => {
   const blinko = RootStore.Get(BlinkoStore)
   PromiseCall(api.notes.deleteMany.mutate({ ids: [blinko.curSelectedNote?.id!] }))
-  api.ai.embeddingDelete.mutate({ id: blinko.curSelectedNote?.id! })
+  // api.ai.embeddingDelete.mutate({ id: blinko.curSelectedNote?.id! })
 }
 
 const handleRelatedNotes = async () => {

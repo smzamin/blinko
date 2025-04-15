@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef } from "react";
-import { helper } from "./helper";
-import { BlinkoStore } from "@/store/blinkoStore";
 import { RootStore } from "@/store";
+import { BlinkoStore } from "@/store/blinkoStore";
+import { useEffect, useRef, useState } from "react";
+import { helper } from "./helper";
 
 export const useConfigSetting = (configKey: keyof BlinkoStore['config']['value']) => {
   const blinko = RootStore.Get(BlinkoStore);

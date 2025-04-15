@@ -1,11 +1,11 @@
-import { RootStore } from "../root";
-import { DialogStandaloneStore } from "../module/DialogStandalone";
-import { Store } from "../standard/base";
-import { PluginRender } from "./pluginRender";
+import { EditorStore } from "@/components/Common/Editor/editorStore";
+import { eventBus } from "@/lib/event";
 import { Note } from "@/server/types";
 import { makeAutoObservable } from "mobx";
-import { eventBus } from "@/lib/event";
-import { EditorStore } from "@/components/Common/Editor/editorStore";
+import { DialogStandaloneStore } from "../module/DialogStandalone";
+import { RootStore } from "../root";
+import { Store } from "../standard/base";
+import { PluginRender } from "./pluginRender";
 
 export type EditorFooterSlot = {
   name: string;

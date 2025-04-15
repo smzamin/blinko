@@ -1,23 +1,23 @@
-import { observer } from 'mobx-react-lite';
-import { Autocomplete, AutocompleteItem, Button, Code, Input, Select, SelectItem, Switch, Tooltip, Chip, Slider, Textarea } from '@heroui/react';
-import { RootStore } from '@/store';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { PromiseCall } from '@/store/standard/PromiseState';
 import { Icon } from '@/components/Common/Iconify/icons';
+import TagSelector from '@/components/Common/TagSelector';
 import { api } from '@/lib/trpc';
+import { RootStore } from '@/store';
 import { AiStore } from '@/store/aiStore';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { PromiseCall } from '@/store/standard/PromiseState';
+import { StorageListState } from '@/store/standard/StorageListState';
+import { Autocomplete, AutocompleteItem, Button, Chip, Code, Input, Select, SelectItem, Slider, Switch, Textarea, Tooltip } from '@heroui/react';
+import axios from 'axios';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Item, ItemWithTooltip } from './Item';
-import { useEffect, useState, useRef } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
+import { CollapsibleCard } from '../Common/CollapsibleCard';
+import { IconButton } from '../Common/Editor/Toolbar/IconButton';
 import { ShowRebuildEmbeddingProgressDialog } from '../Common/RebuildEmbeddingProgress';
 import { showTipsDialog } from '../Common/TipsDialog';
-import TagSelector from '@/components/Common/TagSelector';
-import { CollapsibleCard } from '../Common/CollapsibleCard';
-import { ToastPlugin } from '@/store/module/Toast/Toast';
-import axios from 'axios';
-import { StorageListState } from '@/store/standard/StorageListState';
-import { IconButton } from '../Common/Editor/Toolbar/IconButton';
+import { Item, ItemWithTooltip } from './Item';
 
 export const AiSetting = observer(() => {
   const blinko = RootStore.Get(BlinkoStore);
@@ -29,7 +29,7 @@ export const AiSetting = observer(() => {
 
   const fetchRebuildProgress = async () => {
     try {
-      const data = await api.ai.rebuildEmbeddingProgress.query();
+      const data = await api['ai'].rebuildEmbeddingProgress.query();
       if (data) {
         setRebuildProgress({
           percentage: data.percentage,
@@ -334,7 +334,7 @@ export const AiSetting = observer(() => {
                   containerSize={40}
                   tooltip={<div>{t('check-connect')}</div>}
                   onClick={async (e) => {
-                    RootStore.Get(ToastPlugin).promise(api.ai.testConnect.mutate(), {
+                    RootStore.Get(ToastPlugin).promise(api['ai'].testConnect.mutate(), {
                       loading: t('loading'),
                       success: t('check-connect-success'),
                       error: t('check-connect-error'),
@@ -438,7 +438,7 @@ export const AiSetting = observer(() => {
                       title: t('rebuild-in-progress'),
                       content: t('there-is-a-rebuild-task-in-progress-do-you-want-to-restart'),
                       onConfirm: async () => {
-                        await api.ai.rebuildEmbeddingStart.mutate({ force: true });
+                        await api['ai'].rebuildEmbeddingStart.mutate({ force: true });
                         setRebuildProgress((prev) => ({
                           percentage: 0,
                           isRunning: true,
@@ -452,7 +452,7 @@ export const AiSetting = observer(() => {
                       title: t('force-rebuild-embedding-index'),
                       content: t('if-you-have-a-lot-of-notes-you-may-consume-a-certain-number-of-tokens'),
                       onConfirm: async () => {
-                        await api.ai.rebuildEmbeddingStart.mutate({ force: true });
+                        await api['ai'].rebuildEmbeddingStart.mutate({ force: true });
                         setRebuildProgress((prev) => ({
                           percentage: 0,
                           isRunning: true,
@@ -1050,7 +1050,7 @@ export const AiSetting = observer(() => {
       3. **Tag Structure Requirements**: When using existing tags, it is necessary to construct a parent-child hierarchical structure. For example, place programming language tags under parent tags such as #Code or #Programming, like #Code/JavaScript, #Programming/Python. When adding new tags, try to classify them under appropriate existing parent tags as well.
       4. **New Tag Generation Rules**: If there are no tags in the existing list that match the content, create new tags based on the key technologies, business fields, functional features, etc. of the content. The language of the new tags should be consistent with that of the content.
       5. **Response Format Specification**: Only return tags separated by commas. There should be no spaces between tags, and no formatting or code blocks should be used. Each tag should start with #, such as #JavaScript.
-      6. **Example**: For JavaScript content related to web development, a reference response could be #Programming/Languages, #Web/Development, #Code/JavaScript, #Front-End Development/Frameworks (if applicable), #Browser Compatibility. It is strictly prohibited to respond in formats such as code blocks, JSON, or Markdown. Just provide the tags directly. 
+      6. **Example**: For JavaScript content related to web development, a reference response could be #Programming/Languages, #Web/Development, #Code/JavaScript, #Front-End Development/Frameworks (if applicable), #Browser Compatibility. It is strictly prohibited to respond in formats such as code blocks, JSON, or Markdown. Just provide the tags directly.
          `}
                     onBlur={(e) => {
                       PromiseCall(

@@ -1,9 +1,8 @@
-import { router, authProcedure, publicProcedure } from '../trpc';
+import { accountsSchema, commentsSchema, NotificationType } from '@/lib/prismaZodType';
+import * as crypto from 'crypto';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { commentsSchema, accountsSchema, NotificationType } from '@/lib/prismaZodType';
-import * as crypto from 'crypto';
-import { AiService } from '../plugins/ai';
+import { authProcedure, publicProcedure, router } from '../trpc';
 import { CreateNotification } from './notification';
 
 const accountSchema = accountsSchema.pick({
@@ -76,9 +75,9 @@ export const commentRouter = router({
       } catch (error) {
       }
 
-      if (content.includes('@Blinko AI')) {
-        AiService.AIComment({ content, noteId })
-      }
+      // if (content.includes('@Blinko AI')) {
+      //   AiService.AIComment({ content, noteId })
+      // }
 
       await prisma.comments.create({
         data: {

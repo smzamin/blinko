@@ -1,5 +1,5 @@
-import React from "react";
 import { observer } from "mobx-react-lite";
+import React from "react";
 import { RootStore } from "../root";
 
 export const AppProvider = observer(({ children }: { children?: React.ReactNode }) => {

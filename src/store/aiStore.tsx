@@ -1,21 +1,21 @@
+import { AiEmoji } from '@/components/BlinkoAi/aiEmoji';
+import { AiTag } from '@/components/BlinkoAi/aiTag';
+import { BlinkoItem } from '@/components/BlinkoCard';
+import { eventBus } from '@/lib/event';
+import i18n from '@/lib/i18n';
 import { _ } from '@/lib/lodash';
-import { Store } from './standard/base';
-import { ToastPlugin } from './module/Toast/Toast';
-import { RootStore } from './root';
 import { api, streamApi } from '@/lib/trpc';
-import { StorageListState } from './standard/StorageListState';
 import { GlobalConfig, Note } from '@/server/types';
+import { Image } from '@heroui/react';
 import { makeAutoObservable } from 'mobx';
 import { BlinkoStore } from './blinkoStore';
-import { eventBus } from '@/lib/event';
-import { PromiseCall, PromisePageState, PromiseState } from './standard/PromiseState';
 import { DialogStore } from './module/Dialog';
-import { Image } from '@heroui/react';
-import { AiTag } from '@/components/BlinkoAi/aiTag';
-import i18n from '@/lib/i18n';
-import { AiEmoji } from '@/components/BlinkoAi/aiEmoji';
+import { ToastPlugin } from './module/Toast/Toast';
+import { RootStore } from './root';
+import { Store } from './standard/base';
+import { PromiseCall, PromisePageState, PromiseState } from './standard/PromiseState';
+import { StorageListState } from './standard/StorageListState';
 import { StorageState } from './standard/StorageState';
-import { BlinkoItem } from '@/components/BlinkoCard';
 
 type Chat = {
   content: string;
@@ -106,7 +106,7 @@ export class AiStore implements Store {
         const startTime = Date.now();
         let isFristChunk = true;
         this.currentMessageResult.fristCharDelay = 0;
-        const res = await streamApi.ai.completions.mutate(
+        const res = await streamApi['ai'].completions.mutate(
           {
             question: userQuestion,
             conversations: filteredChatConversation,
@@ -149,7 +149,7 @@ export class AiStore implements Store {
         });
 
         if (this.currentConversation.value?.messages?.length && this.currentConversation.value?.messages?.length < 3) {
-          api.ai.summarizeConversationTitle.mutate({
+          api['ai'].summarizeConversationTitle.mutate({
             conversations: this.currentConversation.value?.messages ?? [],
             conversationId: this.currentConversationId,
           });
@@ -315,7 +315,7 @@ export class AiStore implements Store {
       this.scrollTicker++;
       this.isWriting = true;
       this.writingResponseText = '';
-      const res = await streamApi.ai.writing.mutate(
+      const res = await streamApi['ai'].writing.mutate(
         {
           question: this.writeQuestion,
           type: writeType,
@@ -344,7 +344,7 @@ export class AiStore implements Store {
     function: async (id: number, content: string) => {
       try {
         RootStore.Get(ToastPlugin).loading(i18n.t('thinking'));
-        const res = await api.ai.autoTag.mutate({ content });
+        const res = await api['ai'].autoTag.mutate({ content });
         RootStore.Get(ToastPlugin).remove();
         RootStore.Get(DialogStore).setData({
           isOpen: true,
@@ -378,7 +378,7 @@ export class AiStore implements Store {
     function: async (id: number, content: string) => {
       try {
         RootStore.Get(ToastPlugin).loading(i18n.t('thinking'));
-        const res = await api.ai.autoEmoji.mutate({ content });
+        const res = await api['ai'].autoEmoji.mutate({ content });
         RootStore.Get(ToastPlugin).remove();
         console.log(res);
         RootStore.Get(DialogStore).setData({

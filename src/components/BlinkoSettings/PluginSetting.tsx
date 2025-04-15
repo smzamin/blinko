@@ -1,20 +1,20 @@
-import { observer } from "mobx-react-lite";
-import { Tabs, Tab, Card, Button, Chip, Input, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
-import { useTranslation } from "react-i18next";
-import { RootStore } from "@/store";
-import { CollapsibleCard } from "../Common/CollapsibleCard";
 import { Icon } from '@/components/Common/Iconify/icons';
-import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
-import { useState, useEffect } from "react";
-import { PluginManagerStore } from "@/store/plugin/pluginManagerStore";
 import i18n from "@/lib/i18n";
-import { type PluginInfo } from "@/server/types";
-import { LoadingAndEmpty } from "../Common/LoadingAndEmpty";
-import { PromiseCall } from "@/store/standard/PromiseState";
-import { I18nString } from "@/store/plugin";
-import { PluginRender } from "@/store/plugin/pluginRender";
-import { compareVersions } from "@/lib/utils/versionUtils";
 import { api } from "@/lib/trpc";
+import { compareVersions } from "@/lib/utils/versionUtils";
+import { type PluginInfo } from "@/server/types";
+import { RootStore } from "@/store";
+import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { I18nString } from "@/store/plugin";
+import { PluginManagerStore } from "@/store/plugin/pluginManagerStore";
+import { PluginRender } from "@/store/plugin/pluginRender";
+import { PromiseCall } from "@/store/standard/PromiseState";
+import { Button, Card, CardBody, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tab, Tabs } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { CollapsibleCard } from "../Common/CollapsibleCard";
+import { LoadingAndEmpty } from "../Common/LoadingAndEmpty";
 
 interface PluginCardProps {
   name: string;
@@ -102,7 +102,7 @@ const InstalledPlugins = observer(() => {
   // Load all plugins and fetch app version when component mounts
   useEffect(() => {
     pluginManager.loadAllPlugins();
-    
+
     async function fetchAppVersion() {
       try {
         const version = await api.public.version.query();
@@ -111,7 +111,7 @@ const InstalledPlugins = observer(() => {
         console.error('Failed to fetch app version:', error);
       }
     }
-    
+
     fetchAppVersion();
   }, []);
 
@@ -147,7 +147,7 @@ const InstalledPlugins = observer(() => {
   // Check if plugin requires newer app version
   const needsAppUpgrade = (plugin: PluginInfo): boolean => {
     if (!plugin.minAppVersion) return false;
-    
+
     try {
       return compareVersions(plugin.minAppVersion, currentAppVersion) > 0;
     } catch (error) {
@@ -176,7 +176,7 @@ const InstalledPlugins = observer(() => {
         // Find the latest version from marketplace
         const latestPlugin = allPlugins.find(p => p.name === metadata.name);
         const hasUpdate = latestPlugin && latestPlugin.version !== metadata.version;
-        
+
         // Check if we need app upgrade for the latest version of the plugin
         const updateRequiresAppUpgrade = latestPlugin && needsAppUpgrade(latestPlugin);
 
@@ -292,7 +292,7 @@ const AllPlugins = observer(() => {
         console.error('Failed to fetch app version:', error);
       }
     }
-    
+
     fetchAppVersion();
   }, []);
 
@@ -320,7 +320,7 @@ const AllPlugins = observer(() => {
   // Check if plugin requires newer app version
   const needsAppUpgrade = (plugin: PluginInfo): boolean => {
     if (!plugin.minAppVersion) return false;
-    
+
     try {
       return compareVersions(plugin.minAppVersion, currentAppVersion) > 0;
     } catch (error) {
@@ -559,4 +559,4 @@ export const PluginSetting = observer(() => {
       </Tabs>
     </CollapsibleCard>
   );
-}); 
+});

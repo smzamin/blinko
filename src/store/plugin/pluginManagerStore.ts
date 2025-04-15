@@ -1,23 +1,23 @@
 /// <reference types="systemjs" />
-import { api } from "@/lib/trpc";
-import { BasePlugin } from ".";
-import { Store } from "../standard/base";
 import { eventBus } from "@/lib/event";
-import System from 'systemjs/dist/system.js';
 import i18n from "@/lib/i18n";
-import { PluginApiStore } from './pluginApiStore';
-import { RootStore } from "../root";
-import { ToastPlugin } from "../module/Toast/Toast";
-import { makeAutoObservable } from "mobx";
-import { PromisePageState, PromiseState } from "../standard/PromiseState";
+import { api } from "@/lib/trpc";
 import { type PluginInfo } from "@/server/types";
-import { StorageState } from "../standard/StorageState";
-import { BlinkoStore } from "../blinkoStore";
-import { BaseStore } from "../baseStore";
-import { ResourceStore } from "../resourceStore";
-import { HubStore } from "../hubStore";
 import copy from "copy-to-clipboard";
+import { makeAutoObservable } from "mobx";
+import System from 'systemjs/dist/system.js';
+import { BasePlugin } from ".";
+import { BaseStore } from "../baseStore";
+import { BlinkoStore } from "../blinkoStore";
+import { HubStore } from "../hubStore";
+import { ToastPlugin } from "../module/Toast/Toast";
+import { ResourceStore } from "../resourceStore";
+import { RootStore } from "../root";
+import { Store } from "../standard/base";
+import { PromisePageState, PromiseState } from "../standard/PromiseState";
+import { StorageState } from "../standard/StorageState";
 import { UserStore } from "../user";
+import { PluginApiStore } from './pluginApiStore';
 
 export class PluginManagerStore implements Store {
   sid = 'pluginManagerStore';
@@ -78,28 +78,28 @@ export class PluginManagerStore implements Store {
     try {
       // Remove previously loaded CSS files
       this.removeCssFiles(pluginName);
-      
+
       // Use API to get CSS content
       const cssContents = await api.plugin.getPluginCssContents.query({ pluginName });
-      
+
       if (cssContents.length > 0) {
         const styleElements: HTMLStyleElement[] = [];
-        
+
         for (const cssData of cssContents) {
           // Create style element
           const styleElement = document.createElement('style');
           styleElement.type = 'text/css';
           styleElement.dataset.pluginName = pluginName;
           styleElement.dataset.fileName = cssData.fileName;
-          
+
           // Set CSS content
           styleElement.textContent = cssData.content;
-          
+
           // Add to document
           document.head.appendChild(styleElement);
           styleElements.push(styleElement);
         }
-        
+
         this.loadedCssFiles.set(pluginName, styleElements);
       }
     } catch (error) {
@@ -132,7 +132,7 @@ export class PluginManagerStore implements Store {
   async connectDevPlugin(url: string) {
     try {
       this.disconnectDevPlugin(); // Ensure previous connection is closed
-      
+
       this.devWebscoketUrl.save(url);
       this.wsConnectionStatus = 'disconnected';
 
@@ -175,7 +175,7 @@ export class PluginManagerStore implements Store {
         if (this.latestDevFileName) {
           await this.destroyPlugin(this.latestDevFileName);
         }
-        
+
         // Handle multi-file message format
         if (data.type === "code" && Array.isArray(data.files)) {
           await this.handleMultiFileDevPlugin(data);
@@ -213,21 +213,21 @@ export class PluginManagerStore implements Store {
     // Save metadata
     this.devPluginMetadata = data.metadata;
     this.wsConnectionStatus = 'connected';
-    
+
     // Process file encoding
     const processedFiles = this.processDevPluginFiles(data.files);
-    
+
     // Find main JS file
     const mainJsFile = this.findMainJsFile(processedFiles);
     if (!mainJsFile) {
       throw new Error('No valid JS entry file found');
     }
-    
+
     this.latestDevFileName = mainJsFile.fileName;
-    
+
     // Save all files
     await this.saveDevFiles(processedFiles);
-    
+
     // Load plugin
     await this.loadDevPlugin(mainJsFile.fileName);
     RootStore.Get(ToastPlugin).success(i18n.t('plugin-updated'));
@@ -322,10 +322,10 @@ export class PluginManagerStore implements Store {
    */
   private findMainJsFile(files: Array<{fileName: string, content: string, fileType: string}>) {
     const jsFiles = files.filter(f => f.fileType === 'js');
-    return jsFiles.find(f => 
-      f.fileName === 'index.js' || 
-      f.fileName === 'main.js' || 
-      f.fileName.endsWith('/index.js') || 
+    return jsFiles.find(f =>
+      f.fileName === 'index.js' ||
+      f.fileName === 'main.js' ||
+      f.fileName.endsWith('/index.js') ||
       f.fileName.endsWith('/main.js')
     ) || jsFiles[0]; // If standard name not found, use first JS file
   }
@@ -335,10 +335,10 @@ export class PluginManagerStore implements Store {
    */
   private async saveDevFile(code: string, fileName: string) {
     try {
-      await api.plugin.saveDevPlugin.mutate({ 
-        code, 
-        fileName, 
-        metadata: this.devPluginMetadata 
+      await api.plugin.saveDevPlugin.mutate({
+        code,
+        fileName,
+        metadata: this.devPluginMetadata
       });
     } catch (error) {
       console.error('Save dev plugin error:', error);
@@ -353,14 +353,14 @@ export class PluginManagerStore implements Store {
     try {
       // Prepare main JS file
       const mainJsFile = this.findMainJsFile(files);
-      
+
       if (!mainJsFile) {
         throw new Error('No valid JS file found');
       }
-      
+
       // Save main JS file
       await this.saveDevFile(mainJsFile.content, mainJsFile.fileName);
-      
+
       // Create separate requests for additional files
       const savePromises = files
         .filter(file => file !== mainJsFile) // Exclude already saved main JS file
@@ -375,7 +375,7 @@ export class PluginManagerStore implements Store {
             return Promise.resolve();
           }
         });
-      
+
       // Save all other files in parallel
       await Promise.all(savePromises);
     } catch (error) {
@@ -388,7 +388,7 @@ export class PluginManagerStore implements Store {
     console.log('loadDevPlugin');
     try {
       await this.loadCssFiles("dev");
-      
+
       const module = await window.System.import(`/plugins/dev/${fileName}`);
       return await this.initPlugin(module.default, "dev");
     } catch (error) {
@@ -409,14 +409,14 @@ export class PluginManagerStore implements Store {
   async loadPlugin(pluginPath: string) {
     try {
       const module = await window.System.import(pluginPath);
-      
+
       // Extract plugin name from path
       const pathSegments = pluginPath.split('/');
       const pluginName = pathSegments[pathSegments.indexOf('plugins') + 1] || '';
-      
+
       // Load plugin CSS
       await this.loadCssFiles(pluginName);
-      
+
       // Initialize plugin
       return await this.initPlugin(module.default, pluginName);
     } catch (error) {
@@ -477,7 +477,7 @@ export class PluginManagerStore implements Store {
       const plugin = new PluginClass();
       plugin.init();
       this.plugins.set(pluginName, plugin);
-      
+
       if (plugin.withSettingPanel) {
         // For dev plugin, we need to update metadata
         if (pluginName === "dev") {
@@ -485,7 +485,7 @@ export class PluginManagerStore implements Store {
         }
         this.plugins.get(pluginName)!.withSettingPanel = true;
       }
-      
+
       return plugin;
     } catch (error) {
       console.error(`Failed to initialize plugin: ${pluginName}`, error);

@@ -1,8 +1,8 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import { useTranslation } from "react-i18next";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 interface TagSelectorProps {
   selectedTag: string | null;
@@ -11,8 +11,8 @@ interface TagSelectorProps {
   className?: string;
 }
 
-export default function TagSelector({ 
-  selectedTag, 
+export default function TagSelector({
+  selectedTag,
   onSelectionChange,
   variant = "bordered",
   className = "max-w-full"
@@ -58,4 +58,4 @@ export default function TagSelector({
       )}
     </Autocomplete>
   );
-} 
+}

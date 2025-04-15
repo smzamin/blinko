@@ -1,5 +1,4 @@
 import { streamApi } from '@/lib/trpc'
-import { type ProgressResult } from '@/server/plugins/memos'
 import { RootStore } from '@/store'
 import { BlinkoStore } from '@/store/blinkoStore'
 import { DialogStore } from '@/store/module/Dialog'
@@ -15,7 +14,7 @@ export const ImportProgress = observer(({ filePath }: { filePath: string }) => {
   const store = RootStore.Local(() => ({
     progress: 0,
     total: 0,
-    message: [] as ProgressResult[],
+    message: [] as any[],
     status: '',
     get value() {
       const v = Math.round((store.progress / store.total) * 100)
@@ -28,7 +27,7 @@ export const ImportProgress = observer(({ filePath }: { filePath: string }) => {
       return store.status === 'error'
     },
     handleAsyncGenerator: async () => {
-      const asyncGeneratorRes = await streamApi.task.importFromMemos.mutate({ filePath })
+      const asyncGeneratorRes = await streamApi?.['task'].importFromMemos.mutate({ filePath })
       for await (const item of asyncGeneratorRes) {
         store.progress = item.progress?.current ?? 0
         store.total = item.progress?.total ?? 0

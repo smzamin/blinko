@@ -21,4 +21,4 @@ export const ImageWrapper = ({ src, width, height }: ImageWrapperProps) => {
       </PhotoProvider>
     </div>
   );
-}; 
+};

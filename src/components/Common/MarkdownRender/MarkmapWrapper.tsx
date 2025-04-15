@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { Markmap } from 'markmap-view';
 import { Transformer } from 'markmap-lib';
+import { Markmap } from 'markmap-view';
+import { useEffect, useRef } from 'react';
 
 const transformer = new Transformer();
 

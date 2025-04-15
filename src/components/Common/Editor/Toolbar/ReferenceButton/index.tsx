@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react-lite'
-import { BlinkoStore } from '@/store/blinkoStore'
-import { RootStore } from '@/store'
-import { EditorStore } from '../../editorStore'
-import { useEffect } from 'react'
 import { BlinkoSelectNote } from '@/components/Common/BlinkoSelectNote'
+import { RootStore } from '@/store'
+import { BlinkoStore } from '@/store/blinkoStore'
+import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { EditorStore } from '../../editorStore'
 
 interface Props {
   store: EditorStore
@@ -23,4 +23,4 @@ export const ReferenceButton = observer(({ store }: Props) => {
       blackList={store.references}
     />
   )
-}) 
+})

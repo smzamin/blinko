@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-
-import { promises as fs } from 'fs';
-import { randomBytes, pbkdf2 } from 'crypto';
 import { hashPassword } from '@/server/routers/user';
+import { PrismaClient } from '@prisma/client';
+import { promises as fs } from 'fs';
 
 const prisma = new PrismaClient();
 

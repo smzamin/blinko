@@ -1,8 +1,8 @@
-import { IconButton } from '../IconButton';
-import { useTranslation } from 'react-i18next';
-import { NoteType } from '@/server/types';
 import { Div } from '@/components/Common/Div';
+import { NoteType } from '@/server/types';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { IconButton } from '../IconButton';
 
 export const NoteTypeButton = ({ noteType, setNoteType}: {
   noteType: NoteType,
@@ -14,7 +14,7 @@ export const NoteTypeButton = ({ noteType, setNoteType}: {
   useEffect(() => {
     setType(noteType);
   }, [noteType]);
-  
+
   return (
     <Div
       onTap={() => {
@@ -32,4 +32,4 @@ export const NoteTypeButton = ({ noteType, setNoteType}: {
     </Div>
 
   );
-}; 
+};

@@ -1,20 +1,19 @@
-import { IconButton } from '../IconButton';
-import { useTranslation } from 'react-i18next';
-import { EditorStore } from '../../editorStore';
-import { useMediaQuery } from 'usehooks-ts';
-import { Input, Button } from '@heroui/react';
-import { Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
-import { ScrollArea } from '@/components/Common/ScrollArea';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { RootStore } from '@/store/root';
-import { AiStore } from '@/store/aiStore';
-import { observer } from 'mobx-react-lite';
-import { useEffect, useRef } from 'react';
 import { Icon } from '@/components/Common/Iconify/icons';
 import { SendIcon } from '@/components/Common/Icons';
 import { MarkdownRender } from '@/components/Common/MarkdownRender';
+import { ScrollArea } from '@/components/Common/ScrollArea';
 import { eventBus } from '@/lib/event';
+import { AiStore } from '@/store/aiStore';
+import { BlinkoStore } from '@/store/blinkoStore';
 import { PluginApiStore } from '@/store/plugin/pluginApiStore';
+import { RootStore } from '@/store/root';
+import { Button, Input, Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
+import { EditorStore } from '../../editorStore';
+import { IconButton } from '../IconButton';
 
 interface Props {
   store: EditorStore;
@@ -188,4 +187,4 @@ export const AIWriteButton = observer(({ store, content }: Props) => {
       </PopoverContent>
     </Popover>
   );
-}); 
+});

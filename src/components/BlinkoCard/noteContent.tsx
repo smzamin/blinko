@@ -1,8 +1,8 @@
 import { MarkdownRender } from '@/components/Common/MarkdownRender';
-import { FilesAttachmentRender } from "../Common/AttachmentRender";
 import { Note } from '@/server/types';
 import { BlinkoStore } from '@/store/blinkoStore';
 import { observer } from 'mobx-react-lite';
+import { FilesAttachmentRender } from "../Common/AttachmentRender";
 import { ReferencesContent } from './referencesContent';
 
 interface NoteContentProps {

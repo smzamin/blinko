@@ -1,23 +1,23 @@
-import React, { useRef, useEffect } from 'react';
-import { Modal, ModalContent, ModalBody, Input, Button, Divider } from '@heroui/react';
+import { ResourceItemPreview } from '@/components/BlinkoResource/ResourceItem';
 import { Icon } from '@/components/Common/Iconify/icons';
-import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
-import { RootStore } from '@/store';
-import { BlinkoStore } from '@/store/blinkoStore';
-import { AiStore } from '@/store/aiStore';
-import { observer } from 'mobx-react-lite';
+import { helper } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
 import { cn } from '@/lib/utils';
-import { Note, ResourceType, Tag } from '@/server/types';
-import { ScrollArea } from '../Common/ScrollArea';
-import { ResourceItemPreview } from '@/components/BlinkoResource/ResourceItem';
 import { allSettings } from '@/pages/settings';
+import { Note, ResourceType, Tag } from '@/server/types';
+import { RootStore } from '@/store';
+import { AiStore } from '@/store/aiStore';
+import { BlinkoStore } from '@/store/blinkoStore';
+import { Button, Divider, Input, Modal, ModalBody, ModalContent } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/router';
+import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'usehooks-ts';
 import { BlinkoCard } from '../BlinkoCard';
 import { ConvertTypeButton } from '../BlinkoCard/cardFooter';
 import { LoadingAndEmpty } from '../Common/LoadingAndEmpty';
-import { useMediaQuery } from 'usehooks-ts';
-import { helper } from '@/lib/helper';
+import { ScrollArea } from '../Common/ScrollArea';
 
 interface GlobalSearchProps {
   isOpen: boolean;
@@ -91,12 +91,12 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
       const matchingTags = blinkoStore.tagList.value?.listTags
         .filter(tag => tag.name.toLowerCase().includes(query.toLowerCase()))
         .slice(0, 10); // Limit to top 10 results
-      
-      this.searchResults = { 
-        notes: [], 
-        resources: [], 
-        settings: [], 
-        tags: matchingTags 
+
+      this.searchResults = {
+        notes: [],
+        resources: [],
+        settings: [],
+        tags: matchingTags
       };
       this.isSearching = false;
     },
@@ -122,8 +122,8 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
     // Computed properties
     get hasResults() {
       return (
-        this.searchResults.notes.length > 0 || 
-        this.searchResults.resources.length > 0 || 
+        this.searchResults.notes.length > 0 ||
+        this.searchResults.resources.length > 0 ||
         this.searchResults.settings.length > 0 ||
         this.searchResults.tags.length > 0
       );
@@ -342,37 +342,37 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
               autoFocus
               onKeyDown={handleKeyDown}
               startContent={
-                <Icon 
-                  className="" 
+                <Icon
+                  className=""
                   icon={
-                    store.isAiQuestion 
-                      ? 'mingcute:ai-line' 
-                      : store.isTagSearch 
-                        ? 'mingcute:hashtag-line' 
+                    store.isAiQuestion
+                      ? 'mingcute:ai-line'
+                      : store.isTagSearch
+                        ? 'mingcute:hashtag-line'
                         : 'lets-icons:search'
-                  } 
-                  width="24" 
-                  height="24" 
+                  }
+                  width="24"
+                  height="24"
                 />
               }
               endContent={
                 <div className="flex items-center gap-1">
                   {store.searchQuery && (
-                    <Button 
-                      isIconOnly 
-                      variant="light" 
-                      size="sm" 
-                      onPress={() => store.setSearchQuery('')} 
+                    <Button
+                      isIconOnly
+                      variant="light"
+                      size="sm"
+                      onPress={() => store.setSearchQuery('')}
                       className="hover:text-danger transition-colors"
                     >
                       <Icon icon="ph:x-bold" width="16" height="16" />
                     </Button>
                   )}
-                  <Button 
-                    isIconOnly 
-                    variant="light" 
-                    size="sm" 
-                    onPress={() => store.toggleAiQuestion()} 
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    size="sm"
+                    onPress={() => store.toggleAiQuestion()}
                     className={cn('hover:text-primary transition-colors', store.isAiQuestion && 'text-primary')}
                   >
                     <Icon icon={store.isAiQuestion ? 'lets-icons:search' : 'mingcute:ai-line'} width="20" height="20" />
@@ -393,7 +393,7 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
                         <div className="flex flex-col">{store.searchResults.tags.map(renderTagItem)}</div>
                       </div>
                     )}
-                    
+
                     {/* Actions section - only show if not in tag search mode */}
                     {!store.isTagSearch && (
                       <div className="flex flex-col gap-1 mb-2">

@@ -1,11 +1,9 @@
-import { type Tag } from '@/server/types';
-import { _ } from './lodash';
-import i18n from './i18n';
 import { FileType } from '@/components/Common/Editor/type';
-import dayjs from 'dayjs';
-import { GlobalConfig } from '@/server/types';
+import { GlobalConfig, type Tag } from '@/server/types';
 import { RootStore } from '@/store';
 import { BlinkoStore } from '@/store/blinkoStore';
+import dayjs from 'dayjs';
+import i18n from './i18n';
 
 const valMap = {
   undefined: '',

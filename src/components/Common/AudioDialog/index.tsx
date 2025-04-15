@@ -1,8 +1,8 @@
-import { RootStore } from "@/store";
-import { useCallback, useState, useEffect, useRef, useMemo } from "react";
-import useAudioRecorder from "../AudioRecorder/hook";
 import { Icon } from '@/components/Common/Iconify/icons';
+import { RootStore } from "@/store";
 import { DialogStandaloneStore } from "@/store/module/DialogStandalone";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useAudioRecorder from "../AudioRecorder/hook";
 
 interface MyAudioRecorderProps {
   onComplete?: (file: File) => void;
@@ -43,41 +43,41 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
       // Create new AudioContext
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       audioContextRef.current = audioContext;
-      
+
       // Create analyzer node
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 128; // Smaller FFT size for better performance
       analyser.smoothingTimeConstant = 0.7; // Enhanced smoothing
       analyserRef.current = analyser;
-      
+
       // Connect audio source to analyzer
       const source = audioContext.createMediaStreamSource(stream);
       source.connect(analyser);
       sourceRef.current = source;
-      
+
       // Initialize audio level array with minimum height values
-      setAudioLevel(Array(30).fill(3)); 
-      
+      setAudioLevel(Array(30).fill(3));
+
       // Create update function for audio levels
       const updateAudioLevel = () => {
         if (!analyserRef.current) return;
-        
+
         // Get frequency data even when not recording for smooth animation
         const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(dataArray);
-        
+
         // Calculate weighted average volume, emphasizing low and mid frequencies
         const sum = dataArray.reduce((acc, val, i) => {
           // Weight low and mid frequencies more
-          const weight = i < dataArray.length / 3 ? 1.5 : 
+          const weight = i < dataArray.length / 3 ? 1.5 :
                           i < dataArray.length * 2/3 ? 1.2 : 0.8;
           return acc + (val * weight);
         }, 0);
-        
+
         const average = sum / dataArray.length;
         // Ensure value is always a number
         const scaledValue: number = Math.max(average * 1.5, 3);
-        
+
         // Update audio level display with smooth animation
         setAudioLevel(prevLevels => {
           const newLevels = [...prevLevels].map(n => n || 0); // Ensure all values are numbers
@@ -88,11 +88,11 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
           newLevels[newLevels.length - 1] = scaledValue;
           return newLevels;
         });
-        
+
         // Continue animation loop
         animationFrameRef.current = requestAnimationFrame(updateAudioLevel);
       };
-      
+
       // Start animation immediately
       animationFrameRef.current = requestAnimationFrame(updateAudioLevel);
       console.log("Audio visualization started");
@@ -107,12 +107,12 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
     }
-    
+
     if (sourceRef.current) {
       sourceRef.current.disconnect();
       sourceRef.current = null;
     }
-    
+
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
       try {
         audioContextRef.current.close();
@@ -120,7 +120,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
         console.error("Failed to close AudioContext:", error);
       }
     }
-    
+
     audioContextRef.current = null;
     analyserRef.current = null;
   }, []);
@@ -135,13 +135,13 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
         }
         setAudioPermissionGranted(true);
         setIsRecording(true);
-        
+
         // Start timer for recording duration
         const timer = setInterval(() => {
           setRecordingTime(prev => prev + 1);
         }, 1000);
         setTimerId(timer);
-        
+
         // Start milliseconds timer for smoother UI updates
         const msTimer = setInterval(() => {
           setMilliseconds(prev => (prev + 1) % 100);
@@ -151,9 +151,9 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
         console.error("Failed to start recording:", error);
       }
     };
-    
+
     initRecording();
-    
+
     return () => {
       if (timerId) clearInterval(timerId);
       if (millisecondTimerRef.current) clearInterval(millisecondTimerRef.current);
@@ -174,15 +174,15 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
       const handleStart = () => {
         setIsRecording(true);
       };
-      
+
       const handleStop = () => {
         setIsRecording(false);
         cleanupAudioAnalyser();
       };
-      
+
       mediaRecorder.addEventListener('start', handleStart);
       mediaRecorder.addEventListener('stop', handleStop);
-      
+
       return () => {
         mediaRecorder.removeEventListener('start', handleStart);
         mediaRecorder.removeEventListener('stop', handleStop);
@@ -193,7 +193,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
   const handleStopRecording = useCallback(() => {
     if (isRecording) {
       setIsRecording(false);
-      
+
       try {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
           stopRecording();
@@ -201,17 +201,17 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
       } catch (error) {
         console.error("Stop recording error:", error);
       }
-      
+
       if (timerId) {
         clearInterval(timerId);
         setTimerId(null);
       }
-      
+
       if (millisecondTimerRef.current) {
         clearInterval(millisecondTimerRef.current);
         millisecondTimerRef.current = null;
       }
-      
+
       cleanupAudioAnalyser();
     }
   }, [isRecording, stopRecording, mediaRecorder, timerId, cleanupAudioAnalyser]);
@@ -224,7 +224,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
       const file = new File([recordingBlob], `my_recording_${Date.now()}.${extension}`, {
         type: mimeType
       });
-      
+
       // Add duration as a custom property to the file
       const minutes = Math.floor(recordingTime / 60).toString().padStart(2, '0');
       const seconds = Math.floor(recordingTime % 60).toString().padStart(2, '0');
@@ -233,7 +233,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
         value: durationStr,
         writable: false
       });
-      
+
       onComplete?.(file);
     }
   }, [recordingBlob, onComplete, recordingTime]);
@@ -242,7 +242,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
     setLastRecordingBlob(null);
     setRecordingTime(0);
     setMilliseconds(0);
-    
+
     const initNewRecording = async () => {
       try {
         const stream = await startRecording();
@@ -250,13 +250,13 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
           setupAudioAnalyser(stream);
         }
         setIsRecording(true);
-        
+
         // Restart timer
         const timer = setInterval(() => {
           setRecordingTime(prev => prev + 1);
         }, 1000);
         setTimerId(timer);
-        
+
         // Restart milliseconds timer
         const msTimer = setInterval(() => {
           setMilliseconds(prev => (prev + 1) % 100);
@@ -266,7 +266,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
         console.error("Failed to restart recording:", error);
       }
     };
-    
+
     initNewRecording();
   }, [startRecording, setupAudioAnalyser]);
 
@@ -287,7 +287,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
             <span className="ml-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
           </div>
         </div>
-        
+
         <div className="w-full flex-1 flex flex-col items-center justify-center my-4">
           <div className="my-4 w-full">
             {!audioPermissionGranted ? (
@@ -295,14 +295,14 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
                 Please allow microphone access to start recording
               </div>
             ) : null}
-            
+
             <div className="w-full h-[40px] flex items-center justify-center rounded">
               <div className="w-full h-full flex items-end justify-center space-x-1 px-2">
                 {audioLevel.map((level, index) => (
-                  <div 
-                    key={index} 
-                    className="w-[3px] bg-green-500 rounded-t-sm" 
-                    style={{ 
+                  <div
+                    key={index}
+                    className="w-[3px] bg-green-500 rounded-t-sm"
+                    style={{
                       height: `${Math.min(level, 100)}%`,
                       transition: 'height 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
                       opacity: isRecording ? 1 : 0.5,
@@ -313,12 +313,12 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
               </div>
             </div>
           </div>
-          
+
           <div className="text-white text-7xl font-bold mt-4">
             {formattedTime}
           </div>
         </div>
-        
+
         <div className="flex justify-center mt-4 w-full">
           {isRecording ? (
             <button

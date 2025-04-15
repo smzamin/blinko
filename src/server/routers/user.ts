@@ -1,13 +1,13 @@
-import { router, publicProcedure, authProcedure, superAdminAuthMiddleware, demoAuthMiddleware } from '../trpc';
+import { accountsSchema } from '@/lib/prismaZodType';
+import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+import { pbkdf2, randomBytes } from 'crypto';
+import { encode } from 'next-auth/jwt';
 import { z } from 'zod';
 import { prisma } from '../prisma';
-import { encode } from 'next-auth/jwt';
-import { Prisma } from '@prisma/client';
-import { accountsSchema } from '@/lib/prismaZodType';
+import { authProcedure, demoAuthMiddleware, publicProcedure, router, superAdminAuthMiddleware } from '../trpc';
 import { generateTOTP, generateTOTPQRCode, getNextAuthSecret, verifyTOTP } from "./helper";
 import { deleteNotes } from './note';
-import { pbkdf2, randomBytes } from 'crypto';
 
 const genToken = async ({ id, name, role, permissions }: { id: number, name: string, role: string, permissions?: string[] }) => {
   const secret = await getNextAuthSecret();

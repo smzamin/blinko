@@ -1,18 +1,18 @@
 // blinko.public.value?.version
 
-import { observer } from "mobx-react-lite";
-import { Link, Image, Chip } from "@heroui/react";
-import { RootStore } from "@/store";
-import { BlinkoStore } from "@/store/blinkoStore";
-import { PromiseState } from "@/store/standard/PromiseState";
+import { CollapsibleCard } from "@/components/Common/CollapsibleCard";
 import { Icon } from '@/components/Common/Iconify/icons';
 import { api } from "@/lib/trpc";
+import { RootStore } from "@/store";
 import { AiStore } from "@/store/aiStore";
-import { useTranslation } from "react-i18next";
-import { Item } from "./Item";
+import { BlinkoStore } from "@/store/blinkoStore";
+import { PromiseState } from "@/store/standard/PromiseState";
+import { Chip, Image, Link } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useMediaQuery } from "usehooks-ts";
-import { CollapsibleCard } from "@/components/Common/CollapsibleCard";
+import { Item } from "./Item";
 
 export const AboutSetting = observer(() => {
   const blinko = RootStore.Get(BlinkoStore)

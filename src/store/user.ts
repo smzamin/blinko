@@ -1,17 +1,17 @@
+import { eventBus } from '@/lib/event';
+import { api } from '@/lib/trpc';
+import { makeAutoObservable } from 'mobx';
 import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { BaseStore } from './baseStore';
+import { BlinkoStore } from './blinkoStore';
 import { RootStore } from './root';
 import { Store } from './standard/base';
-import { eventBus } from '@/lib/event';
-import { makeAutoObservable } from 'mobx';
 import { PromiseState } from './standard/PromiseState';
-import { api } from '@/lib/trpc';
-import { BlinkoStore } from './blinkoStore';
-import { BaseStore } from './baseStore';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from 'next-themes';
 
 export class UserStore implements User, Store {
   sid = 'user';
@@ -135,7 +135,7 @@ export class UserStore implements User, Store {
         }
       }
     };
-    
+
     handleFeatureRoute('ai', 'useAI', {
       title: "AI",
       href: '/ai',

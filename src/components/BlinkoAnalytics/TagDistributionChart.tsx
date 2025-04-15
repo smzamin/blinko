@@ -1,9 +1,9 @@
 import { Card, CardBody } from "@heroui/react"
+import * as echarts from 'echarts'
 import { observer } from "mobx-react-lite"
-import { useTranslation } from "react-i18next"
 import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
-import * as echarts from 'echarts'
+import { useTranslation } from "react-i18next"
 import { useMediaQuery } from "usehooks-ts"
 
 interface TagDistributionChartProps {
@@ -93,7 +93,7 @@ export const TagDistributionChart = observer(({ tagStats }: TagDistributionChart
         }
       ],
       color: [
-        '#FF6B6B', '#4ECDC4', '#45B7D1', '#08AEEA', 
+        '#FF6B6B', '#4ECDC4', '#45B7D1', '#08AEEA',
         '#2AF598', '#4FACFE', '#FF9A8B', '#FF6A88',
         '#A9C9FF', '#FEE140'
       ]
@@ -146,4 +146,4 @@ export const TagDistributionChart = observer(({ tagStats }: TagDistributionChart
       </CardBody>
     </Card>
   )
-}) 
+})

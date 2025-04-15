@@ -1,8 +1,8 @@
-import { Button, InputOtp } from "@heroui/react";
-import { useTranslation } from "react-i18next";
 import { Icon } from '@/components/Common/Iconify/icons';
 import { RootStore } from "@/store";
 import { DialogStore } from "@/store/module/Dialog";
+import { Button, InputOtp } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 interface TwoFactorModalProps {
   onConfirm: (code: string) => void;

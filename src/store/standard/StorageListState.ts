@@ -18,7 +18,6 @@ export class StorageListState<T = any> {
     this.load();
   }
 
-
   load() {
     try {
       const value = localStorage.getItem(this.key);

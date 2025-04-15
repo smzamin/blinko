@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
-import { signIn } from 'next-auth/react';
+import { LoadingPage } from '@/components/Common/LoadingPage';
 import { ShowTwoFactorModal } from '@/components/Common/TwoFactorModal';
 import { RootStore } from '@/store';
-import { ToastPlugin } from '@/store/module/Toast/Toast';
 import { DialogStore } from '@/store/module/Dialog';
+import { ToastPlugin } from '@/store/module/Toast/Toast';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoadingPage } from '@/components/Common/LoadingPage';
 
 export default function OAuthCallback() {
   const router = useRouter();
@@ -49,4 +48,4 @@ export default function OAuthCallback() {
   }, [session, router, t]);
 
   return <LoadingPage />
-} 
+}

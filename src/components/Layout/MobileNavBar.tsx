@@ -1,14 +1,14 @@
 import { Icon } from '@/components/Common/Iconify/icons';
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { observer } from "mobx-react-lite";
+import { useSwiper } from "@/lib/hooks";
 import { RootStore } from "@/store";
 import { BaseStore } from "@/store/baseStore";
 import { BlinkoStore } from "@/store/blinkoStore";
-import { SideBarItem } from "./index";
-import { useTranslation } from "react-i18next";
-import { useSwiper } from "@/lib/hooks";
 import { motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
+import { SideBarItem } from "./index";
 
 interface MobileNavBarProps {
   onItemClick?: () => void;
@@ -32,10 +32,10 @@ export const MobileNavBar = observer(({ onItemClick }: MobileNavBarProps) => {
     <motion.div
       className="h-[70px] flex w-full px-4 py-2 gap-2 bg-background block md:hidden overflow-hidden fixed bottom-0 z-50"
       animate={{ y: isVisible ? 0 : 100 }}
-      transition={{ 
+      transition={{
         type: "tween",
         duration: 0.3,
-        ease: [0.25, 0.1, 0.25, 1] 
+        ease: [0.25, 0.1, 0.25, 1]
       }}
     >
       {mobileItems.map(i => (

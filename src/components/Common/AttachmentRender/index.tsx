@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import { FileIcons } from './FileIcon';
-import { observer } from 'mobx-react-lite';
+import { BlinkoCard } from '@/components/BlinkoCard';
+import { Icon } from '@/components/Common/Iconify/icons';
 import { helper } from '@/lib/helper';
 import { type Attachment } from '@/server/types';
+import { Popover, PopoverContent, PopoverTrigger } from '@heroui/popover';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { EditorStore } from '../Editor/editorStore';
+import { HandleFileType } from '../Editor/editorUtils';
 import { FileType } from '../Editor/type';
+import { DraggableFileGrid } from './DraggableFileGrid';
+import { FileIcons } from './FileIcon';
+import { AudioRender } from './audioRender';
 import { DeleteIcon, DownloadIcon } from './icons';
 import { ImageRender } from './imageRender';
-import { HandleFileType } from '../Editor/editorUtils';
-import { Icon } from '@/components/Common/Iconify/icons';
-import { Popover, PopoverContent, PopoverTrigger } from '@heroui/popover';
-import { BlinkoCard } from '@/components/BlinkoCard';
-import { EditorStore } from '../Editor/editorStore';
-import { DraggableFileGrid } from './DraggableFileGrid';
-import { AudioRender } from './audioRender';
 
 //https://www.npmjs.com/package/browser-thumbnail-generator
 
@@ -26,8 +26,8 @@ type IProps = {
 const AttachmentsRender = observer((props: IProps) => {
   const { files, preview = false, columns = 3 } = props
 
-  const gridClassName = preview 
-    ? `grid grid-cols-${(columns - 1) < 1 ? 1 : (columns - 1)} md:grid-cols-${columns} gap-2` 
+  const gridClassName = preview
+    ? `grid grid-cols-${(columns - 1) < 1 ? 1 : (columns - 1)} md:grid-cols-${columns} gap-2`
     : 'flex flex-row gap-2 overflow-x-auto pb-2';
 
   return (
@@ -69,8 +69,8 @@ const AttachmentsRender = observer((props: IProps) => {
         className={gridClassName}
         onReorder={props.onReorder}
         renderItem={(file) => (
-          <div 
-            className={`relative mt-2 flex p-2 items-center gap-2 cursor-pointer 
+          <div
+            className={`relative mt-2 flex p-2 items-center gap-2 cursor-pointer
               bg-sencondbackground hover:bg-hover transition-all rounded-md group
               ${!preview ? 'min-w-[200px] flex-shrink-0' : 'w-full'}`}
             onClick={() => {
@@ -157,5 +157,5 @@ const ReferenceRender = observer(({ store }: { store: EditorStore }) => {
   </div>
 })
 
-export { AttachmentsRender, FilesAttachmentRender, ReferenceRender }
+export { AttachmentsRender, FilesAttachmentRender, ReferenceRender };
 
