@@ -175,7 +175,8 @@
     "@internationalized/date": "^3.8.0"
   },
   "overrides": {
-    "@langchain/core": "^0.3.44"
+    "@langchain/core": "^0.3.44",
+    "@internationalized/date": "^3.8.0"
   },
   "prettier": {
     "printWidth": 200,

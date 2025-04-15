@@ -14,7 +14,7 @@ import { NoteType } from "@/server/types";
 import { useRouter } from "next/router";
 import { AiStore } from "@/store/aiStore";
 import { FocusEditorFixMobile } from "../Common/Editor/editorUtils";
-import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
+import { parseAbsoluteToLocal } from "@internationalized/date";
 import i18n from "@/lib/i18n";
 import { BlinkoShareDialog } from "../BlinkoShareDialog";
 import { BaseStore } from "@/store/baseStore";
@@ -32,9 +32,9 @@ export const ShowEditTimeModel = () => {
     isDismissable: false,
     showOnlyContentCloseButton: true,
     content: () => {
-      const [createdAt, setCreatedAt] = useState<ZonedDateTime | null>(blinko.curSelectedNote?.createdAt ?
+      const [createdAt, setCreatedAt] = useState<any>(blinko.curSelectedNote?.createdAt ?
         parseAbsoluteToLocal(blinko.curSelectedNote.createdAt.toISOString()) : null);
-      const [updatedAt, setUpdatedAt] = useState<ZonedDateTime | null>(blinko.curSelectedNote?.updatedAt ?
+      const [updatedAt, setUpdatedAt] = useState<any>(blinko.curSelectedNote?.updatedAt ?
         parseAbsoluteToLocal(blinko.curSelectedNote.updatedAt.toISOString()) : null);
 
       const handleSave = () => {
