@@ -148,7 +148,11 @@ module.exports = withBundleAnalyzer(withPWA({
         '@aws-sdk/client-s3', '@aws-sdk/lib-storage', '@aws-sdk/s3-request-presigner', '@opentelemetry/api',
         '@trpc/server', '@prisma/client', 'prisma', 'pg', 'zod', 'archiver', 'cron', 'jsonwebtoken',
         'sqlite3', 'pdf-parse', 'sharp', 'mammoth', 'music-metadata', 'unfurl.js', 'request-ip',
-        'systemjs', 'ncp', 'node-fetch'
+        'systemjs', 'ncp', 'node-fetch', '@opentelemetry/otlp-transformer', '@azure/msal-node',
+        '@azure/msal-common', '@azure/cosmos', '@grpc/grpc-js', '@anthropic-ai/sdk', '@mistralai/mistralai',
+        '@mixedbread-ai/sdk', '@llamaindex/readers', '@huggingface/transformers', 'chromadb-default-embed',
+        '@prisma/client', 'prisma', 'pdf-parse', 'sqlite3', '@libsql/linux-x64-gnu','@mastra/core',
+        'echarts', 'three'
       );
     }
     if (!isServer) {
