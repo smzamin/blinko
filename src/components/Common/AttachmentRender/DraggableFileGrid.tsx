@@ -26,15 +26,15 @@ export const DraggableFileGrid = ({
 }: DraggableFileGridProps) => {
   const handleDragEnd = async (result: any) => {
     if (!result.destination) return;
-    
+
     const { source, destination } = result;
     const filteredFiles = files.filter(i => i.previewType === type);
     const allFiles = Array.from(files);
-    
+
     const [reorderedItem] = filteredFiles.splice(source.index, 1);
     if (reorderedItem) {
       filteredFiles.splice(destination.index, 0, reorderedItem);
-      
+
       const newFiles = allFiles.map(file => {
         if (file.previewType === type) {
           return filteredFiles.shift() || file;
@@ -59,7 +59,7 @@ export const DraggableFileGrid = ({
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId={type} direction="horizontal">
+      <Droppable droppableId={type} direction="horizontal" isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={false}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -94,4 +94,4 @@ export const DraggableFileGrid = ({
       </Droppable>
     </DragDropContext>
   );
-}; 
+};

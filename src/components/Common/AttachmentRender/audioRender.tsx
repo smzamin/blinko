@@ -52,7 +52,7 @@ export const AudioRender = observer(({ files, preview = false }: Props) => {
   useEffect(() => {
     files?.filter(i => i.previewType === 'audio').forEach(file => {
       getMetadata(file);
-      
+
       // Set initial duration for recordings with audioDuration property
       if (file.name.startsWith('my_recording_') && (file as any).audioDuration) {
         setDuration(prev => ({
@@ -108,8 +108,8 @@ export const AudioRender = observer(({ files, preview = false }: Props) => {
       if (!progress) return;
 
       // Avoid division by zero or NaN values
-      const percentage = musicManager.duration > 0 
-        ? (musicManager.currentTime / musicManager.duration) * 100 
+      const percentage = musicManager.duration > 0
+        ? (musicManager.currentTime / musicManager.duration) * 100
         : 0;
       progress.style.width = `${percentage}%`;
 
@@ -289,7 +289,9 @@ export const AudioRender = observer(({ files, preview = false }: Props) => {
                               onMouseDown={(e) => handleProgressBarDrag(e, file.name)}
                             >
                               <div
-                                ref={el => el && (progressRefs.current[file.name] = el)}
+                                ref={(el: HTMLDivElement | null) => {
+                                  if (el) progressRefs.current[file.name] = el;
+                                }}
                                 className={`absolute h-full rounded-full transition-all duration-100 ${metadata?.coverUrl ? 'bg-white' : 'bg-primary'
                                   }`}
                               />

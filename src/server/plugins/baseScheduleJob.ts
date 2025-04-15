@@ -64,7 +64,7 @@ export abstract class BaseScheduleJob {
           isSuccess: success,
           schedule: cronTime,
           name: this.taskName,
-          isRunning: this.job.running
+          isRunning: this.job['running']
         }
       });
     } else {
@@ -75,7 +75,7 @@ export abstract class BaseScheduleJob {
           output,
           isSuccess: success,
           schedule: cronTime,
-          isRunning: this.job.running
+          isRunning: this.job['running']
         }
       });
     }
@@ -85,7 +85,7 @@ export abstract class BaseScheduleJob {
     this.job.stop();
     return await prisma.scheduledTask.update({
       where: { name: this.taskName },
-      data: { isRunning: this.job.running }
+      data: { isRunning: this.job['running'] }
     });
   }
 

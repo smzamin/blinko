@@ -5,10 +5,9 @@ import { prisma } from '../prisma';
 import { encode } from 'next-auth/jwt';
 import { Prisma } from '@prisma/client';
 import { accountsSchema } from '@/lib/prismaZodType';
-import { hashPassword, verifyPassword } from 'prisma/seed';
 import { generateTOTP, generateTOTPQRCode, getNextAuthSecret, verifyTOTP } from "./helper";
 import { deleteNotes } from './note';
-import { createSeed } from 'prisma/seedData';
+import { pbkdf2, randomBytes } from 'crypto';
 
 const genToken = async ({ id, name, role, permissions }: { id: number, name: string, role: string, permissions?: string[] }) => {
   const secret = await getNextAuthSecret();
@@ -237,7 +236,7 @@ export const userRouter = router({
               userId: res.id
             }
           })
-          await createSeed(res.id)
+          // await createSeed(res.id)
           return true
         } else {
           const config = await prisma.config.findFirst({ where: { key: 'isAllowRegister' } })
@@ -286,14 +285,14 @@ export const userRouter = router({
       if (!user) {
         throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
       }
-      
-      const token = await genToken({ 
-        id: user.id, 
-        name: user.name ?? '', 
+
+      const token = await genToken({
+        id: user.id,
+        name: user.name ?? '',
         role: user.role,
         permissions: ['notes.upsert','ai.completions']
       });
-      
+
       return { token };
     }),
   upsertUser: authProcedure.use(demoAuthMiddleware)
@@ -363,7 +362,7 @@ export const userRouter = router({
         const { id, nickname, name, password } = input
 
         const update: Prisma.accountsUpdateInput = {}
-        
+
         if (name && (!id || (id && (await prisma.accounts.findUnique({ where: { id } }))?.name !== name))) {
           const hasSameUser = await prisma.accounts.findFirst({ where: { name } });
           if (hasSameUser) {
@@ -373,7 +372,7 @@ export const userRouter = router({
             });
           }
         }
-        
+
         if (id) {
           if (name) update.name = name
           if (password) {
@@ -542,3 +541,26 @@ export const userRouter = router({
       };
     }),
 })
+
+export async function hashPassword(password: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const salt = randomBytes(16).toString('hex');
+    pbkdf2(password, salt, 1000, 64, 'sha512', (err, derivedKey) => {
+      if (err) reject(err);
+      resolve('pbkdf2:' + salt + ':' + derivedKey.toString('hex'));
+    });
+  });
+}
+
+export async function verifyPassword(inputPassword: string, hashedPassword: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    const [prefix, salt, hash] = hashedPassword.split(':');
+    if (prefix !== 'pbkdf2') {
+      return resolve(false);
+    }
+    pbkdf2(inputPassword, salt!, 1000, 64, 'sha512', (err, derivedKey) => {
+      if (err) reject(err);
+      resolve(derivedKey.toString('hex') === hash);
+    });
+  });
+}

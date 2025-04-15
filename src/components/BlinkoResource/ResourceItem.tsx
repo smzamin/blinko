@@ -217,7 +217,7 @@ const ResourceItem = observer(({ item, index, onSelect, isSelected, onFolderClic
               }}
             >
               {item.isFolder ? (
-                <Droppable droppableId={droppableId!}>
+                <Droppable droppableId={droppableId!} isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={false}>
                   {(dropProvided, dropSnapshot) => (
                     <div ref={dropProvided.innerRef} {...dropProvided.droppableProps} className="w-full h-full relative">
                       <ResourceCard item={item} isSelected={isSelected} onSelect={onSelect} isDraggingOver={dropSnapshot.isDraggingOver} />

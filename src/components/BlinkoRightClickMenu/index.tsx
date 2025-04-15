@@ -424,8 +424,8 @@ export const LeftCickMenu = observer(({ onTrigger, className }: { onTrigger: () 
       </DropdownItem>
 
       {!blinko.curSelectedNote?.isRecycle ? (
-        <DropdownItem key="ShareItem" onPress={handlePublic}> 
-          <PublicItem />  
+        <DropdownItem key="ShareItem" onPress={handlePublic}>
+          <PublicItem />
         </DropdownItem>
       ) : <></>}
 

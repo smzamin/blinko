@@ -1,5 +1,6 @@
 import { Icon } from '@/components/Common/Iconify/icons';
 import { motion } from "framer-motion";
+import { JSX } from 'react';
 
 // Tool icons mapping for different tools
 export const toolIcons: Record<string, string> = {
@@ -20,18 +21,18 @@ export const toolIcons: Record<string, string> = {
 export const getToolIcon = (toolName: string): string => {
   // Extract the base name if it contains spaces or special formatting
   const baseName = toolName.toLowerCase().trim();
-  
+
   // Try to find an exact match first
   if (toolIcons[baseName]) {
     return toolIcons[baseName];
   }
-  
+
   // Try to find a partial match
   const partialMatch = Object.keys(toolIcons).find(key => baseName.includes(key));
   if (partialMatch && toolIcons[partialMatch]) {
     return toolIcons[partialMatch];
   }
-  
+
   // Default icon if no match found
   return "material-symbols:build-circle";
 };
@@ -54,23 +55,23 @@ export const getToolDisplayName = (toolName: string): string => {
 /**
  * Component that displays a tool usage chip with animation
  */
-export const ToolUsageChip = ({ 
-  toolName, 
-  index 
-}: { 
-  toolName: string, 
-  index: number 
+export const ToolUsageChip = ({
+  toolName,
+  index
+}: {
+  toolName: string,
+  index: number
 }): JSX.Element => {
   const displayName = getToolDisplayName(toolName);
   const icon = getToolIcon(toolName);
-  
+
   return (
     <motion.div
       className="cursor-none inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-xl mr-2 mb-2 border border-primary/20 shadow-sm"
       initial={{ opacity: 0, scale: 0.8, y: 10 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ 
-        duration: 0.4, 
+      transition={{
+        duration: 0.4,
         delay: index * 0.1,
         type: "spring",
         stiffness: 100

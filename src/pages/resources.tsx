@@ -180,7 +180,7 @@ const Page = observer(() => {
           />
           <PhotoProvider>
             {resources.length > 0 && (
-              <Droppable droppableId="resources">
+              <Droppable droppableId="resources" isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={false}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}

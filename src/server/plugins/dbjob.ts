@@ -81,7 +81,7 @@ export class DBJob extends BaseScheduleJob {
       });
 
       const archiveComplete = new Promise((resolve, reject) => {
-        output.on('close', resolve);
+        output.on('close', () => resolve(void 0));
         output.on('error', reject);
         archive.on('error', reject);
       });
@@ -203,20 +203,20 @@ export class DBJob extends BaseScheduleJob {
         }
         const targetPath = path.join(ROOT_PATH, entry.filename);
         await fs.promises.mkdir(path.dirname(targetPath), { recursive: true });
-        
+
         try {
           const readStream = await entry.openReadStream();
           const writeStream = fs.createWriteStream(targetPath);
-          
+
           // Add error handlers to both streams
           readStream.on('error', (err) => {
             writeStream.destroy(err);
           });
-          
+
           writeStream.on('error', (err) => {
             readStream.destroy();
           });
-          
+
           await new Promise((resolve, reject) => {
             readStream
               .pipe(writeStream)
@@ -232,7 +232,7 @@ export class DBJob extends BaseScheduleJob {
                 reject(err);
               });
           });
-          
+
           processedBytes += entry.uncompressedSize;
           entryCount++;
 

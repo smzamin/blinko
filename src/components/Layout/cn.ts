@@ -11,13 +11,10 @@ const COMMON_UNITS = ["small", "medium", "large"];
  * So we can use classes like `text-small` or `text-default-500` and override them.
  */
 const twMerge = extendTailwindMerge({
-  // @ts-ignore 
+  // @ts-ignore
   extend: {
     theme: {
-      opacity: ["disabled"],
-      spacing: ["divider"],
-      borderWidth: COMMON_UNITS,
-      borderRadius: COMMON_UNITS,
+      spacing: ["divider"]
     },
     classGroups: {
       shadow: [{shadow: COMMON_UNITS}],

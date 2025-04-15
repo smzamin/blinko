@@ -35,7 +35,7 @@ export const useConfigSetting = (configKey: keyof BlinkoStore['config']['value']
 export const useSwiper = (threshold = 50) => {
   const [isVisible, setIsVisible] = useState(true);
   const touchStartY = useRef(0);
-  const lastDirection = useRef<'up' | 'down'>();
+  const lastDirection = useRef<'up' | 'down'>('up');
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
@@ -50,11 +50,11 @@ export const useSwiper = (threshold = 50) => {
         if (deltaY > 0) {
           lastDirection.current = 'down';
           setIsVisible(true);
-        } else { 
+        } else {
           lastDirection.current = 'up';
           setIsVisible(false);
         }
-        touchStartY.current = touchY; 
+        touchStartY.current = touchY;
       }
     };
 
@@ -129,7 +129,7 @@ export const useHistoryBack = <T extends string>({
     if (state) {
       try {
         const currentPath = window.location.pathname + window.location.search;
-        history.pushState({ 
+        history.pushState({
           [historyState]: true,
           timestamp: Date.now(),
           path: currentPath

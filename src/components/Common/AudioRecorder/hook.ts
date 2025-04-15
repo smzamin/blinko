@@ -64,7 +64,7 @@ const useAudioRecorder: (
   }, [setRecordingTime, setTimerInterval]);
 
   const _stopTimer: () => void = useCallback(() => {
-    timerInterval != null && clearInterval(timerInterval);
+    if (timerInterval) clearInterval(timerInterval as NodeJS.Timeout);
     setTimerInterval(undefined);
   }, [timerInterval, setTimerInterval]);
 
@@ -89,25 +89,25 @@ const useAudioRecorder: (
 
     try {
       console.log("Requesting microphone permission...");
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: audioTrackConstraints ? audioTrackConstraints : {
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: true,
         }
       });
-      
+
       // Save stream reference for later cleanup
       mediaStreamRef.current = stream;
-      
+
       console.log("Microphone access granted, tracks:", stream.getAudioTracks().length);
       const audioTrack = stream.getAudioTracks()[0];
       if (audioTrack) {
         console.log("Track settings:", audioTrack.getSettings());
       }
-      
+
       setIsRecording(true);
-      
+
       let options: MediaRecorderOptions = mediaRecorderOptions || {};
       if (!options.mimeType) {
         // Try different MIME types
@@ -118,7 +118,7 @@ const useAudioRecorder: (
           'audio/ogg;codecs=opus',
           ''  // Default
         ];
-        
+
         for (const type of mimeTypes) {
           if (!type || MediaRecorder.isTypeSupported(type)) {
             options.mimeType = type;
@@ -136,39 +136,39 @@ const useAudioRecorder: (
       console.log("Creating MediaRecorder...");
       const recorder = new MediaRecorder(stream, options);
       const dataChunks: Blob[] = [];
-      
+
       recorder.ondataavailable = (event) => {
         console.log("Data chunk received:", event.data.size, "bytes");
         if (event.data && event.data.size > 0) {
           dataChunks.push(event.data);
         }
       };
-      
+
       recorder.onstop = () => {
         console.log("Recording stopped, data chunks:", dataChunks.length);
         const blob = new Blob(dataChunks, { type: options.mimeType || 'audio/webm' });
         console.log("Final blob created:", blob.size, "bytes, type:", blob.type);
         setRecordingBlob(blob);
-        
+
         // Only auto-cleanup resources if not manually stopped to avoid duplicated cleanup
         if (!hasStoppedRef.current) {
           cleanupResources();
         }
-        
+
         setMediaRecorder(undefined);
       };
-      
+
       recorder.onerror = (event) => {
         console.error("MediaRecorder error:", event);
       };
-      
+
       // Set more frequent data collection for better visualization
       recorder.start(100); // Collect data every 100ms
       console.log("MediaRecorder started, state:", recorder.state);
-      
+
       setMediaRecorder(recorder);
       _startTimer();
-      
+
       // Return stream for use in AudioDialog
       return stream;
     } catch (err: any) {
@@ -181,7 +181,7 @@ const useAudioRecorder: (
       } else if (err.name === 'NotReadableError') {
         console.error("Microphone may be in use by another application");
       }
-      
+
       onNotAllowedOrFound?.(err);
       throw err; // Rethrow error for UI handling
     }
@@ -202,7 +202,7 @@ const useAudioRecorder: (
   const stopRecording: () => void = useCallback(() => {
     console.log("Attempting to stop recording, MediaRecorder state:", mediaRecorder?.state);
     hasStoppedRef.current = true;
-    
+
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
       try {
         mediaRecorder.stop();
@@ -213,12 +213,12 @@ const useAudioRecorder: (
     } else {
       console.warn("Cannot stop recording: MediaRecorder doesn't exist or is already inactive");
     }
-    
+
     _stopTimer();
     setRecordingTime(0);
     setIsRecording(false);
     setIsPaused(false);
-    
+
     // Manual cleanup of resources
     cleanupResources();
   }, [
@@ -238,7 +238,7 @@ const useAudioRecorder: (
       console.warn("Cannot pause/resume: MediaRecorder doesn't exist");
       return;
     }
-    
+
     if (isPaused) {
       console.log("Resuming recording");
       setIsPaused(false);
