@@ -1,12 +1,12 @@
 const isProduction = process.env.NODE_ENV === 'production';
 const withPWA = require('next-pwa')({
   dest: 'public',
-  maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, 
+  maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development', 
+  disable: process.env.NODE_ENV === 'development',
   fallbacks: {
-    document: '/offline' 
+    document: '/offline'
   },
   cacheOnFrontEndNav: true,
   reloadOnOnline: true,
@@ -39,7 +39,7 @@ const withPWA = require('next-pwa')({
       }
     },
     {
-      urlPattern: ({ request }) => 
+      urlPattern: ({ request }) =>
         request.destination === 'style' ||
         request.destination === 'script' ||
         request.destination === 'font' ||
@@ -62,7 +62,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer(withPWA({
   output: 'standalone',
-  transpilePackages: ['react-diff-view','highlight.js','remark-gfm','rehype-raw'],
+  transpilePackages: ['react-diff-view', 'highlight.js', 'remark-gfm', 'rehype-raw'],
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   serverExternalPackages: ["@mastra/*", "onnxruntime-node", "@libsql/client"],
   async headers() {
@@ -142,7 +142,15 @@ module.exports = withBundleAnalyzer(withPWA({
   },
   webpack: (config, { dev, isServer }) => {
     config.experiments = { ...config.experiments, topLevelAwait: true };
-    
+
+    if (isServer) {
+      config.externals.push(
+        '@aws-sdk/client-s3', '@aws-sdk/lib-storage', '@aws-sdk/s3-request-presigner', '@opentelemetry/api',
+        '@trpc/server', '@prisma/client', 'prisma', 'pg', 'zod', 'archiver', 'cron', 'jsonwebtoken',
+        'sqlite3', 'pdf-parse', 'sharp', 'mammoth', 'music-metadata', 'unfurl.js', 'request-ip',
+        'systemjs', 'ncp', 'node-fetch'
+      );
+    }
     if (!isServer) {
       config.resolve.fallback = {
         dns: false,
@@ -153,18 +161,18 @@ module.exports = withBundleAnalyzer(withPWA({
         'onnxruntime-node': false,
       };
     }
-    
+
     config.module = {
       ...config.module,
       exprContextCritical: false,
       noParse: [/onnxruntime-node/],
     };
-    
+
     config.resolve.alias = {
       ...config.resolve.alias,
       canvas: false,
     };
-    
+
     config.module.rules.push({
       test: /\.(glsl|vs|fs|vert|frag)$/,
       exclude: /node_modules/,
@@ -172,7 +180,7 @@ module.exports = withBundleAnalyzer(withPWA({
     })
     return config;
   },
-  reactStrictMode: isProduction? true : false,
+  reactStrictMode: isProduction ? true : false,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -188,5 +196,5 @@ module.exports = withBundleAnalyzer(withPWA({
       }
     ]
   }
-  
+
 }))
