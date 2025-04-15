@@ -1,40 +1,19 @@
 {
   "name": "blinko",
   "version": "0.52.3",
-  "repository": "https://github.com/blinko-space/blinko.git",
   "private": true,
   "browser": {
     "fs": false,
     "os": false,
     "path": false
   },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
   "scripts": {
-    "generate": "prisma generate",
-    "prisma-studio": "prisma studio",
-    "migrate": "prisma migrate deploy",
-    "migrate-dev": "prisma migrate dev",
-    "migrate-dev-reset": "prisma migrate reset",
-    "db-seed": "prisma db seed",
-    "build-seed": "tsc -p tsconfig.seed.json",
-    "db-reset": "prisma migrate dev reset",
     "dev": "next dev -p 1111",
-    "dev:https": "ngrok http 1111",
     "build": "set NODE_ENV=production & next build",
-    "build:standalone": "set NODE_ENV=production & set NEXT_PRIVATE_STANDALONE=true & next build",
-    "build:dev": "set NODE_ENV=development & next build",
-    "build:analyze": "set ANALYZE=true & next build",
-    "build:debug": "set DEBUG=* & next build",
-    "build:max": "set NODE_OPTIONS=--max-old-space-size=16384 & set DEBUG=* & next build",
-    "start": "prisma migrate & prisma db seed & next start -p 1111",
+    "start": "next start -p 1111",
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
-    "postinstall": "pnpm generate",
-    "docker:reset:password": "node prisma/resetpassword.js",
-    "build:types": "tsc -p tsconfig.types.json",
-    "icons:update": "node src/components/Common/Iconify/buildIcons.js"
+    "build:types": "tsc -p tsconfig.types.json"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.1.9",
