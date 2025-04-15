@@ -13,7 +13,8 @@
     "start": "next start -p 1111",
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
-    "build:types": "tsc -p tsconfig.types.json"
+    "build:types": "tsc -p tsconfig.types.json",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.10",
